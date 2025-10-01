@@ -21,13 +21,14 @@ const eslintConfig = [
     ],
     files: ["**/*.{js,jsx,ts,tsx}"],
     rules: {
-      "semi": ["error", "always"],
-      "quotes": ["error", "double"],   // Comillas dobles
-      "no-unused-vars": ["warn"],
-      "no-console": ["warn"],
-      "eqeqeq": ["error", "always"],
-      "curly": ["error", "all"],
-      "indent": ["error", 2, { "SwitchCase": 1 }]
+     // Reglas recomendadas de estilo y consistencia
+      "semi": ["error", "always"],                   // Siempre usar punto y coma
+      "quotes": ["error", "double"], // Comillas dobles
+      "no-unused-vars": ["warn"],                   // Variables no usadas → warning
+      "no-console": ["warn", { allow: ["warn", "error"] }], // console.log → warning
+      "eqeqeq": ["error", "always"],                // Usar siempre === y !==
+      "curly": ["error", "all"],                    // Siempre llaves en if/for/while
+      "indent": ["error", 2, { "SwitchCase": 1 }], // Indentación 2 espacios
     }
   },
 ];
