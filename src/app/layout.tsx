@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "../styles/globals.css";
 import Navbar from "@/components/Navbar";
+import AuthFooter from "@/components/AuthFooter";
 
 export const metadata: Metadata = {
   title: "VitalFit Gym",
@@ -17,6 +18,11 @@ export default function RootLayout({
       <body className="antialiased bg-background text-foreground">
         <Navbar />
         {children}
+        <AuthFooter
+          text="¿No tienes una cuenta?"
+          linkText="Regístrate aquí"
+          href="/signup"
+        />
       </body>
     </html>
   );

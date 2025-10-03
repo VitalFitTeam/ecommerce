@@ -1,3 +1,5 @@
+import theme from "@/styles/theme";
+import Link from "next/link";
 import React from "react";
 
 interface AuthFooterProps {
@@ -8,11 +10,15 @@ interface AuthFooterProps {
 
 const AuthFooter: React.FC<AuthFooterProps> = ({ text, linkText, href }) => {
   return (
-    <span>
+    <span className="text-body text-dark-gray">
       {text}{" "}
-      <a className="text-blue-500" href={href}>
+      <Link
+        href={href}
+        style={{ color: theme.Colors.primary }}
+        className="text-primary hover:text-accent-red transition-colors font-medium"
+      >
         {linkText}
-      </a>
+      </Link>
     </span>
   );
 };
