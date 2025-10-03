@@ -1,6 +1,6 @@
 import theme from "@/styles/theme";
 
-export default function Home() {
+export default function RegisterPage() {
   return (
     <div
       style={{
@@ -19,7 +19,7 @@ export default function Home() {
           fontFamily: "var(--font-display)",
         }}
       >
-        VitalFit
+        Register
       </h1>
     </div>
   );
