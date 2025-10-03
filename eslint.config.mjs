@@ -23,7 +23,7 @@ const eslintConfig = [
     rules: {
      // Reglas recomendadas de estilo y consistencia
          // Siempre usar punto y coma
-      "quotes": ["error", "double", { "allowTemplateLiterals": true, "avoidEscape": true }], // Permitir dobles y simples si es necesario
+      "quotes": ["error", "double", { "allowTemplateLiterals": true, "avoidEscape": true }],
       "no-unused-vars": ["warn"],                   // Variables no usadas → warning
       "no-console": ["warn", { allow: ["warn", "error"] }], // console.log → warning
       "eqeqeq": ["error", "always"],                // Usar siempre === y !==
