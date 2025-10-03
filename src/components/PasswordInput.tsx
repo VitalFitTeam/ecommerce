@@ -26,7 +26,7 @@ const PasswordInput = forwardRef<HTMLInputElement, PasswordInputProps>(
           aria-label={ariaLabel}
           className={`w-full px-4 py-3 border rounded-lg border-[#A4A4A4] 
             focus:border-[#F27F2A] focus:ring-[#F27F2A] 
-            focus:outline-none text-[#1A1A1A] transition-colors duration-200 ${className}`}
+            focus:outline-none text-[#1A1A1A] text-lg transition-colors duration-200 ${className}`}
         />
 
         {/* Botón con el ícono de ojo (sirve para alternar visibilidad) */}
