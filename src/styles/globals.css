@@ -1,0 +1,47 @@
+/*define estilos y variables CSS generales que se aplican a todo el proyecto.*/
+
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue:wght@700&family=Montserrat:wght@800&family=Roboto:wght@400&display=swap');
+
+:root {
+  /* Colores corporativos */
+  --color-primary: #F27F2A;
+  --color-black: #1A1A1A;
+  --color-dark-gray: #5C5E60;
+  --color-white: #FFFFFF;
+  --color-accent-red: #EA232D;
+  --color-accent-green: #42672D;
+
+  /* Paleta base */
+  --background: var(--color-white);
+  --foreground: var(--color-black);
+
+  /* Tipografías */
+  --font-display: 'Bebas Neue', Arial, sans-serif;
+  --font-heading: 'Montserrat', Arial, sans-serif;
+  --font-body: 'Roboto', Arial, sans-serif;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: var(--color-black);
+    --foreground: var(--color-white);
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-body);
+  margin: 0;
+  padding: 0;
+  transition: background 0.3s, color 0.3s;
+}
+
+h1, .font-display { font-family: var(--font-display); font-weight: 700; }
+h2, h3, .font-heading { font-family: var(--font-heading); font-weight: 800; }
+p, span, .font-body { font-family: var(--font-body); font-weight: 400; }
+
+:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}

@@ -22,8 +22,8 @@ const eslintConfig = [
     files: ["**/*.{js,jsx,ts,tsx}"],
     rules: {
      // Reglas recomendadas de estilo y consistencia
-      "semi": ["error", "always"],                   // Siempre usar punto y coma
-      "quotes": ["error", "double"], // Comillas dobles
+         // Siempre usar punto y coma
+      "quotes": ["error", "double", { "allowTemplateLiterals": true, "avoidEscape": true }], // Permitir dobles y simples si es necesario
       "no-unused-vars": ["warn"],                   // Variables no usadas → warning
       "no-console": ["warn", { allow: ["warn", "error"] }], // console.log → warning
       "eqeqeq": ["error", "always"],                // Usar siempre === y !==
