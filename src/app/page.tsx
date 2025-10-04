@@ -1,26 +1,13 @@
-import theme from "@/styles/theme";
+import AuthFooter from "@/components/AuthFooter";
+import Navbar from "@/components/Navbar";
+import { typography } from "@/styles/styles";
 
 export default function Home() {
   return (
-    <div
-      style={{
-        backgroundColor: theme.Colors.background,
-        color: theme.Colors.primary,
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        height: "100vh",
-      }}
-    >
-      <h1
-        style={{
-          fontSize: theme.FontSizes.h1.size,
-          lineHeight: `${theme.FontSizes.h1.lineHeight}px`,
-          fontFamily: "var(--font-display)",
-        }}
-      >
-        VitalFit
-      </h1>
+    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
+      <Navbar />
+      <h1 style={{fontFamily: typography.h1 }}>VitalFit</h1>
+      <AuthFooter text="hola" linkText="mundo" href="hola.com" />
     </div>
   );
 }
