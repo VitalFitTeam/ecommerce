@@ -32,6 +32,7 @@ export const colors = {
     darkGray: "#5C5E60", // Gris Oscuro
     white: "#FFFFFF", // Blanco Puro
     gray: "#393938",
+    ligthGray: "#BBB", // Gris claro
   },
   accents: {
     red: "#EA232D", // Rojo Intenso
