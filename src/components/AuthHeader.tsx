@@ -1,22 +1,33 @@
-import { colors, typography } from "@/styles/styles";
 import Image from "next/image";
 import React from "react";
+import { colors, typography } from "@/styles/styles";
 
 const AuthHeader: React.FC = () => {
+  const componentStyles: { [key: string]: React.CSSProperties } = {
+    container: {
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+      justifyContent: "center",
+      padding: "1rem",
+    },
+    logo: {
+      marginBottom: "0.5rem",
+    },
+    title: {
+      fontSize: "2.5rem", // Cambiado a 2.5rem
+      fontFamily: "'Bebas Neue', sans-serif", // Fuente directa
+      color: colors.complementary.black,
+      letterSpacing: "0.05em", // Ajuste para el tracking
+    },
+  };
+
   return (
-    <div style={{ textAlign: "center", padding: "1rem" }}>
-      <div style={{ marginBottom: "0.5rem" }}>
-        <Image
-          src="/logo/isotipo 1.svg"
-          alt="isotipo"
-          width={170}
-          height={170}
-        />
+    <div style={componentStyles.container}>
+      <div style={componentStyles.logo}>
+        <Image src="/logo/isotipo 1.svg" alt="Logo" width={150} height={150} />
       </div>
-      <h1
-        className={`${typography.heading} text-black`}
-        style={{ color: colors.complementary.gray }}
-      >
+      <h1 style={componentStyles.title} className="tracking-wide">
         Iniciar sesión
       </h1>
     </div>
