@@ -24,14 +24,14 @@ const PrimaryButton = forwardRef<HTMLButtonElement, PrimaryButtonProps>(
       "items-center",
       "justify-center",
       "rounded-lg",
-      "py-3",
+      "py-2",
       "px-8",
       "font-semibold",
       "transition-all",
       "duration-200",
       "ease-in-out",
       "relative",
-      "min-h-[48px]",
+      "min-h-[32px]",
       "border-0",
       "focus:outline-none",
       "focus:ring-2",
@@ -80,7 +80,7 @@ const PrimaryButton = forwardRef<HTMLButtonElement, PrimaryButtonProps>(
         {isLoading && (
           <div className="absolute left-4 flex items-center">
             <div
-              className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent"
+              className="animate-spin rounded-full w-5 border-2 border-white border-t-transparent"
               aria-hidden="true"
             />
           </div>
