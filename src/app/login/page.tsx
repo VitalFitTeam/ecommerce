@@ -127,7 +127,7 @@ export default function Login() {
                 <AuthFooter
                   text="¿Olvidaste tu Contraseña?"
                   linkText="Recuperar"
-                  href="/Recuperar"
+                  href="/recoverPassword"
                 />
               </div>
             </div>
@@ -140,7 +140,7 @@ export default function Login() {
           <AuthFooter
             text="¿No tienes Cuenta?"
             linkText="Registrarse"
-            href="#"
+            href="/register"
           />
         </AuthCard>
       </div>
