@@ -9,7 +9,11 @@ import PasswordInput from "@/components/PasswordInput";
 import PrimaryButton from "@/components/PrimaryButton";
 
 export default function Login() {
-  const [formData, setFormData] = useState({ usuario: "", password: "" });
+  const [formData, setFormData] = useState({
+    usuario: "",
+    password: "",
+    confirmPassword: "",
+  });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -65,9 +69,12 @@ export default function Login() {
                     name="confirmPassword"
                     ariaLabel="Confirmar contraseña"
                     placeholder="Confirmar contraseña"
-                    value={formData.password}
+                    value={formData.confirmPassword}
                     onChange={(e) => {
-                      setFormData({ ...formData, password: e.target.value });
+                      setFormData({
+                        ...formData,
+                        confirmPassword: e.target.value,
+                      });
                     }}
                     className="bg-white"
                   />
