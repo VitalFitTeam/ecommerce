@@ -1,13 +1,21 @@
 import { z } from "zod";
 
 export const loginSchema = z.object({
-  email: z
-    .string()
-    .nonempty("El email es obligatorio")
-    .email("Formato de email inválido"),
+  usuario: z.string().email("Correo inválido"),
   password: z
     .string()
-    .nonempty("La contraseña es obligatoria")
-    .min(8, "La contraseña debe tener al menos 8 caracteres")
-    .max(20, "La contraseña no puede exceder los 20 caracteres"),
+    .min(8, "Debe tener al menos 8 caracteres")
+    .max(20, "No puede exceder 20 caracteres")
+    .refine((val) => /[A-Z]/.test(val), {
+      message: "Debe contener al menos una mayúscula",
+    })
+    .refine((val) => /[a-z]/.test(val), {
+      message: "Debe contener al menos una minúscula",
+    })
+    .refine((val) => /[0-9]/.test(val), {
+      message: "Debe contener al menos un número",
+    })
+    .refine((val) => /[^A-Za-z0-9]/.test(val), {
+      message: "Debe contener al menos un carácter especial",
+    }),
 });

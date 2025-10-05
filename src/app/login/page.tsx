@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import * as z from "zod";
 import AuthFooter from "@/components/AuthFooter";
 import { typography } from "@/styles/styles";
 import AuthCard from "@/components/AuthCard";
@@ -11,27 +10,7 @@ import PasswordInput from "@/components/PasswordInput";
 import TextInput from "@/components/TextInput";
 import PrimaryButton from "@/components/PrimaryButton";
 import Checkbox from "@/components/Checkbox";
-
-// ✅ Esquema Zod
-const loginSchema = z.object({
-  usuario: z.string().email("Correo inválido"),
-  password: z
-    .string()
-    .min(8, "Debe tener al menos 8 caracteres")
-    .max(20, "No puede exceder 20 caracteres")
-    .refine((val) => /[A-Z]/.test(val), {
-      message: "Debe contener al menos una mayúscula",
-    })
-    .refine((val) => /[a-z]/.test(val), {
-      message: "Debe contener al menos una minúscula",
-    })
-    .refine((val) => /[0-9]/.test(val), {
-      message: "Debe contener al menos un número",
-    })
-    .refine((val) => /[^A-Za-z0-9]/.test(val), {
-      message: "Debe contener al menos un carácter especial",
-    }),
-});
+import { loginSchema } from "@/lib/validation/loginSchema";
 
 export default function Login() {
   const [rememberMe, setRememberMe] = useState(false);
