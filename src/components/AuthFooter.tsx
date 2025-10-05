@@ -10,15 +10,12 @@ interface AuthFooterProps {
 
 const AuthFooter: React.FC<AuthFooterProps> = ({ text, linkText, href }) => {
   return (
-    <span
-      className={typography.h1}
-      style={{ color: colors.complementary.darkGray }}
-    >
+    <span>
       {text}{" "}
       <Link
         href={href}
-        style={{ color: colors.primary}}
-        className="font-medium hover:text-red-600 transition-colors"
+        style={{ color: colors.primary }}
+        className="hover:text-primary transition-colors"
       >
         {linkText}
       </Link>

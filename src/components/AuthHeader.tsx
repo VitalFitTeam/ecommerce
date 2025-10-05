@@ -25,7 +25,12 @@ const AuthHeader: React.FC = () => {
   return (
     <div style={componentStyles.container}>
       <div style={componentStyles.logo}>
-        <Image src="/logo/isotipo 1.svg" alt="Logo" width={150} height={150} />
+        <Image
+          src="/images/isotipo 1.svg"
+          alt="Logo"
+          width={150}
+          height={150}
+        />
       </div>
       <h1 style={componentStyles.title} className="tracking-wide">
         Iniciar sesión
