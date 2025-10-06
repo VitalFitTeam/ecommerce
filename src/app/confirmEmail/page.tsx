@@ -5,13 +5,16 @@ import { typography } from "@/styles/styles";
 import AuthCard from "@/components/AuthCard";
 import Logo from "@/components/Logo";
 import PrimaryButton from "@/components/PrimaryButton";
+import { useRouter, useSearchParams } from "next/navigation"; // Modificado
 
 export default function ConfirmEmail() {
   const [code, setCode] = useState<string[]>(["", "", "", "", "", ""]);
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
+  const router = useRouter();
+  const searchParams = useSearchParams(); // Agregado
+  const flow = searchParams.get("flow"); // Agregado
 
   useEffect(() => {
-    // Focus en el primer input al montar el componente
     if (inputRefs.current[0]) {
       inputRefs.current[0].focus();
     }
@@ -19,7 +22,9 @@ export default function ConfirmEmail() {
 
   const handleInputChange = (index: number, value: string) => {
     // Solo permitir números
-    if (value && !/^\d+$/.test(value)) {return;}
+    if (value && !/^\d+$/.test(value)) {
+      return;
+    }
 
     const newCode = [...code];
     newCode[index] = value;
@@ -62,7 +67,12 @@ export default function ConfirmEmail() {
     const verificationCode = code.join("");
 
     if (verificationCode.length === 6) {
-      alert(`Código verificado: ${verificationCode}`);
+      if (flow === "recover") {
+        router.push("/changePassword");
+      } else {
+        // Puedes cambiar "/login" por la ruta que desees después del registro
+        router.push("/login");
+      }
     } else {
       alert("Por favor, ingresa el código completo de 6 dígitos");
     }

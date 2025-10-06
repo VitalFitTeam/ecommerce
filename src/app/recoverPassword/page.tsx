@@ -9,11 +9,13 @@ import TextInput from "@/components/TextInput";
 import PrimaryButton from "@/components/PrimaryButton";
 import { AlertCard } from "@/components/AlertCard";
 import { recoverSchema } from "@/lib/validation/recoverSchema";
+import { useRouter } from "next/navigation";
 
 export default function RecoverPassword() {
   const [formData, setFormData] = useState({ usuario: "" });
   const [error, setError] = useState<{ usuario?: string[] }>({});
   const [showAlert, setShowAlert] = useState(false);
+  const router = useRouter();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -33,6 +35,9 @@ export default function RecoverPassword() {
       setShowAlert(true);
       setError({});
       setFormData({ usuario: "" });
+
+      // Redirigir a la pantalla de código con el flujo de recuperación
+      router.push("/confirmEmail?flow=recover");
     }
   };
 
