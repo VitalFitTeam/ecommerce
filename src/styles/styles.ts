@@ -28,14 +28,14 @@ export const typography = {
 export const colors = {
   primary: "#F27F2A", // Naranja Vital
   complementary: {
-    black: "#1A1A1A",   // Negro Carbón
+    black: "#1A1A1A", // Negro Carbón
     darkGray: "#5C5E60", // Gris Oscuro
-    white: "#FFFFFF",    // Blanco Puro
+    white: "#FFFFFF", // Blanco Puro
+    gray: "#393938",
+    ligthGray: "#BBB", // Gris claro
   },
   accents: {
-    red: "#EA232D",      // Rojo Intenso
-    green: "#42672D",    // Verde Vital
+    red: "#EA232D", // Rojo Intenso
+    green: "#42672D", // Verde Vital
   },
 };
-
-
