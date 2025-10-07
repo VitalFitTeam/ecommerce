@@ -14,6 +14,7 @@ import { registerSchema } from "@/lib/validation/registerSchema";
 import { RegisterFormData } from "@/lib/validation/registerSchema";
 import GoogleLoginButton from "@/components/GoogleLoginButton";
 import { colors } from "@/styles/styles";
+import { useRouter } from "next/navigation";
 
 export default function RegisterPage() {
   const [formData, setFormData] = useState<RegisterFormData>({
@@ -32,6 +33,7 @@ export default function RegisterPage() {
   >({});
   const [showAlert, setShowAlert] = useState(false);
   const [terms, setTerms] = useState(false);
+  const router = useRouter();
 
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTerms(event.target.checked);
@@ -48,7 +50,6 @@ export default function RegisterPage() {
       }));
       return;
     } else {
-      // Limpiar error de términos si está aceptado
       setError((prev) => ({ ...prev, terms: undefined }));
     }
 
@@ -67,7 +68,6 @@ export default function RegisterPage() {
       setError(fieldErrors);
       return;
     } else {
-      // Solo mostrar alerta si pasa TODAS las validaciones
       setShowAlert(true);
       setError({});
       setFormData({
@@ -81,6 +81,9 @@ export default function RegisterPage() {
         cpassword: "",
       });
       setTerms(false);
+
+      // Redirigir a la pantalla de confirmación de correo con el flujo de registro
+      router.push("/confirmEmail?flow=register");
     }
   };
 
