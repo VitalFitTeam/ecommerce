@@ -31,6 +31,12 @@ export const registerSchema = z
       .min(1, { message: "El documento de identidad es obligatorio" })
       .min(3, { message: "El documento debe tener al menos 3 caracteres" }),
 
+    genero: z
+      .union([z.literal("masculino"), z.literal("femenino"), z.literal("")])
+      .refine((val) => val !== "", {
+        message: "Selecciona un género válido",
+      }),
+
     nacimiento: z
       .string()
       .min(1, { message: "La fecha de nacimiento es obligatoria" })
@@ -72,7 +78,7 @@ export const registerSchema = z
   })
   .refine((data) => data.password === data.cpassword, {
     message: "Las contraseñas no coinciden",
-    path: ["cpassword"], // Esto hace que el error aparezca en el campo cpassword
+    path: ["cpassword"],
   });
 
 export type RegisterFormData = z.infer<typeof registerSchema> & {

@@ -15,7 +15,6 @@ import { RegisterFormData } from "@/lib/validation/registerSchema";
 import GoogleLoginButton from "@/components/GoogleLoginButton";
 import { colors } from "@/styles/styles";
 import { useRouter } from "next/navigation";
-
 export default function RegisterPage() {
   const [formData, setFormData] = useState<RegisterFormData>({
     nombre: "",
@@ -23,6 +22,7 @@ export default function RegisterPage() {
     email: "",
     telefono: "",
     documento: "",
+    genero: "", // ✅ valor válido según el esquema
     nacimiento: "",
     password: "",
     cpassword: "",
@@ -76,6 +76,7 @@ export default function RegisterPage() {
         email: "",
         telefono: "",
         documento: "",
+        genero: "", // <-- agregado
         nacimiento: "",
         password: "",
         cpassword: "",
@@ -246,29 +247,69 @@ export default function RegisterPage() {
                 </div>
               </div>
 
-              <div className="mb-4">
-                <label
-                  htmlFor="nacimiento"
-                  className="block text-sm font-medium text-gray-700 mb-1 sm:text-base text-left"
-                >
-                  Fecha de Nacimiento*
-                </label>
-                <TextInput
-                  id="nacimiento"
-                  type="date"
-                  name="nacimiento"
-                  ariaLabel="nacimiento"
-                  value={formData.nacimiento}
-                  onChange={(e) =>
-                    handleInputChange("nacimiento", e.target.value)
-                  }
-                  className="bg-white w-full"
-                />
-                {error.nacimiento?.map((msg, i) => (
-                  <p key={i} className="text-red-500 text-xs sm:text-sm mt-1">
-                    {msg}
-                  </p>
-                ))}
+              <div className="flex flex-col mb-4 space-y-4 sm:flex-row sm:space-y-0 sm:space-x-4">
+                {/* Fecha de Nacimiento a la izquierda */}
+                <div className="flex-1">
+                  <label
+                    htmlFor="nacimiento"
+                    className="block text-sm font-medium text-gray-700 mb-1 sm:text-base text-left"
+                  >
+                    Fecha de Nacimiento*
+                  </label>
+                  <TextInput
+                    id="nacimiento"
+                    type="date"
+                    name="nacimiento"
+                    ariaLabel="nacimiento"
+                    value={formData.nacimiento}
+                    onChange={(e) =>
+                      handleInputChange("nacimiento", e.target.value)
+                    }
+                    className="bg-white w-full"
+                  />
+                  {error.nacimiento?.map((msg, i) => (
+                    <p key={i} className="text-red-500 text-xs sm:text-sm mt-1">
+                      {msg}
+                    </p>
+                  ))}
+                </div>
+                {/* Género a la derecha */}
+                <div className="flex-1">
+                  <label className="block text-sm font-medium text-gray-700 mb-1 sm:text-base text-left">
+                    Género*
+                  </label>
+                  <div className="flex items-center space-x-6">
+                    <label className="flex items-center">
+                      <input
+                        type="radio"
+                        name="genero"
+                        value="masculino"
+                        checked={formData.genero === "masculino"}
+                        onChange={() =>
+                          handleInputChange("genero", "masculino")
+                        }
+                        className="form-radio h-4 w-4 text-primary"
+                      />
+                      <span className="ml-2">Masculino</span>
+                    </label>
+                    <label className="flex items-center">
+                      <input
+                        type="radio"
+                        name="genero"
+                        value="femenino"
+                        checked={formData.genero === "femenino"}
+                        onChange={() => handleInputChange("genero", "femenino")}
+                        className="form-radio h-4 w-4 text-primary"
+                      />
+                      <span className="ml-2">Femenino</span>
+                    </label>
+                  </div>
+                  {error.genero?.map((msg, i) => (
+                    <p key={i} className="text-red-500 text-xs sm:text-sm mt-1">
+                      {msg}
+                    </p>
+                  ))}
+                </div>
               </div>
 
               <div className="flex flex-col mb-4 space-y-4 sm:flex-row sm:space-y-0 sm:space-x-4">
