@@ -14,9 +14,9 @@ import { loginSchema } from "@/lib/validation/loginSchema";
 
 export default function Login() {
   const [rememberMe, setRememberMe] = useState(false);
-  const [formData, setFormData] = useState({ usuario: "", password: "" });
+  const [formData, setFormData] = useState({ email: "", password: "" });
   const [errors, setErrors] = useState<{
-    usuario?: string[];
+    email?: string[];
     password?: string[];
   }>({});
 
@@ -24,7 +24,7 @@ export default function Login() {
     setRememberMe(event.target.checked);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const result = loginSchema.safeParse(formData);
 
@@ -32,8 +32,8 @@ export default function Login() {
       const fieldErrors: Record<string, string[]> = {};
       const flattened = result.error.flatten();
 
-      if (flattened.fieldErrors.usuario) {
-        fieldErrors.usuario = flattened.fieldErrors.usuario;
+      if (flattened.fieldErrors.email) {
+        fieldErrors.email = flattened.fieldErrors.email;
       }
       if (flattened.fieldErrors.password) {
         fieldErrors.password = flattened.fieldErrors.password;
@@ -44,7 +44,32 @@ export default function Login() {
     }
 
     setErrors({});
-    console.log("Login exitoso:", result.data);
+
+    try {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+      const response = await fetch(`${apiUrl}/auth/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        alert(data.message || "Error al iniciar sesión");
+        return;
+      }
+
+      // Login exitoso
+      console.log("Token recibido:", data.token);
+      // Aquí puedes guardar el token en localStorage o cookies
+      // localStorage.setItem("token", data.token);
+    } catch (error) {
+      console.error("Error al conectar con la API:", error);
+      alert("No se pudo conectar con el servidor");
+    }
   };
 
   return (
@@ -70,18 +95,18 @@ export default function Login() {
                   Correo Electrónico*
                 </label>
                 <TextInput
-                  id="usuario"
-                  name="usuario"
-                  ariaLabel="Usuario"
-                  placeholder="Usuario"
-                  value={formData.usuario}
+                  id="email"
+                  name="email"
+                  ariaLabel="email"
+                  placeholder="Email"
+                  value={formData.email}
                   onChange={(e) => {
-                    setFormData({ ...formData, usuario: e.target.value });
+                    setFormData({ ...formData, email: e.target.value });
                     setErrors((prev) => ({ ...prev, usuario: undefined }));
                   }}
                   className="bg-white"
                 />
-                {errors.usuario?.map((msg, i) => (
+                {errors.email?.map((msg, i) => (
                   <p key={i} className="text-red-500 text-sm mt-1">
                     {msg}
                   </p>

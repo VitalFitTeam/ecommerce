@@ -39,10 +39,9 @@ export default function RegisterPage() {
     setTerms(event.target.checked);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Validar términos y condiciones primero
     if (!terms) {
       setError((prev) => ({
         ...prev,
@@ -68,23 +67,65 @@ export default function RegisterPage() {
       setError(fieldErrors);
       return;
     } else {
-      setShowAlert(true);
-      setError({});
-      setFormData({
-        nombre: "",
-        apellido: "",
-        email: "",
-        telefono: "",
-        documento: "",
-        genero: "", // <-- agregado
-        nacimiento: "",
-        password: "",
-        cpassword: "",
-      });
-      setTerms(false);
+      //si paso las validaciones mandar los datos a la api
+      const birthDateISO = formData.nacimiento
+        ? new Date(formData.nacimiento + "T00:00:00.000Z").toISOString()
+        : "";
 
-      // Redirigir a la pantalla de confirmación de correo con el flujo de registro
-      router.push("/confirmEmail?flow=register");
+      const genderMapping = {
+        masculino: "male",
+        femenino: "female",
+      };
+
+      const apiGender =
+        genderMapping[formData.genero as keyof typeof genderMapping] ||
+        formData.genero;
+
+      try {
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+        const response = await fetch(`${apiUrl}/auth/register`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            first_name: formData.nombre,
+            last_name: formData.apellido,
+            email: formData.email,
+            phone: formData.telefono,
+            identity_document: formData.documento,
+            gender: apiGender,
+            birth_Date: birthDateISO,
+            password: formData.password,
+          }),
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          alert(data.message || "Error al registrar");
+          return;
+        }
+
+        setError({});
+        setFormData({
+          nombre: "",
+          apellido: "",
+          email: "",
+          telefono: "",
+          documento: "",
+          genero: "",
+          nacimiento: "",
+          password: "",
+          cpassword: "",
+        });
+        setTerms(false);
+        setShowAlert(true);
+        router.push("/confirmEmail?flow=register");
+      } catch (error) {
+        console.error("Error al conectar con la API:", error);
+        alert("No se pudo conectar con el servidor");
+      }
     }
   };
 
