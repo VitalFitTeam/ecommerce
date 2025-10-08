@@ -5,33 +5,38 @@ import { typography } from "@/styles/styles";
 import AuthCard from "@/components/AuthCard";
 import Logo from "@/components/Logo";
 import PrimaryButton from "@/components/PrimaryButton";
-import { useRouter, useSearchParams } from "next/navigation"; // Modificado
+import { useRouter, useSearchParams } from "next/navigation";
 
 export default function ConfirmEmail() {
   const [code, setCode] = useState<string[]>(["", "", "", "", "", ""]);
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
   const router = useRouter();
-  const searchParams = useSearchParams(); // Agregado
-  const flow = searchParams.get("flow"); // Agregado
+  const searchParams = useSearchParams();
+  const flow = searchParams.get("flow");
 
   useEffect(() => {
-    if (inputRefs.current[0]) {
-      inputRefs.current[0].focus();
-    }
+    inputRefs.current[0]?.focus();
   }, []);
 
+  const isValidChar = (char: string) => /^[a-zA-Z0-9]$/.test(char);
+
   const handleInputChange = (index: number, value: string) => {
-    // Solo permitir números
-    if (value && !/^\d+$/.test(value)) {
+    const char = value.slice(-1); // Solo tomar el último carácter ingresado
+
+    const newCode = [...code];
+
+    if (char === "") {
+      newCode[index] = "";
+      setCode(newCode);
       return;
     }
 
-    const newCode = [...code];
-    newCode[index] = value;
+    if (!isValidChar(char)) {return;}
+
+    newCode[index] = char;
     setCode(newCode);
 
-    // Auto-focus al siguiente input si se ingresó un dígito
-    if (value && index < 5) {
+    if (index < code.length - 1) {
       inputRefs.current[index + 1]?.focus();
     }
   };
@@ -40,25 +45,36 @@ export default function ConfirmEmail() {
     index: number,
     e: React.KeyboardEvent<HTMLInputElement>,
   ) => {
-    if (e.key === "Backspace" && !code[index] && index > 0) {
-      // Si el input está vacío y se presiona backspace, ir al input anterior
-      inputRefs.current[index - 1]?.focus();
+    if (e.key === "Backspace") {
+      const newCode = [...code];
+
+      if (newCode[index] !== "") {
+        newCode[index] = "";
+        setCode(newCode);
+      } else if (index > 0) {
+        inputRefs.current[index - 1]?.focus();
+        const updatedCode = [...code];
+        updatedCode[index - 1] = "";
+        setCode(updatedCode);
+      }
     }
   };
 
   const handlePaste = (e: React.ClipboardEvent) => {
     e.preventDefault();
     const pastedData = e.clipboardData.getData("text");
-    const numbers = pastedData.replace(/\D/g, "").split("").slice(0, 6);
+    const chars = pastedData
+      .replace(/[^a-zA-Z0-9]/g, "")
+      .split("")
+      .slice(0, 6);
 
-    if (numbers.length === 6) {
+    if (chars.length > 0) {
       const newCode = [...code];
-      numbers.forEach((num, index) => {
-        newCode[index] = num;
+      chars.forEach((char, index) => {
+        newCode[index] = char;
       });
       setCode(newCode);
-
-      inputRefs.current[5]?.focus();
+      inputRefs.current[Math.min(chars.length, 5)]?.focus();
     }
   };
 
@@ -67,18 +83,13 @@ export default function ConfirmEmail() {
     const verificationCode = code.join("");
 
     if (verificationCode.length === 6) {
-      if (flow === "recover") {
-        router.push("/changePassword");
-      } else {
-        // Puedes cambiar "/login" por la ruta que desees después del registro
-        router.push("/login");
-      }
+      router.push(flow === "recover" ? "/changePassword" : "/login");
     } else {
-      alert("Por favor, ingresa el código completo de 6 dígitos");
+      alert("Por favor, ingresa el código completo de 6 caracteres");
     }
   };
 
-  const isCodeComplete = code.every((digit) => digit !== "");
+  const isCodeComplete = code.every((char) => char !== "");
 
   return (
     <div className="flex flex-col items-center justify-center px-5 py-4">
@@ -96,18 +107,17 @@ export default function ConfirmEmail() {
             <form className="w-full" onSubmit={handleSubmit} noValidate>
               <div className="space-y-3 w-full">
                 <div className="flex justify-between gap-2 mb-6">
-                  {code.map((digit, index) => (
+                  {code.map((char, index) => (
                     <input
                       key={index}
                       ref={(el) => (inputRefs.current[index] = el)}
                       type="text"
-                      inputMode="numeric"
                       maxLength={1}
-                      value={digit}
+                      value={char}
                       onChange={(e) => handleInputChange(index, e.target.value)}
                       onKeyDown={(e) => handleKeyDown(index, e)}
                       onPaste={handlePaste}
-                      className="w-10 h-10 text-center border border-gray-300 rounded-lg focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 text-lg font-semibold"
+                      className="w-10 h-10 text-center border border-gray-300 rounded-lg focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 text-lg font-semibold uppercase"
                       placeholder="-"
                     />
                   ))}
