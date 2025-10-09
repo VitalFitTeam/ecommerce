@@ -9,6 +9,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 
 export default function ConfirmEmail() {
   const [code, setCode] = useState<string[]>(["", "", "", "", "", ""]);
+  const [loading, setLoading] = useState(false);
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -21,41 +22,28 @@ export default function ConfirmEmail() {
   const isValidChar = (char: string) => /^[a-zA-Z0-9]$/.test(char);
 
   const handleInputChange = (index: number, value: string) => {
-    const char = value.slice(-1); // Solo tomar el último carácter ingresado
+    const char = value.slice(-1).toUpperCase();
+    if (!isValidChar(char) && char !== "") return;
 
     const newCode = [...code];
-
-    if (char === "") {
-      newCode[index] = "";
-      setCode(newCode);
-      return;
-    }
-
-    if (!isValidChar(char)) {return;}
-
     newCode[index] = char;
     setCode(newCode);
 
-    if (index < code.length - 1) {
+    if (index < code.length - 1 && char !== "") {
       inputRefs.current[index + 1]?.focus();
     }
   };
 
-  const handleKeyDown = (
-    index: number,
-    e: React.KeyboardEvent<HTMLInputElement>,
-  ) => {
+  const handleKeyDown = (index: number, e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Backspace") {
       const newCode = [...code];
-
       if (newCode[index] !== "") {
         newCode[index] = "";
         setCode(newCode);
       } else if (index > 0) {
         inputRefs.current[index - 1]?.focus();
-        const updatedCode = [...code];
-        updatedCode[index - 1] = "";
-        setCode(updatedCode);
+        newCode[index - 1] = "";
+        setCode(newCode);
       }
     }
   };
@@ -63,29 +51,63 @@ export default function ConfirmEmail() {
   const handlePaste = (e: React.ClipboardEvent) => {
     e.preventDefault();
     const pastedData = e.clipboardData.getData("text");
-    const chars = pastedData
-      .replace(/[^a-zA-Z0-9]/g, "")
-      .split("")
-      .slice(0, 6);
-
+    const chars = pastedData.replace(/[^a-zA-Z0-9]/g, "").slice(0, 6);
     if (chars.length > 0) {
       const newCode = [...code];
-      chars.forEach((char, index) => {
-        newCode[index] = char;
+      chars.split("").forEach((char, index) => {
+        newCode[index] = char.toUpperCase();
       });
       setCode(newCode);
       inputRefs.current[Math.min(chars.length, 5)]?.focus();
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const verificationCode = code.join("");
 
-    if (verificationCode.length === 6) {
-      router.push(flow === "recover" ? "/changePassword" : "/login");
-    } else {
+    const verificationCode = code.join("").trim();
+    if (verificationCode.length !== 6) {
       alert("Por favor, ingresa el código completo de 6 caracteres");
+      return;
+    }
+
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+    if (!apiUrl) {
+      alert("La URL de la API no está configurada.");
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const response = await fetch(`${apiUrl}/auth/activate`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({ code: verificationCode }),
+      });
+
+      let data: any = {};
+      try {
+        data = await response.json();
+      } catch {
+        // Si el backend devuelve vacío, seguimos
+      }
+
+      if (!response.ok) {
+        alert(data?.message || "No se pudo verificar el código. Intenta nuevamente.");
+        return;
+      }
+
+      alert("Correo verificado correctamente ✅");
+      router.push(flow === "recover" ? "/changePassword" : "/login");
+    } catch (error) {
+      console.error("Error al conectar con la API:", error);
+      alert("No se pudo conectar con el servidor. Intenta más tarde.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -98,39 +120,35 @@ export default function ConfirmEmail() {
           <AuthCard>
             <Logo slogan={false} width={80} />
             <h2 className={typography.h3}>CONFIRMA TU CORREO ELECTRÓNICO</h2>
-            <div className="text-left mb-4">
-              <span>
-                Introduce el código enviado a tu correo para confirmarlo
-              </span>
-            </div>
+            <p className="text-left mb-4">
+              Introduce el código enviado a tu correo para confirmarlo
+            </p>
 
             <form className="w-full" onSubmit={handleSubmit} noValidate>
-              <div className="space-y-3 w-full">
-                <div className="flex justify-between gap-2 mb-6">
-                  {code.map((char, index) => (
-                    <input
-                      key={index}
-                      ref={(el) => (inputRefs.current[index] = el)}
-                      type="text"
-                      maxLength={1}
-                      value={char}
-                      onChange={(e) => handleInputChange(index, e.target.value)}
-                      onKeyDown={(e) => handleKeyDown(index, e)}
-                      onPaste={handlePaste}
-                      className="w-10 h-10 text-center border border-gray-300 rounded-lg focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 text-lg font-semibold uppercase"
-                      placeholder="-"
-                    />
-                  ))}
-                </div>
+              <div className="flex justify-between gap-2 mb-6">
+                {code.map((char, index) => (
+                  <input
+                    key={index}
+                    ref={(el) => (inputRefs.current[index] = el)}
+                    type="text"
+                    maxLength={1}
+                    value={char}
+                    autoComplete="one-time-code"
+                    onChange={(e) => handleInputChange(index, e.target.value)}
+                    onKeyDown={(e) => handleKeyDown(index, e)}
+                    onPaste={handlePaste}
+                    className="w-10 h-10 text-center border border-gray-300 rounded-lg focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 text-lg font-semibold uppercase"
+                    placeholder="-"
+                  />
+                ))}
               </div>
 
-              <div className="mt-4 w-full">
-                <PrimaryButton type="submit" disabled={!isCodeComplete}>
-                  Verificar Correo
-                </PrimaryButton>
-              </div>
+              <PrimaryButton type="submit" disabled={!isCodeComplete || loading}>
+                {loading ? "Verificando..." : "Verificar Correo"}
+              </PrimaryButton>
+
               <div className="mt-4 w-full text-right">
-                <a className="font-medium" href="#">
+                <a className="font-medium text-primary hover:underline" href="#">
                   Reenviar Código
                 </a>
               </div>
