@@ -7,6 +7,10 @@ import Logo from "@/components/Logo";
 import PrimaryButton from "@/components/PrimaryButton";
 import { useRouter, useSearchParams } from "next/navigation";
 
+type ActivateResponse = {
+  message?: string;
+};
+
 export default function ConfirmEmail() {
   const [code, setCode] = useState<string[]>(["", "", "", "", "", ""]);
   const [loading, setLoading] = useState(false);
@@ -23,7 +27,9 @@ export default function ConfirmEmail() {
 
   const handleInputChange = (index: number, value: string) => {
     const char = value.slice(-1).toUpperCase();
-    if (!isValidChar(char) && char !== "") return;
+    if (!isValidChar(char) && char !== "") {
+      return;
+    }
 
     const newCode = [...code];
     newCode[index] = char;
@@ -34,7 +40,10 @@ export default function ConfirmEmail() {
     }
   };
 
-  const handleKeyDown = (index: number, e: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyDown = (
+    index: number,
+    e: React.KeyboardEvent<HTMLInputElement>,
+  ) => {
     if (e.key === "Backspace") {
       const newCode = [...code];
       if (newCode[index] !== "") {
@@ -89,15 +98,18 @@ export default function ConfirmEmail() {
         body: JSON.stringify({ code: verificationCode }),
       });
 
-      let data: any = {};
+      let data: ActivateResponse = { message: undefined };
       try {
         data = await response.json();
       } catch {
-        // Si el backend devuelve vacío, seguimos
+        // Si el backend devuelve vacío, usamos mensaje genérico
+        data = { message: undefined };
       }
 
       if (!response.ok) {
-        alert(data?.message || "No se pudo verificar el código. Intenta nuevamente.");
+        alert(
+          data.message || "No se pudo verificar el código. Intenta nuevamente.",
+        );
         return;
       }
 
@@ -143,12 +155,18 @@ export default function ConfirmEmail() {
                 ))}
               </div>
 
-              <PrimaryButton type="submit" disabled={!isCodeComplete || loading}>
+              <PrimaryButton
+                type="submit"
+                disabled={!isCodeComplete || loading}
+              >
                 {loading ? "Verificando..." : "Verificar Correo"}
               </PrimaryButton>
 
               <div className="mt-4 w-full text-right">
-                <a className="font-medium text-primary hover:underline" href="#">
+                <a
+                  className="font-medium text-primary hover:underline"
+                  href="#"
+                >
                   Reenviar Código
                 </a>
               </div>
