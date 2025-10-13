@@ -32,6 +32,8 @@ export default function RegisterPage() {
     Partial<Record<keyof RegisterFormData, string[]>>
   >({});
   const [showAlert, setShowAlert] = useState(false);
+  const [showAlertError, setShowAlertError] = useState(false);
+  const [submitError, setSubmitError] = useState("");
   const [terms, setTerms] = useState(false);
   const router = useRouter();
 
@@ -103,10 +105,15 @@ export default function RegisterPage() {
         const data = await response.json();
 
         if (!response.ok) {
-          alert(data.message || "Error al registrar");
+          setSubmitError(data.message || "Error al registrar");
+          if (data.error === "conflict") {
+            setSubmitError("Usuario Ya Registrado");
+          }
+          setShowAlertError(true);
           return;
         }
 
+        setShowAlertError(false);
         setError({});
         setFormData({
           nombre: "",
@@ -121,7 +128,6 @@ export default function RegisterPage() {
         });
         setTerms(false);
         setShowAlert(true);
-        router.push("/confirmEmail?flow=register");
       } catch (error) {
         console.error("Error al conectar con la API:", error);
         alert("No se pudo conectar con el servidor");
@@ -131,6 +137,7 @@ export default function RegisterPage() {
 
   const handleInputChange = (field: keyof RegisterFormData, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
+
     if (error[field]) {
       setError((prev) => ({ ...prev, [field]: undefined }));
     }
@@ -140,12 +147,22 @@ export default function RegisterPage() {
     <div className="flex flex-col items-center justify-center min-h-screen px-4 py-6 sm:px-6 lg:px-8">
       <AlertCard
         visible={showAlert}
-        message="Registro exitoso"
-        description="Tu cuenta ha sido creada exitosamente. Por favor revisa tu correo electrónico para verificar tu cuenta."
+        message="Revisa tu correo"
+        description="¡Gracias por registrarte en VITALFIT! Para completar tu registro, por favor, verifica tu dirección de correo electrónico."
         buttonLabel="Cerrar"
-        onClose={() => setShowAlert(false)}
+        onClose={() => {
+          setShowAlert(false);
+          router.push("/confirmEmail?flow=register");
+        }}
       />
-
+      <AlertCard
+        visible={showAlertError}
+        message="Error"
+        description={submitError}
+        buttonLabel="Cerrar"
+        error={true}
+        onClose={() => setShowAlertError(false)}
+      />
       <div className="flex justify-center w-full max-w-6xl">
         <div className="w-full max-w-2xl lg:max-w-4xl">
           <AuthCard>
@@ -249,12 +266,14 @@ export default function RegisterPage() {
                     id="telefono"
                     name="telefono"
                     ariaLabel="telefono"
-                    placeholder="Teléfono"
+                    placeholder="+58 412-1234567"
                     value={formData.telefono}
                     onChange={(e) =>
                       handleInputChange("telefono", e.target.value)
                     }
                     className="bg-white w-full"
+                    pattern="^\+\d{1,3}\s?\d{1,4}[-\s]?\d{4,}$"
+                    title="Formato esperado: +58 412-1234567"
                   />
                   {error.telefono?.map((msg, i) => (
                     <p key={i} className="text-red-500 text-xs sm:text-sm mt-1">
