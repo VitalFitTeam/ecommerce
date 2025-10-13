@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import { typography } from "@/styles/styles";
 import AuthCard from "@/components/AuthCard";
+import { AlertCard } from "@/components/AlertCard";
 import Logo from "@/components/Logo";
 import PrimaryButton from "@/components/PrimaryButton";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -13,11 +14,12 @@ type ActivateResponse = {
 
 export default function ConfirmEmail() {
   const [code, setCode] = useState<string[]>(["", "", "", "", "", ""]);
-  const [loading, setLoading] = useState(false);
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
-  const router = useRouter();
+  const [showAlert, setShowAlert] = useState(false);
+  const [loading, setLoading] = useState(false);
   const searchParams = useSearchParams();
   const flow = searchParams.get("flow");
+  const router = useRouter();
 
   useEffect(() => {
     inputRefs.current[0]?.focus();
@@ -113,8 +115,7 @@ export default function ConfirmEmail() {
         return;
       }
 
-      alert("Correo verificado correctamente ✅");
-      router.push(flow === "recover" ? "/changePassword" : "/login");
+      setShowAlert(true);
     } catch (error) {
       console.error("Error al conectar con la API:", error);
       alert("No se pudo conectar con el servidor. Intenta más tarde.");
@@ -127,6 +128,17 @@ export default function ConfirmEmail() {
 
   return (
     <div className="flex flex-col items-center justify-center px-5 py-4">
+      <AlertCard
+        visible={showAlert}
+        message="¡Te has registrado exitosamente!"
+        description=""
+        buttonLabel="Continuar"
+        success={true}
+        onClose={() => {
+          setShowAlert(false);
+          router.push(flow === "recover" ? "/changePassword" : "/login");
+        }}
+      />
       <div className="flex justify-center w-full">
         <div className="max-w-sm w-full">
           <AuthCard>

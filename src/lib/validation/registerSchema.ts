@@ -21,9 +21,10 @@ export const registerSchema = z
 
     telefono: z
       .string()
-      .min(1, { message: "El teléfono es obligatorio" })
-      .regex(/^[0-9+\-\s()]+$/, {
-        message: "El teléfono debe contener solo números y caracteres válidos",
+      .min(8)
+      .regex(/^\+\d{1,3}\s?\d{1,4}[-\s]?\d{4,}$/, {
+        message:
+          "Formato de teléfono inválido. Usa formato internacional como +58 412-1234567",
       }),
 
     documento: z
