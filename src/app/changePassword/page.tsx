@@ -7,22 +7,104 @@ import AuthCard from "@/components/AuthCard";
 import Logo from "@/components/Logo";
 import PasswordInput from "@/components/PasswordInput";
 import PrimaryButton from "@/components/PrimaryButton";
+import { passwordSchema } from "@/lib/validation/passwordSchema";
+import { useRouter } from "next/navigation";
+import { AlertCard } from "@/components/AlertCard";
 
-export default function Login() {
+export default function PasswordReset() {
+  
+  const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
+  const [showAlert, setShowAlert] = useState(false);
+
   const [formData, setFormData] = useState({
-    usuario: "",
     password: "",
     confirmPassword: "",
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const [errors, setErrors] = useState<{
+    password?: string;
+    confirmPassword?: string;
+  }>({});
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("continuar contraseña");
+    setIsLoading(true);
+
+    const result = passwordSchema.safeParse({
+      password: formData.password,
+      confirmPassword: formData.confirmPassword,
+    });
+
+    if (!result.success) {
+      const fieldErrors: {
+        password?: string;
+        confirmPassword?: string;
+      } = {};
+
+      result.error.issues.forEach((err) => {
+        if (err.path[0] === "password") fieldErrors.password = err.message;
+        if (err.path[0] === "confirmPassword") fieldErrors.confirmPassword = err.message;
+      });
+      
+      setIsLoading(false);
+      setErrors(fieldErrors);
+      return;
+    }
+
+    try {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+      const tokenCode = localStorage.getItem("code");
+
+      if (!tokenCode) {
+        alert("Error en obtener token de confirmación, solicitar nuevamente");
+        return;
+      }
+
+      const response = await fetch(`${apiUrl}/auth/password/reset`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          confirm_password: formData.confirmPassword,
+          password: formData.password,
+          token: tokenCode,
+        }),
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        alert(errorText || "Error al cambiar contraseña");
+        setIsLoading(false);
+        return;
+      }
+
+      setErrors({});
+      setFormData({
+        password: "",
+        confirmPassword: "",
+      });
+      setShowAlert(true);
+    } catch (error) {
+      console.error("Error al conectar con la API:", error);
+      alert("No se pudo conectar con el servidor");
+    }
   };
 
   return (
     <div className="flex flex-col items-center justify-center px-5 py-4">
-      {/* Card centrado siempre */}
+      <AlertCard
+          visible={showAlert}
+          message= {"¡Contraseña restablecida exitosamente!"}
+          description=""
+          buttonLabel="Continuar"
+          success={true}
+          onClose={() => {
+            setShowAlert(false);
+            router.push("/login");
+          }}
+        />
       <div className="flex justify-center w-full">
         <div className="max-w-sm w-full">
           <AuthCard>
@@ -50,11 +132,16 @@ export default function Login() {
                     ariaLabel="Campo de contraseña"
                     placeholder="Nueva contraseña"
                     value={formData.password}
-                    onChange={(e) => {
-                      setFormData({ ...formData, password: e.target.value });
-                    }}
+                    onChange={(e) =>
+                      setFormData({ ...formData, password: e.target.value })
+                    }
                     className="bg-white"
                   />
+                  {errors.password && (
+                    <span className="text-red-500 text-sm mt-1">
+                      {errors.password}
+                    </span>
+                  )}
                 </div>
 
                 <div className="flex flex-col">
@@ -70,26 +157,33 @@ export default function Login() {
                     ariaLabel="Confirmar contraseña"
                     placeholder="Confirmar contraseña"
                     value={formData.confirmPassword}
-                    onChange={(e) => {
+                    onChange={(e) =>
                       setFormData({
                         ...formData,
                         confirmPassword: e.target.value,
-                      });
-                    }}
+                      })
+                    }
                     className="bg-white"
                   />
+                  {errors.confirmPassword && (
+                    <span className="text-red-500 text-sm mt-1">
+                      {errors.confirmPassword}
+                    </span>
+                  )}
                 </div>
               </div>
 
               <div className="mt-4 w-full">
-                <PrimaryButton type="submit">Continuar</PrimaryButton>
+                <PrimaryButton type="submit" disabled={isLoading}>
+                  {isLoading ? "Procesando..." : "Continuar"}
+                </PrimaryButton>
               </div>
             </form>
 
             <AuthFooter
               text="¿Recuerdas tu Contraseña?"
               linkText="Iniciar Sesión"
-              href="#"
+              href="/login"
             />
           </AuthCard>
         </div>
