@@ -16,11 +16,13 @@ export default function ConfirmEmail() {
   const [code, setCode] = useState<string[]>(["", "", "", "", "", ""]);
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
   const [showAlert, setShowAlert] = useState(false);
+  const [showAlertConfirmation, setShowAlertConfirmation] = useState(false);
+  const [incorrectCode, setIncorrectCode] = useState(false);
   const [loading, setLoading] = useState(false);
   const searchParams = useSearchParams();
   const flow = searchParams.get("flow");
   const router = useRouter();
-
+ 
   useEffect(() => {
     inputRefs.current[0]?.focus();
   }, []);
@@ -82,61 +84,119 @@ export default function ConfirmEmail() {
       return;
     }
 
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-    if (!apiUrl) {
-      alert("La URL de la API no está configurada.");
-      return;
-    }
-
     setLoading(true);
 
-    try {
-      const response = await fetch(`${apiUrl}/auth/activate`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        body: JSON.stringify({ code: verificationCode }),
-      });
-
-      let data: ActivateResponse = { message: undefined };
-      try {
-        data = await response.json();
-      } catch {
-        // Si el backend devuelve vacío, usamos mensaje genérico
-        data = { message: undefined };
-      }
-
-      if (!response.ok) {
-        alert(
-          data.message || "No se pudo verificar el código. Intenta nuevamente.",
-        );
+    if(flow !== "recover"){
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+      if (!apiUrl) {
+        alert("La URL de la API no está configurada.");
         return;
       }
 
-      setShowAlert(true);
-    } catch (error) {
-      console.error("Error al conectar con la API:", error);
-      alert("No se pudo conectar con el servidor. Intenta más tarde.");
-    } finally {
-      setLoading(false);
+      try {
+        const response = await fetch(`${apiUrl}/auth/activate`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify({ code: verificationCode }),
+        });
+
+        let data: ActivateResponse = { message: undefined };
+        try {
+          data = await response.json();
+        } catch {
+          data = { message: undefined };
+        }
+
+        if (!response.ok) {
+          alert(
+            data.message || "No se pudo verificar el código. Intenta nuevamente.",
+          );
+          setIncorrectCode(true);
+          return;
+        }
+
+        if(flow == "recover"){
+          localStorage.setItem("code",verificationCode);
+        }
+        
+        setShowAlert(true);
+      } catch (error) {
+        console.error("Error al conectar con la API:", error);
+        alert("No se pudo conectar con el servidor. Intenta más tarde.");
+      } finally {
+        setLoading(false);
+      }
+    }else{
+      const emailCode = localStorage.getItem("code");
+      if(emailCode !== verificationCode){
+        setIncorrectCode(true);
+        setLoading(false);
+        return;
+      }
     }
+
+    setLoading(false);
+    setShowAlert(true);
   };
 
   const isCodeComplete = code.every((char) => char !== "");
+
+  const resendCode = async () => {
+    const email = localStorage.getItem("email");
+    try {
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+        const response = await fetch(`${apiUrl}/auth/password/forgot`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email: email,
+          }),
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          alert(data.message || "Error al reenviar codigo");
+          return;
+        }
+
+        if(flow == "recover"){
+          localStorage.setItem("code",data.code);
+        }
+
+        setShowAlertConfirmation(true);
+
+      } catch (error) {
+        console.error("Error al conectar con la API:", error);
+        alert("No se pudo conectar con el servidor");
+      }
+  };
 
   return (
     <div className="flex flex-col items-center justify-center px-5 py-4">
       <AlertCard
         visible={showAlert}
-        message="¡Te has registrado exitosamente!"
+        message= {flow === "recover" ? "Email Confirmado" : "¡Te has registrado exitosamente!"}
         description=""
         buttonLabel="Continuar"
         success={true}
         onClose={() => {
           setShowAlert(false);
           router.push(flow === "recover" ? "/changePassword" : "/login");
+        }}
+      />
+      <AlertCard
+        visible={showAlertConfirmation}
+        message= {"Codigo de Confirmación Reenviado"}
+        description=""
+        buttonLabel="OK"
+        onClose={() => {
+          setShowAlertConfirmation(false);
         }}
       />
       <div className="flex justify-center w-full">
@@ -166,7 +226,11 @@ export default function ConfirmEmail() {
                   />
                 ))}
               </div>
-
+              {incorrectCode && 
+                <div className="text-left font-medium my-5">
+                  <span className="text-red-500">Codigo Incorrecto</span>
+                </div>
+              }
               <PrimaryButton
                 type="submit"
                 disabled={!isCodeComplete || loading}
@@ -176,6 +240,7 @@ export default function ConfirmEmail() {
 
               <div className="mt-4 w-full text-right">
                 <a
+                  onClick={()=>{resendCode();}}
                   className="font-medium text-primary hover:underline"
                   href="#"
                 >

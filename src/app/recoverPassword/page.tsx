@@ -15,10 +15,13 @@ export default function RecoverPassword() {
   const [formData, setFormData] = useState({ usuario: "" });
   const [error, setError] = useState<{ usuario?: string[] }>({});
   const [showAlert, setShowAlert] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsLoading(true);
+
     const result = recoverSchema.safeParse(formData);
 
     if (!result.success) {
@@ -30,15 +33,41 @@ export default function RecoverPassword() {
       }
 
       setError(fieldErrors);
+      setIsLoading(false);
       return;
-    } else {
+    }
+
+    try {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+      const response = await fetch(`${apiUrl}/auth/password/forgot`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: formData.usuario,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        alert(data.message || "Error al verificar email");
+        setIsLoading(false);
+        return;
+      }
+
+      localStorage.setItem("email", formData.usuario);
+      localStorage.setItem("code",data.code);
       setShowAlert(true);
       setError({});
       setFormData({ usuario: "" });
-
-      // Redirigir a la pantalla de código con el flujo de recuperación
-      router.push("/confirmEmail?flow=recover");
+    } catch (error) {
+      console.error("Error al conectar con la API:", error);
+      alert("No se pudo conectar con el servidor");
     }
+
+    setIsLoading(false);
   };
 
   return (
@@ -48,7 +77,10 @@ export default function RecoverPassword() {
         message="Revisa tu correo"
         description="Hemos enviado instrucciones para restablecer tu contraseña a tu correo electrónico. Por favor revisa tu bandeja de entrada y sigue el enlace para restablecer tu contraseña."
         buttonLabel="Cerrar"
-        onClose={() => setShowAlert(false)}
+        onClose={() => {
+          setShowAlert(false);
+          router.push("/confirmEmail?flow=recover");
+        }}
       />
 
       <div className="flex justify-center w-full">
@@ -92,7 +124,9 @@ export default function RecoverPassword() {
               </div>
 
               <div className="mt-4 w-full">
-                <PrimaryButton type="submit">Continuar</PrimaryButton>
+                <PrimaryButton type="submit" disabled={isLoading}>
+                  {isLoading ? "Procesando..." : "Continuar"}
+                </PrimaryButton>
               </div>
             </form>
 
