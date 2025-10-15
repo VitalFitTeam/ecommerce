@@ -1,17 +1,18 @@
-import { Header } from "@/components/dashboard/header";
 import { typography } from "@/styles/styles";
+import { Membership } from "@/components/dashboard/Membership";
+import { QuickActions } from "@/components/dashboard/QuickActions";
+import { Header } from "@/components/dashboard/header";
 
 export default function DashboardPage() {
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-100">
       <Header name="Albani Barragan" email="albani@gmail.com" />
 
       <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
         <div className="text-center">
           <h1
             className={
-              typography.h2 +
-              "text-3xl font-bold uppercase tracking-tight text-gray-900"
+              typography.h2 + " uppercase tracking-tight text-gray-900"
             }
           >
             Bienvenido Albani
@@ -20,6 +21,22 @@ export default function DashboardPage() {
             Gestiona tu membresía y accede a todas las funcionalidades de tu
             gimnasio
           </p>
+        </div>
+
+        <div className="mt-8 grid gap-6 lg:grid-cols-3">
+          <div className="space-y-6 lg:col-span-2">
+            <Membership
+              status={true}
+              plan="Premium"
+              fecha="14 Enero 2024"
+              vence="15 Enero 2025"
+              sucursal="Sucursal Oeste"
+            />
+          </div>
+
+          <div className="space-y-6">
+            <QuickActions />
+          </div>
         </div>
       </main>
     </div>
