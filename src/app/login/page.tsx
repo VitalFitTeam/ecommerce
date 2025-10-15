@@ -1,6 +1,6 @@
 "use client";
 
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
 import AuthFooter from "@/components/AuthFooter";
 import { typography } from "@/styles/styles";
 import AuthCard from "@/components/AuthCard";
@@ -15,10 +15,10 @@ import { loginSchema } from "@/lib/validation/loginSchema";
 export default function Login() {
   const [rememberMe, setRememberMe] = useState(false);
   const [formData, setFormData] = useState({ email: "", password: "" });
-  
+
   useEffect(() => {
     localStorage.clear();
-  }, [])
+  }, []);
 
   const [errors, setErrors] = useState<{
     email?: string[];
@@ -69,6 +69,8 @@ export default function Login() {
 
       // Login exitoso
       console.log("Token recibido:", data.token);
+      sessionStorage.setItem("token", data.token);
+      window.location.replace("/dashboard");
       // Aquí puedes guardar el token en localStorage o cookies
       // localStorage.setItem("token", data.token);
     } catch (error) {
