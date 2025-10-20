@@ -58,7 +58,7 @@ export default function RecoverPassword() {
       }
 
       localStorage.setItem("email", formData.usuario);
-      localStorage.setItem("code",data.code);
+      localStorage.setItem("code", data.code);
       setShowAlert(true);
       setError({});
       setFormData({ usuario: "" });
@@ -71,7 +71,7 @@ export default function RecoverPassword() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center px-5 py-4">
+    <div className="flex items-center justify-center min-h-screen px-5 py-4">
       <AlertCard
         visible={showAlert}
         message="Revisa tu correo"
@@ -88,7 +88,7 @@ export default function RecoverPassword() {
           <AuthCard>
             <Logo slogan={false} width={80} />
             <h2 className={typography.h3}>RECUPERA TU CONTRASEÑA</h2>
-            <div className="text-left mb-4">
+            <div className="text-center mb-4">
               <span>
                 Ingrese el correo electrónico asociado a la cuenta para
                 recuperar la contraseña

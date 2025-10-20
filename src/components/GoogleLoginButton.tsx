@@ -8,7 +8,7 @@ const GoogleLoginButton: React.FC<GoogleProps> = ({ text }) => {
   return (
     <button
       type="button"
-      className="w-full flex items-center justify-center gap-2 py-2 px-4 bg-white border border-gray-300 rounded hover:bg-gray-100 transition"
+      className="w-full flex items-center justify-center gap-2 py-2 px-4 bg-white shadow-lg rounded hover:bg-gray-100 transition"
     >
       <svg
         className="w-5 h-5"

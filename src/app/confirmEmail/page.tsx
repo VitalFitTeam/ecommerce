@@ -18,11 +18,12 @@ export default function ConfirmEmail() {
   const [showAlert, setShowAlert] = useState(false);
   const [showAlertConfirmation, setShowAlertConfirmation] = useState(false);
   const [incorrectCode, setIncorrectCode] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const searchParams = useSearchParams();
   const flow = searchParams.get("flow");
   const router = useRouter();
- 
+
   useEffect(() => {
     inputRefs.current[0]?.focus();
   }, []);
@@ -38,6 +39,12 @@ export default function ConfirmEmail() {
     const newCode = [...code];
     newCode[index] = char;
     setCode(newCode);
+
+    // clear previous error state when the user changes input
+    if (incorrectCode) {
+      setIncorrectCode(false);
+      setErrorMessage(null);
+    }
 
     if (index < code.length - 1 && char !== "") {
       inputRefs.current[index + 1]?.focus();
@@ -80,16 +87,20 @@ export default function ConfirmEmail() {
 
     const verificationCode = code.join("").trim();
     if (verificationCode.length !== 6) {
-      alert("Por favor, ingresa el código completo de 6 caracteres");
+      setIncorrectCode(true);
+      setErrorMessage("Por favor, ingresa el código completo de 6 caracteres");
+      setLoading(false);
       return;
     }
 
     setLoading(true);
 
-    if(flow !== "recover"){
+    if (flow !== "recover") {
       const apiUrl = process.env.NEXT_PUBLIC_API_URL;
       if (!apiUrl) {
-        alert("La URL de la API no está configurada.");
+        setIncorrectCode(true);
+        setErrorMessage("La URL de la API no está configurada.");
+        setLoading(false);
         return;
       }
 
@@ -111,34 +122,42 @@ export default function ConfirmEmail() {
         }
 
         if (!response.ok) {
-          alert(
-            data.message || "No se pudo verificar el código. Intenta nuevamente.",
-          );
           setIncorrectCode(true);
+          setErrorMessage(data.message || "Código incorrecto");
+          setLoading(false);
           return;
         }
 
-        if(flow == "recover"){
-          localStorage.setItem("code",verificationCode);
+        if (flow === "recover") {
+          localStorage.setItem("code", verificationCode);
         }
-        
+
+        // clear any previous errors and show success
+        setIncorrectCode(false);
+        setErrorMessage(null);
         setShowAlert(true);
       } catch (error) {
         console.error("Error al conectar con la API:", error);
-        alert("No se pudo conectar con el servidor. Intenta más tarde.");
+        setIncorrectCode(true);
+        setErrorMessage(
+          "No se pudo conectar con el servidor. Intenta más tarde.",
+        );
       } finally {
         setLoading(false);
       }
-    }else{
+    } else {
       const emailCode = localStorage.getItem("code");
-      if(emailCode !== verificationCode){
+      if (emailCode !== verificationCode) {
         setIncorrectCode(true);
+        setErrorMessage("Código incorrecto");
         setLoading(false);
         return;
       }
     }
 
     setLoading(false);
+    setIncorrectCode(false);
+    setErrorMessage(null);
     setShowAlert(true);
   };
 
@@ -147,41 +166,46 @@ export default function ConfirmEmail() {
   const resendCode = async () => {
     const email = localStorage.getItem("email");
     try {
-        const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-        const response = await fetch(`${apiUrl}/auth/password/forgot`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            email: email,
-          }),
-        });
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+      const response = await fetch(`${apiUrl}/auth/password/forgot`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: email,
+        }),
+      });
 
-        const data = await response.json();
+      const data = await response.json();
 
-        if (!response.ok) {
-          alert(data.message || "Error al reenviar codigo");
-          return;
-        }
-
-        if(flow == "recover"){
-          localStorage.setItem("code",data.code);
-        }
-
-        setShowAlertConfirmation(true);
-
-      } catch (error) {
-        console.error("Error al conectar con la API:", error);
-        alert("No se pudo conectar con el servidor");
+      if (!response.ok) {
+        setIncorrectCode(true);
+        setErrorMessage(data.message || "Error al reenviar codigo");
+        return;
       }
+
+      if (flow === "recover") {
+        localStorage.setItem("code", data.code);
+      }
+
+      setShowAlertConfirmation(true);
+    } catch (error) {
+      console.error("Error al conectar con la API:", error);
+      setIncorrectCode(true);
+      setErrorMessage("No se pudo conectar con el servidor");
+    }
   };
 
   return (
-    <div className="flex flex-col items-center justify-center px-5 py-4">
+    <div className="flex items-center justify-center min-h-screen px-5 py-4">
       <AlertCard
         visible={showAlert}
-        message= {flow === "recover" ? "Email Confirmado" : "¡Te has registrado exitosamente!"}
+        message={
+          flow === "recover"
+            ? "Email Confirmado"
+            : "¡Te has registrado exitosamente!"
+        }
         description=""
         buttonLabel="Continuar"
         success={true}
@@ -192,7 +216,7 @@ export default function ConfirmEmail() {
       />
       <AlertCard
         visible={showAlertConfirmation}
-        message= {"Codigo de Confirmación Reenviado"}
+        message={"Codigo de Confirmación Reenviado"}
         description=""
         buttonLabel="OK"
         onClose={() => {
@@ -213,7 +237,9 @@ export default function ConfirmEmail() {
                 {code.map((char, index) => (
                   <input
                     key={index}
-                    ref={(el) => (inputRefs.current[index] = el)}
+                    ref={(el) => {
+                      inputRefs.current[index] = el;
+                    }}
                     type="text"
                     maxLength={1}
                     value={char}
@@ -221,16 +247,18 @@ export default function ConfirmEmail() {
                     onChange={(e) => handleInputChange(index, e.target.value)}
                     onKeyDown={(e) => handleKeyDown(index, e)}
                     onPaste={handlePaste}
-                    className="w-10 h-10 text-center border border-gray-300 rounded-lg focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 text-lg font-semibold uppercase"
+                    className="w-8 h-8 text-center border border-gray-300 rounded-lg focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 text-lg font-semibold uppercase"
                     placeholder="-"
                   />
                 ))}
               </div>
-              {incorrectCode && 
+              {incorrectCode && (
                 <div className="text-left font-medium my-5">
-                  <span className="text-red-500">Codigo Incorrecto</span>
+                  <span className="text-red-500">
+                    {errorMessage ?? "Codigo Incorrecto"}
+                  </span>
                 </div>
-              }
+              )}
               <PrimaryButton
                 type="submit"
                 disabled={!isCodeComplete || loading}
@@ -240,11 +268,13 @@ export default function ConfirmEmail() {
 
               <div className="mt-4 w-full text-right">
                 <a
-                  onClick={()=>{resendCode();}}
-                  className="font-medium text-primary hover:underline"
+                  onClick={() => {
+                    resendCode();
+                  }}
+                  className="text-green-500 hover:underline"
                   href="#"
                 >
-                  Reenviar Código
+                  <h2>Reenviar Código</h2>
                 </a>
               </div>
             </form>
