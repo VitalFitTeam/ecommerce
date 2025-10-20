@@ -10,7 +10,7 @@ interface AuthFooterProps {
 
 const AuthFooter: React.FC<AuthFooterProps> = ({ text, linkText, href }) => {
   return (
-    <span>
+    <span className="text-xs font-medium flex-inline">
       {text}{" "}
       <Link
         href={href}

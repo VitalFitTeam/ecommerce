@@ -16,7 +16,7 @@ const config: Config = {
       fontFamily: {
         body: ["var(--font-body)", "sans-serif"],
         heading: ["var(--font-heading)", "sans-serif"],
-        display: ["var(--font-display)", "sans-serif"],
+        bebas: ["var(--font-bebas)", "sans-serif"], // si quieres usar font-bebas directamente
       },
     },
   },

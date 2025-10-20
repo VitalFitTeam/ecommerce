@@ -166,13 +166,13 @@ export default function RegisterPage() {
       <div className="flex justify-center w-full max-w-6xl">
         <div className="w-full max-w-2xl lg:max-w-4xl">
           <AuthCard>
-            <div className="flex flex-col mb-6 space-y-4 sm:flex-row sm:justify-between sm:items-center sm:space-y-0">
-              <div className="text-center sm:text-left">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 space-y-4 sm:space-y-0 w-full">
+              <div className="text-center lg:text-left">
                 <h3 className={`${typography.h3} text-xl sm:text-2xl`}>
-                  CREA UNA CUENTA
+                  CREA TU CUENTA
                 </h3>
               </div>
-              <div className="flex justify-center sm:justify-end">
+              <div className="flex justify-center sm:justify-end text-right">
                 <Logo slogan={true} />
               </div>
             </div>

@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react";
 import AuthFooter from "@/components/AuthFooter";
-import { typography } from "@/styles/styles";
 import AuthCard from "@/components/AuthCard";
 import Logo from "@/components/Logo";
 import GoogleLoginButton from "@/components/GoogleLoginButton";
@@ -10,11 +9,14 @@ import PasswordInput from "@/components/PasswordInput";
 import TextInput from "@/components/TextInput";
 import PrimaryButton from "@/components/PrimaryButton";
 import Checkbox from "@/components/Checkbox";
+import { AlertCard } from "@/components/AlertCard";
 import { loginSchema } from "@/lib/validation/loginSchema";
 
 export default function Login() {
   const [rememberMe, setRememberMe] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({ email: "", password: "" });
+  const [authError, setAuthError] = useState<string | null>(null);
 
   useEffect(() => {
     localStorage.clear();
@@ -31,6 +33,8 @@ export default function Login() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsSubmitting(true);
+
     const result = loginSchema.safeParse(formData);
 
     if (!result.success) {
@@ -45,6 +49,7 @@ export default function Login() {
       }
 
       setErrors(fieldErrors);
+      setIsSubmitting(false);
       return;
     }
 
@@ -63,19 +68,22 @@ export default function Login() {
       const data = await response.json();
 
       if (!response.ok) {
-        alert(data.message || "Error al iniciar sesión");
+        if (response.status === 401) {
+          setAuthError("Credenciales Incorrectas");
+        } else {
+          setAuthError(data.message || "Error al iniciar sesión");
+        }
+        setIsSubmitting(false);
         return;
       }
 
-      // Login exitoso
       console.log("Token recibido:", data.token);
       sessionStorage.setItem("token", data.token);
       window.location.replace("/dashboard");
-      // Aquí puedes guardar el token en localStorage o cookies
-      // localStorage.setItem("token", data.token);
     } catch (error) {
       console.error("Error al conectar con la API:", error);
-      alert("No se pudo conectar con el servidor");
+      setAuthError("No se pudo conectar con el servidor");
+      setIsSubmitting(false);
     }
   };
 
@@ -87,11 +95,23 @@ export default function Login() {
       }}
     >
       <div className="w-full max-w-sm sm:max-w-md lg:max-w-lg">
+        {authError && (
+          <AlertCard
+            visible={true}
+            message="Credenciales Incorrectas"
+            description=""
+            buttonLabel="Aceptar"
+            error={true}
+            onClose={() => {
+              setAuthError(null);
+            }}
+          />
+        )}
         <AuthCard>
           <Logo slogan={false} width={80} />
-          <h2 className={typography.h3}>INICIAR SESIÓN</h2>
-          <GoogleLoginButton text="Sign in with Google" />
-          <div className="text-center md:text-left mb-4">
+          <h2 className="text-3xl font-bebas">INICIAR SESIÓN</h2>
+          <GoogleLoginButton text="Iniciar sesión con Google" />
+          <div className="text-sm text-center mb-4">
             <span>Ingresa tus credenciales para iniciar sesión</span>
           </div>
 
@@ -148,14 +168,14 @@ export default function Login() {
             </div>
 
             <div className="flex flex-col sm:flex-row w-full mt-3 gap-2 sm:gap-0">
-              <div className="flex-1">
+              <div className="flex-1 text-sm">
                 <Checkbox
                   labelText="Mantener Sesión"
                   isChecked={rememberMe}
                   onChange={handleCheckboxChange}
                 />
               </div>
-              <div className="flex-1">
+              <div className="flex-1 text-xs">
                 <AuthFooter
                   text="¿Olvidaste tu Contraseña?"
                   linkText="Recuperar"
@@ -165,7 +185,13 @@ export default function Login() {
             </div>
 
             <div className="mt-4 w-full">
-              <PrimaryButton type="submit">Iniciar sesión</PrimaryButton>
+              <PrimaryButton
+                type="submit"
+                disabled={isSubmitting}
+                className={isSubmitting ? "opacity-50 cursor-not-allowed" : ""}
+              >
+                {isSubmitting ? "Cargando..." : "Iniciar sesión"}
+              </PrimaryButton>
             </div>
           </form>
 

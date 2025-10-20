@@ -25,6 +25,16 @@ export const typography = {
   heading: "font-heading text-[2.5rem] tracking-wide", // Bebas Neue
 };
 
+export const typographyBebas = {
+  h1: "text-[3rem] leading-[3.5rem] font-extrabold font-bebas",
+  h2: "text-[2.25rem] leading-[2.5rem] font-bold font-bebas",
+  h3: "text-[1.875rem] leading-[2.25rem] font-bold font-bebas",
+  h4: "text-[1.5rem] leading-[2rem] font-medium font-bebas",
+  h5: "text-[1.25rem] leading-[1.75rem] font-medium font-bebas",
+  body: "text-[1rem] leading-[1.5rem] font-normal font-bebas",
+  heading: "font-heading text-[2.5rem] tracking-wide font-bebas", // Bebas Neue
+};
+
 export const colors = {
   primary: "#F27F2A", // Naranja Vital
   complementary: {
