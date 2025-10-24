@@ -1,4 +1,4 @@
-import { colors, montserrat, typography } from "@/styles/styles";
+import { colors } from "@/styles/styles";
 import Link from "next/link";
 import React from "react";
 

@@ -3,7 +3,7 @@ import React, { ReactNode, MouseEvent, ButtonHTMLAttributes } from "react";
 interface QuickButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   children: ReactNode;
   className?: string;
-  onClick?: (event: MouseEvent<HTMLButtonElement>) => void;
+  onClick?: (_event: MouseEvent<HTMLButtonElement>) => void;
 }
 
 const QuickButton: React.FC<QuickButtonProps> = ({
