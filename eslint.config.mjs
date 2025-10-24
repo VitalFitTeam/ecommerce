@@ -28,7 +28,7 @@ const eslintConfig = [
       "no-console": ["warn", { allow: ["warn", "error"] }], // console.log → warning
       "eqeqeq": ["error", "always"],                // Usar siempre === y !==
       "curly": ["error", "all"],                    // Siempre llaves en if/for/while
-      "indent": ["error", 2, { "SwitchCase": 1 }], // Indentación 2 espacios
+      "indent": ["error", 2], // Indentación 2 espacios
     }
   },
 ];
