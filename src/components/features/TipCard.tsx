@@ -1,4 +1,4 @@
-import Card from "@/components/dashboard/Card";
+import Card from "@/components/ui/Card";
 import { typography } from "@/styles/styles";
 
 export function TipCard() {
@@ -11,7 +11,8 @@ export function TipCard() {
 
       <div className="mt-3">
         <p className={phraseStyle}>
-          Es mejor levantar menos peso con buena forma que mucho peso con mala postura.
+          Es mejor levantar menos peso con buena forma que mucho peso con mala
+          postura.
         </p>
       </div>
     </Card>
