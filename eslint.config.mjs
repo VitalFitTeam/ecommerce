@@ -34,7 +34,6 @@ const eslintConfig = [
       "@typescript-eslint/no-unused-expressions": ["warn"], // Re-enable and set to warn
       "@typescript-eslint/no-unused-vars": ["warn"], // Re-enable and set to warn
       "@typescript-eslint/no-explicit-any": ["warn"], // Re-enable and set to warn
-      "indent": ["error", 2, { "SwitchCase": 1 }], // Indentación 2 espacios
       "@next/next/no-assign-module-variable": ["error"], // Re-enable and set to error
       "@typescript-eslint/ban-ts-comment": ["error"], // Re-enable and set to error
       "@typescript-eslint/no-empty-object-type": ["error"], // Re-enable and set to error
@@ -42,13 +41,6 @@ const eslintConfig = [
       "no-unused-vars": ["warn"], // Re-enable and set to warn
       "no-eval": ["error"], // Re-enable and set to error
     }
-  },
-  {
-    // Disable indent rule specifically for QRCodeCard.tsx to resolve RangeError
-    files: ["src/components/dashboard/QRCodeCard.tsx"],
-    rules: {
-      indent: "off",
-    },
   },
 ];
 
