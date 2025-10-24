@@ -31,7 +31,7 @@ jobs:
         run: npm run lint
 
       - name: Ejecutar pruebas (Tests)
-        run: npx lint-staged
+        run: npm test
 
       - name: Construir el proyecto (Build)
         run: npm run build
