@@ -11,7 +11,8 @@ export function TipCard() {
 
       <div className="mt-3">
         <p className={phraseStyle}>
-          Es mejor levantar menos peso con buena forma que mucho peso con mala postura.
+          Es mejor levantar menos peso con buena forma que mucho peso con mala
+          postura.
         </p>
       </div>
     </Card>

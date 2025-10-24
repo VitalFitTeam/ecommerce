@@ -1,4 +1,4 @@
-import { CalendarIcon } from "@heroicons/react/24/outline"
+import { CalendarIcon } from "@heroicons/react/24/outline";
 import Card from "@/components/ui/Card";
 
 type StatsProps = {
@@ -7,7 +7,11 @@ type StatsProps = {
   clases: number;
 };
 
-export const StatsCards: React.FC<StatsProps> = ({semana,calorias,clases}) => {
+export const StatsCards: React.FC<StatsProps> = ({
+  semana,
+  calorias,
+  clases,
+}) => {
   return (
     <Card>
       <div className="grid gap-4 sm:grid-cols-3">
@@ -26,7 +30,9 @@ export const StatsCards: React.FC<StatsProps> = ({semana,calorias,clases}) => {
 
         <Card className="border border-orange-500">
           <div className="pb-2">
-            <div className="text-sm font-medium text-gray-600">Calorías estimadas</div>
+            <div className="text-sm font-medium text-gray-600">
+              Calorías estimadas
+            </div>
           </div>
           <div>
             <div className="text-3xl font-bold">{calorias}</div>
@@ -38,7 +44,9 @@ export const StatsCards: React.FC<StatsProps> = ({semana,calorias,clases}) => {
 
         <Card className="border border-orange-500">
           <div className="pb-2">
-            <div className="text-sm font-medium text-gray-600">Clases Reservadas</div>
+            <div className="text-sm font-medium text-gray-600">
+              Clases Reservadas
+            </div>
           </div>
           <div>
             <div className="text-3xl font-bold">{clases}</div>
@@ -49,5 +57,5 @@ export const StatsCards: React.FC<StatsProps> = ({semana,calorias,clases}) => {
         </Card>
       </div>
     </Card>
-  )
-}
+  );
+};

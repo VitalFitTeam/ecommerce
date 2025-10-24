@@ -1,15 +1,17 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 
 type QrProps = {
   id: string;
   name: string;
 };
 
-export const QRCodeCard : React.FC<QrProps> = ({id,name,}) => {
+export const QRCodeCard: React.FC<QrProps> = ({ id, name }) => {
   const [showModal, setShowModal] = useState(false);
-  const modalButtonStyle = "rounded-md border border-gray-300 bg-gray-100 px-4 py-2 text-sm";
+  const modalButtonStyle =
+    "rounded-md border border-gray-300 bg-gray-100 px-4 py-2 text-sm";
   return (
     <>
       <div className="rounded-lg border border-orange-500 bg-gradient-to-br from-orange-500 to-orange-600 text-white shadow-sm">
@@ -24,13 +26,17 @@ export const QRCodeCard : React.FC<QrProps> = ({id,name,}) => {
             className="flex h-32 w-32 items-center justify-center rounded-lg cursor-pointer"
             onClick={() => setShowModal(true)}
           >
-            <img
+            <Image
               src="/images/qr-code.png"
               alt="Código QR"
+              width={112}
+              height={112}
               className="h-28 w-28 object-contain"
             />
           </div>
-          <p className="mt-4 text-center text-sm font-medium">Escanea para ingresar</p>
+          <p className="mt-4 text-center text-sm font-medium">
+            Escanea para ingresar
+          </p>
         </div>
       </div>
 
@@ -46,29 +52,31 @@ export const QRCodeCard : React.FC<QrProps> = ({id,name,}) => {
               ×
             </button>
 
-            <h4 className="text-lg font-semibold text-gray-800 mb-4">Código QR de Acceso</h4>
+            <h4 className="text-lg font-semibold text-gray-800 mb-4">
+              Código QR de Acceso
+            </h4>
 
-            <img
+            <Image
               src="/images/qr-code.png"
               alt="Código QR ampliado"
+              width={192}
+              height={192}
               className="mx-auto h-48 w-48 object-contain mb-4"
             />
 
             <p className="text-base font-semibold text-gray-900">{name}</p>
             <p className="text-sm text-gray-500 mb-2">{id}</p>
-            <p className="text-sm text-gray-600">Presenta este código en la recepción</p>
+            <p className="text-sm text-gray-600">
+              Presenta este código en la recepción
+            </p>
 
             <div className="mt-6 flex justify-center gap-4">
-              <button className={modalButtonStyle}>
-                Descargar
-              </button>
-              <button className={modalButtonStyle}>
-                Compartir
-              </button>
+              <button className={modalButtonStyle}>Descargar</button>
+              <button className={modalButtonStyle}>Compartir</button>
             </div>
           </div>
         </div>
       )}
     </>
   );
-}
+};

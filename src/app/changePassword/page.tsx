@@ -12,7 +12,6 @@ import { useRouter } from "next/navigation";
 import { AlertCard } from "@/components/features/AlertCard";
 
 export default function PasswordReset() {
-  
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
@@ -43,10 +42,14 @@ export default function PasswordReset() {
       } = {};
 
       result.error.issues.forEach((err) => {
-        if (err.path[0] === "password") fieldErrors.password = err.message;
-        if (err.path[0] === "confirmPassword") fieldErrors.confirmPassword = err.message;
+        if (err.path[0] === "password") {
+          fieldErrors.password = err.message;
+        }
+        if (err.path[0] === "confirmPassword") {
+          fieldErrors.confirmPassword = err.message;
+        }
       });
-      
+
       setIsLoading(false);
       setErrors(fieldErrors);
       return;
@@ -89,22 +92,25 @@ export default function PasswordReset() {
     } catch (error) {
       console.error("Error al conectar con la API:", error);
       alert("No se pudo conectar con el servidor");
+    } finally {
+      // Use finally to ensure setIsLoading(false) runs
+      setIsLoading(false);
     }
   };
 
   return (
     <div className="flex flex-col items-center justify-center px-5 py-4">
       <AlertCard
-          visible={showAlert}
-          message= {"¡Contraseña restablecida exitosamente!"}
-          description=""
-          buttonLabel="Continuar"
-          success={true}
-          onClose={() => {
-            setShowAlert(false);
-            router.push("/login");
-          }}
-        />
+        visible={showAlert}
+        message={"¡Contraseña restablecida exitosamente!"}
+        description=""
+        buttonLabel="Continuar"
+        success={true}
+        onClose={() => {
+          setShowAlert(false);
+          router.push("/login");
+        }}
+      />
       <div className="flex justify-center w-full">
         <div className="max-w-sm w-full">
           <AuthCard>

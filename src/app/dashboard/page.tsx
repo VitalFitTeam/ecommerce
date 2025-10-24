@@ -14,11 +14,14 @@ export default function DashboardPage() {
 
       <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
         <div className="text-center">
-          <h1 className={`${typography.h2} uppercase tracking-tight text-gray-900`}>
+          <h1
+            className={`${typography.h2} uppercase tracking-tight text-gray-900`}
+          >
             Bienvenido Albani
           </h1>
           <p className="mt-2 text-sm text-gray-600">
-            Gestiona tu membresía y accede a todas las funcionalidades de tu gimnasio
+            Gestiona tu membresía y accede a todas las funcionalidades de tu
+            gimnasio
           </p>
         </div>
 

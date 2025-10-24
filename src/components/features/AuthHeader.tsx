@@ -1,6 +1,6 @@
 import Image from "next/image";
 import React from "react";
-import { colors, typography } from "@/styles/styles";
+import { colors } from "@/styles/styles";
 
 const AuthHeader: React.FC = () => {
   const componentStyles: { [key: string]: React.CSSProperties } = {
