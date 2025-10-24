@@ -3,7 +3,7 @@ import {
   CalendarIcon,
   CalendarDaysIcon,
 } from "@heroicons/react/24/outline";
-import Card from "@/components/dashboard/Card";
+import Card from "@/components/ui/Card";
 type HeaderProps = {
   status: boolean;
   plan: string;

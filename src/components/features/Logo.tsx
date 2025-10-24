@@ -1,7 +1,5 @@
 import React from "react";
 import Image from "next/image";
-import imgLogo from "../assets/images/logo-vitalfit.png";
-import imgIsotipo from "../assets/images/isotipo.png";
 
 interface LogoProps {
   slogan: boolean;
@@ -9,10 +7,10 @@ interface LogoProps {
 }
 
 const Logo: React.FC<LogoProps> = ({ slogan, width }) => {
-  const imgPATH = slogan ? imgLogo : imgIsotipo;
+  const imgPATH = slogan ? "/images/logo-vitalfit.png" : "/images/isotipo.png";
   return (
     <div className="flex justify-center">
-      <Image alt="Logo" src={imgPATH} width={width || 200} />
+      <Image alt="Logo" src={imgPATH} width={width || 200} height={200} />
     </div>
   );
 };

@@ -2,10 +2,10 @@
 
 import { useState, useRef, useEffect } from "react";
 import { typography } from "@/styles/styles";
-import AuthCard from "@/components/AuthCard";
-import { AlertCard } from "@/components/AlertCard";
-import Logo from "@/components/Logo";
-import PrimaryButton from "@/components/PrimaryButton";
+import AuthCard from "@/components/features/AuthCard";
+import { AlertCard } from "@/components/features/AlertCard";
+import Logo from "@/components/features/Logo";
+import PrimaryButton from "@/components/ui/PrimaryButton";
 import { useRouter, useSearchParams } from "next/navigation";
 
 type ActivateResponse = {
