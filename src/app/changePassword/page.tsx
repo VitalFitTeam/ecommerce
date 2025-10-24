@@ -1,15 +1,15 @@
 "use client";
 
 import { useState } from "react";
-import AuthFooter from "@/components/AuthFooter";
+import AuthFooter from "@/components/features/AuthFooter";
 import { typography } from "@/styles/styles";
-import AuthCard from "@/components/AuthCard";
-import Logo from "@/components/Logo";
-import PasswordInput from "@/components/PasswordInput";
-import PrimaryButton from "@/components/PrimaryButton";
+import AuthCard from "@/components/features/AuthCard";
+import Logo from "@/components/features/Logo";
+import PasswordInput from "@/components/ui/PasswordInput";
+import PrimaryButton from "@/components/ui/PrimaryButton";
 import { passwordSchema } from "@/lib/validation/passwordSchema";
 import { useRouter } from "next/navigation";
-import { AlertCard } from "@/components/AlertCard";
+import { AlertCard } from "@/components/features/AlertCard";
 
 export default function PasswordReset() {
   const router = useRouter();
