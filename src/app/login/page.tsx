@@ -1,15 +1,15 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import AuthFooter from "@/components/AuthFooter";
-import AuthCard from "@/components/AuthCard";
-import Logo from "@/components/Logo";
-import GoogleLoginButton from "@/components/GoogleLoginButton";
-import PasswordInput from "@/components/PasswordInput";
-import TextInput from "@/components/TextInput";
-import PrimaryButton from "@/components/PrimaryButton";
-import Checkbox from "@/components/Checkbox";
-import { AlertCard } from "@/components/AlertCard";
+import AuthFooter from "@/components/features/AuthFooter";
+import AuthCard from "@/components/features/AuthCard";
+import Logo from "@/components/features/Logo";
+import GoogleLoginButton from "@/components/ui/GoogleLoginButton";
+import PasswordInput from "@/components/ui/PasswordInput";
+import TextInput from "@/components/ui/TextInput";
+import PrimaryButton from "@/components/ui/PrimaryButton";
+import Checkbox from "@/components/ui/Checkbox";
+import { AlertCard } from "@/components/features/AlertCard";
 import { loginSchema } from "@/lib/validation/loginSchema";
 
 export default function Login() {

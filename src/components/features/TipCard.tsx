@@ -1,4 +1,4 @@
-import Card from "@/components/dashboard/Card";
+import Card from "@/components/ui/Card";
 import { typography } from "@/styles/styles";
 
 export function TipCard() {

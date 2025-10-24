@@ -1,13 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import AuthFooter from "@/components/AuthFooter";
+import AuthFooter from "@/components/features/AuthFooter";
 import { typography } from "@/styles/styles";
-import AuthCard from "@/components/AuthCard";
-import Logo from "@/components/Logo";
-import TextInput from "@/components/TextInput";
-import PrimaryButton from "@/components/PrimaryButton";
-import { AlertCard } from "@/components/AlertCard";
+import AuthCard from "@/components/features/AuthCard";
+import Logo from "@/components/features/Logo";
+import TextInput from "@/components/ui/TextInput";
+import PrimaryButton from "@/components/ui/PrimaryButton";
+import { AlertCard } from "@/components/features/AlertCard";
 import { recoverSchema } from "@/lib/validation/recoverSchema";
 import { useRouter } from "next/navigation";
 

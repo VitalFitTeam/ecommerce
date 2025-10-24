@@ -1,11 +1,11 @@
 import { typography } from "@/styles/styles";
-import { Membership } from "@/components/dashboard/Membership";
-import { QuickActions } from "@/components/dashboard/QuickActions";
-import { Header } from "@/components/dashboard/header";
-import { QRCodeCard } from "@/components/dashboard/QRCodeCard";
-import { TipCard } from "@/components/dashboard/TipCard";
-import { AppDownloadBanner } from "@/components/dashboard/AppDownloadBanner";
-import { StatsCards } from "@/components/dashboard/StatsCards";
+import { Membership } from "@/components/features/Membership";
+import { QuickActions } from "@/components/features/QuickActions";
+import { Header } from "@/components/layout/Header";
+import { QRCodeCard } from "@/components/features/QRCodeCard";
+import { TipCard } from "@/components/features/TipCard";
+import { AppDownloadBanner } from "@/components/features/AppDownloadBanner";
+import { StatsCards } from "@/components/features/StatsCards";
 
 export default function DashboardPage() {
   return (
