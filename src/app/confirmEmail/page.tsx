@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, Suspense } from "react";
 import { typography } from "@/styles/styles";
 import AuthCard from "@/components/features/AuthCard";
 import { AlertCard } from "@/components/features/AlertCard";
@@ -12,7 +12,7 @@ type ActivateResponse = {
   message?: string;
 };
 
-export default function ConfirmEmail() {
+function ConfirmEmailContent() {
   const [code, setCode] = useState<string[]>(["", "", "", "", "", ""]);
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
   const [showAlert, setShowAlert] = useState(false);
@@ -282,5 +282,13 @@ export default function ConfirmEmail() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function ConfirmEmail() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <ConfirmEmailContent />
+    </Suspense>
   );
 }

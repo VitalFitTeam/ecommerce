@@ -4,7 +4,7 @@ import { colors, typography } from "@/styles/styles";
 interface InputFieldProps {
   value: string;
   placeholder?: string;
-  onChange: (_e: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 const InputField: React.FC<InputFieldProps> = ({
