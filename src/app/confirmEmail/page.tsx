@@ -5,7 +5,6 @@ import { typography } from "@/styles/styles";
 import AuthCard from "@/components/features/AuthCard";
 import { AlertCard } from "@/components/features/AlertCard";
 import Logo from "@/components/features/Logo";
-import PrimaryButton from "@/components/ui/PrimaryButton";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 
