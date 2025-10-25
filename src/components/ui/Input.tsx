@@ -1,56 +1,29 @@
-import { colors } from "@/styles/styles";
+"use client";
 
-type InputProps = {
-  label: string;
-  value?: string;
-  type?: string;
-  helperText?: string;
-  placeholder?: string;
-};
+import React, { forwardRef } from "react";
+import { cn } from "@/lib/utils";
 
-const Input = ({
-  label,
-  type = "text",
-  value,
-  helperText,
-  placeholder,
-}: InputProps) => {
-  return (
-    <div className="flex flex-col gap-1">
-      {/* Label */}
-      <label
-        className="text-sm font-medium"
-        style={{ color: colors.complementary.black }}
-      >
-        {label}
-      </label>
+export interface InputProps
+  extends React.InputHTMLAttributes<HTMLInputElement> {
+  error?: boolean;
+}
 
-      {/* Input */}
+export const Input = forwardRef<HTMLInputElement, InputProps>(
+  ({ className, error, ...props }, ref) => {
+    return (
       <input
-        type={type}
-        value={value}
-        placeholder={placeholder}
-        className={`
-          px-3 py-2 rounded-md font-sans border
-          bg-gray-50 text-gray-900
-          border-gray-300
-          focus:outline-none focus:ring-2 focus:ring-[${colors.primary}] focus:border-transparent
-          transition-all duration-200
-          placeholder:text-gray-400
-        `}
+        ref={ref}
+        {...props}
+        className={cn(
+          "border rounded-md px-3 py-2 text-sm w-full focus:outline-none focus:ring-2 focus:ring-primary pr-10",
+          error
+            ? "border-red-500 focus:border-red-500"
+            : "border-gray-300 focus:border-[#F27F2A]",
+          className,
+        )}
       />
+    );
+  },
+);
 
-      {/* Helper Text */}
-      {helperText && (
-        <span
-          className="text-xs"
-          style={{ color: colors.complementary.darkGray }}
-        >
-          {helperText}
-        </span>
-      )}
-    </div>
-  );
-};
-
-export default Input;
+Input.displayName = "Input";
