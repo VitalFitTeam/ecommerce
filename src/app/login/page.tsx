@@ -7,7 +7,6 @@ import Logo from "@/components/features/Logo";
 import GoogleLoginButton from "@/components/ui/GoogleLoginButton";
 import PasswordInput from "@/components/ui/PasswordInput";
 import TextInput from "@/components/ui/TextInput";
-import PrimaryButton from "@/components/ui/PrimaryButton";
 import Checkbox from "@/components/ui/Checkbox";
 import { AlertCard } from "@/components/features/AlertCard";
 import { loginSchema } from "@/lib/validation/loginSchema";

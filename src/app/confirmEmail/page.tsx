@@ -7,6 +7,7 @@ import { AlertCard } from "@/components/features/AlertCard";
 import Logo from "@/components/features/Logo";
 import PrimaryButton from "@/components/ui/PrimaryButton";
 import { useRouter, useSearchParams } from "next/navigation";
+import { Button } from "@/components/ui/button";
 
 type ActivateResponse = {
   message?: string;
@@ -259,12 +260,9 @@ function ConfirmEmailContent() {
                   </span>
                 </div>
               )}
-              <PrimaryButton
-                type="submit"
-                disabled={!isCodeComplete || loading}
-              >
+              <Button type="submit" disabled={!isCodeComplete || loading}>
                 {loading ? "Verificando..." : "Verificar Correo"}
-              </PrimaryButton>
+              </Button>
 
               <div className="mt-4 w-full text-right">
                 <a
