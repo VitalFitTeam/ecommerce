@@ -2,7 +2,7 @@ import React, { ReactNode } from "react";
 
 interface CardProps {
   children: ReactNode;
-  className?: string; // className es ahora una prop opcional
+  className?: string;
 }
 
 const Card: React.FC<CardProps> = ({ children, className = "" }) => {

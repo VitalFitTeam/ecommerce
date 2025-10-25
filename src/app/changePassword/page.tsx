@@ -6,10 +6,10 @@ import { typography } from "@/styles/styles";
 import AuthCard from "@/components/features/AuthCard";
 import Logo from "@/components/features/Logo";
 import PasswordInput from "@/components/ui/PasswordInput";
-import PrimaryButton from "@/components/ui/PrimaryButton";
 import { passwordSchema } from "@/lib/validation/passwordSchema";
 import { useRouter } from "next/navigation";
 import { AlertCard } from "@/components/features/AlertCard";
+import { Button } from "@/components/ui/button";
 
 export default function PasswordReset() {
   const router = useRouter();
@@ -180,9 +180,9 @@ export default function PasswordReset() {
               </div>
 
               <div className="mt-4 w-full">
-                <PrimaryButton type="submit" disabled={isLoading}>
+                <Button fullWidth type="submit" disabled={isLoading}>
                   {isLoading ? "Procesando..." : "Continuar"}
-                </PrimaryButton>
+                </Button>
               </div>
             </form>
 

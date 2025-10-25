@@ -6,10 +6,10 @@ import { typography } from "@/styles/styles";
 import AuthCard from "@/components/features/AuthCard";
 import Logo from "@/components/features/Logo";
 import TextInput from "@/components/ui/TextInput";
-import PrimaryButton from "@/components/ui/PrimaryButton";
 import { AlertCard } from "@/components/features/AlertCard";
 import { recoverSchema } from "@/lib/validation/recoverSchema";
 import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
 
 export default function RecoverPassword() {
   const [formData, setFormData] = useState({ usuario: "" });
@@ -124,9 +124,9 @@ export default function RecoverPassword() {
               </div>
 
               <div className="mt-4 w-full">
-                <PrimaryButton type="submit" disabled={isLoading}>
+                <Button fullWidth type="submit" disabled={isLoading}>
                   {isLoading ? "Procesando..." : "Continuar"}
-                </PrimaryButton>
+                </Button>
               </div>
             </form>
 

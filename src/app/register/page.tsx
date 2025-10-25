@@ -8,13 +8,13 @@ import Logo from "@/components/features/Logo";
 import PasswordInput from "@/components/ui/PasswordInput";
 import TextInput from "@/components/ui/TextInput";
 import Checkbox from "@/components/ui/Checkbox";
-import PrimaryButton from "@/components/ui/PrimaryButton";
 import { AlertCard } from "@/components/features/AlertCard";
 import { registerSchema } from "@/lib/validation/registerSchema";
 import { RegisterFormData } from "@/lib/validation/registerSchema";
 import GoogleLoginButton from "@/components/ui/GoogleLoginButton";
 import { colors } from "@/styles/styles";
 import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
 export default function RegisterPage() {
   const [formData, setFormData] = useState<RegisterFormData>({
     nombre: "",
@@ -451,12 +451,13 @@ export default function RegisterPage() {
               </div>
 
               <div className="mt-6 w-full">
-                <PrimaryButton
+                <Button
+                  fullWidth
                   type="submit"
                   className="w-full py-3 text-base sm:py-2"
                 >
                   Crear Cuenta
-                </PrimaryButton>
+                </Button>
               </div>
               <div className="mt-6 w-full">
                 <GoogleLoginButton text="Sign in with google" />

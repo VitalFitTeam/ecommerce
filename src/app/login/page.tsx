@@ -7,10 +7,10 @@ import Logo from "@/components/features/Logo";
 import GoogleLoginButton from "@/components/ui/GoogleLoginButton";
 import PasswordInput from "@/components/ui/PasswordInput";
 import TextInput from "@/components/ui/TextInput";
-import PrimaryButton from "@/components/ui/PrimaryButton";
 import Checkbox from "@/components/ui/Checkbox";
 import { AlertCard } from "@/components/features/AlertCard";
 import { loginSchema } from "@/lib/validation/loginSchema";
+import { Button } from "@/components/ui/button";
 
 export default function Login() {
   const [rememberMe, setRememberMe] = useState(false);
@@ -107,6 +107,7 @@ export default function Login() {
             }}
           />
         )}
+
         <AuthCard>
           <Logo slogan={false} width={80} />
           <h2 className="text-3xl font-bebas">INICIAR SESIÓN</h2>
@@ -185,13 +186,15 @@ export default function Login() {
             </div>
 
             <div className="mt-4 w-full">
-              <PrimaryButton
+              <Button
                 type="submit"
+                fullWidth
+                variant={"primary"}
                 disabled={isSubmitting}
                 className={isSubmitting ? "opacity-50 cursor-not-allowed" : ""}
               >
                 {isSubmitting ? "Cargando..." : "Iniciar sesión"}
-              </PrimaryButton>
+              </Button>
             </div>
           </form>
 
