@@ -8,7 +8,7 @@ import GoogleLoginButton from "@/components/ui/GoogleLoginButton";
 import PasswordInput from "@/components/ui/PasswordInput";
 import TextInput from "@/components/ui/TextInput";
 import Checkbox from "@/components/ui/Checkbox";
-import { AlertCard } from "@/components/features/AlertCard";
+import { Notification } from "@/components/ui/Notification";
 import { loginSchema } from "@/lib/validation/loginSchema";
 import { Button } from "@/components/ui/button";
 
@@ -17,6 +17,9 @@ export default function Login() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [authError, setAuthError] = useState<string | null>(null);
+  const [showApiError, setShowApiError] = useState(false);
+  const [showConnectionError, setShowConnectionError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
     localStorage.clear();
@@ -70,8 +73,10 @@ export default function Login() {
       if (!response.ok) {
         if (response.status === 401) {
           setAuthError("Credenciales Incorrectas");
+          // No llamamos a setShowApiError aquí porque authError se maneja por separado
         } else {
-          setAuthError(data.message || "Error al iniciar sesión");
+          setErrorMessage(data.message || "Error al iniciar sesión");
+          setShowApiError(true);
         }
         setIsSubmitting(false);
         return;
@@ -82,7 +87,8 @@ export default function Login() {
       window.location.replace("/dashboard");
     } catch (error) {
       console.error("Error al conectar con la API:", error);
-      setAuthError("No se pudo conectar con el servidor");
+      setErrorMessage("No se pudo conectar con el servidor");
+      setShowConnectionError(true);
       setIsSubmitting(false);
     }
   };
@@ -96,15 +102,30 @@ export default function Login() {
     >
       <div className="w-full max-w-sm sm:max-w-md lg:max-w-lg">
         {authError && (
-          <AlertCard
-            visible={true}
-            message="Credenciales Incorrectas"
-            description=""
-            buttonLabel="Aceptar"
-            error={true}
+          <Notification
+            variant="destructive"
+            title=""
+            description="Credenciales incorrectas"
             onClose={() => {
               setAuthError(null);
+              setShowApiError(false);
             }}
+          />
+        )}
+        {showApiError && (
+          <Notification
+            variant="destructive"
+            title="Error"
+            description={errorMessage}
+            onClose={() => setShowApiError(false)}
+          />
+        )}
+        {showConnectionError && (
+          <Notification
+            variant="destructive"
+            title="Error de Conexión"
+            description="No se pudo conectar con el servidor."
+            onClose={() => setShowConnectionError(false)}
           />
         )}
 

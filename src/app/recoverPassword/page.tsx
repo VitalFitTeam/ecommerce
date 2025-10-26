@@ -1,12 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import AuthFooter from "@/components/features/AuthFooter";
 import { typography } from "@/styles/styles";
 import AuthCard from "@/components/features/AuthCard";
 import Logo from "@/components/features/Logo";
 import TextInput from "@/components/ui/TextInput";
-import { AlertCard } from "@/components/features/AlertCard";
+import { Notification } from "@/components/ui/Notification";
 import { recoverSchema } from "@/lib/validation/recoverSchema";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
@@ -15,8 +15,22 @@ export default function RecoverPassword() {
   const [formData, setFormData] = useState({ usuario: "" });
   const [error, setError] = useState<{ usuario?: string[] }>({});
   const [showAlert, setShowAlert] = useState(false);
+  const [showApiError, setShowApiError] = useState(false);
+  const [showConnectionError, setShowConnectionError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
+
+  useEffect(() => {
+    let timer: NodeJS.Timeout;
+    if (showAlert) {
+      timer = setTimeout(() => {
+        setShowAlert(false);
+        router.push("/confirmEmail?flow=recover");
+      }, 4000);
+    }
+    return () => clearTimeout(timer);
+  }, [showAlert, router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -52,7 +66,8 @@ export default function RecoverPassword() {
       const data = await response.json();
 
       if (!response.ok) {
-        alert(data.message || "Error al verificar email");
+        setErrorMessage(data.message || "Error al verificar email");
+        setShowApiError(true);
         setIsLoading(false);
         return;
       }
@@ -64,7 +79,7 @@ export default function RecoverPassword() {
       setFormData({ usuario: "" });
     } catch (error) {
       console.error("Error al conectar con la API:", error);
-      alert("No se pudo conectar con el servidor");
+      setShowConnectionError(true);
     }
 
     setIsLoading(false);
@@ -72,16 +87,29 @@ export default function RecoverPassword() {
 
   return (
     <div className="flex items-center justify-center min-h-screen px-5 py-4">
-      <AlertCard
-        visible={showAlert}
-        message="Revisa tu correo"
-        description="Hemos enviado instrucciones para restablecer tu contraseña a tu correo electrónico. Por favor revisa tu bandeja de entrada y sigue el enlace para restablecer tu contraseña."
-        buttonLabel="Cerrar"
-        onClose={() => {
-          setShowAlert(false);
-          router.push("/confirmEmail?flow=recover");
-        }}
-      />
+      {showAlert && (
+        <Notification
+          variant="success"
+          title="Revisa tu correo"
+          description="Hemos enviado instrucciones para reestablecer tu contraseña a tu correo electrónico."
+        />
+      )}
+      {showApiError && (
+        <Notification
+          variant="destructive"
+          title="Error"
+          description={errorMessage}
+          onClose={() => setShowApiError(false)}
+        />
+      )}
+      {showConnectionError && (
+        <Notification
+          variant="destructive"
+          title="Error de Conexión"
+          description="No se pudo conectar con el servidor."
+          onClose={() => setShowConnectionError(false)}
+        />
+      )}
 
       <div className="flex justify-center w-full">
         <div className="max-w-sm w-full">

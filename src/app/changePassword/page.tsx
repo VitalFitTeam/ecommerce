@@ -1,20 +1,23 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import AuthFooter from "@/components/features/AuthFooter";
 import { typography } from "@/styles/styles";
 import AuthCard from "@/components/features/AuthCard";
 import Logo from "@/components/features/Logo";
 import PasswordInput from "@/components/ui/PasswordInput";
+import { Notification } from "@/components/ui/Notification";
 import { passwordSchema } from "@/lib/validation/passwordSchema";
 import { useRouter } from "next/navigation";
-import { AlertCard } from "@/components/features/AlertCard";
 import { Button } from "@/components/ui/button";
 
 export default function PasswordReset() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
+  const [showApiError, setShowApiError] = useState(false);
+  const [showConnectionError, setShowConnectionError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const [formData, setFormData] = useState({
     password: "",
@@ -25,6 +28,17 @@ export default function PasswordReset() {
     password?: string;
     confirmPassword?: string;
   }>({});
+
+  useEffect(() => {
+    let timer: NodeJS.Timeout;
+    if (showAlert) {
+      timer = setTimeout(() => {
+        setShowAlert(false);
+        router.push("/dashboard");
+      }, 4000);
+    }
+    return () => clearTimeout(timer);
+  }, [showAlert, router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -60,7 +74,11 @@ export default function PasswordReset() {
       const tokenCode = localStorage.getItem("code");
 
       if (!tokenCode) {
-        alert("Error en obtener token de confirmación, solicitar nuevamente");
+        setErrorMessage(
+          "Error en obtener token de confirmación, solicitar nuevamente",
+        );
+        setShowApiError(true);
+        setIsLoading(false);
         return;
       }
 
@@ -78,7 +96,8 @@ export default function PasswordReset() {
 
       if (!response.ok) {
         const errorText = await response.text();
-        alert(errorText || "Error al cambiar contraseña");
+        setErrorMessage(errorText || "Error al cambiar contraseña");
+        setShowApiError(true);
         setIsLoading(false);
         return;
       }
@@ -91,26 +110,36 @@ export default function PasswordReset() {
       setShowAlert(true);
     } catch (error) {
       console.error("Error al conectar con la API:", error);
-      alert("No se pudo conectar con el servidor");
+      setShowConnectionError(true);
     } finally {
-      // Use finally to ensure setIsLoading(false) runs
       setIsLoading(false);
     }
   };
 
   return (
     <div className="flex flex-col items-center justify-center px-5 py-4">
-      <AlertCard
-        visible={showAlert}
-        message={"¡Contraseña restablecida exitosamente!"}
-        description=""
-        buttonLabel="Continuar"
-        success={true}
-        onClose={() => {
-          setShowAlert(false);
-          router.push("/login");
-        }}
-      />
+      {showAlert && (
+        <Notification
+          variant="success"
+          description="¡Contraseña restablecida exitosamente!"
+        />
+      )}
+      {showApiError && (
+        <Notification
+          variant="destructive"
+          title="Error"
+          description={errorMessage}
+          onClose={() => setShowApiError(false)}
+        />
+      )}
+      {showConnectionError && (
+        <Notification
+          variant="destructive"
+          title="Error de Conexión"
+          description="No se pudo conectar con el servidor."
+          onClose={() => setShowConnectionError(false)}
+        />
+      )}
       <div className="flex justify-center w-full">
         <div className="max-w-sm w-full">
           <AuthCard>
