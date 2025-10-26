@@ -9,7 +9,8 @@ import PasswordInput from "@/components/ui/PasswordInput";
 import TextInput from "@/components/ui/TextInput";
 import { PhoneInput } from "@/components/ui/phone-input";
 import Checkbox from "@/components/ui/Checkbox";
-import { AlertCard } from "@/components/features/AlertCard";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { XCircleIcon } from "@heroicons/react/24/solid";
 import { registerSchema } from "@/lib/validation/registerSchema";
 import { RegisterFormData } from "@/lib/validation/registerSchema";
 import GoogleLoginButton from "@/components/ui/GoogleLoginButton";
@@ -23,7 +24,7 @@ export default function RegisterPage() {
     email: "",
     telefono: "",
     documento: "",
-    genero: "", // ✅ valor válido según el esquema
+    genero: "",
     nacimiento: "",
     password: "",
     cpassword: "",
@@ -34,6 +35,7 @@ export default function RegisterPage() {
   >({});
   const [showAlert, setShowAlert] = useState(false);
   const [showAlertError, setShowAlertError] = useState(false);
+  const [showConnectionError, setShowConnectionError] = useState(false);
   const [submitError, setSubmitError] = useState("");
   const [terms, setTerms] = useState(false);
   const router = useRouter();
@@ -131,7 +133,7 @@ export default function RegisterPage() {
         setShowAlert(true);
       } catch (error) {
         console.error("Error al conectar con la API:", error);
-        alert("No se pudo conectar con el servidor");
+        setShowConnectionError(true);
       }
     }
   };
@@ -146,342 +148,358 @@ export default function RegisterPage() {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen px-4 py-6 sm:px-6 lg:px-8">
-      <AlertCard
-        visible={showAlert}
-        message="Revisa tu correo"
-        description="¡Gracias por registrarte en VITALFIT! Para completar tu registro, por favor, verifica tu dirección de correo electrónico."
-        buttonLabel="Cerrar"
-        onClose={() => {
-          setShowAlert(false);
-          router.push("/confirmEmail?flow=register");
-        }}
-      />
-      <AlertCard
-        visible={showAlertError}
-        message="Error"
-        description={submitError}
-        buttonLabel="Cerrar"
-        error={true}
-        onClose={() => setShowAlertError(false)}
-      />
-      <div className="flex justify-center w-full max-w-6xl">
-        <div className="w-full max-w-2xl lg:max-w-4xl">
-          <AuthCard>
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 space-y-4 sm:space-y-0 w-full">
-              <div className="text-center lg:text-left">
-                <h3 className={`${typography.h3} text-xl sm:text-2xl`}>
-                  CREA TU CUENTA
-                </h3>
-              </div>
-              <div className="flex justify-center sm:justify-end text-right">
-                <Logo slogan={true} />
-              </div>
+      <div className="w-full max-w-2xl lg:max-w-4xl space-y-4">
+        {showAlert && (
+          <Alert>
+            <AlertTitle className="flex items-center justify-between">
+              Revisa tu correo
+              <XCircleIcon
+                className="h-5 w-5 cursor-pointer"
+                onClick={() => {
+                  setShowAlert(false);
+                  router.push("/confirmEmail?flow=register");
+                }}
+              />
+            </AlertTitle>
+            <AlertDescription>
+              ¡Gracias por registrarte en VITALFIT! Para completar tu registro,
+              por favor, verifica tu dirección de correo electrónico.
+            </AlertDescription>
+          </Alert>
+        )}
+        {showAlertError && (
+          <Alert variant="destructive">
+            <AlertTitle className="flex items-center justify-between">
+              Error
+              <XCircleIcon
+                className="h-5 w-5 cursor-pointer"
+                onClick={() => setShowAlertError(false)}
+              />
+            </AlertTitle>
+            <AlertDescription>{submitError}</AlertDescription>
+          </Alert>
+        )}
+        {showConnectionError && (
+          <Alert variant="destructive">
+            <AlertTitle className="flex items-center justify-between">
+              Error de Conexión
+              <XCircleIcon
+                className="h-5 w-5 cursor-pointer"
+                onClick={() => setShowConnectionError(false)}
+              />
+            </AlertTitle>
+            <AlertDescription>
+              No se pudo conectar con el servidor. Por favor, inténtalo de nuevo
+              más tarde.
+            </AlertDescription>
+          </Alert>
+        )}
+        <AuthCard>
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 space-y-4 sm:space-y-0 w-full">
+            <div className="text-center lg:text-left">
+              <h3 className={`${typography.h3} text-xl sm:text-2xl`}>
+                CREA TU CUENTA
+              </h3>
             </div>
+            <div className="flex justify-center sm:justify-end text-right">
+              <Logo slogan={true} />
+            </div>
+          </div>
 
-            <form className="w-full" onSubmit={handleSubmit} noValidate>
-              <div className="flex flex-col mb-4 space-y-4 sm:flex-row sm:space-y-0 sm:space-x-4">
-                <div className="flex-1">
-                  <label
-                    htmlFor="nombre"
-                    className="block text-sm font-medium text-gray-700 mb-1 sm:text-base text-left"
-                  >
-                    Nombre*
-                  </label>
-                  <TextInput
-                    id="nombre"
-                    name="nombre"
-                    ariaLabel="nombre"
-                    placeholder="Nombre"
-                    value={formData.nombre}
-                    onChange={(e) =>
-                      handleInputChange("nombre", e.target.value)
-                    }
-                    className="bg-white w-full"
-                  />
-                  {error.nombre?.map((msg, i) => (
-                    <p key={i} className="text-red-500 text-xs sm:text-sm mt-1">
-                      {msg}
-                    </p>
-                  ))}
-                </div>
-                <div className="flex-1">
-                  <label
-                    htmlFor="apellido"
-                    className="block text-sm font-medium text-gray-700 mb-1 sm:text-base text-left"
-                  >
-                    Apellido*
-                  </label>
-                  <TextInput
-                    id="apellido"
-                    name="apellido"
-                    ariaLabel="apellido"
-                    placeholder="Apellido"
-                    value={formData.apellido}
-                    onChange={(e) =>
-                      handleInputChange("apellido", e.target.value)
-                    }
-                    className="bg-white w-full"
-                  />
-                  {error.apellido?.map((msg, i) => (
-                    <p key={i} className="text-red-500 text-xs sm:text-sm mt-1">
-                      {msg}
-                    </p>
-                  ))}
-                </div>
-              </div>
-
-              <div className="mb-4">
+          <form className="w-full" onSubmit={handleSubmit} noValidate>
+            <div className="flex flex-col mb-4 space-y-4 sm:flex-row sm:space-y-0 sm:space-x-4">
+              <div className="flex-1">
                 <label
-                  htmlFor="email"
+                  htmlFor="nombre"
                   className="block text-sm font-medium text-gray-700 mb-1 sm:text-base text-left"
                 >
-                  Correo Electrónico*
+                  Nombre*
                 </label>
                 <TextInput
-                  id="email"
-                  name="email"
-                  type="email"
-                  ariaLabel="email"
-                  placeholder="correo@ejemplo.com"
-                  value={formData.email}
-                  onChange={(e) => handleInputChange("email", e.target.value)}
+                  id="nombre"
+                  name="nombre"
+                  ariaLabel="nombre"
+                  placeholder="Nombre"
+                  value={formData.nombre}
+                  onChange={(e) => handleInputChange("nombre", e.target.value)}
                   className="bg-white w-full"
                 />
-                {error.email?.map((msg, i) => (
+                {error.nombre?.map((msg, i) => (
                   <p key={i} className="text-red-500 text-xs sm:text-sm mt-1">
                     {msg}
                   </p>
                 ))}
               </div>
-
-              <div className="flex flex-col mb-4 space-y-4 sm:flex-row sm:space-y-0 sm:space-x-4">
-                <div className="flex-1">
-                  <label
-                    htmlFor="telefono"
-                    className="block text-sm font-medium text-gray-700 mb-1 sm:text-base text-left"
-                  >
-                    Número de teléfono*
-                  </label>
-                  <PhoneInput
-                    id="telefono"
-                    value={formData.telefono}
-                    onChange={(value) => handleInputChange("telefono", value)}
-                    defaultCountry="VE"
-                  />
-                  {error.telefono?.map((msg, i) => (
-                    <p key={i} className="text-red-500 text-xs sm:text-sm mt-1">
-                      {msg}
-                    </p>
-                  ))}
-                </div>
-                <div className="flex-1">
-                  <label
-                    htmlFor="documento"
-                    className="block text-sm font-medium text-gray-700 mb-1 sm:text-base text-left"
-                  >
-                    Documento de identidad*
-                  </label>
-                  <TextInput
-                    id="documento"
-                    name="documento"
-                    ariaLabel="documento"
-                    placeholder="Documento"
-                    value={formData.documento}
-                    onChange={(e) =>
-                      handleInputChange("documento", e.target.value)
-                    }
-                    className="bg-white w-full"
-                  />
-                  {error.documento?.map((msg, i) => (
-                    <p key={i} className="text-red-500 text-xs sm:text-sm mt-1">
-                      {msg}
-                    </p>
-                  ))}
-                </div>
-              </div>
-
-              <div className="flex flex-col mb-4 space-y-4 sm:flex-row sm:space-y-0 sm:space-x-4">
-                {/* Fecha de Nacimiento a la izquierda */}
-                <div className="flex-1">
-                  <label
-                    htmlFor="nacimiento"
-                    className="block text-sm font-medium text-gray-700 mb-1 sm:text-base text-left"
-                  >
-                    Fecha de Nacimiento*
-                  </label>
-                  <TextInput
-                    id="nacimiento"
-                    type="date"
-                    name="nacimiento"
-                    ariaLabel="nacimiento"
-                    value={formData.nacimiento}
-                    onChange={(e) =>
-                      handleInputChange("nacimiento", e.target.value)
-                    }
-                    className="bg-white w-full"
-                  />
-                  {error.nacimiento?.map((msg, i) => (
-                    <p key={i} className="text-red-500 text-xs sm:text-sm mt-1">
-                      {msg}
-                    </p>
-                  ))}
-                </div>
-                {/* Género a la derecha */}
-                <div className="flex flex-col mb-4">
-                  <label className="block text-sm font-medium text-gray-700 mb-1 sm:text-base text-left">
-                    Género*
-                  </label>
-                  <div className="p-4 rounded-md">
-                    <label className="flex items-center">
-                      <input
-                        type="radio"
-                        name="genero"
-                        value="masculino"
-                        checked={formData.genero === "masculino"}
-                        onChange={() =>
-                          handleInputChange("genero", "masculino")
-                        }
-                        className="form-radio h-4 w-4 text-primary"
-                      />
-                      <span className="ml-2">Masculino</span>
-                    </label>
-                    <label className="flex items-center mt-2">
-                      <input
-                        type="radio"
-                        name="genero"
-                        value="femenino"
-                        checked={formData.genero === "femenino"}
-                        onChange={() => handleInputChange("genero", "femenino")}
-                        className="form-radio h-4 w-4 text-primary"
-                      />
-                      <span className="ml-2">Femenino</span>
-                    </label>
-                    <label className="flex items-center mt-2">
-                      <input
-                        type="radio"
-                        name="genero"
-                        value="prefiero no especificarlo"
-                        checked={
-                          formData.genero === "prefiero no especificarlo"
-                        }
-                        onChange={() =>
-                          handleInputChange(
-                            "genero",
-                            "prefiero no especificarlo",
-                          )
-                        }
-                        className="form-radio h-4 w-4 text-primary"
-                      />
-                      <span className="ml-2">Prefiero no especificarlo</span>
-                    </label>
-                  </div>
-                  {error.genero?.map((msg, i) => (
-                    <p key={i} className="text-red-500 text-xs sm:text-sm mt-1">
-                      {msg}
-                    </p>
-                  ))}
-                </div>
-              </div>
-
-              <div className="flex flex-col mb-4 space-y-4 sm:flex-row sm:space-y-0 sm:space-x-4">
-                <div className="flex-1">
-                  <label
-                    htmlFor="password"
-                    className="block text-sm font-medium text-gray-700 mb-1 sm:text-base text-left"
-                  >
-                    Contraseña*
-                  </label>
-                  <PasswordInput
-                    id="password"
-                    name="password"
-                    ariaLabel="Campo de contraseña"
-                    placeholder="Ingresa tu contraseña"
-                    value={formData.password}
-                    onChange={(e) =>
-                      handleInputChange("password", e.target.value)
-                    }
-                    className="bg-white w-full"
-                  />
-                  {error.password?.map((msg, i) => (
-                    <p key={i} className="text-red-500 text-xs sm:text-sm mt-1">
-                      {msg}
-                    </p>
-                  ))}
-                </div>
-                <div className="flex-1">
-                  <label
-                    htmlFor="cpassword"
-                    className="block text-sm font-medium text-gray-700 mb-1 sm:text-base text-left"
-                  >
-                    Confirmar Contraseña*
-                  </label>
-                  <PasswordInput
-                    id="cpassword"
-                    name="cpassword"
-                    ariaLabel="Confirmar Contraseña"
-                    placeholder="Confirmar contraseña"
-                    value={formData.cpassword}
-                    onChange={(e) =>
-                      handleInputChange("cpassword", e.target.value)
-                    }
-                    className="bg-white w-full"
-                  />
-                  {error.cpassword?.map((msg, i) => (
-                    <p key={i} className="text-red-500 text-xs sm:text-sm mt-1">
-                      {msg}
-                    </p>
-                  ))}
-                </div>
-              </div>
-
-              <div className="flex items-start mb-6 space-x-3">
-                <div className="flex-shrink-0 mt-1">
-                  <Checkbox
-                    labelText=""
-                    isChecked={terms}
-                    onChange={handleCheckboxChange}
-                  />
-                </div>
-                <div className="flex-1">
-                  <a
-                    href="#"
-                    style={{ color: colors.primary }}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-xs sm:text-sm hover:underline"
-                  >
-                    Acepto los términos, condiciones del servicio y las
-                    políticas de seguridad
-                  </a>
-                  {error.terms?.map((msg, i) => (
-                    <p key={i} className="text-red-500 text-xs sm:text-sm mt-1">
-                      {msg}
-                    </p>
-                  ))}
-                </div>
-              </div>
-
-              <div className="mt-6 w-full">
-                <Button
-                  fullWidth
-                  type="submit"
-                  className="w-full py-3 text-base sm:py-2"
+              <div className="flex-1">
+                <label
+                  htmlFor="apellido"
+                  className="block text-sm font-medium text-gray-700 mb-1 sm:text-base text-left"
                 >
-                  Crear Cuenta
-                </Button>
+                  Apellido*
+                </label>
+                <TextInput
+                  id="apellido"
+                  name="apellido"
+                  ariaLabel="apellido"
+                  placeholder="Apellido"
+                  value={formData.apellido}
+                  onChange={(e) =>
+                    handleInputChange("apellido", e.target.value)
+                  }
+                  className="bg-white w-full"
+                />
+                {error.apellido?.map((msg, i) => (
+                  <p key={i} className="text-red-500 text-xs sm:text-sm mt-1">
+                    {msg}
+                  </p>
+                ))}
               </div>
-              <div className="mt-6 w-full">
-                <GoogleLoginButton text="Sign in with google" />
-              </div>
-            </form>
+            </div>
 
-            <AuthFooter
-              text="¿Ya tienes una Cuenta?"
-              linkText="Iniciar Sesión"
-              href="/login"
-            />
-          </AuthCard>
-        </div>
+            <div className="mb-4">
+              <label
+                htmlFor="email"
+                className="block text-sm font-medium text-gray-700 mb-1 sm:text-base text-left"
+              >
+                Correo Electrónico*
+              </label>
+              <TextInput
+                id="email"
+                name="email"
+                type="email"
+                ariaLabel="email"
+                placeholder="correo@ejemplo.com"
+                value={formData.email}
+                onChange={(e) => handleInputChange("email", e.target.value)}
+                className="bg-white w-full"
+              />
+              {error.email?.map((msg, i) => (
+                <p key={i} className="text-red-500 text-xs sm:text-sm mt-1">
+                  {msg}
+                </p>
+              ))}
+            </div>
+
+            <div className="flex flex-col mb-4 space-y-4 sm:flex-row sm:space-y-0 sm:space-x-4">
+              <div className="flex-1">
+                <label
+                  htmlFor="telefono"
+                  className="block text-sm font-medium text-gray-700 mb-1 sm:text-base text-left"
+                >
+                  Número de teléfono*
+                </label>
+                <PhoneInput
+                  id="telefono"
+                  value={formData.telefono}
+                  onChange={(value) => handleInputChange("telefono", value)}
+                  defaultCountry="VE"
+                />
+                {error.telefono?.map((msg, i) => (
+                  <p key={i} className="text-red-500 text-xs sm:text-sm mt-1">
+                    {msg}
+                  </p>
+                ))}
+              </div>
+              <div className="flex-1">
+                <label
+                  htmlFor="documento"
+                  className="block text-sm font-medium text-gray-700 mb-1 sm:text-base text-left"
+                >
+                  Documento de identidad*
+                </label>
+                <TextInput
+                  id="documento"
+                  name="documento"
+                  ariaLabel="documento"
+                  placeholder="Documento"
+                  value={formData.documento}
+                  onChange={(e) =>
+                    handleInputChange("documento", e.target.value)
+                  }
+                  className="bg-white w-full"
+                />
+                {error.documento?.map((msg, i) => (
+                  <p key={i} className="text-red-500 text-xs sm:text-sm mt-1">
+                    {msg}
+                  </p>
+                ))}
+              </div>
+            </div>
+
+            <div className="flex flex-col mb-4 ">
+              {/* Fecha de Nacimiento a la izquierda */}
+              <div className="flex-1 mb-2">
+                <label
+                  htmlFor="nacimiento"
+                  className="block text-sm font-medium text-gray-700 mb-1 sm:text-base text-left"
+                >
+                  Fecha de Nacimiento*
+                </label>
+                <TextInput
+                  id="nacimiento"
+                  type="date"
+                  name="nacimiento"
+                  ariaLabel="nacimiento"
+                  value={formData.nacimiento}
+                  onChange={(e) =>
+                    handleInputChange("nacimiento", e.target.value)
+                  }
+                  className="bg-white w-full"
+                />
+                {error.nacimiento?.map((msg, i) => (
+                  <p key={i} className="text-red-500 text-xs sm:text-sm mt-1">
+                    {msg}
+                  </p>
+                ))}
+              </div>
+              {/* Género a la derecha */}
+              <div className="flex flex-col mb-2">
+                <label className="block text-sm font-medium text-gray-700 mb-1 sm:text-base text-left">
+                  Género*
+                </label>
+                <div className="flex items-center">
+                  <label className="flex items-center mr-4">
+                    <input
+                      type="radio"
+                      name="genero"
+                      value="masculino"
+                      checked={formData.genero === "masculino"}
+                      onChange={() => handleInputChange("genero", "masculino")}
+                      className="mr-2"
+                    />
+                    Masculino
+                  </label>
+                  <label className="flex items-center mr-4">
+                    <input
+                      type="radio"
+                      name="genero"
+                      value="femenino"
+                      checked={formData.genero === "femenino"}
+                      onChange={() => handleInputChange("genero", "femenino")}
+                      className="mr-2"
+                    />
+                    Femenino
+                  </label>
+                  <label className="flex items-center">
+                    <input
+                      type="radio"
+                      name="genero"
+                      value="prefiero no especificarlo"
+                      checked={formData.genero === "prefiero no especificarlo"}
+                      onChange={() =>
+                        handleInputChange("genero", "prefiero no especificarlo")
+                      }
+                      className="mr-2"
+                    />
+                    Prefiero no especificarlo
+                  </label>
+                </div>
+                {error.genero?.map((msg, i) => (
+                  <p key={i} className="text-red-500 text-xs sm:text-sm mt-1">
+                    {msg}
+                  </p>
+                ))}
+              </div>
+            </div>
+
+            <div className="flex flex-col mb-4 space-y-4 sm:flex-row sm:space-y-0 sm:space-x-4">
+              <div className="flex-1">
+                <label
+                  htmlFor="password"
+                  className="block text-sm font-medium text-gray-700 mb-1 sm:text-base text-left"
+                >
+                  Contraseña*
+                </label>
+                <PasswordInput
+                  id="password"
+                  name="password"
+                  ariaLabel="Campo de contraseña"
+                  placeholder="Ingresa tu contraseña"
+                  value={formData.password}
+                  onChange={(e) =>
+                    handleInputChange("password", e.target.value)
+                  }
+                  className="bg-white w-full"
+                />
+                {error.password?.map((msg, i) => (
+                  <p key={i} className="text-red-500 text-xs sm:text-sm mt-1">
+                    {msg}
+                  </p>
+                ))}
+              </div>
+              <div className="flex-1">
+                <label
+                  htmlFor="cpassword"
+                  className="block text-sm font-medium text-gray-700 mb-1 sm:text-base text-left"
+                >
+                  Confirmar Contraseña*
+                </label>
+                <PasswordInput
+                  id="cpassword"
+                  name="cpassword"
+                  ariaLabel="Confirmar Contraseña"
+                  placeholder="Confirmar contraseña"
+                  value={formData.cpassword}
+                  onChange={(e) =>
+                    handleInputChange("cpassword", e.target.value)
+                  }
+                  className="bg-white w-full"
+                />
+                {error.cpassword?.map((msg, i) => (
+                  <p key={i} className="text-red-500 text-xs sm:text-sm mt-1">
+                    {msg}
+                  </p>
+                ))}
+              </div>
+            </div>
+
+            <div className="flex items-start mb-6 space-x-3">
+              <div className="flex-shrink-0 mt-1">
+                <Checkbox
+                  labelText=""
+                  isChecked={terms}
+                  onChange={handleCheckboxChange}
+                />
+              </div>
+              <div className="flex-1">
+                <a
+                  href="#"
+                  style={{ color: colors.primary }}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-xs sm:text-sm hover:underline"
+                >
+                  Acepto los términos, condiciones del servicio y las políticas
+                  de seguridad
+                </a>
+                {error.terms?.map((msg, i) => (
+                  <p key={i} className="text-red-500 text-xs sm:text-sm mt-1">
+                    {msg}
+                  </p>
+                ))}
+              </div>
+            </div>
+
+            <div className="mt-6 w-full">
+              <Button
+                fullWidth
+                type="submit"
+                className="w-full py-3 text-base sm:py-2"
+              >
+                Crear Cuenta
+              </Button>
+            </div>
+            <div className="mt-6 w-full">
+              <GoogleLoginButton text="Sign in with google" />
+            </div>
+          </form>
+
+          <AuthFooter
+            text="¿Ya tienes una Cuenta?"
+            linkText="Iniciar Sesión"
+            href="/login"
+          />
+        </AuthCard>
       </div>
     </div>
   );
