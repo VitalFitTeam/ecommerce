@@ -7,6 +7,7 @@ import AuthCard from "@/components/features/AuthCard";
 import Logo from "@/components/features/Logo";
 import PasswordInput from "@/components/ui/PasswordInput";
 import TextInput from "@/components/ui/TextInput";
+import { PhoneInput } from "@/components/ui/phone-input";
 import Checkbox from "@/components/ui/Checkbox";
 import { AlertCard } from "@/components/features/AlertCard";
 import { registerSchema } from "@/lib/validation/registerSchema";
@@ -261,19 +262,11 @@ export default function RegisterPage() {
                   >
                     Número de teléfono*
                   </label>
-                  <TextInput
-                    type="tel"
+                  <PhoneInput
                     id="telefono"
-                    name="telefono"
-                    ariaLabel="telefono"
-                    placeholder="+58 412-1234567"
                     value={formData.telefono}
-                    onChange={(e) =>
-                      handleInputChange("telefono", e.target.value)
-                    }
-                    className="bg-white w-full"
-                    pattern="^\+\d{1,3}\s?\d{1,4}[-\s]?\d{4,}$"
-                    title="Formato esperado: +58 412-1234567"
+                    onChange={(value) => handleInputChange("telefono", value)}
+                    defaultCountry="VE"
                   />
                   {error.telefono?.map((msg, i) => (
                     <p key={i} className="text-red-500 text-xs sm:text-sm mt-1">
@@ -334,11 +327,11 @@ export default function RegisterPage() {
                   ))}
                 </div>
                 {/* Género a la derecha */}
-                <div className="flex-1">
+                <div className="flex flex-col mb-4">
                   <label className="block text-sm font-medium text-gray-700 mb-1 sm:text-base text-left">
                     Género*
                   </label>
-                  <div className="flex items-center space-x-6">
+                  <div className="p-4 rounded-md">
                     <label className="flex items-center">
                       <input
                         type="radio"
@@ -352,7 +345,7 @@ export default function RegisterPage() {
                       />
                       <span className="ml-2">Masculino</span>
                     </label>
-                    <label className="flex items-center">
+                    <label className="flex items-center mt-2">
                       <input
                         type="radio"
                         name="genero"
@@ -362,6 +355,24 @@ export default function RegisterPage() {
                         className="form-radio h-4 w-4 text-primary"
                       />
                       <span className="ml-2">Femenino</span>
+                    </label>
+                    <label className="flex items-center mt-2">
+                      <input
+                        type="radio"
+                        name="genero"
+                        value="prefiero no especificarlo"
+                        checked={
+                          formData.genero === "prefiero no especificarlo"
+                        }
+                        onChange={() =>
+                          handleInputChange(
+                            "genero",
+                            "prefiero no especificarlo",
+                          )
+                        }
+                        className="form-radio h-4 w-4 text-primary"
+                      />
+                      <span className="ml-2">Prefiero no especificarlo</span>
                     </label>
                   </div>
                   {error.genero?.map((msg, i) => (

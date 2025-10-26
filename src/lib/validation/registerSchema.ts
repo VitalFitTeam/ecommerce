@@ -33,7 +33,12 @@ export const registerSchema = z
       .min(3, { message: "El documento debe tener al menos 3 caracteres" }),
 
     genero: z
-      .union([z.literal("masculino"), z.literal("femenino"), z.literal("")])
+      .union([
+        z.literal("masculino"),
+        z.literal("femenino"),
+        z.literal("prefiero no especificarlo"),
+        z.literal(""),
+      ])
       .refine((val) => val !== "", {
         message: "Selecciona un género válido",
       }),
