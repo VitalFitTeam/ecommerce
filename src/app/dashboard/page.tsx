@@ -1,7 +1,7 @@
 import { typography } from "@/styles/styles";
 import { Membership } from "@/components/features/Membership";
 import { QuickActions } from "@/components/features/QuickActions";
-import { Header } from "@/components/layout/Header";
+import { Header } from "@/components/layout/dashboard/Header";
 import { QRCodeCard } from "@/components/features/QRCodeCard";
 import { TipCard } from "@/components/features/TipCard";
 import { AppDownloadBanner } from "@/components/features/AppDownloadBanner";
