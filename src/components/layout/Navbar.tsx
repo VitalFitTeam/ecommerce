@@ -16,8 +16,12 @@ export function Navbar({ transparent = false }: NavbarProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const isActive = (href: string) => {
-    if (href === "/" && pathname === "/") {return true;}
-    if (href !== "/" && pathname.startsWith(href)) {return true;}
+    if (href === "/" && pathname === "/") {
+      return true;
+    }
+    if (href !== "/" && pathname.startsWith(href)) {
+      return true;
+    }
     return false;
   };
 
