@@ -6,7 +6,7 @@ import {
   BookmarkIcon,
 } from "@heroicons/react/24/outline";
 import { typography } from "@/styles/styles";
-import Card from "@/components/ui/Card";
+import { Card } from "@/components/ui/Card";
 import QuickButton from "@/components/features/QuickButton";
 
 export function QuickActions() {

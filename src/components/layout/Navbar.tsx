@@ -29,7 +29,7 @@ export function Navbar({ transparent = false }: NavbarProps) {
     { label: "Inicio", href: "/" },
     { label: "Servicios", href: "/services" },
     { label: "Sucursales", href: "/branches" },
-    { label: "Miembros", href: "/members" },
+    { label: "Membresías", href: "/memberships" },
     { label: "Contacto", href: "/contact" },
   ];
 
@@ -71,15 +71,19 @@ export function Navbar({ transparent = false }: NavbarProps) {
 
       {/* Action Buttons - Desktop */}
       <div className="hidden md:flex items-center gap-3">
-        <Button
-          variant="ghost"
-          className="text-primary border border-primary hover:bg-primary hover:text-white"
-        >
-          Iniciar sesión
-        </Button>
-        <Button className="bg-primary hover:bg-orange-600 text-white">
-          Unirse
-        </Button>
+        <Link href="/login">
+          <Button
+            variant="ghost"
+            className="text-primary border border-primary hover:bg-primary hover:text-white"
+          >
+            Iniciar sesión
+          </Button>
+        </Link>
+        <Link href="/register">
+          <Button className="bg-primary hover:bg-orange-600 text-white">
+            Unirse
+          </Button>
+        </Link>
       </div>
 
       {isMenuOpen && (
@@ -100,15 +104,19 @@ export function Navbar({ transparent = false }: NavbarProps) {
               </Link>
             ))}
             <div className="flex flex-col gap-2 pt-2 border-t border-slate-800">
-              <Button
-                variant="ghost"
-                className="text-primary border border-primary hover:bg-primary hover:text-white w-full"
-              >
-                Iniciar sesión
-              </Button>
-              <Button className="bg-primary hover:bg-orange-600 text-white w-full">
-                Unirse
-              </Button>
+              <Link href="/login" onClick={() => setIsMenuOpen(false)}>
+                <Button
+                  variant="ghost"
+                  className="text-primary border border-primary hover:bg-primary hover:text-white w-full"
+                >
+                  Iniciar sesión
+                </Button>
+              </Link>
+              <Link href="/register" onClick={() => setIsMenuOpen(false)}>
+                <Button className="bg-primary hover:bg-orange-600 text-white w-full">
+                  Unirse
+                </Button>
+              </Link>
             </div>
           </div>
         </div>

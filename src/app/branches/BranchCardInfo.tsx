@@ -6,7 +6,7 @@ import {
   CalendarIcon,
 } from "@heroicons/react/24/outline";
 import { BuildingStorefrontIcon } from "@heroicons/react/24/outline";
-import Card from "@/components/ui/Card";
+import { Card } from "@/components/ui/Card";
 
 interface BranchCardInfoProps {
   title: string;
