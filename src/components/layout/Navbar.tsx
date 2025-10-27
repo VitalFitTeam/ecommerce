@@ -1,125 +1,118 @@
 "use client";
-import Image from "next/image";
+
+import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { Button } from "@/components/ui/button";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
+import Logo from "@/components/features/Logo";
 
-const Navbar = () => {
-  const [menuOpen, setMenuOpen] = useState(false);
-  const pathname = usePathname(); // para detectar la ruta actual
+interface NavbarProps {
+  transparent?: boolean;
+}
 
-  const navLinks = [
-    { href: "/", label: "Inicio" },
-    { href: "#services", label: "Servicios" },
-    { href: "#branches", label: "Sucursales" },
-    { href: "#membership", label: "Membresías" },
-    { href: "#contact", label: "Contacto" },
+export function Navbar({ transparent = false }: NavbarProps) {
+  const pathname = usePathname();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const isActive = (href: string) => {
+    if (href === "/" && pathname === "/") {
+      return true;
+    }
+    if (href !== "/" && pathname.startsWith(href)) {
+      return true;
+    }
+    return false;
+  };
+
+  const navItems = [
+    { label: "Inicio", href: "/" },
+    { label: "Servicios", href: "/services" },
+    { label: "Sucursales", href: "/branches" },
+    { label: "Miembros", href: "/members" },
+    { label: "Contacto", href: "/contact" },
   ];
 
   return (
-    <nav className="bg-[rgba(0,0,0,0.7)] fixed top-0 left-0 w-full z-100 w-full pt-2 transition-all duration-300 backdrop-blur-md">
-      <div className="mx-auto px-2 sm:px-3 lg:px-4">
-        <div className="flex justify-between items-center h-16">
-          <Link href="/" className="text-xl font-bold text-gray-900 ml-4">
-            <Image
-              src="/logo/logo-vitalfit-white.png"
-              alt="Logo"
-              width={200}
-              height={40}
-            />
+    <nav
+      className={`w-full px-6 py-4 flex items-center lg:justify-between transition-colors ${
+        transparent ? "bg-transparent" : "bg-[#303030]"
+      }`}
+    >
+      <button
+        className="md:hidden p-2 text-white hover:bg-slate-800 rounded-lg transition-colors"
+        onClick={() => setIsMenuOpen(!isMenuOpen)}
+      >
+        {isMenuOpen ? (
+          <XMarkIcon className="w-6 h-6" />
+        ) : (
+          <Bars3Icon className="w-6 h-6" />
+        )}
+      </button>
+
+      <Logo slogan={true} theme="dark" />
+
+      {/* Menu Items - Desktop */}
+      <div className="hidden md:flex items-center gap-8">
+        {navItems.map((item) => (
+          <Link
+            key={item.href}
+            href={item.href}
+            className={`transition-colors ${
+              isActive(item.href)
+                ? "text-white bg-primary rounded border-primary p-2"
+                : "text-gray-300 hover:text-primary"
+            }`}
+          >
+            {item.label}
           </Link>
-
-          {/* Botón Hamburguesa (solo móvil) */}
-          <div className="flex md:hidden">
-            <button
-              onClick={() => setMenuOpen(!menuOpen)}
-              className="text-white hover:text-[#F27F2A] transition-colors"
-              aria-label="Abrir menú"
-            >
-              {menuOpen ? (
-                <XMarkIcon className="w-7 h-7" />
-              ) : (
-                <Bars3Icon className="w-7 h-7" />
-              )}
-            </button>
-          </div>
-
-          {/* Menú principal (desktop) */}
-          <div className="hidden md:flex space-x-8 text-white">
-            {navLinks.map(({ href, label }) => (
-              <Link
-                key={href}
-                href={href}
-                scroll={false}
-                className={`px-3 py-1 rounded-md transition-colors ${
-                  pathname === href
-                    ? "bg-[#F27F2A] text-white font-semibold"
-                    : "hover:text-[#F27F2A]"
-                }`}
-              >
-                {label}
-              </Link>
-            ))}
-          </div>
-
-          {/* Botones de acción (desktop) */}
-          <div className="hidden md:flex items-center space-x-4 mr-4">
-            <Link
-              href="/login"
-              className="px-4 py-2 text-sm font-bold text-[#F27F2A] border border-[#F27F2A] rounded-md hover:border-white hover:text-white transition-colors"
-            >
-              Iniciar sesión
-            </Link>
-            <Link
-              href="/register"
-              className="px-4 py-2 text-sm font-medium text-white bg-[#F27F2A] rounded-md transition-colors"
-            >
-              Unirse
-            </Link>
-          </div>
-        </div>
+        ))}
       </div>
 
-      {/* Menú móvil desplegable */}
-      {menuOpen && (
-        <div className="md:hidden bg-[rgba(0,0,0,0.9)] text-white px-6 py-4 space-y-4">
-          {navLinks.map(({ href, label }) => (
-            <Link
-              key={href}
-              href={href}
-              scroll={false}
-              onClick={() => setMenuOpen(false)}
-              className={`block py-2 px-2 rounded-md transition-colors ${
-                pathname === href
-                  ? "bg-[#F27F2A] text-white font-semibold"
-                  : "hover:text-[#F27F2A]"
-              }`}
-            >
-              {label}
-            </Link>
-          ))}
+      {/* Action Buttons - Desktop */}
+      <div className="hidden md:flex items-center gap-3">
+        <Button
+          variant="ghost"
+          className="text-primary border border-primary hover:bg-primary hover:text-white"
+        >
+          Iniciar sesión
+        </Button>
+        <Button className="bg-primary hover:bg-orange-600 text-white">
+          Unirse
+        </Button>
+      </div>
 
-          <div className="flex flex-col space-y-3 pt-4 border-t border-gray-700">
-            <Link
-              href="/login"
-              onClick={() => setMenuOpen(false)}
-              className="text-center py-2 border border-[#F27F2A] rounded-md hover:text-white hover:border-white transition-colors"
-            >
-              Iniciar sesión
-            </Link>
-            <Link
-              href="/register"
-              onClick={() => setMenuOpen(false)}
-              className="text-center py-2 bg-[#F27F2A] rounded-md hover:bg-white hover:text-[#F27F2A] transition-colors"
-            >
-              Unirse
-            </Link>
+      {isMenuOpen && (
+        <div className="absolute top-16 left-0 right-0 bg-[#303030] border-t md:hidden">
+          <div className="flex flex-col p-4 gap-4">
+            {navItems.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                onClick={() => setIsMenuOpen(false)}
+                className={`transition-colors py-2 px-4 rounded-lg ${
+                  isActive(item.href)
+                    ? "text-white bg-primary"
+                    : "text-gray-300 hover:text-white"
+                }`}
+              >
+                {item.label}
+              </Link>
+            ))}
+            <div className="flex flex-col gap-2 pt-2 border-t border-slate-800">
+              <Button
+                variant="ghost"
+                className="text-primary border border-primary hover:bg-primary hover:text-white w-full"
+              >
+                Iniciar sesión
+              </Button>
+              <Button className="bg-primary hover:bg-orange-600 text-white w-full">
+                Unirse
+              </Button>
+            </div>
           </div>
         </div>
       )}
     </nav>
   );
-};
-
-export default Navbar;
+}
