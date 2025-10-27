@@ -16,7 +16,8 @@ import {
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
-interface GeneralAlertDialogProps {
+interface GeneralAlertDialogProps
+  extends Partial<React.ComponentProps<typeof AlertDialog>> {
   trigger: React.ReactNode;
   title: string;
   description: string;
@@ -25,22 +26,22 @@ interface GeneralAlertDialogProps {
   onAction?: () => void;
   actionVariant?: "default" | "destructive";
   cancelText?: string;
-  open?: boolean;
-  onOpenChange?: (open: boolean) => void;
 }
 
-export function GeneralAlertDialog({
-  trigger,
-  title,
-  description,
-  actionText,
-  onAction,
-  type = "confirmation",
-  actionVariant = "default",
-  cancelText = "Cancelar",
-  open,
-  onOpenChange,
-}: GeneralAlertDialogProps) {
+export function GeneralAlertDialog(props: GeneralAlertDialogProps) {
+  const {
+    trigger,
+    title,
+    description,
+    actionText,
+    onAction,
+    type = "confirmation",
+    actionVariant = "default",
+    cancelText = "Cancelar",
+    open,
+    onOpenChange,
+  } = props;
+
   return (
     <AlertDialog open={open} onOpenChange={onOpenChange}>
       <AlertDialogTrigger asChild>{trigger}</AlertDialogTrigger>

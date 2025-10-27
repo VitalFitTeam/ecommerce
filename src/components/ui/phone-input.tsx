@@ -26,12 +26,15 @@ type PhoneInputProps = Omit<
   "onChange" | "value" | "ref"
 > &
   Omit<RPNInput.Props<typeof RPNInput.default>, "onChange"> & {
+    // the parameter name here is only used for type clarity; eslint may
+    // consider it unused — disable the rule for this line.
+    // eslint-disable-next-line no-unused-vars
     onChange?: (value: RPNInput.Value) => void;
   };
 
 const PhoneInput: React.ForwardRefExoticComponent<PhoneInputProps> =
   React.forwardRef<React.ElementRef<typeof RPNInput.default>, PhoneInputProps>(
-    ({ className, onChange, value, ...props }, ref) => {
+    ({ className, onChange, value: valueProp, ...props }, ref) => {
       return (
         <div
           className={cn(
@@ -46,7 +49,7 @@ const PhoneInput: React.ForwardRefExoticComponent<PhoneInputProps> =
             countrySelectComponent={CountrySelect}
             inputComponent={InputComponent}
             smartCaret={false}
-            value={value || undefined}
+            value={valueProp || undefined}
             /**
              * Handles the onChange event.
              *
@@ -56,7 +59,11 @@ const PhoneInput: React.ForwardRefExoticComponent<PhoneInputProps> =
              *
              * @param {E164Number | undefined} value - The entered value
              */
-            onChange={(value) => onChange?.(value || ("" as RPNInput.Value))}
+            onChange={(value) => {
+              if (onChange) {
+                onChange(value || ("" as RPNInput.Value));
+              }
+            }}
             {...props}
           />
         </div>
@@ -86,7 +93,9 @@ type CountrySelectProps = {
   disabled?: boolean;
   value: RPNInput.Country;
   options: CountryEntry[];
-  onChange: (country: RPNInput.Country) => void;
+  // mark parameter name with leading underscore to avoid unused-var warnings in type positions
+  // eslint-disable-next-line no-unused-vars
+  onChange: (_country: RPNInput.Country) => void;
 };
 
 const CountrySelect = ({
@@ -105,7 +114,9 @@ const CountrySelect = ({
       modal
       onOpenChange={(open) => {
         setIsOpen(open);
-        open && setSearchValue("");
+        if (open) {
+          setSearchValue("");
+        }
       }}
     >
       <PopoverTrigger asChild>
@@ -173,7 +184,8 @@ const CountrySelect = ({
 
 interface CountrySelectOptionProps extends RPNInput.FlagProps {
   selectedCountry: RPNInput.Country;
-  onChange: (country: RPNInput.Country) => void;
+  // eslint-disable-next-line no-unused-vars
+  onChange: (_country: RPNInput.Country) => void;
   onSelectComplete: () => void;
 }
 

@@ -1,9 +1,10 @@
-import React, { ReactNode, MouseEvent, ButtonHTMLAttributes } from "react";
+import React, { ReactNode, ButtonHTMLAttributes } from "react";
 
 interface QuickButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   children: ReactNode;
   className?: string;
-  onClick?: (event: MouseEvent<HTMLButtonElement>) => void;
+  // use built-in React handler type to avoid naming an unused parameter
+  onClick?: React.MouseEventHandler<HTMLButtonElement>;
 }
 
 const QuickButton: React.FC<QuickButtonProps> = ({
