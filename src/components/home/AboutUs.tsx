@@ -16,8 +16,8 @@ interface SectionAboutUsProps {
 
 const SectionAboutUs: React.FC<SectionAboutUsProps> = ({ sections }) => {
   return (
-    <div className="w-full mb-50">
-      <h2 className="text-center text-4xl md:text-5xl font-bold mb-20 mt-20">
+    <div className="w-full mb-30">
+      <h2 className="text-center text-7xl md:text-7xl font-bold mb-20 mt-20">
         <span className="text-[#F27F2A]">Sobre</span>{" "}
         <span className="text-gray-900">Nosotros</span>
       </h2>
