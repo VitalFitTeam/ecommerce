@@ -479,7 +479,6 @@ export default function RegisterPage() {
               <GoogleLoginButton text="Sign in with google" />
             </div>
           </form>
-
           <AuthFooter
             text="¿Ya tienes una Cuenta?"
             linkText="Iniciar Sesión"

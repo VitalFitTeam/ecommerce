@@ -157,7 +157,6 @@ export default function RecoverPassword() {
                 </Button>
               </div>
             </form>
-
             <AuthFooter
               text="¿Recuerdas tu Contraseña?"
               linkText="Iniciar Sesión"

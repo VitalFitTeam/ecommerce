@@ -1,5 +1,4 @@
 "use client";
-
 import { useState, useRef, useEffect, Suspense } from "react";
 import { typography } from "@/styles/styles";
 import AuthCard from "@/components/features/AuthCard";

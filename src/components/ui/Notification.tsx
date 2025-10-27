@@ -26,7 +26,6 @@ export interface NotificationProps
   description: string;
   onClose?: () => void;
 }
-
 const Notification = React.forwardRef<HTMLDivElement, NotificationProps>(
   ({ className, variant, title, description, onClose, ...props }, ref) => {
     return (

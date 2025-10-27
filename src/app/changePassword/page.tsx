@@ -10,7 +10,6 @@ import { Notification } from "@/components/ui/Notification";
 import { passwordSchema } from "@/lib/validation/passwordSchema";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-
 export default function PasswordReset() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
@@ -207,7 +206,6 @@ export default function PasswordReset() {
                   )}
                 </div>
               </div>
-
               <div className="mt-4 w-full">
                 <Button fullWidth type="submit" disabled={isLoading}>
                   {isLoading ? "Procesando..." : "Continuar"}

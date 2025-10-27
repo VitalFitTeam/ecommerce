@@ -218,7 +218,6 @@ export default function Login() {
               </Button>
             </div>
           </form>
-
           <AuthFooter
             text="¿No tienes Cuenta?"
             linkText="Registrarse"
