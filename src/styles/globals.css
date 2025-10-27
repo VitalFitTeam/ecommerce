@@ -134,3 +134,21 @@ h5 {
     @apply bg-background text-foreground;
   }
 }
+
+/* Animación de burbujas */
+@keyframes square {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(-700px) rotate(600deg);
+  }
+}
+
+.animate-square {
+  animation: square 10s infinite linear;
+}
+
+html {
+  scroll-behavior: smooth;
+}

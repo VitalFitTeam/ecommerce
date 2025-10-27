@@ -3,7 +3,7 @@ import { montserrat, bebas } from "@/styles/styles";
 
 import "../styles/globals.css";
 export const metadata: Metadata = {
-  title: "GymApp Dashboard",
+  title: "VITALFIT",
   description: "Administra tus reservas, entrenadores y sucursales de gimnasio",
 };
 
@@ -14,7 +14,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="es" className={`${montserrat.variable} ${bebas.variable}`}>
-      <body className="antialiased">{children}</body>
+      <body className="antialiased ">{children}</body>
     </html>
   );
 }
