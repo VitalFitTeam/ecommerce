@@ -1,5 +1,5 @@
 import { CalendarIcon } from "@heroicons/react/24/outline";
-import Card from "@/components/ui/Card";
+import { Card } from "@/components/ui/Card";
 
 type StatsProps = {
   semana: string;
