@@ -3,7 +3,8 @@ import React from "react";
 interface CheckboxProps {
   labelText: string;
   isChecked?: boolean;
-  onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  // use built-in React handler type
+  onChange?: React.ChangeEventHandler<HTMLInputElement>;
 }
 
 const Checkbox: React.FC<CheckboxProps> = ({

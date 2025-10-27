@@ -2,7 +2,7 @@
 
 import SectionAboutUs from "@/components/home/AboutUs";
 import Banner from "@/components/home/Banner";
-import Navbar from "@/components/layout/Navbar";
+import { Navbar } from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 
 export default function Home() {

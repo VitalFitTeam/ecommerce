@@ -4,7 +4,7 @@ import { Navbar } from "@/components/layout/Navbar";
 import { BranchCard } from "./BranchCard";
 import { Button } from "@/components/ui/button";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
-import { Footer } from "@/components/layout/Footer";
+import Footer from "@/components/layout/Footer";
 import { MapPinIcon } from "lucide-react";
 
 export default function Home() {
