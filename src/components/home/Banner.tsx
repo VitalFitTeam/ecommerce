@@ -32,14 +32,14 @@ const Banner: React.FC<BannerProps> = ({
           <div className="text-left max-w-[50%]">
             {/* Título con HTML permitido */}
             <h1
-              className="text-4xl md:text-5xl font-bold text-white mb-4"
+              className="text-6xl tracking-wider md:text-6xl font-medium text-white mb-4"
               dangerouslySetInnerHTML={{ __html: title }}
             />
 
             {/* Subtítulo con HTML permitido */}
             {subtitle && (
               <p
-                className="text-xl md:text-2xl text-white/90"
+                className="text-xl md:text-1.5xl text-white/90"
                 dangerouslySetInnerHTML={{ __html: subtitle }}
               />
             )}
