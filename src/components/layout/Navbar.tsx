@@ -1,0 +1,118 @@
+"use client";
+
+import { useState } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
+import Logo from "@/components/features/Logo";
+
+interface NavbarProps {
+  transparent?: boolean;
+}
+
+export function Navbar({ transparent = false }: NavbarProps) {
+  const pathname = usePathname();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const isActive = (href: string) => {
+    if (href === "/" && pathname === "/") {
+      return true;
+    }
+    if (href !== "/" && pathname.startsWith(href)) {
+      return true;
+    }
+    return false;
+  };
+
+  const navItems = [
+    { label: "Inicio", href: "/" },
+    { label: "Servicios", href: "/services" },
+    { label: "Sucursales", href: "/branches" },
+    { label: "Miembros", href: "/members" },
+    { label: "Contacto", href: "/contact" },
+  ];
+
+  return (
+    <nav
+      className={`w-full px-6 py-4 flex items-center lg:justify-between transition-colors ${
+        transparent ? "bg-transparent" : "bg-[#303030]"
+      }`}
+    >
+      <button
+        className="md:hidden p-2 text-white hover:bg-slate-800 rounded-lg transition-colors"
+        onClick={() => setIsMenuOpen(!isMenuOpen)}
+      >
+        {isMenuOpen ? (
+          <XMarkIcon className="w-6 h-6" />
+        ) : (
+          <Bars3Icon className="w-6 h-6" />
+        )}
+      </button>
+
+      <Logo slogan={true} theme="dark" />
+
+      {/* Menu Items - Desktop */}
+      <div className="hidden md:flex items-center gap-8">
+        {navItems.map((item) => (
+          <Link
+            key={item.href}
+            href={item.href}
+            className={`transition-colors ${
+              isActive(item.href)
+                ? "text-white bg-primary rounded border-primary p-2"
+                : "text-gray-300 hover:text-primary"
+            }`}
+          >
+            {item.label}
+          </Link>
+        ))}
+      </div>
+
+      {/* Action Buttons - Desktop */}
+      <div className="hidden md:flex items-center gap-3">
+        <Button
+          variant="ghost"
+          className="text-primary border border-primary hover:bg-primary hover:text-white"
+        >
+          Iniciar sesión
+        </Button>
+        <Button className="bg-primary hover:bg-orange-600 text-white">
+          Unirse
+        </Button>
+      </div>
+
+      {isMenuOpen && (
+        <div className="absolute top-16 left-0 right-0 bg-[#303030] border-t md:hidden">
+          <div className="flex flex-col p-4 gap-4">
+            {navItems.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                onClick={() => setIsMenuOpen(false)}
+                className={`transition-colors py-2 px-4 rounded-lg ${
+                  isActive(item.href)
+                    ? "text-white bg-primary"
+                    : "text-gray-300 hover:text-white"
+                }`}
+              >
+                {item.label}
+              </Link>
+            ))}
+            <div className="flex flex-col gap-2 pt-2 border-t border-slate-800">
+              <Button
+                variant="ghost"
+                className="text-primary border border-primary hover:bg-primary hover:text-white w-full"
+              >
+                Iniciar sesión
+              </Button>
+              <Button className="bg-primary hover:bg-orange-600 text-white w-full">
+                Unirse
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+    </nav>
+  );
+}
