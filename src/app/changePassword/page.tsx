@@ -8,7 +8,7 @@ import Logo from "@/components/features/Logo";
 import PasswordInput from "@/components/ui/PasswordInput";
 import { passwordSchema } from "@/lib/validation/passwordSchema";
 import { useRouter } from "next/navigation";
-import { Notification } from "@/components/ui/Notification";
+import { Notification } from "@/components/ui/Notification"; // La importación ya está aquí
 import { Button } from "@/components/ui/button";
 
 export default function PasswordReset() {
@@ -16,6 +16,11 @@ export default function PasswordReset() {
   const [isLoading, setIsLoading] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
   const [showConnectionError, setShowConnectionError] = useState(false);
+  // Nuevo estado para la notificación de errores del servidor/token
+  const [showServerError, setShowServerError] = useState<{
+    visible: boolean;
+    message: string;
+  }>({ visible: false, message: "" });
 
   const [formData, setFormData] = useState({
     password: "",
@@ -30,6 +35,8 @@ export default function PasswordReset() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
+    // Asegurarse de ocultar cualquier error previo antes de la nueva petición
+    setShowServerError({ visible: false, message: "" });
 
     const result = passwordSchema.safeParse({
       password: formData.password,
@@ -61,7 +68,12 @@ export default function PasswordReset() {
       const tokenCode = localStorage.getItem("code");
 
       if (!tokenCode) {
-        alert("Error en obtener token de confirmación, solicitar nuevamente");
+        // 1. Reemplazamos el primer alert (Error en obtener token)
+        setShowServerError({
+          visible: true,
+          message:
+            "Error en obtener el código de confirmación. Por favor, solicita nuevamente el restablecimiento de contraseña.",
+        });
         return;
       }
 
@@ -79,7 +91,20 @@ export default function PasswordReset() {
 
       if (!response.ok) {
         const errorText = await response.text();
-        alert(errorText || "Error al cambiar contraseña");
+        // Intentamos parsear el JSON si es posible para un mensaje más limpio
+        let errorMessage = "Error al cambiar contraseña";
+        try {
+          const errorData = JSON.parse(errorText);
+          errorMessage = errorData.message || errorMessage;
+        } catch {
+          errorMessage = errorText || errorMessage;
+        }
+
+        // 2. Reemplazamos el segundo alert (Error al cambiar contraseña)
+        setShowServerError({
+          visible: true,
+          message: errorMessage,
+        });
         setIsLoading(false);
         return;
       }
@@ -119,20 +144,27 @@ export default function PasswordReset() {
           onClose={() => setShowConnectionError(false)}
         />
       )}
+      {/* Nueva Notificación de Error del Servidor/Token */}
+      {showServerError.visible && (
+        <Notification
+          variant="destructive"
+          title="Error al Restablecer Contraseña"
+          description={showServerError.message}
+          onClose={() => setShowServerError({ visible: false, message: "" })}
+        />
+      )}
       <div className="flex justify-center w-full">
         <div className="max-w-sm w-full">
           <AuthCard>
             <Logo slogan={false} width={80} />
             <h2 className={typography.h3}>CAMBIA TU CONTRASEÑA</h2>
             <div className="text-left mb-4">
-              <span>
-                Ingrese el correo electrónico asociado a la cuenta para
-                recuperar la contraseña
-              </span>
+              <span>Ingrese su nueva contraseña.</span>
             </div>
 
             <form className="w-full" onSubmit={handleSubmit} noValidate>
               <div className="space-y-3 w-full">
+                {/* ... Campos de Contraseña ... */}
                 <div className="flex flex-col">
                   <label
                     htmlFor="password"
