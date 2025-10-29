@@ -8,7 +8,7 @@ import GoogleLoginButton from "@/components/ui/GoogleLoginButton";
 import PasswordInput from "@/components/ui/PasswordInput";
 import TextInput from "@/components/ui/TextInput";
 import Checkbox from "@/components/ui/Checkbox";
-import { AlertCard } from "@/components/features/AlertCard";
+import { Notification } from "@/components/ui/Notification";
 import { loginSchema } from "@/lib/validation/loginSchema";
 import { Button } from "@/components/ui/button";
 
@@ -96,15 +96,11 @@ export default function Login() {
     >
       <div className="w-full max-w-sm sm:max-w-md lg:max-w-lg">
         {authError && (
-          <AlertCard
-            visible={true}
-            message="Credenciales Incorrectas"
-            description=""
-            buttonLabel="Aceptar"
-            error={true}
-            onClose={() => {
-              setAuthError(null);
-            }}
+          <Notification
+            variant="destructive"
+            title="Credenciales incorrectas"
+            description={authError}
+            onClose={() => setAuthError(null)}
           />
         )}
 

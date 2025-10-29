@@ -9,7 +9,7 @@ import PasswordInput from "@/components/ui/PasswordInput";
 import TextInput from "@/components/ui/TextInput";
 import { PhoneInput } from "@/components/ui/phone-input";
 import Checkbox from "@/components/ui/Checkbox";
-import { AlertCard } from "@/components/features/AlertCard";
+import { Notification } from "@/components/ui/Notification";
 import { registerSchema } from "@/lib/validation/registerSchema";
 import { RegisterFormData } from "@/lib/validation/registerSchema";
 import GoogleLoginButton from "@/components/ui/GoogleLoginButton";
@@ -34,6 +34,7 @@ export default function RegisterPage() {
   >({});
   const [showAlert, setShowAlert] = useState(false);
   const [showAlertError, setShowAlertError] = useState(false);
+  const [showConnectionError, setShowConnectionError] = useState(false);
   const [submitError, setSubmitError] = useState("");
   const [terms, setTerms] = useState(false);
   const router = useRouter();
@@ -134,7 +135,7 @@ export default function RegisterPage() {
         setShowAlert(true);
       } catch (error) {
         console.error("Error al conectar con la API:", error);
-        alert("No se pudo conectar con el servidor");
+        setShowConnectionError(true);
       }
     }
   };
@@ -149,24 +150,33 @@ export default function RegisterPage() {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen px-4 py-6 sm:px-6 lg:px-8">
-      <AlertCard
-        visible={showAlert}
-        message="Revisa tu correo"
-        description="¡Gracias por registrarte en VITALFIT! Para completar tu registro, por favor, verifica tu dirección de correo electrónico."
-        buttonLabel="Cerrar"
-        onClose={() => {
-          setShowAlert(false);
-          router.push("/confirmEmail?flow=register");
-        }}
-      />
-      <AlertCard
-        visible={showAlertError}
-        message="Error"
-        description={submitError}
-        buttonLabel="Cerrar"
-        error={true}
-        onClose={() => setShowAlertError(false)}
-      />
+      {showAlert && (
+        <Notification
+          variant="success"
+          title="Revisa tu correo"
+          description="¡Gracias por registrarte en VITALFIT! Para completar tu registro, por favor, verifica tu dirección de correo electrónico."
+          onClose={() => {
+            setShowAlert(false);
+            router.push("/confirmEmail?flow=register");
+          }}
+        />
+      )}
+      {showAlertError && (
+        <Notification
+          variant="destructive"
+          title="Error"
+          description={submitError}
+          onClose={() => setShowAlertError(false)}
+        />
+      )}
+      {showConnectionError && (
+        <Notification
+          variant="destructive"
+          title="Error de Conexión"
+          description="No se pudo conectar con el servidor. Por favor, inténtalo de nuevo más tarde."
+          onClose={() => setShowConnectionError(false)}
+        />
+      )}
       <div className="flex justify-center w-full max-w-6xl">
         <div className="w-full max-w-2xl lg:max-w-4xl">
           <AuthCard>
@@ -302,39 +312,36 @@ export default function RegisterPage() {
                   ))}
                 </div>
               </div>
-
+              <div className="mb-4">
+                <label
+                  htmlFor="nacimiento"
+                  className="block text-sm font-medium text-gray-700 mb-1 sm:text-base text-left"
+                >
+                  Fecha de Nacimiento*
+                </label>
+                <TextInput
+                  id="nacimiento"
+                  type="date"
+                  name="nacimiento"
+                  ariaLabel="nacimiento"
+                  value={formData.nacimiento}
+                  onChange={(e) =>
+                    handleInputChange("nacimiento", e.target.value)
+                  }
+                  className="bg-white w-full"
+                />
+                {error.nacimiento?.map((msg, i) => (
+                  <p key={i} className="text-red-500 text-xs sm:text-sm mt-1">
+                    {msg}
+                  </p>
+                ))}
+              </div>
               <div className="flex flex-col mb-4 space-y-4 sm:flex-row sm:space-y-0 sm:space-x-4">
-                {/* Fecha de Nacimiento a la izquierda */}
                 <div className="flex-1">
-                  <label
-                    htmlFor="nacimiento"
-                    className="block text-sm font-medium text-gray-700 mb-1 sm:text-base text-left"
-                  >
-                    Fecha de Nacimiento*
-                  </label>
-                  <TextInput
-                    id="nacimiento"
-                    type="date"
-                    name="nacimiento"
-                    ariaLabel="nacimiento"
-                    value={formData.nacimiento}
-                    onChange={(e) =>
-                      handleInputChange("nacimiento", e.target.value)
-                    }
-                    className="bg-white w-full"
-                  />
-                  {error.nacimiento?.map((msg, i) => (
-                    <p key={i} className="text-red-500 text-xs sm:text-sm mt-1">
-                      {msg}
-                    </p>
-                  ))}
-                </div>
-                {/* Género a la derecha */}
-                <div className="flex flex-col mb-4">
                   <label className="block text-sm font-medium text-gray-700 mb-1 sm:text-base text-left">
                     Género*
                   </label>
-                  <div className="p-4 rounded-md">
+                  <div className="p-2 rounded-md flex flex-wrap items-center gap-4">
                     <label className="flex items-center">
                       <input
                         type="radio"
@@ -348,7 +355,8 @@ export default function RegisterPage() {
                       />
                       <span className="ml-2">Masculino</span>
                     </label>
-                    <label className="flex items-center mt-2">
+
+                    <label className="flex items-center">
                       <input
                         type="radio"
                         name="genero"
@@ -359,7 +367,8 @@ export default function RegisterPage() {
                       />
                       <span className="ml-2">Femenino</span>
                     </label>
-                    <label className="flex items-center mt-2">
+
+                    <label className="flex items-center">
                       <input
                         type="radio"
                         name="genero"
