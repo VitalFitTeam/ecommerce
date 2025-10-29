@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect, Suspense } from "react";
 import { typography } from "@/styles/styles";
 import AuthCard from "@/components/features/AuthCard";
-import { AlertCard } from "@/components/features/AlertCard";
+import { Notification } from "@/components/ui/Notification";
 import Logo from "@/components/features/Logo";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
@@ -17,6 +17,7 @@ function ConfirmEmailContent() {
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
   const [showAlert, setShowAlert] = useState(false);
   const [showAlertConfirmation, setShowAlertConfirmation] = useState(false);
+  const [showConnectionError, setShowConnectionError] = useState(false);
   const [incorrectCode, setIncorrectCode] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -142,6 +143,7 @@ function ConfirmEmailContent() {
         setErrorMessage(
           "No se pudo conectar con el servidor. Intenta más tarde.",
         );
+        setShowConnectionError(true);
       } finally {
         setLoading(false);
       }
@@ -199,30 +201,39 @@ function ConfirmEmailContent() {
 
   return (
     <div className="flex items-center justify-center min-h-screen px-5 py-4">
-      <AlertCard
-        visible={showAlert}
-        message={
-          flow === "recover"
-            ? "Email Confirmado"
-            : "¡Te has registrado exitosamente!"
-        }
-        description=""
-        buttonLabel="Continuar"
-        success={true}
-        onClose={() => {
-          setShowAlert(false);
-          router.push(flow === "recover" ? "/changePassword" : "/login");
-        }}
-      />
-      <AlertCard
-        visible={showAlertConfirmation}
-        message={"Codigo de Confirmación Reenviado"}
-        description=""
-        buttonLabel="OK"
-        onClose={() => {
-          setShowAlertConfirmation(false);
-        }}
-      />
+      {showAlert && (
+        <Notification
+          variant="success"
+          title={flow === "recover" ? "Email confirmado" : "Registro exitoso"}
+          description={
+            flow === "recover"
+              ? "Email confirmado"
+              : "¡Te has registrado exitosamente!"
+          }
+          onClose={() => {
+            setShowAlert(false);
+            router.push(flow === "recover" ? "/changePassword" : "/login");
+          }}
+        />
+      )}
+      {showAlertConfirmation && (
+        <Notification
+          variant="success"
+          title={"Código de Confirmación Reenviado"}
+          description={""}
+          onClose={() => {
+            setShowAlertConfirmation(false);
+          }}
+        />
+      )}
+      {showConnectionError && (
+        <Notification
+          variant="destructive"
+          title="Error de Conexión"
+          description="No se pudo conectar con el servidor. Por favor, inténtalo de nuevo más tarde."
+          onClose={() => setShowConnectionError(false)}
+        />
+      )}
       <div className="flex justify-center w-full">
         <div className="max-w-sm w-full">
           <AuthCard>

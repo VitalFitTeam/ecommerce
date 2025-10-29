@@ -6,7 +6,7 @@ import { typography } from "@/styles/styles";
 import AuthCard from "@/components/features/AuthCard";
 import Logo from "@/components/features/Logo";
 import TextInput from "@/components/ui/TextInput";
-import { AlertCard } from "@/components/features/AlertCard";
+import { Notification } from "@/components/ui/Notification";
 import { recoverSchema } from "@/lib/validation/recoverSchema";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
@@ -16,6 +16,7 @@ export default function RecoverPassword() {
   const [error, setError] = useState<{ usuario?: string[] }>({});
   const [showAlert, setShowAlert] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [showConnectionError, setShowConnectionError] = useState(false);
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -64,7 +65,7 @@ export default function RecoverPassword() {
       setFormData({ usuario: "" });
     } catch (error) {
       console.error("Error al conectar con la API:", error);
-      alert("No se pudo conectar con el servidor");
+      setShowConnectionError(true);
     }
 
     setIsLoading(false);
@@ -72,16 +73,25 @@ export default function RecoverPassword() {
 
   return (
     <div className="flex items-center justify-center min-h-screen px-5 py-4">
-      <AlertCard
-        visible={showAlert}
-        message="Revisa tu correo"
-        description="Hemos enviado instrucciones para restablecer tu contraseña a tu correo electrónico. Por favor revisa tu bandeja de entrada y sigue el enlace para restablecer tu contraseña."
-        buttonLabel="Cerrar"
-        onClose={() => {
-          setShowAlert(false);
-          router.push("/confirmEmail?flow=recover");
-        }}
-      />
+      {showAlert && (
+        <Notification
+          variant="success"
+          title="Revisa tu correo"
+          description="Hemos enviado instrucciones para restablecer tu contraseña a tu correo electrónico. Por favor revisa tu bandeja de entrada y sigue el enlace para restablecer tu contraseña."
+          onClose={() => {
+            setShowAlert(false);
+            router.push("/confirmEmail?flow=recover");
+          }}
+        />
+      )}
+      {showConnectionError && (
+        <Notification
+          variant="destructive"
+          title="Error de Conexión"
+          description="No se pudo conectar con el servidor. Por favor, inténtalo de nuevo más tarde."
+          onClose={() => setShowConnectionError(false)}
+        />
+      )}
 
       <div className="flex justify-center w-full">
         <div className="max-w-sm w-full">

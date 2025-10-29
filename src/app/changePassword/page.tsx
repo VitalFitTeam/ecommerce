@@ -8,13 +8,14 @@ import Logo from "@/components/features/Logo";
 import PasswordInput from "@/components/ui/PasswordInput";
 import { passwordSchema } from "@/lib/validation/passwordSchema";
 import { useRouter } from "next/navigation";
-import { AlertCard } from "@/components/features/AlertCard";
+import { Notification } from "@/components/ui/Notification";
 import { Button } from "@/components/ui/button";
 
 export default function PasswordReset() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
+  const [showConnectionError, setShowConnectionError] = useState(false);
 
   const [formData, setFormData] = useState({
     password: "",
@@ -91,7 +92,7 @@ export default function PasswordReset() {
       setShowAlert(true);
     } catch (error) {
       console.error("Error al conectar con la API:", error);
-      alert("No se pudo conectar con el servidor");
+      setShowConnectionError(true);
     } finally {
       // Use finally to ensure setIsLoading(false) runs
       setIsLoading(false);
@@ -100,17 +101,24 @@ export default function PasswordReset() {
 
   return (
     <div className="flex flex-col items-center justify-center px-5 py-4">
-      <AlertCard
-        visible={showAlert}
-        message={"¡Contraseña restablecida exitosamente!"}
-        description=""
-        buttonLabel="Continuar"
-        success={true}
-        onClose={() => {
-          setShowAlert(false);
-          router.push("/login");
-        }}
-      />
+      {showAlert && (
+        <Notification
+          variant="success"
+          description="¡Contraseña restablecida exitosamente!"
+          onClose={() => {
+            setShowAlert(false);
+            router.push("/login");
+          }}
+        />
+      )}
+      {showConnectionError && (
+        <Notification
+          variant="destructive"
+          title="Error de Conexión"
+          description="No se pudo conectar con el servidor. Por favor, inténtalo de nuevo más tarde."
+          onClose={() => setShowConnectionError(false)}
+        />
+      )}
       <div className="flex justify-center w-full">
         <div className="max-w-sm w-full">
           <AuthCard>
