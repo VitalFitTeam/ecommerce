@@ -21,11 +21,19 @@ export const registerSchema = z
 
     telefono: z
       .string()
-      .min(8)
-      .regex(/^\+\d{1,3}\s?\d{1,4}[-\s]?\d{4,}$/, {
+      .min(1, { message: "El teléfono es obligatorio" })
+      .regex(/^\+?[\d\s\-()]+$/, {
         message:
-          "Formato de teléfono inválido. Usa formato internacional como +58 412-1234567",
-      }),
+          "Formato de teléfono inválido. Usa un número válido con o sin prefijo internacional, por ejemplo +58 4121234567",
+      })
+      // Validar que contenga al menos 7 dígitos (después de quitar caracteres no numéricos)
+      .refine(
+        (val) => {
+          const digits = val.replace(/\D/g, "");
+          return digits.length >= 7;
+        },
+        { message: "El teléfono debe tener al menos 7 dígitos" },
+      ),
 
     documento: z
       .string()

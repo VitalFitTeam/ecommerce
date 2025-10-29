@@ -30,7 +30,7 @@ export default function RegisterPage() {
   });
 
   const [error, setError] = useState<
-    Partial<Record<keyof RegisterFormData, string[]>>
+    Partial<Record<keyof RegisterFormData | "terms", string[]>>
   >({});
   const [showAlert, setShowAlert] = useState(false);
   const [showAlertError, setShowAlertError] = useState(false);
@@ -45,20 +45,13 @@ export default function RegisterPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!terms) {
-      setError((prev) => ({
-        ...prev,
-        terms: ["Debes aceptar los términos y condiciones"],
-      }));
-      return;
-    } else {
-      setError((prev) => ({ ...prev, terms: undefined }));
-    }
-
     const result = registerSchema.safeParse(formData);
 
+    const fieldErrors: Partial<
+      Record<keyof RegisterFormData | "terms", string[]>
+    > = {};
+
     if (!result.success) {
-      const fieldErrors: Partial<Record<keyof RegisterFormData, string[]>> = {};
       const flattened = result.error.flatten();
 
       Object.entries(flattened.fieldErrors).forEach(([key, value]) => {
@@ -66,11 +59,21 @@ export default function RegisterPage() {
           fieldErrors[key as keyof RegisterFormData] = value;
         }
       });
+    }
 
-      setError(fieldErrors);
+    // Añadir error de términos si no están aceptados
+    if (!terms) {
+      fieldErrors.terms = ["Debes aceptar los términos y condiciones"];
+    }
+
+    // Si hay errores, mostrarlos todos a la vez y no continuar
+    if (Object.keys(fieldErrors).length > 0) {
+      setError(
+        fieldErrors as Partial<Record<keyof RegisterFormData, string[]>>,
+      );
       return;
     } else {
-      //si paso las validaciones mandar los datos a la api
+      // si pasó las validaciones mandar los datos a la api
       const birthDateISO = formData.nacimiento
         ? new Date(formData.nacimiento + "T00:00:00.000Z").toISOString()
         : "";
