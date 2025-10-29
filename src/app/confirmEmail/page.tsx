@@ -212,7 +212,7 @@ function ConfirmEmailContent() {
           }
           onClose={() => {
             setShowAlert(false);
-            router.push(flow === "recover" ? "/changePassword" : "/login");
+            router.push(flow === "recover" ? "/changePassword" : "/dashboard");
           }}
         />
       )}

@@ -17,11 +17,18 @@ export default function RecoverPassword() {
   const [showAlert, setShowAlert] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [showConnectionError, setShowConnectionError] = useState(false);
+  // 1. Nuevo estado para la notificación de error del servidor/email no verificado
+  const [showServerError, setShowServerError] = useState<{
+    visible: boolean;
+    message: string;
+  }>({ visible: false, message: "" });
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
+    // Asegurarse de ocultar cualquier error previo antes de la nueva petición
+    setShowServerError({ visible: false, message: "" });
 
     const result = recoverSchema.safeParse(formData);
 
@@ -53,7 +60,13 @@ export default function RecoverPassword() {
       const data = await response.json();
 
       if (!response.ok) {
-        alert(data.message || "Error al verificar email");
+        // 2. Reemplazamos el alert por la actualización del estado de notificación de error
+        setShowServerError({
+          visible: true,
+          message:
+            data.message ||
+            "Error al verificar el correo electrónico o la solicitud.",
+        });
         setIsLoading(false);
         return;
       }
@@ -73,6 +86,7 @@ export default function RecoverPassword() {
 
   return (
     <div className="flex items-center justify-center min-h-screen px-5 py-4">
+      {/* Notificación de Éxito */}
       {showAlert && (
         <Notification
           variant="success"
@@ -84,6 +98,7 @@ export default function RecoverPassword() {
           }}
         />
       )}
+      {/* Notificación de Error de Conexión */}
       {showConnectionError && (
         <Notification
           variant="destructive"
@@ -92,9 +107,19 @@ export default function RecoverPassword() {
           onClose={() => setShowConnectionError(false)}
         />
       )}
+      {/* 3. Nueva Notificación de Error del Servidor/Email */}
+      {showServerError.visible && (
+        <Notification
+          variant="destructive" // O el variant que uses para errores
+          title="Error de Verificación"
+          description={showServerError.message}
+          onClose={() => setShowServerError({ visible: false, message: "" })}
+        />
+      )}
 
       <div className="flex justify-center w-full">
         <div className="max-w-sm w-full">
+          {/* ... El resto del componente permanece igual ... */}
           <AuthCard>
             <Logo slogan={false} width={80} />
             <h2 className={typography.h3}>RECUPERA TU CONTRASEÑA</h2>
