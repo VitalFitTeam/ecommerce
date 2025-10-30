@@ -12,7 +12,7 @@ interface SearchInputProps {
 export default function SearchInput({
   value,
   onChange,
-  placeholder = "Buscar...",
+  placeholder = "Buscar Servicio...",
 }: SearchInputProps) {
   return (
     <div className="relative w-full">

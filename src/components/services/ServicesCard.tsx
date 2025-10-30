@@ -11,6 +11,7 @@ interface ServiceCardProps {
   rating: number;
   image: string;
   view?: "grid" | "list";
+  onLearnMore?: () => void;
 }
 
 export default function ServiceCard({
@@ -20,6 +21,7 @@ export default function ServiceCard({
   rating,
   image,
   view = "grid",
+  onLearnMore,
 }: ServiceCardProps) {
   // Vista cuadrícula
   if (view === "grid") {
@@ -49,7 +51,10 @@ export default function ServiceCard({
           </div>
           <div className="flex justify-between items-center">
             <span className="text-xl font-bold text-black">${price}</span>
-            <button className="bg-[#F27F2A] text-white px-5 py-2 rounded-md text-sm font-semibold hover:bg-[#d66d1f] transition">
+            <button
+              onClick={onLearnMore}
+              className="bg-[#F27F2A] text-white px-5 py-2 rounded-md text-sm hover:bg-[#d66d1f] transition"
+            >
               Saber más
             </button>
           </div>
@@ -85,7 +90,10 @@ export default function ServiceCard({
         </div>
         <div className="flex justify-between items-center">
           <span className="text-xl font-bold text-black">${price}</span>
-          <button className="bg-[#F27F2A] text-white px-5 py-2 rounded-md text-sm font-semibold hover:bg-[#d66d1f] transition">
+          <button
+            onClick={onLearnMore}
+            className="bg-[#F27F2A] text-white px-5 py-2 rounded-md text-sm hover:bg-[#d66d1f] transition"
+          >
             Saber más
           </button>
         </div>

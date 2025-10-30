@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Navbar } from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import ServiceCard from "@/components/services/ServicesCard";
+import ServiceModal from "@/components/services/ServiceModal";
 import SearchInput from "@/components/ui/SearchInput";
 import { Squares2X2Icon, ListBulletIcon } from "@heroicons/react/24/solid";
 
@@ -14,6 +15,20 @@ export default function ServicesPage() {
     category: "",
     rating: "",
   });
+
+  // Estado para controlar el modal
+  const [selectedService, setSelectedService] = useState<any | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleOpenModal = (service: any) => {
+    setSelectedService(service);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setSelectedService(null);
+    setIsModalOpen(false);
+  };
 
   const services = [
     {
@@ -53,7 +68,7 @@ export default function ServicesPage() {
     <>
       <Navbar />
 
-      <section className="pt-28 pb-16 px-6 bg-gray-50 min-h-screen">
+      <section className="pt-28 pb-10 px-6 bg-gray-50 min-h-screen">
         {/* Encabezado */}
         <div className="text-center mb-12">
           <h1 className="text-center text-5xl md:text-6xl font-bold mb-5">
@@ -65,11 +80,11 @@ export default function ServicesPage() {
           </p>
         </div>
 
-        {/*Filtros*/}
-        <div className="w-full flex flex-wrap items-center justify-between gap-4 mb-10">
-          {/*Grupo de búsqueda y selects */}
+        {/* Filtros */}
+        <div className="hidden md:flex w-full flex-wrap items-center justify-between gap-4 mb-10">
+          {/* Grupo de búsqueda y selects */}
           <div className="flex flex-wrap md:flex-nowrap items-center gap-3 flex-1 min-w-[250px]">
-            {/* Campo de búsqueda*/}
+            {/* Campo de búsqueda */}
             <div className="w-full sm:w-[900px] md:w-[400px]">
               <SearchInput
                 value={filters.name}
@@ -100,7 +115,7 @@ export default function ServicesPage() {
             </select>
           </div>
 
-          {/*Grupo de vista y borrar filtros */}
+          {/* Grupo de vista y borrar filtros */}
           <div className="flex flex-wrap items-center justify-start md:justify-end gap-3 w-full md:w-auto">
             <span className="text-gray-600 font-bold mr-3 text-base">
               Vista:
@@ -132,7 +147,7 @@ export default function ServicesPage() {
               </button>
             </div>
 
-            {/*Borrar filtros*/}
+            {/* Borrar filtros */}
             <button
               onClick={handleClearFilters}
               className="flex items-center gap-1 text-gray-600 font-bold text-base hover:text-[#F27F2A] transition cursor-pointer"
@@ -149,17 +164,34 @@ export default function ServicesPage() {
         {view === "grid" ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
             {services.map((service) => (
-              <ServiceCard key={service.id} {...service} view="grid" />
+              <ServiceCard
+                key={service.id}
+                {...service}
+                view="grid"
+                onLearnMore={() => handleOpenModal(service)}
+              />
             ))}
           </div>
         ) : (
           <div className="flex flex-col gap-6">
             {services.map((service) => (
-              <ServiceCard key={service.id} {...service} view="list" />
+              <ServiceCard
+                key={service.id}
+                {...service}
+                view="list"
+                onLearnMore={() => handleOpenModal(service)}
+              />
             ))}
           </div>
         )}
       </section>
+
+      {/* Modal */}
+      <ServiceModal
+        service={selectedService}
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+      />
 
       <Footer />
     </>
