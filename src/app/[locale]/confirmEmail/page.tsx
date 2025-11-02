@@ -5,8 +5,9 @@ import { typography } from "@/styles/styles";
 import AuthCard from "@/components/features/AuthCard";
 import { Notification } from "@/components/ui/Notification";
 import Logo from "@/components/features/Logo";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
+import { useRouter } from "@/i18n/routing";
 
 type ActivateResponse = {
   message?: string;

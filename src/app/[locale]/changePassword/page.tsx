@@ -7,9 +7,9 @@ import AuthCard from "@/components/features/AuthCard";
 import Logo from "@/components/features/Logo";
 import PasswordInput from "@/components/ui/PasswordInput";
 import { passwordSchema } from "@/lib/validation/passwordSchema";
-import { useRouter } from "next/navigation";
 import { Notification } from "@/components/ui/Notification"; // La importación ya está aquí
 import { Button } from "@/components/ui/button";
+import { useRouter } from "@/i18n/routing";
 
 export default function PasswordReset() {
   const router = useRouter();

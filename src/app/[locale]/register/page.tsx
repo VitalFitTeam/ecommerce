@@ -14,8 +14,8 @@ import { registerSchema } from "@/lib/validation/registerSchema";
 import { RegisterFormData } from "@/lib/validation/registerSchema";
 import GoogleLoginButton from "@/components/ui/GoogleLoginButton";
 import { colors } from "@/styles/styles";
-import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
+import { useRouter } from "@/i18n/routing";
 export default function RegisterPage() {
   const [formData, setFormData] = useState<RegisterFormData>({
     nombre: "",
@@ -23,7 +23,7 @@ export default function RegisterPage() {
     email: "",
     telefono: "",
     documento: "",
-    genero: "", // ✅ valor válido según el esquema
+    genero: "",
     nacimiento: "",
     password: "",
     cpassword: "",
@@ -62,19 +62,16 @@ export default function RegisterPage() {
       });
     }
 
-    // Añadir error de términos si no están aceptados
     if (!terms) {
       fieldErrors.terms = ["Debes aceptar los términos y condiciones"];
     }
 
-    // Si hay errores, mostrarlos todos a la vez y no continuar
     if (Object.keys(fieldErrors).length > 0) {
       setError(
         fieldErrors as Partial<Record<keyof RegisterFormData, string[]>>,
       );
       return;
     } else {
-      // si pasó las validaciones mandar los datos a la api
       const birthDateISO = formData.nacimiento
         ? new Date(formData.nacimiento + "T00:00:00.000Z").toISOString()
         : "";
