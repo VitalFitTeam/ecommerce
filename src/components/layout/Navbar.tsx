@@ -1,11 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
 import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import Logo from "@/components/features/Logo";
+import LocaleSwitcher from "../ui/LocaleSwitcher";
 
 interface NavbarProps {
   transparent?: boolean;
@@ -39,6 +40,7 @@ export function Navbar({ transparent = false }: NavbarProps) {
         transparent ? "bg-transparent" : "bg-[#303030]"
       }`}
     >
+      {/* Botón menu mobile */}
       <button
         className="md:hidden p-2 text-white hover:bg-slate-800 rounded-lg transition-colors"
         onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -50,9 +52,10 @@ export function Navbar({ transparent = false }: NavbarProps) {
         )}
       </button>
 
+      {/* Logo */}
       <Logo slogan={true} theme="dark" />
 
-      {/* Menu Items - Desktop */}
+      {/* Menu Desktop */}
       <div className="hidden md:flex items-center gap-8">
         {navItems.map((item) => (
           <Link
@@ -69,7 +72,7 @@ export function Navbar({ transparent = false }: NavbarProps) {
         ))}
       </div>
 
-      {/* Action Buttons - Desktop */}
+      {/* Botones Desktop */}
       <div className="hidden md:flex items-center gap-3">
         <Link href="/login">
           <Button
@@ -86,6 +89,7 @@ export function Navbar({ transparent = false }: NavbarProps) {
         </Link>
       </div>
 
+      {/* Menu Mobile */}
       {isMenuOpen && (
         <div className="absolute top-16 left-0 right-0 bg-[#303030] border-t md:hidden">
           <div className="flex flex-col p-4 gap-4">
@@ -103,6 +107,7 @@ export function Navbar({ transparent = false }: NavbarProps) {
                 {item.label}
               </Link>
             ))}
+
             <div className="flex flex-col gap-2 pt-2 border-t border-slate-800">
               <Link href="/login" onClick={() => setIsMenuOpen(false)}>
                 <Button
@@ -121,6 +126,9 @@ export function Navbar({ transparent = false }: NavbarProps) {
           </div>
         </div>
       )}
+      <div className="ml-4">
+        <LocaleSwitcher />
+      </div>
     </nav>
   );
 }
