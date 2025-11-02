@@ -3,16 +3,12 @@ import LoginPage from "../page";
 import React from "react";
 
 jest.mock("next-intl", () => ({
-  useTranslations: () => (key: string) => key, // Devuelve la clave (ej. "LoginPage.title")
+  useTranslations: () => (key: string) => key,
   useLocale: () => "es",
 }));
 
 jest.mock("@/i18n/routing", () => {
-  // Creamos el componente 'Link' simulado por separado
-  const MockedLink = React.forwardRef(({ href, ...props }: any, ref) => (
-    <a ref={ref} href={href} {...props} />
-  ));
-  MockedLink.displayName = "MockedLink";
+  const MockedLink = ({ href, ...props }: any) => <a href={href} {...props} />;
 
   return {
     useRouter: jest.fn(() => ({
@@ -27,20 +23,25 @@ jest.mock("@/i18n/routing", () => {
 describe("Login Page", () => {
   it("should render the login form", () => {
     render(<LoginPage />);
-    const heading = screen.getByRole("heading", { name: "LoginPage.title" });
+
+    // 3. ACTUALIZAMOS las búsquedas para que coincidan con el HTML renderizado
+    //    que vimos en el log de error.
+
+    // El log dice: Name "INICIAR SESIÓN"
+    const heading = screen.getByRole("heading", { name: /iniciar sesión/i });
     expect(heading).toBeInTheDocument();
-    const emailInput = screen.getByPlaceholderText(
-      "LoginPage.form.emailPlaceholder",
-    );
+
+    // El log dice: placeholder="Email"
+    const emailInput = screen.getByPlaceholderText(/email/i);
     expect(emailInput).toBeInTheDocument();
 
-    const passwordInput = screen.getByPlaceholderText(
-      "LoginPage.form.passwordPlaceholder",
-    );
+    // El log dice: placeholder="Ingresa tu contraseña"
+    const passwordInput = screen.getByPlaceholderText(/ingresa tu contraseña/i);
     expect(passwordInput).toBeInTheDocument();
 
+    // El log dice: Name "Iniciar sesión"
     const submitButton = screen.getByRole("button", {
-      name: "LoginPage.form.submitButton",
+      name: /^iniciar sesión$/i, // Usamos /^...$/ para un match exacto
     });
     expect(submitButton).toBeInTheDocument();
   });
