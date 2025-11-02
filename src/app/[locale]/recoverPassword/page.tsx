@@ -8,8 +8,8 @@ import Logo from "@/components/features/Logo";
 import TextInput from "@/components/ui/TextInput";
 import { Notification } from "@/components/ui/Notification";
 import { recoverSchema } from "@/lib/validation/recoverSchema";
-import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
+import { useRouter } from "@/i18n/routing";
 
 export default function RecoverPassword() {
   const [formData, setFormData] = useState({ usuario: "" });
@@ -27,7 +27,6 @@ export default function RecoverPassword() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    // Asegurarse de ocultar cualquier error previo antes de la nueva petición
     setShowServerError({ visible: false, message: "" });
 
     const result = recoverSchema.safeParse(formData);

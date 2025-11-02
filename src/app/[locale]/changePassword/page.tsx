@@ -7,16 +7,15 @@ import AuthCard from "@/components/features/AuthCard";
 import Logo from "@/components/features/Logo";
 import PasswordInput from "@/components/ui/PasswordInput";
 import { passwordSchema } from "@/lib/validation/passwordSchema";
-import { useRouter } from "next/navigation";
 import { Notification } from "@/components/ui/Notification"; // La importación ya está aquí
 import { Button } from "@/components/ui/button";
+import { useRouter } from "@/i18n/routing";
 
 export default function PasswordReset() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
   const [showConnectionError, setShowConnectionError] = useState(false);
-  // Nuevo estado para la notificación de errores del servidor/token
   const [showServerError, setShowServerError] = useState<{
     visible: boolean;
     message: string;
@@ -35,7 +34,6 @@ export default function PasswordReset() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    // Asegurarse de ocultar cualquier error previo antes de la nueva petición
     setShowServerError({ visible: false, message: "" });
 
     const result = passwordSchema.safeParse({
