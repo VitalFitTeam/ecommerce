@@ -1,5 +1,5 @@
+import { Link } from "@/i18n/routing";
 import { colors } from "@/styles/styles";
-import Link from "next/link";
 import React from "react";
 
 interface AuthFooterProps {

@@ -16,7 +16,6 @@ export default function PasswordReset() {
   const [isLoading, setIsLoading] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
   const [showConnectionError, setShowConnectionError] = useState(false);
-  // Nuevo estado para la notificación de errores del servidor/token
   const [showServerError, setShowServerError] = useState<{
     visible: boolean;
     message: string;
@@ -35,7 +34,6 @@ export default function PasswordReset() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    // Asegurarse de ocultar cualquier error previo antes de la nueva petición
     setShowServerError({ visible: false, message: "" });
 
     const result = passwordSchema.safeParse({
