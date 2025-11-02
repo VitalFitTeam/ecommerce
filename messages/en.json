@@ -1,0 +1,65 @@
+{
+  "HomePage": {
+    "banner": {
+      "title": "Transform your <highlight>body</highlight>, transform your <highlight>life</highlight>",
+      "subtitle": "Discover the power of smart, personalized fitness."
+    },
+    "aboutUs": {
+      "mission": {
+        "title": "Mission",
+        "content": "<p>To be the leading fitness network that empowers people to achieve their wellness goals, through quality service and advanced technology, ensuring a fluid and accessible experience in each of our franchises.</p>",
+        "imageAlt": "Mission"
+      },
+      "vision": {
+        "title": "Vision",
+        "content": "<p>To consolidate ourselves as the most intelligent and best-integrated fitness ecosystem in the market, recognized for our operational excellence, strategic data-driven management, and our ability to offer scalable and sustainable growth to all our franchisees.</p>",
+        "imageAlt": "Vision"
+      },
+      "values": {
+        "title": "Values",
+        "content": "<p>Our operation is based on four fundamental values: Operational Coherence that guarantees standardization in every interaction, Data Integrity as the basis for strategic decisions, Customer Orientation focused on lasting relationships, and Technological Agility to continuously adapt to market demands.</p>",
+        "imageAlt": "Values"
+      },
+      "objectives": {
+        "title": "Objectives",
+        "content": "<p>To transform lives through fitness, creating a community where each person finds the motivation, equipment, and perfect environment to achieve their physical and mental goals. We are committed to being your ally on this journey of personal improvement.</p>",
+        "imageAlt": "Objectives"
+      }
+    }
+  },
+  "ServicesPage": {
+    "title": "<highlight>OUR</highlight> SERVICES",
+    "subtitle": "Explore the variety of classes we offer to help you achieve your fitness goals.",
+    "filters": {
+      "searchPlaceholder": "Search service by name...",
+      "ratingDefault": "Rating",
+      "categoryDefault": "Category",
+      "viewLabel": "View:",
+      "viewGrid": "Grid",
+      "viewList": "List",
+      "clear": "Clear filters"
+    },
+    "ratings": {
+      "5stars": "(5 stars)",
+      "4stars": "(4 stars or more)",
+      "3stars": "(3 stars or more)"
+    },
+    "categories": {
+      "yoga": "Yoga",
+      "crossfit": "CrossFit",
+      "spinning": "Spinning",
+      "strength": "Strength",
+      "cardio": "Cardio"
+    }
+  },
+  "LocaleSwitcher": {
+    "label": "Change language",
+    "locale": "{locale, select, en {🇺🇸 English} es {🇪🇸 Español} other {Language}}"
+  },
+  "BranchesPage": {
+    "title": "<highlight>OUR</highlight> <highlight-dark>LOCATIONS</highlight-dark>",
+    "subtitle": "Your fitness space, closer than you imagine. Our VITALFIT branches are strategically located to make training accessible, fast, and to ensure you never pause your well-being.",
+    "viewButton": "View locations",
+    "footerQuote": "Your best version starts here. Visit our branches and feel the energy that transforms. Every VITALFIT space is designed to inspire, challenge, and accompany you on every step of your evolution."
+  }
+}

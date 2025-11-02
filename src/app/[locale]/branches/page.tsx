@@ -8,6 +8,7 @@ import Footer from "@/components/layout/Footer";
 import { MapPinIcon } from "lucide-react";
 import { useState } from "react";
 import FindBranch from "./FindBranch";
+import { useTranslations } from "next-intl";
 
 export default function Branches() {
   const [showSucursales, setShowSucursales] = useState(false);
@@ -44,6 +45,7 @@ export default function Branches() {
     setShowSucursales(true);
   };
 
+  const t = useTranslations("BranchesPage");
   return (
     <main className="min-h-screen bg-white">
       <Navbar transparent={false} />
@@ -53,14 +55,17 @@ export default function Branches() {
           <section className="bg-gray-50 py-12 px-6">
             <div className="max-w-6xl mx-auto">
               <h1 className="text-4xl md:text-5xl font-bold text-center mb-4">
-                <span className="text-orange-500">NUESTRAS</span>{" "}
-                <span className="text-gray-900">SUCURSALES</span>
+                {t.rich("title", {
+                  highlight: (chunks) => (
+                    <span className="text-orange-500">{chunks}</span>
+                  ),
+                  "highlight-dark": (chunks) => (
+                    <span className="text-gray-900">{chunks}</span>
+                  ),
+                })}
               </h1>
               <p className="text-center text-gray-600 w-full mx-auto">
-                Tu espacio fitness, más cerca de lo que imaginas. Nuestras
-                sucursales VITALFIT están ubicadas estratégicamente para que
-                entrenar sea accesible, rápido y que nunca pongas en pausa tu
-                bienestar.
+                {t("subtitle")}
               </p>
             </div>
           </section>
@@ -83,7 +88,6 @@ export default function Branches() {
                 </button>
               </div>
 
-              {/* View All Button */}
               <div className="flex justify-center">
                 <Button
                   onClick={() => {
@@ -92,7 +96,7 @@ export default function Branches() {
                   className="bg-primary hover:bg-orange-600 text-white px-8 py-2 rounded-full"
                 >
                   <MapPinIcon className="w-5 h-5 text-white flex-shrink-0 mt-0.5" />
-                  Ver sucursales
+                  {t("viewButton")}
                 </Button>
               </div>
             </div>
@@ -101,10 +105,7 @@ export default function Branches() {
           <section className="bg-gray-50 py-12 px-6">
             <div className="max-w-4xl mx-auto text-center">
               <p className="text-gray-700 leading-relaxed">
-                Tu mejor versión comienza aquí. Visita nuestras sucursales y
-                siente la energía que transforma. Cada espacio VITALFIT está
-                diseñado para inspirarte, retarte y acompañarte en cada paso de
-                tu evolución.
+                {t("footerQuote")}
               </p>
             </div>
           </section>

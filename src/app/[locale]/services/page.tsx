@@ -7,6 +7,7 @@ import ServiceCard from "@/components/services/ServicesCard";
 import ServiceModal from "@/components/services/ServiceModal";
 import SearchInput from "@/components/ui/SearchInput";
 import { Squares2X2Icon, ListBulletIcon } from "@heroicons/react/24/solid";
+import { useTranslations } from "next-intl";
 
 export default function ServicesPage() {
   const [view, setView] = useState<"grid" | "list">("grid");
@@ -16,7 +17,6 @@ export default function ServicesPage() {
     rating: "",
   });
 
-  // Estado para controlar el modal
   const [selectedService, setSelectedService] = useState<any | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -29,6 +29,12 @@ export default function ServicesPage() {
     setSelectedService(null);
     setIsModalOpen(false);
   };
+
+  const ratings = [
+    { value: "5", label: "★★★★★ (5 estrellas)" },
+    { value: "4", label: "★★★★☆ (4 estrellas o más)" },
+    { value: "3", label: "★★★☆☆ (3 estrellas o más)" },
+  ];
 
   const services = [
     {
@@ -64,29 +70,29 @@ export default function ServicesPage() {
     setFilters({ name: "", category: "", rating: "" });
   };
 
+  const t = useTranslations("ServicesPage");
+
   return (
     <>
       <Navbar />
-
       <section className="pt-28 pb-10 px-6 bg-gray-50 min-h-screen">
-        {/* Encabezado */}
         <div className="text-center mb-12">
           <h1 className="text-center text-5xl md:text-6xl font-bold mb-5">
-            <span className="text-[#F27F2A]">NUESTROS</span> SERVICIOS
+            {t.rich("title", {
+              highlight: (chunks) => (
+                <span className="text-[#F27F2A]">{chunks}</span>
+              ),
+            })}
           </h1>
           <p className="text-gray-600 text-lg md:text-xl mt-2">
-            Explora la variedad de clases que ofrecemos para ayudarte a alcanzar
-            tus metas de fitness.
+            {t("subtitle")}
           </p>
         </div>
-
-        {/* Filtros */}
         <div className="hidden md:flex w-full flex-wrap items-center justify-between gap-4 mb-10">
-          {/* Grupo de búsqueda y selects */}
           <div className="flex flex-wrap md:flex-nowrap items-center gap-3 flex-1 min-w-[250px]">
-            {/* Campo de búsqueda */}
             <div className="w-full sm:w-[900px] md:w-[400px]">
               <SearchInput
+                placeholder={t("filters.searchPlaceholder")}
                 value={filters.name}
                 onChange={(e) =>
                   setFilters({ ...filters, name: e.target.value })
@@ -101,7 +107,12 @@ export default function ServicesPage() {
               }
               className="w-50 md:w-60 px-3 py-2 border border-[#A4A4A4] rounded-lg focus:border-[#F27F2A] focus:ring-[#F27F2A] focus:outline-none text-gray-700 text-sm"
             >
-              <option value="">Rating</option>
+              <option value="">{t("filters.ratingDefault")}</option>
+              {ratings.map((rating) => (
+                <option key={rating.value} value={rating.value}>
+                  {rating.label}
+                </option>
+              ))}
             </select>
 
             <select
@@ -111,14 +122,14 @@ export default function ServicesPage() {
               }
               className="w-50 md:w-60 px-3 py-2 border border-[#A4A4A4] rounded-lg focus:border-[#F27F2A] focus:ring-[#F27F2A] focus:outline-none text-gray-700 text-sm"
             >
-              <option value="">Categoría</option>
+              <option value="">{t("filters.categoryDefault")}</option>
             </select>
           </div>
 
           {/* Grupo de vista y borrar filtros */}
           <div className="flex flex-wrap items-center justify-start md:justify-end gap-3 w-full md:w-auto">
             <span className="text-gray-600 font-bold mr-3 text-base">
-              Vista:
+              {t("filters.viewLabel")}
             </span>
 
             <div className="flex items-center gap-2">
@@ -131,7 +142,7 @@ export default function ServicesPage() {
                 }`}
               >
                 <Squares2X2Icon className="w-4 h-4" />
-                Cuadrícula
+                {t("filters.viewGrid")}
               </button>
 
               <button
@@ -143,16 +154,14 @@ export default function ServicesPage() {
                 }`}
               >
                 <ListBulletIcon className="w-4 h-4" />
-                Lista
+                {t("filters.viewList")}
               </button>
             </div>
-
-            {/* Borrar filtros */}
             <button
               onClick={handleClearFilters}
               className="flex items-center gap-1 text-gray-600 font-bold text-base hover:text-[#F27F2A] transition cursor-pointer"
             >
-              Borrar filtros
+              {t("filters.clear")}
             </button>
           </div>
         </div>
@@ -186,7 +195,6 @@ export default function ServicesPage() {
         )}
       </section>
 
-      {/* Modal */}
       <ServiceModal
         service={selectedService}
         isOpen={isModalOpen}

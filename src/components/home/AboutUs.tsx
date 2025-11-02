@@ -6,7 +6,7 @@ interface SectionAboutUsProps {
   sections: {
     id: number;
     title: string;
-    content: string;
+    content: React.ReactNode;
     imageUrl: string;
     imageAlt: string;
     bgColor?: string;
@@ -39,10 +39,9 @@ const SectionAboutUs: React.FC<SectionAboutUsProps> = ({ sections }) => {
                   <h2 className="font-bold text-4xl md:text-6xl text-center py-5">
                     {section.title}
                   </h2>
-                  <div
-                    className="text-lg leading-relaxed space-y-4"
-                    dangerouslySetInnerHTML={{ __html: section.content }}
-                  />
+                  <div className="text-lg leading-relaxed space-y-4">
+                    {section.content}
+                  </div>
                 </div>
 
                 {/* Imagen */}

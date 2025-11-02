@@ -76,8 +76,6 @@ export default function Login() {
         setIsSubmitting(false);
         return;
       }
-
-      // console.log("Token recibido:", data.token);
       sessionStorage.setItem("token", data.token);
       window.location.replace("/dashboard");
     } catch (error) {
