@@ -79,6 +79,7 @@ export default function RegisterPage() {
       const genderMapping = {
         masculino: "male",
         femenino: "female",
+        "prefiero no especificarlo": "prefer-not-to-say",
       };
 
       const apiGender =
@@ -208,11 +209,11 @@ export default function RegisterPage() {
                     }
                     className="bg-white w-full"
                   />
-                  {error.nombre?.map((msg, i) => (
-                    <p key={i} className="text-red-500 text-xs sm:text-sm mt-1">
-                      {msg}
+                  {error.nombre?.[0] && (
+                    <p className="text-red-500 text-xs sm:text-sm mt-1">
+                      {error.nombre[0]}
                     </p>
-                  ))}
+                  )}
                 </div>
                 <div className="flex-1">
                   <label
@@ -232,11 +233,11 @@ export default function RegisterPage() {
                     }
                     className="bg-white w-full"
                   />
-                  {error.apellido?.map((msg, i) => (
-                    <p key={i} className="text-red-500 text-xs sm:text-sm mt-1">
-                      {msg}
+                  {error.apellido?.[0] && (
+                    <p className="text-red-500 text-xs sm:text-sm mt-1">
+                      {error.apellido[0]}
                     </p>
-                  ))}
+                  )}
                 </div>
               </div>
 
@@ -257,11 +258,11 @@ export default function RegisterPage() {
                   onChange={(e) => handleInputChange("email", e.target.value)}
                   className="bg-white w-full"
                 />
-                {error.email?.map((msg, i) => (
-                  <p key={i} className="text-red-500 text-xs sm:text-sm mt-1">
-                    {msg}
+                {error.email?.[0] && (
+                  <p className="text-red-500 text-xs sm:text-sm mt-1">
+                    {error.email[0]}
                   </p>
-                ))}
+                )}
               </div>
 
               <div className="flex flex-col mb-4 space-y-4 sm:flex-row sm:space-y-0 sm:space-x-4">
@@ -278,11 +279,11 @@ export default function RegisterPage() {
                     onChange={(value) => handleInputChange("telefono", value)}
                     defaultCountry="VE"
                   />
-                  {error.telefono?.map((msg, i) => (
-                    <p key={i} className="text-red-500 text-xs sm:text-sm mt-1">
-                      {msg}
+                  {error.telefono?.[0] && (
+                    <p className="text-red-500 text-xs sm:text-sm mt-1">
+                      {error.telefono[0]}
                     </p>
-                  ))}
+                  )}
                 </div>
                 <div className="flex-1">
                   <label
@@ -302,11 +303,11 @@ export default function RegisterPage() {
                     }
                     className="bg-white w-full"
                   />
-                  {error.documento?.map((msg, i) => (
-                    <p key={i} className="text-red-500 text-xs sm:text-sm mt-1">
-                      {msg}
+                  {error.documento?.[0] && (
+                    <p className="text-red-500 text-xs sm:text-sm mt-1">
+                      {error.documento[0]}
                     </p>
-                  ))}
+                  )}
                 </div>
               </div>
               <div className="mb-4">
@@ -327,11 +328,11 @@ export default function RegisterPage() {
                   }
                   className="bg-white w-full"
                 />
-                {error.nacimiento?.map((msg, i) => (
-                  <p key={i} className="text-red-500 text-xs sm:text-sm mt-1">
-                    {msg}
+                {error.nacimiento?.[0] && (
+                  <p className="text-red-500 text-xs sm:text-sm mt-1">
+                    {error.nacimiento[0]}
                   </p>
-                ))}
+                )}
               </div>
               <div className="flex flex-col mb-4 space-y-4 sm:flex-row sm:space-y-0 sm:space-x-4">
                 <div className="flex-1">
@@ -384,11 +385,11 @@ export default function RegisterPage() {
                       <span className="ml-2">Prefiero no especificarlo</span>
                     </label>
                   </div>
-                  {error.genero?.map((msg, i) => (
-                    <p key={i} className="text-red-500 text-xs sm:text-sm mt-1">
-                      {msg}
+                  {error.genero?.[0] && (
+                    <p className="text-red-500 text-xs sm:text-sm mt-1">
+                      {error.genero[0]}
                     </p>
-                  ))}
+                  )}
                 </div>
               </div>
 
@@ -411,11 +412,11 @@ export default function RegisterPage() {
                     }
                     className="bg-white w-full"
                   />
-                  {error.password?.map((msg, i) => (
-                    <p key={i} className="text-red-500 text-xs sm:text-sm mt-1">
-                      {msg}
+                  {error.password?.[0] && (
+                    <p className="text-red-500 text-xs sm:text-sm mt-1">
+                      {error.password[0]}
                     </p>
-                  ))}
+                  )}
                 </div>
                 <div className="flex-1">
                   <label
@@ -435,11 +436,11 @@ export default function RegisterPage() {
                     }
                     className="bg-white w-full"
                   />
-                  {error.cpassword?.map((msg, i) => (
-                    <p key={i} className="text-red-500 text-xs sm:text-sm mt-1">
-                      {msg}
+                  {error.cpassword?.[0] && (
+                    <p className="text-red-500 text-xs sm:text-sm mt-1">
+                      {error.cpassword[0]}
                     </p>
-                  ))}
+                  )}
                 </div>
               </div>
 
