@@ -61,5 +61,14 @@
     "subtitle": "Tu espacio fitness, más cerca de lo que imaginas. Nuestras sucursales VITALFIT están ubicadas estratégicamente para que entrenar sea accesible, rápido y que nunca pongas en pausa tu bienestar.",
     "viewButton": "Ver sucursales",
     "footerQuote": "Tu mejor versión comienza aquí. Visita nuestras sucursales y siente la energía que transforma. Cada espacio VITALFIT está diseñado para inspirarte, retarte y acompañarte en cada paso de tu evolución."
+  },
+  "FindBranchPage": {
+    "title": "ENCUENTRA TU SUCURSAL",
+    "description": "Usa el mapa o la barra de búsqueda para localizar nuestras sucursales",
+    "search_placeholder": "Buscar sucursal...",
+    "find_nearest_button": "Encontrar la más cercana",
+    "branch_hours_spain": "Lunes - Viernes: 6:00 am - 9:00 pm",
+    "branch_hours_venezuela": "Lunes - Viernes: 6:00 am - 8:00 pm",
+    "branch_hours_chile": "Lunes - Viernes: 6:00 am - 9:00 pm"
   }
 }
