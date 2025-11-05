@@ -61,5 +61,36 @@
     "subtitle": "Tu espacio fitness, más cerca de lo que imaginas. Nuestras sucursales VITALFIT están ubicadas estratégicamente para que entrenar sea accesible, rápido y que nunca pongas en pausa tu bienestar.",
     "viewButton": "Ver sucursales",
     "footerQuote": "Tu mejor versión comienza aquí. Visita nuestras sucursales y siente la energía que transforma. Cada espacio VITALFIT está diseñado para inspirarte, retarte y acompañarte en cada paso de tu evolución."
+  },
+  "LoginPage": {
+    "title": "INICIAR SESIÓN",
+    "googleLogin": "Iniciar sesión con Google",
+    "credentialsPrompt": "Ingresa tus credenciales para iniciar sesión",
+    "email": {
+      "label": "Correo Electrónico*",
+      "placeholder": "Email"
+    },
+    "password": {
+      "label": "Contraseña*",
+      "placeholder": "Ingresa tu contraseña"
+    },
+    "rememberMe": "Mantener Sesión",
+    "forgotPassword": {
+      "text": "¿Olvidaste tu Contraseña?",
+      "link": "Recuperar"
+    },
+    "submitButton": {
+      "default": "Iniciar sesión",
+      "loading": "Cargando..."
+    },
+    "noAccount": {
+      "text": "¿No tienes Cuenta?",
+      "link": "Registrarse"
+    },
+    "errors": {
+      "incorrectCredentials": "Credenciales incorrectas",
+      "loginError": "Error al iniciar sesión",
+      "connectionError": "No se pudo conectar con el servidor"
+    }
   }
 }
