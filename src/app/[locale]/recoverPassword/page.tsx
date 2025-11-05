@@ -10,8 +10,10 @@ import { Notification } from "@/components/ui/Notification";
 import { recoverSchema } from "@/lib/validation/recoverSchema";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "@/i18n/routing";
+import { useTranslations } from "next-intl";
 
 export default function RecoverPassword() {
+  const t = useTranslations("recoverPassword");
   const [formData, setFormData] = useState({ usuario: "" });
   const [error, setError] = useState<{ usuario?: string[] }>({});
   const [showAlert, setShowAlert] = useState(false);
