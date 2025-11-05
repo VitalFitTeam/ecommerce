@@ -2,8 +2,11 @@
 import Image from "next/image";
 import { EnvelopeIcon, PhoneIcon, MapPinIcon } from "@heroicons/react/24/solid";
 import { FaFacebookF, FaInstagram, FaTwitter } from "react-icons/fa";
+import { useTranslations } from "next-intl";
 
 export default function Footer() {
+  const t = useTranslations("footer");
+
   return (
     <footer className="bg-[#EDEDED] text-[#0A0A0A]">
       {/* Contenido principal */}
