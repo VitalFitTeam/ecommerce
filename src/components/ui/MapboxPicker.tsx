@@ -3,56 +3,90 @@
 import { useEffect, useRef } from "react";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
+import type { BranchMapData } from "@/app/[locale]/branches/FindBranch";
 
 export type MapboxPickerProps = {
-  lat?: string;
-  lng?: string;
+  branches: BranchMapData[];
+  isLoading?: boolean;
 };
 
 mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN as string;
 
-export default function MapboxPicker({ lat, lng }: MapboxPickerProps) {
+export default function MapboxPicker({
+  branches,
+  isLoading,
+}: MapboxPickerProps) {
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<mapboxgl.Map | null>(null);
-  const marker = useRef<mapboxgl.Marker | null>(null);
+  const markers = useRef<mapboxgl.Marker[]>([]);
 
   useEffect(() => {
-    if (!mapContainer.current) {
+    if (!mapContainer.current || isLoading) {
       return;
     }
 
-    map.current = new mapboxgl.Map({
+    if (map.current && (map.current as any)._loaded) {
+      map.current.remove();
+      map.current = null;
+    }
+
+    const newMap = new mapboxgl.Map({
       container: mapContainer.current,
       style: "mapbox://styles/mapbox/streets-v12",
-      center: [
-        lng ? parseFloat(lng) : -66.9036,
-        lat ? parseFloat(lat) : 10.4806,
-      ],
-      zoom: 12,
+      center: [-66.9036, 10.4806],
+      zoom: 6,
     });
 
-    map.current.on("click", async (e) => {
-      const longitude = e.lngLat.lng;
-      const latitude = e.lngLat.lat;
+    map.current = newMap;
 
-      if (marker.current) {
-        marker.current.setLngLat([longitude, latitude]);
-      } else {
-        marker.current = new mapboxgl.Marker({ color: "#f97316" })
-          .setLngLat([longitude, latitude])
-          .addTo(map.current!);
+    newMap.addControl(new mapboxgl.NavigationControl(), "top-right");
+
+    newMap.on("load", () => {
+      markers.current.forEach((m) => m.remove());
+      markers.current = [];
+
+      const bounds = new mapboxgl.LngLatBounds();
+
+      branches.forEach((branch) => {
+        if (!branch.latitude || !branch.longitude) {
+          return;
+        }
+
+        const marker = new mapboxgl.Marker({ color: "#f97316" })
+          .setLngLat([branch.longitude, branch.latitude])
+          .setPopup(
+            new mapboxgl.Popup({ offset: 25 }).setHTML(`
+            <div style="font-family: sans-serif; font-size: 14px;">
+              <strong>${branch.name}</strong><br/>
+              ${branch.address}<br/>
+            ${branch.phone || "N/A"}
+            </div>
+          `),
+          )
+          .addTo(newMap);
+
+        markers.current.push(marker);
+        bounds.extend([branch.longitude, branch.latitude]);
+      });
+
+      if (branches.length > 0) {
+        newMap.fitBounds(bounds, { padding: 50 });
       }
     });
 
+    // ✅ Cleanup seguro
     return () => {
-      map.current?.remove();
+      if (map.current && (map.current as any)._loaded) {
+        map.current.remove();
+        map.current = null;
+      }
     };
-  }, [lat, lng]);
+  }, [branches, isLoading]);
 
   return (
     <div
       ref={mapContainer}
-      className="w-full h-128 border border-gray-300 rounded-md overflow-hidden"
+      className="w-full h-[550px] border border-gray-300 rounded-xl overflow-hidden"
     />
   );
 }
