@@ -92,10 +92,6 @@
       "loginError": "Login Error",
       "connectionError": "Could not connect to server"
     }
-    "title": "<highlight>OUR</highlight> <highlight-dark>BRANCHES</highlight-dark>",
-    "subtitle": "Your fitness space, closer than you imagine. Our VITALFIT branches are strategically located so you can train easily, quickly, and never pause your well-being.",
-    "viewButton": "View branches",
-    "footerQuote": "Your best version starts here. Visit our branches and feel the energy that transforms. Each VITALFIT space is designed to inspire, challenge, and accompany you every step of your evolution."
   },
   "FindBranchPage": {
     "title": "FIND YOUR BRANCH",
