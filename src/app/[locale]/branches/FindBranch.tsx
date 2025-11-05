@@ -1,8 +1,7 @@
-// src/app/[locale]/branches/FindBranch.tsx
 "use client";
 
 import { Input } from "@/components/ui/Input";
-import { BranchCardInfo } from "./BranchCardInfo"; // Asegúrate de que este archivo exista
+import { BranchCardInfo } from "./BranchCardInfo";
 import { Button } from "@/components/ui/button";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import {

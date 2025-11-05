@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useTranslations } from "next-intl";
 import AuthFooter from "@/components/features/AuthFooter";
 import AuthCard from "@/components/features/AuthCard";
 import Logo from "@/components/features/Logo";
@@ -11,8 +12,12 @@ import Checkbox from "@/components/ui/Checkbox";
 import { Notification } from "@/components/ui/Notification";
 import { loginSchema } from "@/lib/validation/loginSchema";
 import { Button } from "@/components/ui/button";
+import { useRouter } from "@/i18n/routing";
 
 export default function Login() {
+  const t = useTranslations("LoginPage");
+  const router = useRouter();
+
   const [rememberMe, setRememberMe] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({ email: "", password: "" });
@@ -69,18 +74,19 @@ export default function Login() {
 
       if (!response.ok) {
         if (response.status === 401) {
-          setAuthError("Credenciales Incorrectas");
+          setAuthError(t("errors.incorrectCredentials"));
         } else {
-          setAuthError(data.message || "Error al iniciar sesión");
+          setAuthError(data.message || t("errors.loginError"));
         }
         setIsSubmitting(false);
         return;
       }
       sessionStorage.setItem("token", data.token);
-      window.location.replace("/dashboard");
+      router.push("/dashboard");
+      setAuthError(null);
     } catch (error) {
       console.error("Error al conectar con la API:", error);
-      setAuthError("No se pudo conectar con el servidor");
+      setAuthError(t("errors.connectionError"));
       setIsSubmitting(false);
     }
   };
@@ -96,7 +102,7 @@ export default function Login() {
         {authError && (
           <Notification
             variant="destructive"
-            title="Credenciales incorrectas"
+            title={t("errors.incorrectCredentials")}
             description={authError}
             onClose={() => setAuthError(null)}
           />
@@ -104,27 +110,28 @@ export default function Login() {
 
         <AuthCard>
           <Logo slogan={false} width={80} />
-          <h2 className="text-3xl font-bebas">INICIAR SESIÓN</h2>
-          <GoogleLoginButton text="Iniciar sesión con Google" />
+          <h2 className="text-3xl font-bebas">{t("title")}</h2>
+          <GoogleLoginButton text={t("googleLogin")} />
           <div className="text-sm text-center mb-4">
-            <span>Ingresa tus credenciales para iniciar sesión</span>
+            <span>{t("credentialsPrompt")}</span>
           </div>
 
           <form onSubmit={handleSubmit} noValidate>
             <div className="space-y-3 w-full">
               <div className="flex flex-col">
-                <label htmlFor="usuario" className="text-left font-medium mb-1">
-                  Correo Electrónico*
+                <label htmlFor="email" className="text-left font-medium mb-1">
+                  {/* CORRECCIÓN: Agregado el asterisco para mostrar obligatoriedad */}
+                  {t("email.label")}*
                 </label>
                 <TextInput
                   id="email"
                   name="email"
                   ariaLabel="email"
-                  placeholder="Email"
+                  placeholder={t("email.placeholder")}
                   value={formData.email}
                   onChange={(e) => {
                     setFormData({ ...formData, email: e.target.value });
-                    setErrors((prev) => ({ ...prev, usuario: undefined }));
+                    setErrors((prev) => ({ ...prev, email: undefined }));
                   }}
                   className="bg-white"
                 />
@@ -140,13 +147,14 @@ export default function Login() {
                   htmlFor="password"
                   className="text-left font-medium mb-1"
                 >
-                  Contraseña*
+                  {/* CORRECCIÓN: Agregado el asterisco para mostrar obligatoriedad */}
+                  {t("password.label")}*
                 </label>
                 <PasswordInput
                   id="password"
                   name="password"
                   ariaLabel="Campo de contraseña"
-                  placeholder="Ingresa tu contraseña"
+                  placeholder={t("password.placeholder")}
                   value={formData.password}
                   onChange={(e) => {
                     setFormData({ ...formData, password: e.target.value });
@@ -165,15 +173,15 @@ export default function Login() {
             <div className="flex flex-col sm:flex-row w-full mt-3 gap-2 sm:gap-0">
               <div className="flex-1 text-sm">
                 <Checkbox
-                  labelText="Mantener Sesión"
+                  labelText={t("rememberMe")}
                   isChecked={rememberMe}
                   onChange={handleCheckboxChange}
                 />
               </div>
               <div className="flex-1 text-xs">
                 <AuthFooter
-                  text="¿Olvidaste tu Contraseña?"
-                  linkText="Recuperar"
+                  text={t("forgotPassword.text")}
+                  linkText={t("forgotPassword.link")}
                   href="/recoverPassword"
                 />
               </div>
@@ -187,14 +195,16 @@ export default function Login() {
                 disabled={isSubmitting}
                 className={isSubmitting ? "opacity-50 cursor-not-allowed" : ""}
               >
-                {isSubmitting ? "Cargando..." : "Iniciar sesión"}
+                {isSubmitting
+                  ? t("submitButton.loading")
+                  : t("submitButton.default")}
               </Button>
             </div>
           </form>
 
           <AuthFooter
-            text="¿No tienes Cuenta?"
-            linkText="Registrarse"
+            text={t("noAccount.text")}
+            linkText={t("noAccount.link")}
             href="/register"
           />
         </AuthCard>
