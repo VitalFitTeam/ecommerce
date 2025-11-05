@@ -7,12 +7,12 @@
     "aboutUs": {
       "mission": {
         "title": "Misión",
-        "content": "<p>Ser la principal red de fitness que empodera a las personas para alcanzar sus objetivos de bienestar, a través de un servicio de calidad y con tecnológia avanzada, garantizando una experiencia fluida y accesible en cada una de nuestras franquicias.</p>",
+        "content": "<p>Brindar un servicio integral de bienestar físico y mental que combine tecnología, calidad y atención personalizada, permitiendo a los usuarios acceder a todas las sedes de VitalFit de manera ágil y coherente, potenciando su experiencia mediante herramientas digitales innovadoras.</p>",
         "imageAlt": "Misión"
       },
       "vision": {
         "title": "Visión",
-        "content": "<p>Consolidarnos como el ecosistema de fitness más inteligente y mejor integrado del mercado, reconocido por su excelencia operativa, su gestión estratégica basada en datos y su capacidad para ofrecer un crecimiento escalable y sostenible a todos nuestros franquiciados.</p>",
+        "content": "<p>Convertirnos en el ecosistema de fitness más inteligente e integrado del país, líder en innovación tecnológica, retención de clientes y crecimiento sostenible de franquicias.</p>",
         "imageAlt": "Visión"
       },
       "values": {
@@ -62,35 +62,17 @@
     "viewButton": "Ver sucursales",
     "footerQuote": "Tu mejor versión comienza aquí. Visita nuestras sucursales y siente la energía que transforma. Cada espacio VITALFIT está diseñado para inspirarte, retarte y acompañarte en cada paso de tu evolución."
   },
-  "LoginPage": {
-    "title": "INICIAR SESIÓN",
-    "googleLogin": "Iniciar sesión con Google",
-    "credentialsPrompt": "Ingresa tus credenciales para iniciar sesión",
-    "email": {
-      "label": "Correo Electrónico",
-      "placeholder": "Email"
-    },
-    "password": {
-      "label": "Contraseña",
-      "placeholder": "Ingresa tu contraseña"
-    },
-    "rememberMe": "Mantener Sesión",
-    "forgotPassword": {
-      "text": "¿Olvidaste tu Contraseña?",
-      "link": "Recuperar"
-    },
-    "submitButton": {
-      "default": "Iniciar sesión",
-      "loading": "Cargando..."
-    },
-    "noAccount": {
-      "text": "¿No tienes Cuenta?",
-      "link": "Registrarse"
-    },
-    "errors": {
-      "incorrectCredentials": "Credenciales incorrectas",
-      "loginError": "Error al iniciar sesión",
-      "connectionError": "No se pudo conectar con el servidor"
-    }
+  "FindBranchPage": {
+    "title": "ENCUENTRA TU SUCURSAL",
+    "description": "Usa el mapa o la barra de búsqueda para localizar nuestras sucursales",
+    "search_placeholder": "Buscar sucursal...",
+    "find_nearest_button": "Encontrar la más cercana",
+    "loading_branches": "Cargando sucursales...",
+    "error_loading_branches": "No pudimos cargar las ubicaciones del mapa. Por favor, inténtalo de nuevo más tarde.",
+    "no_valid_branches_found": "No se encontraron sucursales con coordenadas válidas.",
+    "branch_hours_default": "Lunes - Viernes: 6:00 am - 9:00 pm",
+    "branch_hours_spain": "Lunes - Viernes: 6:00 am - 9:00 pm",
+    "branch_hours_venezuela": "Lunes - Viernes: 6:00 am - 8:00 pm",
+    "branch_hours_chile": "Lunes - Viernes: 6:00 am - 9:00 pm"
   }
 }
