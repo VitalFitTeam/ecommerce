@@ -67,11 +67,11 @@
     "googleLogin": "Iniciar sesión con Google",
     "credentialsPrompt": "Ingresa tus credenciales para iniciar sesión",
     "email": {
-      "label": "Correo Electrónico*",
+      "label": "Correo Electrónico",
       "placeholder": "Email"
     },
     "password": {
-      "label": "Contraseña*",
+      "label": "Contraseña",
       "placeholder": "Ingresa tu contraseña"
     },
     "rememberMe": "Mantener Sesión",

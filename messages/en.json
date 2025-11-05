@@ -67,11 +67,11 @@
     "googleLogin": "Sign in with Google",
     "credentialsPrompt": "Enter your credentials to login",
     "email": {
-      "label": "Email*",
+      "label": "Email",
       "placeholder": "Email"
     },
     "password": {
-      "label": "Password*",
+      "label": "Password",
       "placeholder": "Enter your password"
     },
     "rememberMe": "Remember Me",
