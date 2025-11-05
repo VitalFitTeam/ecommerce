@@ -61,5 +61,36 @@
     "subtitle": "Your fitness space, closer than you imagine. Our VITALFIT branches are strategically located to make training accessible, fast, and to ensure you never pause your well-being.",
     "viewButton": "View locations",
     "footerQuote": "Your best version starts here. Visit our branches and feel the energy that transforms. Every VITALFIT space is designed to inspire, challenge, and accompany you on every step of your evolution."
+  },
+  "LoginPage": {
+    "title": "LOGIN",
+    "googleLogin": "Sign in with Google",
+    "credentialsPrompt": "Enter your credentials to login",
+    "email": {
+      "label": "Email",
+      "placeholder": "Email"
+    },
+    "password": {
+      "label": "Password",
+      "placeholder": "Enter your password"
+    },
+    "rememberMe": "Remember Me",
+    "forgotPassword": {
+      "text": "Forgot your Password?",
+      "link": "Recover"
+    },
+    "submitButton": {
+      "default": "Sign in",
+      "loading": "Loading..."
+    },
+    "noAccount": {
+      "text": "Don't have an Account?",
+      "link": "Sign up"
+    },
+    "errors": {
+      "incorrectCredentials": "Incorrect Credentials",
+      "loginError": "Login Error",
+      "connectionError": "Could not connect to server"
+    }
   }
 }
