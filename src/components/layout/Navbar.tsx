@@ -7,12 +7,14 @@ import { Button } from "@/components/ui/button";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import Logo from "@/components/features/Logo";
 import LocaleSwitcher from "../ui/LocaleSwitcher";
+import { useTranslations } from "next-intl";
 
 interface NavbarProps {
   transparent?: boolean;
 }
 
 export function Navbar({ transparent = false }: NavbarProps) {
+  const t = useTranslations("navbar");
   const pathname = usePathname();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 

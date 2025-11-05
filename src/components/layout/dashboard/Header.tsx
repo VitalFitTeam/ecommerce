@@ -1,3 +1,4 @@
+import { useTranslations } from "next-intl";
 import { BellIcon } from "@heroicons/react/24/outline";
 import Logo from "@/components/features/Logo";
 
@@ -7,6 +8,7 @@ type HeaderProps = {
 };
 
 export const Header: React.FC<HeaderProps> = ({ name, email }) => {
+  const t = useTranslations("dashboard.header");
   const acronym = name
     .split(" ")
     .map((palabra) => palabra[0])

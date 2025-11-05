@@ -70,5 +70,30 @@
     "branch_hours_spain": "Monday - Friday: 6:00 am - 9:00 pm",
     "branch_hours_venezuela": "Monday - Friday: 6:00 am - 8:00 pm",
     "branch_hours_chile": "Monday - Friday: 6:00 am - 9:00 pm"
+  },
+  "navbar": {
+    "home": "Home",
+    "services": "Services",
+    "branches": "Branches",
+    "memberships": "Memberships",
+    "contact": "Contact",
+    "login": "Login",
+    "register": "Join"
+  },
+  "dashboard": {
+    "navbar": {
+      "logo_alt": "VitalFit Logo",
+      "title": "Dashboard",
+      "welcome": "Welcome to your Dashboard"
+    }
+  },
+
+  "notifications": "Notifications",
+  "user": {
+    "name": "Name",
+    "email": "Email"
+  },
+  "logo": {
+    "slogan": "Empowering your wellness"
   }
 }
