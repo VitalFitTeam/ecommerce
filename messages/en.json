@@ -52,10 +52,6 @@
       "cardio": "Cardio"
     }
   },
-  "LocaleSwitcher": {
-    "label": "Change language",
-    "locale": "{locale, select, en {🇺🇸 English} es {🇪🇸 Español} other {Language}}"
-  },
   "BranchesPage": {
     "title": "<highlight>OUR</highlight> <highlight-dark>LOCATIONS</highlight-dark>",
     "subtitle": "Your fitness space, closer than you imagine. Our VITALFIT branches are strategically located to make training accessible, fast, and to ensure you never pause your well-being.",
@@ -92,5 +88,9 @@
       "loginError": "Login Error",
       "connectionError": "Could not connect to server"
     }
+  },
+  "LocaleSwitcher": {
+    "label": "Change language",
+    "locale": "{locale, select, en {🇺🇸 English} es {🇪🇸 Español} other {Language}}"
   }
 }

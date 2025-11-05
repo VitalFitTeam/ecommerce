@@ -7,7 +7,7 @@
     "aboutUs": {
       "mission": {
         "title": "Misión",
-        "content": "<p>Ser la principal red de fitness que empodera a las personas para alcanzar sus objetivos de bienestar, a través de un servicio de calidad y con tecnológia avanzada, garantizando una experiencia fluida y accesible en cada una de nuestras franquicias.</p>",
+        "content": "<p>Ser la principal red de fitness que empodera a las personas para alcanzar sus objetivos de bienestar, a través de un servicio de calidad y con tecnología avanzada, garantizando una experiencia fluida y accesible en cada una de nuestras franquicias.</p>",
         "imageAlt": "Misión"
       },
       "vision": {
@@ -26,10 +26,6 @@
         "imageAlt": "Objetivos"
       }
     }
-  },
-  "LocaleSwitcher": {
-    "label": "Change language",
-    "locale": "{locale, select, en {🇺🇸 English} es {🇪🇸 Español} other {Language}}"
   },
   "ServicesPage": {
     "title": "<highlight>NUESTROS</highlight> SERVICIOS",
@@ -92,5 +88,9 @@
       "loginError": "Error al iniciar sesión",
       "connectionError": "No se pudo conectar con el servidor"
     }
+  },
+  "LocaleSwitcher": {
+    "label": "Change language",
+    "locale": "{locale, select, en {🇺🇸 English} es {🇪🇸 Español} other {Language}}"
   }
 }
