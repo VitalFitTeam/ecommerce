@@ -8,6 +8,7 @@ import Logo from "@/components/features/Logo";
 import { useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "@/i18n/routing";
+import { api } from "@/lib/sdk-config";
 
 type ActivateResponse = {
   message?: string;
@@ -98,43 +99,9 @@ function ConfirmEmailContent() {
     setLoading(true);
 
     if (flow !== "recover") {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-      if (!apiUrl) {
-        setIncorrectCode(true);
-        setErrorMessage("La URL de la API no está configurada.");
-        setLoading(false);
-        return;
-      }
-
       try {
-        const response = await fetch(`${apiUrl}/auth/activate`, {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-          },
-          body: JSON.stringify({ code: verificationCode }),
-        });
-
-        let data: ActivateResponse = { message: undefined };
-        try {
-          data = await response.json();
-        } catch {
-          data = { message: undefined };
-        }
-
-        if (!response.ok) {
-          setIncorrectCode(true);
-          setErrorMessage(data.message || "Código incorrecto");
-          setLoading(false);
-          return;
-        }
-
-        if (flow === "recover") {
-          localStorage.setItem("code", verificationCode);
-        }
-
-        // clear any previous errors and show success
+        const response = api.auth.verifyEmail(verificationCode);
+        console.warn(response);
         setIncorrectCode(false);
         setErrorMessage(null);
         setShowAlert(true);
@@ -169,29 +136,8 @@ function ConfirmEmailContent() {
   const resendCode = async () => {
     const email = localStorage.getItem("email");
     try {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-      const response = await fetch(`${apiUrl}/auth/password/forgot`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email: email,
-        }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        setIncorrectCode(true);
-        setErrorMessage(data.message || "Error al reenviar codigo");
-        return;
-      }
-
-      if (flow === "recover") {
-        localStorage.setItem("code", data.code);
-      }
-
+      const response = await api.auth.forgotPassword(String(email));
+      console.warn(response);
       setShowAlertConfirmation(true);
     } catch (error) {
       console.error("Error al conectar con la API:", error);

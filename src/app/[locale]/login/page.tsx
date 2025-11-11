@@ -13,6 +13,8 @@ import { Notification } from "@/components/ui/Notification";
 import { loginSchema } from "@/lib/validation/loginSchema";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "@/i18n/routing";
+import { useAuth } from "@/context/AuthContext";
+import { api } from "@/lib/sdk-config";
 
 export default function Login() {
   const t = useTranslations("LoginPage");
@@ -22,6 +24,8 @@ export default function Login() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [authError, setAuthError] = useState<string | null>(null);
+
+  const { login } = useAuth();
 
   useEffect(() => {
     localStorage.clear();
@@ -61,29 +65,20 @@ export default function Login() {
     setErrors({});
 
     try {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-      const response = await fetch(`${apiUrl}/auth/login`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
+      const response = await api.auth.login({
+        email: formData.email,
+        password: formData.password,
       });
 
-      const data = await response.json();
+      const token = response.token;
 
-      if (!response.ok) {
-        if (response.status === 401) {
-          setAuthError(t("errors.incorrectCredentials"));
-        } else {
-          setAuthError(data.message || t("errors.loginError"));
-        }
-        setIsSubmitting(false);
-        return;
+      if (!token) {
+        throw new Error("Token no recibido");
       }
-      sessionStorage.setItem("token", data.token);
-      router.push("/dashboard");
+
+      login(token);
       setAuthError(null);
+      router.replace("/dashboard");
     } catch (error) {
       console.error("Error al conectar con la API:", error);
       setAuthError(t("errors.connectionError"));
