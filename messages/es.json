@@ -2,46 +2,46 @@
   "HomePage": {
     "banner": {
       "title": "Transforma tu <highlight>cuerpo</highlight>, transforma tu <highlight>vida</highlight>",
-      "subtitle": "Descubre el poder de un fitness inteligente y personalizado."
+      "subtitle": "Descubre el poder del fitness inteligente y personalizado."
     },
     "aboutUs": {
       "mission": {
         "title": "Misión",
-        "content": "<p>Ser la principal red de fitness que empodera a las personas para alcanzar sus objetivos de bienestar, a través de un servicio de calidad y con tecnológia avanzada, garantizando una experiencia fluida y accesible en cada una de nuestras franquicias.</p>",
+        "content": "<p>Ser la red de fitness líder que empodera a las personas para alcanzar sus metas de bienestar mediante servicio de calidad y tecnología avanzada, garantizando una experiencia fluida y accesible en todas nuestras franquicias.</p>",
         "imageAlt": "Misión"
       },
       "vision": {
         "title": "Visión",
-        "content": "<p>Consolidarnos como el ecosistema de fitness más inteligente y mejor integrado del mercado, reconocido por su excelencia operativa, su gestión estratégica basada en datos y su capacidad para ofrecer un crecimiento escalable y sostenible a todos nuestros franquiciados.</p>",
+        "content": "<p>Consolidarnos como el ecosistema de fitness más inteligente e integrado del mercado, reconocido por su excelencia operativa, gestión estratégica basada en datos y capacidad para ofrecer crecimiento escalable y sostenible a todos nuestros franquiciados.</p>",
         "imageAlt": "Visión"
       },
       "values": {
         "title": "Valores",
-        "content": "<p>Nuestra operación se sustenta en cuatro valores fundamentales: Coherencia Operativa que garantiza estandarización en cada interacción, Integridad del Dato como base de decisiones estratégicas, Orientación al Cliente centrada en relaciones duraderas, y Agilidad Tecnológica para adaptarnos continuamente a las demandas del mercado.</p>",
+        "content": "<p>Nuestra operación se construye sobre cuatro valores fundamentales: Coherencia Operativa, que garantiza la estandarización en cada interacción; Integridad de Datos, como base para las decisiones estratégicas; Orientación al Cliente, enfocada en relaciones duraderas; y Agilidad Tecnológica, para adaptarnos continuamente a las demandas del mercado.</p>",
         "imageAlt": "Valores"
       },
       "objectives": {
         "title": "Objetivos",
-        "content": "<p>Transformar vidas a través del fitness, creando una comunidad donde cada persona encuentre la motivación, el equipo y el ambiente perfecto para alcanzar sus metas físicas y mentales. Nos comprometemos a ser tu aliado en este viaje de superación personal.</p>",
+        "content": "<p>Transformar vidas a través del fitness, creando una comunidad donde todos encuentren la motivación, equipamiento y ambiente perfecto para alcanzar sus metas físicas y mentales. Estamos comprometidos a ser tu aliado en este camino de crecimiento personal.</p>",
         "imageAlt": "Objetivos"
       }
     }
   },
   "LocaleSwitcher": {
-    "label": "Change language",
-    "locale": "{locale, select, en {🇺🇸 English} es {🇪🇸 Español} other {Language}}"
+    "label": "Cambiar idioma",
+    "locale": "{locale, select, en {🇺🇸 English} es {🇪🇸 Español} other {Idioma}}"
   },
   "ServicesPage": {
     "title": "<highlight>NUESTROS</highlight> SERVICIOS",
     "subtitle": "Explora la variedad de clases que ofrecemos para ayudarte a alcanzar tus metas de fitness.",
     "filters": {
       "searchPlaceholder": "Buscar servicio por nombre...",
-      "ratingDefault": "Rating",
+      "ratingDefault": "Calificación",
       "categoryDefault": "Categoría",
       "viewLabel": "Vista:",
       "viewGrid": "Cuadrícula",
       "viewList": "Lista",
-      "clear": "Borrar filtros"
+      "clear": "Limpiar filtros"
     },
     "ratings": {
       "5stars": "(5 estrellas)",
@@ -58,17 +58,96 @@
   },
   "BranchesPage": {
     "title": "<highlight>NUESTRAS</highlight> <highlight-dark>SUCURSALES</highlight-dark>",
-    "subtitle": "Tu espacio fitness, más cerca de lo que imaginas. Nuestras sucursales VITALFIT están ubicadas estratégicamente para que entrenar sea accesible, rápido y que nunca pongas en pausa tu bienestar.",
+    "subtitle": "Tu espacio fitness, más cerca de lo que imaginas. Nuestras sucursales VITALFIT están ubicadas estratégicamente para hacer tu entrenamiento accesible, rápido y garantizar que nunca pauses tu camino al bienestar.",
     "viewButton": "Ver sucursales",
-    "footerQuote": "Tu mejor versión comienza aquí. Visita nuestras sucursales y siente la energía que transforma. Cada espacio VITALFIT está diseñado para inspirarte, retarte y acompañarte en cada paso de tu evolución."
+    "footerQuote": "Tu mejor versión comienza aquí. Visita nuestras sucursales y siente la energía que transforma. Cada espacio VITALFIT está diseñado para inspirarte, desafiarte y apoyarte en cada paso de tu evolución."
   },
   "FindBranchPage": {
     "title": "ENCUENTRA TU SUCURSAL",
-    "description": "Usa el mapa o la barra de búsqueda para localizar nuestras sucursales",
+    "description": "Usa el mapa o la barra de búsqueda para ubicar nuestras sucursales",
     "search_placeholder": "Buscar sucursal...",
     "find_nearest_button": "Encontrar la más cercana",
     "branch_hours_spain": "Lunes - Viernes: 6:00 am - 9:00 pm",
     "branch_hours_venezuela": "Lunes - Viernes: 6:00 am - 8:00 pm",
     "branch_hours_chile": "Lunes - Viernes: 6:00 am - 9:00 pm"
+  },
+  "navbar": {
+    "home": "Inicio",
+    "services": "Servicios",
+    "branches": "Sucursales",
+    "memberships": "Membresías",
+    "contact": "Contacto",
+    "login": "Iniciar Sesión",
+    "register": "Unirse"
+  },
+  "dashboard": {
+    "navbar": {
+      "logo_alt": "Logo VitalFit",
+      "title": "Panel de Control",
+      "welcome": "Bienvenido a tu Panel de Control"
+    }
+  },
+  "notifications": "Notificaciones",
+  "user": {
+    "name": "Nombre",
+    "email": "Correo"
+  },
+  "logo": {
+    "slogan": "Potenciando tu bienestar"
+  },
+  "slogan": "Transforma tu vida. Alcanza tu máximo potencial.",
+  "quickLinks": {
+    "title": "Enlaces Rápidos",
+    "services": "Servicios",
+    "membership": "Membresía",
+    "branches": "Sucursales",
+    "contact": "Contacto"
+  },
+  "services": {
+    "title": "Nuestros Servicios",
+    "yoga": "Yoga",
+    "crossfit": "CrossFit",
+    "spinning": "Spinning",
+    "pilates": "Pilates"
+  },
+  "contact": {
+    "title": "Contacto",
+    "phone": "+58 4245912150",
+    "email": "info@vitalfit.com",
+    "address": "Av. Principal 123, Centro"
+  },
+  "rights": "Todos los derechos reservados.",
+  "Footer": {
+    "tagline": "Transforma tu vida. Alcanza tu máximo potencial.",
+    "quickLinks": {
+      "title": "Enlaces Rápidos",
+      "links": {
+        "services": "Servicios",
+        "membership": "Membresía",
+        "branches": "Sucursales",
+        "contact": "Contacto"
+      }
+    },
+    "services": {
+      "title": "Nuestros Servicios",
+      "list": {
+        "yoga": "Yoga",
+        "crossfit": "CrossFit",
+        "spinning": "Spinning",
+        "pilates": "Pilates"
+      }
+    },
+    "contact": {
+      "title": "Contacto",
+      "phone": "+58 4245912150",
+      "email": "info@vitalfit.com",
+      "address": "Av. Principal 123, Centro"
+    },
+    "social": {
+      "instagram": "Instagram",
+      "twitter": "Twitter",
+      "facebook": "Facebook"
+    },
+    "copyright": "© {{year}} VitalFit — Todos los derechos reservados."
   }
 }
