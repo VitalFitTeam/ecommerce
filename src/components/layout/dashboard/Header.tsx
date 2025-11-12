@@ -21,7 +21,10 @@ export const Header: React.FC<HeaderProps> = ({ name, email }) => {
         </div>
 
         <div className="flex items-center gap-4">
-          <button className="rounded-full p-2 hover:bg-gray-100">
+          <button
+            className="rounded-full p-2 hover:bg-gray-100"
+            aria-label={t("notification")}
+          >
             <BellIcon className="h-5 w-5 text-gray-600" />
           </button>
 

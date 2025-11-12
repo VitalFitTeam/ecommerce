@@ -71,81 +71,30 @@
     "branch_hours_venezuela": "Monday - Friday: 6:00 am - 8:00 pm",
     "branch_hours_chile": "Monday - Friday: 6:00 am - 9:00 pm"
   },
-  "navbar": {
-    "home": "Home",
-    "services": "Services",
-    "branches": "Branches",
-    "memberships": "Memberships",
-    "contact": "Contact",
-    "login": "Login",
-    "register": "Join"
-  },
-  "dashboard": {
-    "navbar": {
-      "logo_alt": "VitalFit Logo",
-      "title": "Dashboard",
-      "welcome": "Welcome to your Dashboard"
-    },
-
-    "header": {
-      "notifications": "Notifications",
-      "user": {
-        "name": "Name",
-        "email": "Email"
-      },
-
-      "logo": {
-        "slogan": "Empowering your wellness"
-      }
-    }
-  },
-
-  "footer": {
-    "slogan": "Transform your life. Reach your full potential.",
-    "quickLinks": {
-      "title": "Quick Links",
-      "services": "Services",
-      "membership": "Membership",
-      "branches": "Branches",
-      "contact": "Contact"
-    },
-
-    "services": {
-      "title": "Our Services",
-      "yoga": "Yoga",
-      "crossfit": "CrossFit",
-      "spinning": "Spinning",
-      "pilates": "Pilates"
-    },
-    "contact": {
-      "title": "Contact",
-      "phone": "+58 4245912150",
-      "email": "info@vitalfit.com",
-      "address": "Av. Principal 123, Downtown"
-    },
-    "rights": "All rights reserved."
-  },
-
-  "recoverPassword": {
+  "RecoverPassword": {
     "title": "RECOVER YOUR PASSWORD",
-    "instructions": "Enter the email address associated with your account to recover your password.",
-    "emailLabel": "Email Address*",
-    "emailPlaceholder": "user@example.com",
-    "processing": "Processing...",
-    "continue": "Continue",
-    "success": {
-      "title": "Check your email",
-      "description": "We’ve sent instructions to reset your password. Please check your inbox and follow the link to reset it."
-    },
-    "errors": {
-      "connectionTitle": "Connection Error",
-      "connectionDescription": "Unable to connect to the server. Please try again later.",
-      "verificationTitle": "Verification Error",
-      "verificationError": "Error verifying the email address or request."
+    "subtitle": "Enter the email associated with the account to recover the password",
+    "form": {
+      "emailLabel": "Email*",
+      "emailPlaceholder": "user@example.com",
+      "submitButton": "Continue",
+      "processing": "Processing..."
     },
     "footer": {
-      "text": "Remember your password?",
-      "link": "Sign In"
-    }
+      "text": "Remember your Password?",
+      "linkText": "Log In"
+    },
+    "successNotification": {
+      "title": "Check your email",
+      "description": "We have sent instructions to reset your password to your email. Please check your inbox and follow the link to reset your password."
+    },
+    "connectionError": {
+      "title": "Connection Error",
+      "description": "Could not connect to the server. Please try again later."
+    },
+    "serverErrorNotification": {
+      "title": "Verification Error"
+    },
+    "serverError": "Error verifying the email or the request."
   }
 }
