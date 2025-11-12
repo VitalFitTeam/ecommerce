@@ -148,6 +148,6 @@
       "twitter": "Twitter",
       "facebook": "Facebook"
     },
-    "copyright": "© {{year}} VitalFit — Todos los derechos reservados."
+    "copyright": "© {year} VitalFit — Todos los derechos reservados."
   }
 }
