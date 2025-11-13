@@ -105,5 +105,16 @@
     "branch_hours_spain": "Monday - Friday: 6:00 am - 9:00 pm",
     "branch_hours_venezuela": "Monday - Friday: 6:00 am - 8:00 pm",
     "branch_hours_chile": "Monday - Friday: 6:00 am - 9:00 pm"
+  },
+  "Navbar": {
+    "navItems": {
+      "home": "Home",
+      "services": "Services",
+      "branches": "Branches",
+      "memberships": "Memberships",
+      "contact": "Contact"
+    },
+    "loginButton": "Log In",
+    "registerButton": "Join Us"
   }
 }

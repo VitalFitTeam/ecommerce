@@ -74,5 +74,16 @@
     "branch_hours_spain": "Lunes - Viernes: 6:00 am - 9:00 pm",
     "branch_hours_venezuela": "Lunes - Viernes: 6:00 am - 8:00 pm",
     "branch_hours_chile": "Lunes - Viernes: 6:00 am - 9:00 pm"
+  },
+  "Navbar": {
+    "navItems": {
+      "home": "Inicio",
+      "services": "Servicios",
+      "branches": "Sucursales",
+      "memberships": "Membresías",
+      "contact": "Contacto"
+    },
+    "loginButton": "Iniciar sesión",
+    "registerButton": "Unirse"
   }
 }
