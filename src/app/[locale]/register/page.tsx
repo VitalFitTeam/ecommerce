@@ -16,6 +16,9 @@ import GoogleLoginButton from "@/components/ui/GoogleLoginButton";
 import { colors } from "@/styles/styles";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "@/i18n/routing";
+import { api } from "@/lib/sdk-config";
+import { UserGender } from "@vitalfit/sdk";
+
 export default function RegisterPage() {
   const [formData, setFormData] = useState<RegisterFormData>({
     nombre: "",
@@ -73,7 +76,7 @@ export default function RegisterPage() {
       return;
     } else {
       const birthDateISO = formData.nacimiento
-        ? new Date(formData.nacimiento + "T00:00:00.000Z").toISOString()
+        ? new Date(formData.nacimiento).toISOString().split("T")[0]
         : "";
 
       const genderMapping = {
@@ -82,39 +85,22 @@ export default function RegisterPage() {
         "prefiero no especificarlo": "prefer-not-to-say",
       };
 
-      const apiGender =
-        genderMapping[formData.genero as keyof typeof genderMapping] ||
-        formData.genero;
+      const apiGender = (genderMapping[
+        formData.genero as keyof typeof genderMapping
+      ] || formData.genero) as UserGender;
 
       try {
-        const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-        const response = await fetch(`${apiUrl}/auth/register`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            first_name: formData.nombre,
-            last_name: formData.apellido,
-            email: formData.email,
-            phone: formData.telefono,
-            identity_document: formData.documento,
-            gender: apiGender,
-            birth_Date: birthDateISO,
-            password: formData.password,
-          }),
+        const response = await api.auth.signUp({
+          first_name: formData.nombre,
+          last_name: formData.apellido,
+          email: formData.email,
+          password: formData.password,
+          identity_document: formData.documento,
+          phone: formData.telefono,
+          birth_date: birthDateISO,
+          gender: apiGender,
         });
-
-        const data = await response.json();
-
-        if (!response.ok) {
-          setSubmitError(data.message || "Error al registrar");
-          if (data.error === "conflict") {
-            setSubmitError("Usuario Ya Registrado");
-          }
-          setShowAlertError(true);
-          return;
-        }
+        console.warn(response);
 
         setShowAlertError(false);
         setError({});

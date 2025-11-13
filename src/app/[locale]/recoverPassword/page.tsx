@@ -10,6 +10,7 @@ import TextInput from "@/components/ui/TextInput";
 import { Notification } from "@/components/ui/Notification";
 import { recoverSchema } from "@/lib/validation/recoverSchema";
 import { Button } from "@/components/ui/button";
+import { api } from "@/lib/sdk-config";
 import { useRouter } from "@/i18n/routing";
 
 export default function RecoverPassword() {
@@ -46,30 +47,8 @@ export default function RecoverPassword() {
     }
 
     try {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-      const response = await fetch(`${apiUrl}/auth/password/forgot`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email: formData.usuario,
-        }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        setShowServerError({
-          visible: true,
-          message: data.message || t("serverError"),
-        });
-        setIsLoading(false);
-        return;
-      }
-
+      const response = await api.auth.forgotPassword(formData.usuario);
       localStorage.setItem("email", formData.usuario);
-      localStorage.setItem("code", data.code);
       setShowAlert(true);
       setError({});
       setFormData({ usuario: "" });

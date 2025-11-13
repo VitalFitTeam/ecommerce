@@ -4,6 +4,8 @@ import { NextIntlClientProvider, hasLocale } from "next-intl";
 import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
 import { getMessages } from "next-intl/server";
+import { AuthProvider } from "@/context/AuthContext";
+
 import "../../styles/globals.css";
 
 export const metadata: Metadata = {
@@ -30,9 +32,14 @@ export default async function RootLayout({ children, params }: Props) {
   return (
     <html lang={locale} className={`${montserrat.variable} ${bebas.variable}`}>
       <body className="antialiased">
-        <NextIntlClientProvider locale={locale} messages={serializableMessages}>
-          {children}
-        </NextIntlClientProvider>
+        <AuthProvider>
+          <NextIntlClientProvider
+            locale={locale}
+            messages={serializableMessages}
+          >
+            {children}
+          </NextIntlClientProvider>
+        </AuthProvider>
       </body>
     </html>
   );

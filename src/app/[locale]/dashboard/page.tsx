@@ -1,3 +1,4 @@
+"use client";
 import { typography } from "@/styles/styles";
 import { Membership } from "@/components/features/Membership";
 import { QuickActions } from "@/components/features/QuickActions";
@@ -6,8 +7,18 @@ import { QRCodeCard } from "@/components/features/QRCodeCard";
 import { TipCard } from "@/components/features/TipCard";
 import { AppDownloadBanner } from "@/components/features/AppDownloadBanner";
 import { StatsCards } from "@/components/features/StatsCards";
+import { useAuth } from "@/context/AuthContext";
+import { useRouter } from "@/i18n/routing";
 
 export default function DashboardPage() {
+  const router = useRouter();
+  const { token } = useAuth();
+
+  if (!token) {
+    router.push("/login");
+    return;
+  }
+
   return (
     <div className="min-h-screen bg-gray-100">
       <Header name="Albani Barragan" email="albani@gmail.com" />
