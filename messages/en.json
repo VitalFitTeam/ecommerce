@@ -1,4 +1,24 @@
 {
+  "logo": {
+    "slogan": "Empowering your wellness"
+  },
+  "slogan": "Transform your life. Reach your full potential.",
+  "Navbar": {
+    "navItems": {
+      "home": "Home",
+      "services": "Services",
+      "branches": "Branches",
+      "memberships": "Memberships",
+      "contact": "Contact"
+    },
+    "loginButton": "Login",
+    "registerButton": "Join",
+    "logoSlogan": "Empowering your wellness"
+  },
+  "LocaleSwitcher": {
+    "label": "Change language",
+    "locale": "{locale, select, en {🇺🇸 English} es {🇪🇸 Spanish} other {Language}}"
+  },
   "HomePage": {
     "banner": {
       "title": "Transform your <highlight>body</highlight>, transform your <highlight>life</highlight>",
@@ -26,10 +46,6 @@
         "imageAlt": "Objectives"
       }
     }
-  },
-  "LocaleSwitcher": {
-    "label": "Change language",
-    "locale": "{locale, select, en {🇺🇸 English} es {🇪🇸 Spanish} other {Language}}"
   },
   "ServicesPage": {
     "title": "<highlight>OUR</highlight> SERVICES",
@@ -62,6 +78,21 @@
     "viewButton": "View locations",
     "footerQuote": "Your best version starts here. Visit our branches and feel the energy that transforms. Every VITALFIT space is designed to inspire, challenge, and accompany you on every step of your evolution."
   },
+  "FindBranchPage": {
+    "title": "FIND YOUR BRANCH",
+    "description": "Use the map or search bar to locate our branches.",
+    "search_placeholder": "Search branch...",
+    "find_nearest_button": "Find the nearest one",
+    "loading_branches": "Loading branches...",
+    "error_loading_branches": "We couldn’t load the map locations. Please try again later.",
+    "no_valid_branches_found": "No branches with valid coordinates were found.",
+    "branch_hours": {
+      "default": "Monday - Friday: 6:00 am - 9:00 pm",
+      "spain": "Monday - Friday: 6:00 am - 9:00 pm",
+      "venezuela": "Monday - Friday: 6:00 am - 8:00 pm",
+      "chile": "Monday - Friday: 6:00 am - 9:00 pm"
+    }
+  },
   "LoginPage": {
     "title": "LOGIN",
     "googleLogin": "Sign in with Google",
@@ -93,19 +124,6 @@
       "connectionError": "Could not connect to server"
     }
   },
-  "FindBranchPage": {
-    "title": "FIND YOUR BRANCH",
-    "description": "Use the map or search bar to locate our branches.",
-    "search_placeholder": "Search branch...",
-    "find_nearest_button": "Find the nearest one",
-    "loading_branches": "Loading branches...",
-    "error_loading_branches": "We couldn’t load the map locations. Please try again later.",
-    "no_valid_branches_found": "No branches with valid coordinates were found.",
-    "branch_hours_default": "Monday - Friday: 6:00 am - 9:00 pm",
-    "branch_hours_spain": "Monday - Friday: 6:00 am - 9:00 pm",
-    "branch_hours_venezuela": "Monday - Friday: 6:00 am - 8:00 pm",
-    "branch_hours_chile": "Monday - Friday: 6:00 am - 9:00 pm"
-  },
   "RecoverPassword": {
     "title": "RECOVER YOUR PASSWORD",
     "subtitle": "Enter the email associated with the account to recover the password",
@@ -131,52 +149,19 @@
       "title": "Verification Error"
     },
     "serverError": "Error verifying the email or the request."
-  "navbar": {
-    "home": "Home",
-    "services": "Services",
-    "branches": "Branches",
-    "memberships": "Memberships",
-    "contact": "Contact",
-    "login": "Login",
-    "register": "Join"
   },
   "dashboard": {
     "navbar": {
       "logo_alt": "VitalFit Logo",
       "title": "Dashboard",
       "welcome": "Welcome to your Dashboard"
-    }
+    },
+    "notifications": "Notifications"
   },
-  "notifications": "Notifications",
   "user": {
     "name": "Name",
     "email": "Email"
   },
-  "logo": {
-    "slogan": "Empowering your wellness"
-  },
-  "slogan": "Transform your life. Reach your full potential.",
-  "quickLinks": {
-    "title": "Quick Links",
-    "services": "Services",
-    "membership": "Membership",
-    "branches": "Branches",
-    "contact": "Contact"
-  },
-  "services": {
-    "title": "Our Services",
-    "yoga": "Yoga",
-    "crossfit": "CrossFit",
-    "spinning": "Spinning",
-    "pilates": "Pilates"
-  },
-  "contact": {
-    "title": "Contact",
-    "phone": "+58 4245912150",
-    "email": "info@vitalfit.com",
-    "address": "123 Main Avenue, Downtown"
-  },
-  "rights": "All rights reserved.",
   "Footer": {
     "tagline": "Transform your life. Reach your maximum potential.",
     "quickLinks": {
@@ -209,5 +194,170 @@
       "facebook": "Facebook"
     },
     "copyright": "© {year} VitalFit — All rights reserved."
+  },
+  "MembershipsPage": {
+    "hero": {
+      "titlePart1": "PLANS AND",
+      "titlePart2": "MEMBERSHIPS",
+      "subtitle": "Choose the plan that best suits your fitness needs and goals"
+    },
+    "plans": {
+      "advanced": {
+        "title": "Advanced Subscription",
+        "description": "More benefits for your fitness life",
+        "billingPeriod": "month",
+        "services": {
+          "s1": "Unlimited gym access",
+          "s2": "7 sessions with a fitness consultant",
+          "s3": "Nutritional tracking",
+          "s4": "5 free supplements",
+          "s5": "Gym credential",
+          "s6": "Personal trainer"
+        }
+      },
+      "standard": {
+        "title": "Standard Plan",
+        "description": "Maximum savings and benefits",
+        "billingPeriod": "year",
+        "services": {
+          "s1": "Unlimited facility use",
+          "s2": "Consultations with an expert trainer",
+          "s3": "Dietary control",
+          "s4": "Receive 3 free supplements",
+          "s5": "Train 5 days a week",
+          "s6": "Personal trainer"
+        }
+      },
+      "athlete": {
+        "title": "Athlete Package",
+        "description": "The best value for money",
+        "billingPeriod": "3 months",
+        "services": {
+          "s1": "Unlimited gym access",
+          "s2": "Includes complimentary apparel",
+          "s3": "Train Without Limits",
+          "s4": "Free fitness consultant",
+          "s5": "Gym credential"
+        }
+      },
+      "basic": {
+        "title": "Basic Package",
+        "description": "Ideal for starting in the fit world",
+        "billingPeriod": "month",
+        "services": {
+          "s1": "Save with the annual plan",
+          "s2": "2 sessions with a fitness consultant",
+          "s3": "Dietary control",
+          "s4": "1 free supplement",
+          "s5": "Personal trainer"
+        }
+      }
+    },
+    "includes": {
+      "title": "ALL PLANS INCLUDE",
+      "item1": {
+        "title": "All Locations",
+        "content": "Access to all our branches"
+      },
+      "item2": {
+        "title": "Trainer",
+        "content": "Free floor trainer"
+      },
+      "item3": {
+        "title": "Group Classes",
+        "content": "Various classes across all locations"
+      },
+      "item4": {
+        "title": "Mobile App",
+        "content": "Book classes and track your progress"
+      }
+    },
+    "cta": {
+      "heading": "Not sure which plan to choose?",
+      "subheading": "Our team is here to help you find the perfect plan for your needs",
+      "advisorButton": "Talk to an advisor",
+      "faqButton": "View Frequently Asked Questions"
+    }
+  },
+  "ContactPage": {
+    "hero": {
+      "title": "CONTACT US",
+      "subtitle": "Fill out the form details"
+    },
+    "form": {
+      "nameLabel": "First Name",
+      "namePlaceholder": "First Name",
+      "lastNameLabel": "Last Name",
+      "lastNamePlaceholder": "Last Name",
+      "emailLabel": "Email Address",
+      "emailPlaceholder": "email@example.com",
+      "reasonPlaceholder": "Reason for contact",
+      "preferencePlaceholder": "Contact preference",
+      "messagePlaceholder": "Message",
+      "submitButton": "Submit",
+      "reasons": {
+        "general": "General inquiry",
+        "memberships": "Membership information",
+        "services": "Services information",
+        "complaint": "Complaint",
+        "suggestion": "Suggestion"
+      },
+      "preferences": {
+        "email": "Email",
+        "phone": "Phone",
+        "whatsapp": "WhatsApp"
+      }
+    }
+  },
+  "RegisterPage": {
+    "title": "CREATE YOUR ACCOUNT",
+    "form": {
+      "firstNameLabel": "First Name",
+      "firstNamePlaceholder": "First Name",
+      "lastNameLabel": "Last Name",
+      "lastNamePlaceholder": "Last Name",
+      "emailLabel": "Email Address",
+      "emailPlaceholder": "email@example.com",
+      "phoneLabel": "Phone Number",
+      "documentLabel": "Identity Document",
+      "documentPlaceholder": "Document",
+      "birthDateLabel": "Date of Birth",
+      "passwordLabel": "Password",
+      "passwordPlaceholder": "Enter your password",
+      "confirmPasswordLabel": "Confirm Password",
+      "confirmPasswordPlaceholder": "Confirm password",
+      "termsText": "I accept the terms, service conditions, and security policies",
+      "submitButton": "Create Account",
+      "googleLoginText": "Sign up with Google",
+      "gender": {
+        "label": "Gender",
+        "male": "Male",
+        "maleValue": "masculino",
+        "female": "Female",
+        "femaleValue": "femenino",
+        "preferNotToSay": "Prefer not to specify",
+        "preferNotToSayValue": "preferiero no especificarlo"
+      }
+    },
+    "validation": {
+      "termsRequired": "You must accept the terms and conditions"
+    },
+    "notifications": {
+      "success": {
+        "title": "Check your email",
+        "description": "Thank you for registering with VITALFIT! To complete your registration, please verify your email address."
+      },
+      "error": {
+        "title": "Error"
+      },
+      "connectionError": {
+        "title": "Connection Error",
+        "description": "Could not connect to the server. Please try again later."
+      }
+    },
+    "footer": {
+      "loginPrompt": "Already have an Account?",
+      "loginLink": "Log In"
+    }
   }
 }
