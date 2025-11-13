@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import AuthFooter from "@/components/features/AuthFooter";
 import { typography } from "@/styles/styles";
 import AuthCard from "@/components/features/AuthCard";
@@ -13,12 +14,12 @@ import { api } from "@/lib/sdk-config";
 import { useRouter } from "@/i18n/routing";
 
 export default function RecoverPassword() {
+  const t = useTranslations("RecoverPassword");
   const [formData, setFormData] = useState({ usuario: "" });
   const [error, setError] = useState<{ usuario?: string[] }>({});
   const [showAlert, setShowAlert] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [showConnectionError, setShowConnectionError] = useState(false);
-  // 1. Nuevo estado para la notificación de error del servidor/email no verificado
   const [showServerError, setShowServerError] = useState<{
     visible: boolean;
     message: string;
@@ -65,8 +66,8 @@ export default function RecoverPassword() {
       {showAlert && (
         <Notification
           variant="success"
-          title="Revisa tu correo"
-          description="Hemos enviado instrucciones para restablecer tu contraseña a tu correo electrónico. Por favor revisa tu bandeja de entrada y sigue el enlace para restablecer tu contraseña."
+          title={t("successNotification.title")}
+          description={t("successNotification.description")}
           onClose={() => {
             setShowAlert(false);
             router.push("/confirmEmail?flow=recover");
@@ -77,16 +78,16 @@ export default function RecoverPassword() {
       {showConnectionError && (
         <Notification
           variant="destructive"
-          title="Error de Conexión"
-          description="No se pudo conectar con el servidor. Por favor, inténtalo de nuevo más tarde."
+          title={t("connectionError.title")}
+          description={t("connectionError.description")}
           onClose={() => setShowConnectionError(false)}
         />
       )}
-      {/* 3. Nueva Notificación de Error del Servidor/Email */}
+      {/* Notificación de Error del Servidor/Email */}
       {showServerError.visible && (
         <Notification
-          variant="destructive" // O el variant que uses para errores
-          title="Error de Verificación"
+          variant="destructive"
+          title={t("serverErrorNotification.title")}
           description={showServerError.message}
           onClose={() => setShowServerError({ visible: false, message: "" })}
         />
@@ -94,15 +95,11 @@ export default function RecoverPassword() {
 
       <div className="flex justify-center w-full">
         <div className="max-w-sm w-full">
-          {/* ... El resto del componente permanece igual ... */}
           <AuthCard>
             <Logo slogan={false} width={80} />
-            <h2 className={typography.h3}>RECUPERA TU CONTRASEÑA</h2>
+            <h2 className={typography.h3}>{t("title")}</h2>
             <div className="text-center mb-4">
-              <span>
-                Ingrese el correo electrónico asociado a la cuenta para
-                recuperar la contraseña
-              </span>
+              <span>{t("subtitle")}</span>
             </div>
 
             <form className="w-full" onSubmit={handleSubmit} noValidate>
@@ -112,13 +109,13 @@ export default function RecoverPassword() {
                     htmlFor="usuario"
                     className="text-left font-medium mb-1"
                   >
-                    Correo Electrónico*
+                    {t("form.emailLabel")}
                   </label>
                   <TextInput
                     id="usuario"
                     name="usuario"
                     ariaLabel="usuario"
-                    placeholder="usuario@ejemplo.com"
+                    placeholder={t("form.emailPlaceholder")}
                     value={formData.usuario}
                     onChange={(e) => {
                       setFormData({ ...formData, usuario: e.target.value });
@@ -135,14 +132,14 @@ export default function RecoverPassword() {
 
               <div className="mt-4 w-full">
                 <Button fullWidth type="submit" disabled={isLoading}>
-                  {isLoading ? "Procesando..." : "Continuar"}
+                  {isLoading ? t("form.processing") : t("form.submitButton")}
                 </Button>
               </div>
             </form>
 
             <AuthFooter
-              text="¿Recuerdas tu Contraseña?"
-              linkText="Iniciar Sesión"
+              text={t("footer.text")}
+              linkText={t("footer.linkText")}
               href="/login"
             />
           </AuthCard>

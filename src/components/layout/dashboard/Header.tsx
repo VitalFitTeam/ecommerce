@@ -1,3 +1,4 @@
+import { useTranslations } from "next-intl";
 import { BellIcon } from "@heroicons/react/24/outline";
 import Logo from "@/components/features/Logo";
 
@@ -7,6 +8,7 @@ type HeaderProps = {
 };
 
 export const Header: React.FC<HeaderProps> = ({ name, email }) => {
+  const t = useTranslations("dashboard.header");
   const acronym = name
     .split(" ")
     .map((palabra) => palabra[0])
@@ -19,7 +21,10 @@ export const Header: React.FC<HeaderProps> = ({ name, email }) => {
         </div>
 
         <div className="flex items-center gap-4">
-          <button className="rounded-full p-2 hover:bg-gray-100">
+          <button
+            className="rounded-full p-2 hover:bg-gray-100"
+            aria-label={t("notification")}
+          >
             <BellIcon className="h-5 w-5 text-gray-600" />
           </button>
 
