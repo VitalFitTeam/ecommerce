@@ -8,7 +8,6 @@ import Logo from "@/components/features/Logo";
 import PasswordInput from "@/components/ui/PasswordInput";
 import TextInput from "@/components/ui/TextInput";
 import { PhoneInput } from "@/components/ui/phone-input";
-import Checkbox from "@/components/ui/Checkbox";
 import { Notification } from "@/components/ui/Notification";
 import { registerSchema } from "@/lib/validation/registerSchema";
 import { RegisterFormData } from "@/lib/validation/registerSchema";
@@ -19,6 +18,7 @@ import { useRouter } from "@/i18n/routing";
 import { api } from "@/lib/sdk-config";
 import { UserGender } from "@vitalfit/sdk";
 import { useTranslations } from "next-intl"; // Importado para traducción
+import { Checkbox } from "@/components/ui/Checkbox";
 
 export default function RegisterPage() {
   // Inicializamos la función de traducción
@@ -456,8 +456,8 @@ export default function RegisterPage() {
                 <div className="flex-shrink-0 mt-1">
                   <Checkbox
                     labelText=""
-                    isChecked={terms}
-                    onChange={handleCheckboxChange}
+                    checked={terms}
+                    onCheckedChange={(checked) => setTerms(!!checked)}
                   />
                 </div>
                 <div className="flex-1">
@@ -479,11 +479,7 @@ export default function RegisterPage() {
               </div>
 
               <div className="mt-6 w-full">
-                <Button
-                  fullWidth
-                  type="submit"
-                  className="w-full py-3 text-base sm:py-2"
-                >
+                <Button type="submit" className="w-full py-3 text-base sm:py-2">
                   {t("form.submitButton")}
                 </Button>
               </div>

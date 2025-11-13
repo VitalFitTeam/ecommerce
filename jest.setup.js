@@ -14,3 +14,11 @@ jest.mock("@vitalfit/sdk", () => ({
     })),
   },
 }));
+
+class ResizeObserver {
+  observe() {}
+  unobserve() {}
+  disconnect() {}
+}
+
+global.ResizeObserver = ResizeObserver;
