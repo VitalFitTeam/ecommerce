@@ -39,7 +39,6 @@ export const PaginationControls: React.FC<PaginationControlsProps> = ({
           <PaginationItem>
             <PaginationPrevious
               href="#"
-              size="sm"
               onClick={(e) => {
                 e.preventDefault();
                 if (page > 1) {
@@ -52,7 +51,6 @@ export const PaginationControls: React.FC<PaginationControlsProps> = ({
         <PaginationItem>
           <PaginationLink
             href="#"
-            size="sm"
             onClick={(e) => {
               e.preventDefault();
               onPageChange(1);
@@ -72,7 +70,6 @@ export const PaginationControls: React.FC<PaginationControlsProps> = ({
           <PaginationItem key={num}>
             <PaginationLink
               href="#"
-              size="sm"
               onClick={(e) => {
                 e.preventDefault();
                 onPageChange(num);
@@ -93,7 +90,6 @@ export const PaginationControls: React.FC<PaginationControlsProps> = ({
           <PaginationItem>
             <PaginationLink
               href="#"
-              size="sm"
               onClick={(e) => {
                 e.preventDefault();
                 onPageChange(totalPages);
@@ -108,7 +104,6 @@ export const PaginationControls: React.FC<PaginationControlsProps> = ({
         <PaginationItem>
           <PaginationNext
             href="#"
-            size="sm"
             onClick={(e) => {
               e.preventDefault();
               if (page < totalPages) {
