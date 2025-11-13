@@ -75,6 +75,31 @@
     "branch_hours_venezuela": "Lunes - Viernes: 6:00 am - 8:00 pm",
     "branch_hours_chile": "Lunes - Viernes: 6:00 am - 9:00 pm"
   },
+  "RecoverPassword": {
+    "title": "RECUPERA TU CONTRASEÑA",
+    "subtitle": "Ingrese el correo electrónico asociado a la cuenta para recuperar la contraseña",
+    "form": {
+      "emailLabel": "Correo Electrónico*",
+      "emailPlaceholder": "usuario@ejemplo.com",
+      "submitButton": "Continuar",
+      "processing": "Procesando..."
+    },
+    "footer": {
+      "text": "¿Recuerdas tu Contraseña?",
+      "linkText": "Iniciar Sesión"
+    },
+    "successNotification": {
+      "title": "Revisa tu correo",
+      "description": "Hemos enviado instrucciones para restablecer tu contraseña a tu correo electrónico. Por favor revisa tu bandeja de entrada y sigue el enlace para restablecer tu contraseña."
+    },
+    "connectionError": {
+      "title": "Error de Conexión",
+      "description": "No se pudo conectar con el servidor. Por favor, inténtalo de nuevo más tarde."
+    },
+    "serverErrorNotification": {
+      "title": "Error de Verificación"
+    },
+    "serverError": "Error al verificar el correo electrónico o la solicitud."
   "navbar": {
     "home": "Inicio",
     "services": "Servicios",

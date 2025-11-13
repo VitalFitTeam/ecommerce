@@ -9,7 +9,7 @@ const Navbar = () => {
         <div className="flex-shrink-0">
           <Image
             src="/logo/logo-vitalfit.svg"
-            alt="Logo"
+            alt={t("logoAlt")}
             width={120}
             height={40}
           />
