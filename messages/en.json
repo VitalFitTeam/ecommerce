@@ -106,15 +106,83 @@
     "branch_hours_venezuela": "Monday - Friday: 6:00 am - 8:00 pm",
     "branch_hours_chile": "Monday - Friday: 6:00 am - 9:00 pm"
   },
-  "Navbar": {
-    "navItems": {
-      "home": "Home",
-      "services": "Services",
-      "branches": "Branches",
-      "memberships": "Memberships",
-      "contact": "Contact"
+  "navbar": {
+    "home": "Home",
+    "services": "Services",
+    "branches": "Branches",
+    "memberships": "Memberships",
+    "contact": "Contact",
+    "login": "Login",
+    "register": "Join"
+  },
+  "dashboard": {
+    "navbar": {
+      "logo_alt": "VitalFit Logo",
+      "title": "Dashboard",
+      "welcome": "Welcome to your Dashboard"
+    }
+  },
+  "notifications": "Notifications",
+  "user": {
+    "name": "Name",
+    "email": "Email"
+  },
+  "logo": {
+    "slogan": "Empowering your wellness"
+  },
+  "slogan": "Transform your life. Reach your full potential.",
+  "quickLinks": {
+    "title": "Quick Links",
+    "services": "Services",
+    "membership": "Membership",
+    "branches": "Branches",
+    "contact": "Contact"
+  },
+  "services": {
+    "title": "Our Services",
+    "yoga": "Yoga",
+    "crossfit": "CrossFit",
+    "spinning": "Spinning",
+    "pilates": "Pilates"
+  },
+  "contact": {
+    "title": "Contact",
+    "phone": "+58 4245912150",
+    "email": "info@vitalfit.com",
+    "address": "123 Main Avenue, Downtown"
+  },
+  "rights": "All rights reserved.",
+  "Footer": {
+    "tagline": "Transform your life. Reach your maximum potential.",
+    "quickLinks": {
+      "title": "Quick Links",
+      "links": {
+        "services": "Services",
+        "membership": "Membership",
+        "branches": "Branches",
+        "contact": "Contact"
+      }
     },
-    "loginButton": "Log In",
-    "registerButton": "Join Us"
+    "services": {
+      "title": "Our Services",
+      "list": {
+        "yoga": "Yoga",
+        "crossfit": "CrossFit",
+        "spinning": "Spinning",
+        "pilates": "Pilates"
+      }
+    },
+    "contact": {
+      "title": "Contact",
+      "phone": "+58 4245912150",
+      "email": "info@vitalfit.com",
+      "address": "123 Main Avenue, Downtown"
+    },
+    "social": {
+      "instagram": "Instagram",
+      "twitter": "Twitter",
+      "facebook": "Facebook"
+    },
+    "copyright": "© {year} VitalFit — All rights reserved."
   }
 }
