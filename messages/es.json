@@ -67,6 +67,10 @@
     "description": "Usa el mapa o la barra de búsqueda para ubicar nuestras sucursales",
     "search_placeholder": "Buscar sucursal...",
     "find_nearest_button": "Encontrar la más cercana",
+    "loading_branches": "Cargando sucursales...",
+    "error_loading_branches": "No pudimos cargar las ubicaciones del mapa. Por favor, inténtalo de nuevo más tarde.",
+    "no_valid_branches_found": "No se encontraron sucursales con coordenadas válidas.",
+    "branch_hours_default": "Lunes - Viernes: 6:00 am - 9:00 pm",
     "branch_hours_spain": "Lunes - Viernes: 6:00 am - 9:00 pm",
     "branch_hours_venezuela": "Lunes - Viernes: 6:00 am - 8:00 pm",
     "branch_hours_chile": "Lunes - Viernes: 6:00 am - 9:00 pm"
