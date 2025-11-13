@@ -18,8 +18,12 @@ import { Button } from "@/components/ui/button";
 import { useRouter } from "@/i18n/routing";
 import { api } from "@/lib/sdk-config";
 import { UserGender } from "@vitalfit/sdk";
+import { useTranslations } from "next-intl"; // Importado para traducción
 
 export default function RegisterPage() {
+  // Inicializamos la función de traducción
+  const t = useTranslations("RegisterPage");
+
   const [formData, setFormData] = useState<RegisterFormData>({
     nombre: "",
     apellido: "",
@@ -66,7 +70,7 @@ export default function RegisterPage() {
     }
 
     if (!terms) {
-      fieldErrors.terms = ["Debes aceptar los términos y condiciones"];
+      fieldErrors.terms = [t("validation.termsRequired")];
     }
 
     if (Object.keys(fieldErrors).length > 0) {
@@ -79,10 +83,11 @@ export default function RegisterPage() {
         ? new Date(formData.nacimiento).toISOString().split("T")[0]
         : "";
 
+      // Mapeo de género usando claves de traducción
       const genderMapping = {
-        masculino: "male",
-        femenino: "female",
-        "prefiero no especificarlo": "prefer-not-to-say",
+        [t("form.gender.maleValue")]: "male",
+        [t("form.gender.femaleValue")]: "female",
+        [t("form.gender.preferNotToSayValue")]: "prefer-not-to-say",
       };
 
       const apiGender = (genderMapping[
@@ -137,8 +142,8 @@ export default function RegisterPage() {
       {showAlert && (
         <Notification
           variant="success"
-          title="Revisa tu correo"
-          description="¡Gracias por registrarte en VITALFIT! Para completar tu registro, por favor, verifica tu dirección de correo electrónico."
+          title={t("notifications.success.title")}
+          description={t("notifications.success.description")}
           onClose={() => {
             setShowAlert(false);
             router.push("/confirmEmail?flow=register");
@@ -148,7 +153,7 @@ export default function RegisterPage() {
       {showAlertError && (
         <Notification
           variant="destructive"
-          title="Error"
+          title={t("notifications.error.title")}
           description={submitError}
           onClose={() => setShowAlertError(false)}
         />
@@ -156,18 +161,19 @@ export default function RegisterPage() {
       {showConnectionError && (
         <Notification
           variant="destructive"
-          title="Error de Conexión"
-          description="No se pudo conectar con el servidor. Por favor, inténtalo de nuevo más tarde."
+          title={t("notifications.connectionError.title")}
+          description={t("notifications.connectionError.description")}
           onClose={() => setShowConnectionError(false)}
         />
       )}
+
       <div className="flex justify-center w-full max-w-6xl">
         <div className="w-full max-w-2xl lg:max-w-4xl">
           <AuthCard>
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 space-y-4 sm:space-y-0 w-full">
               <div className="text-center lg:text-left">
                 <h3 className={`${typography.h3} text-xl sm:text-2xl`}>
-                  CREA TU CUENTA
+                  {t("title")}
                 </h3>
               </div>
               <div className="flex justify-center sm:justify-end text-right">
@@ -176,19 +182,20 @@ export default function RegisterPage() {
             </div>
 
             <form className="w-full" onSubmit={handleSubmit} noValidate>
+              {/* Nombre y Apellido */}
               <div className="flex flex-col mb-4 space-y-4 sm:flex-row sm:space-y-0 sm:space-x-4">
                 <div className="flex-1">
                   <label
                     htmlFor="nombre"
                     className="block text-sm font-medium text-gray-700 mb-1 sm:text-base text-left"
                   >
-                    Nombre*
+                    {t("form.firstNameLabel")}*
                   </label>
                   <TextInput
                     id="nombre"
                     name="nombre"
-                    ariaLabel="nombre"
-                    placeholder="Nombre"
+                    ariaLabel={t("form.firstNameLabel")}
+                    placeholder={t("form.firstNamePlaceholder")}
                     value={formData.nombre}
                     onChange={(e) =>
                       handleInputChange("nombre", e.target.value)
@@ -206,13 +213,13 @@ export default function RegisterPage() {
                     htmlFor="apellido"
                     className="block text-sm font-medium text-gray-700 mb-1 sm:text-base text-left"
                   >
-                    Apellido*
+                    {t("form.lastNameLabel")}*
                   </label>
                   <TextInput
                     id="apellido"
                     name="apellido"
-                    ariaLabel="apellido"
-                    placeholder="Apellido"
+                    ariaLabel={t("form.lastNameLabel")}
+                    placeholder={t("form.lastNamePlaceholder")}
                     value={formData.apellido}
                     onChange={(e) =>
                       handleInputChange("apellido", e.target.value)
@@ -232,14 +239,14 @@ export default function RegisterPage() {
                   htmlFor="email"
                   className="block text-sm font-medium text-gray-700 mb-1 sm:text-base text-left"
                 >
-                  Correo Electrónico*
+                  {t("form.emailLabel")}*
                 </label>
                 <TextInput
                   id="email"
                   name="email"
                   type="email"
-                  ariaLabel="email"
-                  placeholder="correo@ejemplo.com"
+                  ariaLabel={t("form.emailLabel")}
+                  placeholder={t("form.emailPlaceholder")}
                   value={formData.email}
                   onChange={(e) => handleInputChange("email", e.target.value)}
                   className="bg-white w-full"
@@ -257,7 +264,7 @@ export default function RegisterPage() {
                     htmlFor="telefono"
                     className="block text-sm font-medium text-gray-700 mb-1 sm:text-base text-left"
                   >
-                    Número de teléfono*
+                    {t("form.phoneLabel")}*
                   </label>
                   <PhoneInput
                     id="telefono"
@@ -276,13 +283,13 @@ export default function RegisterPage() {
                     htmlFor="documento"
                     className="block text-sm font-medium text-gray-700 mb-1 sm:text-base text-left"
                   >
-                    Documento de identidad*
+                    {t("form.documentLabel")}*
                   </label>
                   <TextInput
                     id="documento"
                     name="documento"
-                    ariaLabel="documento"
-                    placeholder="Documento"
+                    ariaLabel={t("form.documentLabel")}
+                    placeholder={t("form.documentPlaceholder")}
                     value={formData.documento}
                     onChange={(e) =>
                       handleInputChange("documento", e.target.value)
@@ -296,18 +303,19 @@ export default function RegisterPage() {
                   )}
                 </div>
               </div>
+
               <div className="mb-4">
                 <label
                   htmlFor="nacimiento"
                   className="block text-sm font-medium text-gray-700 mb-1 sm:text-base text-left"
                 >
-                  Fecha de Nacimiento*
+                  {t("form.birthDateLabel")}*
                 </label>
                 <TextInput
                   id="nacimiento"
                   type="date"
                   name="nacimiento"
-                  ariaLabel="nacimiento"
+                  ariaLabel={t("form.birthDateLabel")}
                   value={formData.nacimiento}
                   onChange={(e) =>
                     handleInputChange("nacimiento", e.target.value)
@@ -320,55 +328,69 @@ export default function RegisterPage() {
                   </p>
                 )}
               </div>
+
               <div className="flex flex-col mb-4 space-y-4 sm:flex-row sm:space-y-0 sm:space-x-4">
                 <div className="flex-1">
                   <label className="block text-sm font-medium text-gray-700 mb-1 sm:text-base text-left">
-                    Género*
+                    {t("form.gender.label")}*
                   </label>
                   <div className="p-2 rounded-md flex flex-wrap items-center gap-4">
                     <label className="flex items-center">
                       <input
                         type="radio"
                         name="genero"
-                        value="masculino"
-                        checked={formData.genero === "masculino"}
-                        onChange={() =>
-                          handleInputChange("genero", "masculino")
-                        }
-                        className="form-radio h-4 w-4 text-primary"
-                      />
-                      <span className="ml-2">Masculino</span>
-                    </label>
-
-                    <label className="flex items-center">
-                      <input
-                        type="radio"
-                        name="genero"
-                        value="femenino"
-                        checked={formData.genero === "femenino"}
-                        onChange={() => handleInputChange("genero", "femenino")}
-                        className="form-radio h-4 w-4 text-primary"
-                      />
-                      <span className="ml-2">Femenino</span>
-                    </label>
-
-                    <label className="flex items-center">
-                      <input
-                        type="radio"
-                        name="genero"
-                        value="prefiero no especificarlo"
-                        checked={
-                          formData.genero === "prefiero no especificarlo"
-                        }
+                        value={t("form.gender.maleValue")}
+                        checked={formData.genero === t("form.gender.maleValue")}
                         onChange={() =>
                           handleInputChange(
                             "genero",
-                            "prefiero no especificarlo",
+                            t("form.gender.maleValue"),
                           )
                         }
                         className="form-radio h-4 w-4 text-primary"
                       />
-                      <span className="ml-2">Prefiero no especificarlo</span>
+                      <span className="ml-2">{t("form.gender.male")}</span>
+                    </label>
+
+                    <label className="flex items-center">
+                      <input
+                        type="radio"
+                        name="genero"
+                        value={t("form.gender.femaleValue")}
+                        checked={
+                          formData.genero === t("form.gender.femaleValue")
+                        }
+                        onChange={() =>
+                          handleInputChange(
+                            "genero",
+                            t("form.gender.femaleValue"),
+                          )
+                        }
+                        className="form-radio h-4 w-4 text-primary"
+                      />
+                      <span className="ml-2">{t("form.gender.female")}</span>
+                    </label>
+
+                    <label className="flex items-center">
+                      <input
+                        type="radio"
+                        name="genero"
+                        value={t("form.gender.preferNotToSayValue")}
+                        checked={
+                          formData.genero ===
+                          t("form.gender.preferNotToSayValue")
+                        }
+                        onChange={() =>
+                          handleInputChange(
+                            "genero",
+                            t("form.gender.preferNotToSayValue"),
+                          )
+                        }
+                        className="form-radio h-4 w-4 text-primary"
+                      />
+                      <span className="ml-2">
+                        {t("form.gender.preferNotToSay")}
+                      </span>
                     </label>
                   </div>
                   {error.genero?.[0] && (
@@ -385,13 +407,13 @@ export default function RegisterPage() {
                     htmlFor="password"
                     className="block text-sm font-medium text-gray-700 mb-1 sm:text-base text-left"
                   >
-                    Contraseña*
+                    {t("form.passwordLabel")}*
                   </label>
                   <PasswordInput
                     id="password"
                     name="password"
-                    ariaLabel="Campo de contraseña"
-                    placeholder="Ingresa tu contraseña"
+                    ariaLabel={t("form.passwordLabel")}
+                    placeholder={t("form.passwordPlaceholder")}
                     value={formData.password}
                     onChange={(e) =>
                       handleInputChange("password", e.target.value)
@@ -409,13 +431,13 @@ export default function RegisterPage() {
                     htmlFor="cpassword"
                     className="block text-sm font-medium text-gray-700 mb-1 sm:text-base text-left"
                   >
-                    Confirmar Contraseña*
+                    {t("form.confirmPasswordLabel")}*
                   </label>
                   <PasswordInput
                     id="cpassword"
                     name="cpassword"
-                    ariaLabel="Confirmar Contraseña"
-                    placeholder="Confirmar contraseña"
+                    ariaLabel={t("form.confirmPasswordLabel")}
+                    placeholder={t("form.confirmPasswordPlaceholder")}
                     value={formData.cpassword}
                     onChange={(e) =>
                       handleInputChange("cpassword", e.target.value)
@@ -446,8 +468,7 @@ export default function RegisterPage() {
                     rel="noopener noreferrer"
                     className="text-xs sm:text-sm hover:underline"
                   >
-                    Acepto los términos, condiciones del servicio y las
-                    políticas de seguridad
+                    {t("form.termsText")}
                   </a>
                   {error.terms?.map((msg, i) => (
                     <p key={i} className="text-red-500 text-xs sm:text-sm mt-1">
@@ -463,17 +484,17 @@ export default function RegisterPage() {
                   type="submit"
                   className="w-full py-3 text-base sm:py-2"
                 >
-                  Crear Cuenta
+                  {t("form.submitButton")}
                 </Button>
               </div>
               <div className="mt-6 w-full">
-                <GoogleLoginButton text="Sign in with google" />
+                <GoogleLoginButton text={t("form.googleLoginText")} />
               </div>
             </form>
 
             <AuthFooter
-              text="¿Ya tienes una Cuenta?"
-              linkText="Iniciar Sesión"
+              text={t("footer.loginPrompt")}
+              linkText={t("footer.loginLink")}
               href="/login"
             />
           </AuthCard>

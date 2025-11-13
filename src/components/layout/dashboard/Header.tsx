@@ -7,12 +7,23 @@ type HeaderProps = {
   email: string;
 };
 
-export const Header: React.FC<HeaderProps> = ({ name, email }) => {
-  const t = useTranslations("dashboard.header");
-  const acronym = name
+const generateAcronym = (fullName: string) => {
+  if (!fullName) {
+    return "";
+  }
+
+  return fullName
     .split(" ")
-    .map((palabra) => palabra[0])
-    .join("");
+    .map((word) => word.charAt(0))
+    .join("")
+    .toUpperCase();
+};
+
+export const Header: React.FC<HeaderProps> = ({ name, email }) => {
+  const t = useTranslations("dashboard");
+
+  const acronym = generateAcronym(name);
+
   return (
     <header className="border-b bg-white">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
@@ -23,7 +34,7 @@ export const Header: React.FC<HeaderProps> = ({ name, email }) => {
         <div className="flex items-center gap-4">
           <button
             className="rounded-full p-2 hover:bg-gray-100"
-            aria-label={t("notification")}
+            aria-label={t("notifications")}
           >
             <BellIcon className="h-5 w-5 text-gray-600" />
           </button>

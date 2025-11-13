@@ -1,4 +1,24 @@
 {
+  "logo": {
+    "slogan": "Potenciando tu bienestar"
+  },
+  "slogan": "Transforma tu vida. Alcanza tu máximo potencial.",
+  "Navbar": {
+    "navItems": {
+      "home": "Inicio",
+      "services": "Servicios",
+      "branches": "Sucursales",
+      "memberships": "Membresías",
+      "contact": "Contacto"
+    },
+    "loginButton": "Iniciar Sesión",
+    "registerButton": "Unirse",
+    "logoSlogan": "Potenciando tu bienestar"
+  },
+  "LocaleSwitcher": {
+    "label": "Cambiar idioma",
+    "locale": "{locale, select, en {🇺🇸 English} es {🇪🇸 Español} other {Idioma}}"
+  },
   "HomePage": {
     "banner": {
       "title": "Transforma tu <highlight>cuerpo</highlight>, transforma tu <highlight>vida</highlight>",
@@ -26,10 +46,6 @@
         "imageAlt": "Objetivos"
       }
     }
-  },
-  "LocaleSwitcher": {
-    "label": "Cambiar idioma",
-    "locale": "{locale, select, en {🇺🇸 English} es {🇪🇸 Español} other {Idioma}}"
   },
   "ServicesPage": {
     "title": "<highlight>NUESTROS</highlight> SERVICIOS",
@@ -70,10 +86,12 @@
     "loading_branches": "Cargando sucursales...",
     "error_loading_branches": "No pudimos cargar las ubicaciones del mapa. Por favor, inténtalo de nuevo más tarde.",
     "no_valid_branches_found": "No se encontraron sucursales con coordenadas válidas.",
-    "branch_hours_default": "Lunes - Viernes: 6:00 am - 9:00 pm",
-    "branch_hours_spain": "Lunes - Viernes: 6:00 am - 9:00 pm",
-    "branch_hours_venezuela": "Lunes - Viernes: 6:00 am - 8:00 pm",
-    "branch_hours_chile": "Lunes - Viernes: 6:00 am - 9:00 pm"
+    "branch_hours": {
+      "default": "Lunes - Viernes: 6:00 am - 9:00 pm",
+      "spain": "Lunes - Viernes: 6:00 am - 9:00 pm",
+      "venezuela": "Lunes - Viernes: 6:00 am - 8:00 pm",
+      "chile": "Lunes - Viernes: 6:00 am - 9:00 pm"
+    }
   },
   "RecoverPassword": {
     "title": "RECUPERA TU CONTRASEÑA",
@@ -100,52 +118,19 @@
       "title": "Error de Verificación"
     },
     "serverError": "Error al verificar el correo electrónico o la solicitud."
-  "navbar": {
-    "home": "Inicio",
-    "services": "Servicios",
-    "branches": "Sucursales",
-    "memberships": "Membresías",
-    "contact": "Contacto",
-    "login": "Iniciar Sesión",
-    "register": "Unirse"
   },
   "dashboard": {
     "navbar": {
-      "logo_alt": "Logo VitalFit",
+      "logo_alt": "VitalFit Logo",
       "title": "Panel de Control",
       "welcome": "Bienvenido a tu Panel de Control"
-    }
+    },
+    "notifications": "Notificaciones"
   },
-  "notifications": "Notificaciones",
   "user": {
     "name": "Nombre",
     "email": "Correo"
   },
-  "logo": {
-    "slogan": "Potenciando tu bienestar"
-  },
-  "slogan": "Transforma tu vida. Alcanza tu máximo potencial.",
-  "quickLinks": {
-    "title": "Enlaces Rápidos",
-    "services": "Servicios",
-    "membership": "Membresía",
-    "branches": "Sucursales",
-    "contact": "Contacto"
-  },
-  "services": {
-    "title": "Nuestros Servicios",
-    "yoga": "Yoga",
-    "crossfit": "CrossFit",
-    "spinning": "Spinning",
-    "pilates": "Pilates"
-  },
-  "contact": {
-    "title": "Contacto",
-    "phone": "+58 4245912150",
-    "email": "info@vitalfit.com",
-    "address": "Av. Principal 123, Centro"
-  },
-  "rights": "Todos los derechos reservados.",
   "Footer": {
     "tagline": "Transforma tu vida. Alcanza tu máximo potencial.",
     "quickLinks": {
@@ -178,5 +163,170 @@
       "facebook": "Facebook"
     },
     "copyright": "© {year} VitalFit — Todos los derechos reservados."
+  },
+  "MembershipsPage": {
+    "hero": {
+      "titlePart1": "PLANES Y",
+      "titlePart2": "MEMBRESÍAS",
+      "subtitle": "Elige el plan que mejor se adapte a tus necesidades y objetivos de fitness"
+    },
+    "plans": {
+      "advanced": {
+        "title": "Suscripción Avanzada",
+        "description": "Más beneficios para tu vida fitness",
+        "billingPeriod": "mes",
+        "services": {
+          "s1": "Acceso ilimitado al gimnasio",
+          "s2": "7 sesiones con consultor fitness",
+          "s3": "Seguimiento nutricional",
+          "s4": "5 suplementos gratis",
+          "s5": "Credencial de gimnasio",
+          "s6": "Entrenador personal"
+        }
+      },
+      "standard": {
+        "title": "Plan Estándar",
+        "description": "Máximo ahorro y beneficios",
+        "billingPeriod": "año",
+        "services": {
+          "s1": "Uso ilimitado de las instalaciones",
+          "s2": "Consultas con entrenador experto",
+          "s3": "Control de alimentación",
+          "s4": "Recibe 3 suplementos gratuitos",
+          "s5": "Entrena 5 días a la semana",
+          "s6": "Entrenador personal"
+        }
+      },
+      "athlete": {
+        "title": "Paquete Atleta",
+        "description": "La mejor relación calidad-precio",
+        "billingPeriod": "3 meses",
+        "services": {
+          "s1": "Acceso ilimitado al gimnasio",
+          "s2": "Incluye prendas sin costo",
+          "s3": "Entrena Sin Límites",
+          "s4": "Consultor fitness gratis",
+          "s5": "Credencial de gimnasio"
+        }
+      },
+      "basic": {
+        "title": "Paquete Básico",
+        "description": "Ideal para iniciar en el mundo fit",
+        "billingPeriod": "mes",
+        "services": {
+          "s1": "Ahorra con el plan anual",
+          "s2": "2 sesiones con consultor fitness",
+          "s3": "Control de alimentación",
+          "s4": "1 suplemento gratis",
+          "s5": "Entrenador personal"
+        }
+      }
+    },
+    "includes": {
+      "title": "TODOS LOS PLANES INCLUYEN",
+      "item1": {
+        "title": "Todas las Sucursales",
+        "content": "Acceso a todas nuestras ubicaciones"
+      },
+      "item2": {
+        "title": "Entrenador",
+        "content": "Entrenador de planta gratuito"
+      },
+      "item3": {
+        "title": "Clases Grupales",
+        "content": "Diversas clases en todos los lugares"
+      },
+      "item4": {
+        "title": "App Móvil",
+        "content": "Reserva clases y sigue tu progreso"
+      }
+    },
+    "cta": {
+      "heading": "¿No estás seguro de qué plan elegir?",
+      "subheading": "Nuestro equipo está aquí para ayudarte a encontrar el plan perfecto para tus necesidades",
+      "advisorButton": "Hablar con un asesor",
+      "faqButton": "Ver Preguntas Frecuentes"
+    }
+  },
+  "ContactPage": {
+    "hero": {
+      "title": "CONTÁCTANOS",
+      "subtitle": "Rellena los datos del formulario"
+    },
+    "form": {
+      "nameLabel": "Nombre",
+      "namePlaceholder": "Nombre",
+      "lastNameLabel": "Apellido",
+      "lastNamePlaceholder": "Apellido",
+      "emailLabel": "Correo electrónico",
+      "emailPlaceholder": "correo@ejemplo.com",
+      "reasonPlaceholder": "Motivo de contacto",
+      "preferencePlaceholder": "Preferencia de contacto",
+      "messagePlaceholder": "Mensaje",
+      "submitButton": "Enviar",
+      "reasons": {
+        "general": "Consulta general",
+        "memberships": "Información de membresías",
+        "services": "Información de servicios",
+        "complaint": "Reclamo",
+        "suggestion": "Sugerencia"
+      },
+      "preferences": {
+        "email": "Correo electrónico",
+        "phone": "Teléfono",
+        "whatsapp": "WhatsApp"
+      }
+    }
+  },
+  "RegisterPage": {
+    "title": "CREA TU CUENTA",
+    "form": {
+      "firstNameLabel": "Nombre",
+      "firstNamePlaceholder": "Nombre",
+      "lastNameLabel": "Apellido",
+      "lastNamePlaceholder": "Apellido",
+      "emailLabel": "Correo Electrónico",
+      "emailPlaceholder": "correo@ejemplo.com",
+      "phoneLabel": "Número de teléfono",
+      "documentLabel": "Documento de identidad",
+      "documentPlaceholder": "Documento",
+      "birthDateLabel": "Fecha de Nacimiento",
+      "passwordLabel": "Contraseña",
+      "passwordPlaceholder": "Ingresa tu contraseña",
+      "confirmPasswordLabel": "Confirmar Contraseña",
+      "confirmPasswordPlaceholder": "Confirmar contraseña",
+      "termsText": "Acepto los términos, condiciones del servicio y las políticas de seguridad",
+      "submitButton": "Crear Cuenta",
+      "googleLoginText": "Iniciar sesión con Google",
+      "gender": {
+        "label": "Género",
+        "male": "Masculino",
+        "maleValue": "masculino",
+        "female": "Femenino",
+        "femaleValue": "femenino",
+        "preferNotToSay": "Prefiero no especificarlo",
+        "preferNotToSayValue": "prefiero no especificarlo"
+      }
+    },
+    "validation": {
+      "termsRequired": "Debes aceptar los términos y condiciones"
+    },
+    "notifications": {
+      "success": {
+        "title": "Revisa tu correo",
+        "description": "¡Gracias por registrarte en VITALFIT! Para completar tu registro, por favor, verifica tu dirección de correo electrónico."
+      },
+      "error": {
+        "title": "Error"
+      },
+      "connectionError": {
+        "title": "Error de Conexión",
+        "description": "No se pudo conectar con el servidor. Por favor, inténtalo de nuevo más tarde."
+      }
+    },
+    "footer": {
+      "loginPrompt": "¿Ya tienes una Cuenta?",
+      "loginLink": "Iniciar Sesión"
+    }
   }
 }
