@@ -218,7 +218,7 @@ export default function PasswordReset() {
               </div>
 
               <div className="mt-4 w-full">
-                <Button fullWidth type="submit" disabled={isLoading}>
+                <Button type="submit" disabled={isLoading}>
                   {isLoading ? "Procesando..." : "Continuar"}
                 </Button>
               </div>

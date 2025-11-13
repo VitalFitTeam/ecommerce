@@ -131,7 +131,7 @@ export default function RecoverPassword() {
               </div>
 
               <div className="mt-4 w-full">
-                <Button fullWidth type="submit" disabled={isLoading}>
+                <Button type="submit" disabled={isLoading}>
                   {isLoading ? t("form.processing") : t("form.submitButton")}
                 </Button>
               </div>
