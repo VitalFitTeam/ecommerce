@@ -5,7 +5,23 @@ import { FaFacebookF, FaInstagram, FaTwitter } from "react-icons/fa";
 import { useTranslations } from "next-intl";
 
 export default function Footer() {
-  const t = useTranslations("footer");
+  const t = useTranslations("Footer");
+
+  // Configuración para servicios
+  const servicesConfig = [
+    { key: "yoga" },
+    { key: "crossfit" },
+    { key: "spinning" },
+    { key: "pilates" },
+  ];
+
+  // Configuración para enlaces rápidos
+  const quickLinksConfig = [
+    { key: "services", href: "#services" },
+    { key: "membership", href: "#membership" },
+    { key: "branches", href: "#branches" },
+    { key: "contact", href: "#contact" },
+  ];
 
   return (
     <footer className="bg-[#EDEDED] text-[#0A0A0A]">
@@ -23,14 +39,14 @@ export default function Footer() {
             />
           </div>
           <p className="text-gray-700 font-bold leading-relaxed max-w-xs">
-            Transforma tu vida. Alcanza tu máximo potencial.
+            {t("tagline")}
           </p>
           <div className="flex space-x-4 pt-2">
             <a
               href="https://instagram.com/vitalfit"
               target="_blank"
               className="text-[#0A0A0A] hover:text-[#F27F2A] transition-colors"
-              aria-label="Instagram"
+              aria-label={t("social.instagram")}
             >
               <FaInstagram className="w-5 h-5" />
             </a>
@@ -38,7 +54,7 @@ export default function Footer() {
               href="https://x.com/vitalfit"
               target="_blank"
               className="text-[#0A0A0A] hover:text-[#F27F2A] transition-colors"
-              aria-label="Twitter"
+              aria-label={t("social.twitter")}
             >
               <FaTwitter className="w-5 h-5" />
             </a>
@@ -46,7 +62,7 @@ export default function Footer() {
               href="https://facebook.com/vitalfit"
               target="_blank"
               className="text-[#0A0A0A] hover:text-[#F27F2A] transition-colors"
-              aria-label="Facebook"
+              aria-label={t("social.facebook")}
             >
               <FaFacebookF className="w-5 h-5" />
             </a>
@@ -56,62 +72,48 @@ export default function Footer() {
         {/* Columna 2: Enlaces rápidos */}
         <div>
           <div className="pb-3">
-            <span className="font-semibold mb-3">Enlaces Rápidos</span>
+            <span className="font-semibold mb-3">{t("quickLinks.title")}</span>
           </div>
           <ul className="space-y-2 text-gray-700">
-            <li>
-              <a href="#services" className="hover:text-[#F27F2A]">
-                Servicios
-              </a>
-            </li>
-            <li>
-              <a href="#membership" className="hover:text-[#F27F2A]">
-                Membresía
-              </a>
-            </li>
-            <li>
-              <a href="#branches" className="hover:text-[#F27F2A]">
-                Sucursales
-              </a>
-            </li>
-            <li>
-              <a href="#contact" className="hover:text-[#F27F2A]">
-                Contacto
-              </a>
-            </li>
+            {quickLinksConfig.map((link) => (
+              <li key={link.key}>
+                <a href={link.href} className="hover:text-[#F27F2A]">
+                  {t(`quickLinks.links.${link.key}`)}
+                </a>
+              </li>
+            ))}
           </ul>
         </div>
 
         {/* Columna 3: Nuestros Servicios */}
         <div>
           <div className="pb-3">
-            <span className="font-semibold mb-3">Nuestros Servicios</span>
+            <span className="font-semibold mb-3">{t("services.title")}</span>
           </div>
           <ul className="space-y-2 text-gray-700">
-            <li>Yoga</li>
-            <li>CrossFit</li>
-            <li>Spinning</li>
-            <li>Pilates</li>
+            {servicesConfig.map((service) => (
+              <li key={service.key}>{t(`services.list.${service.key}`)}</li>
+            ))}
           </ul>
         </div>
 
         {/* Columna 4: Contacto */}
         <div>
           <div className="pb-3">
-            <span className="font-semibold mb-3">Contacto</span>
+            <span className="font-semibold mb-3">{t("contact.title")}</span>
           </div>
           <ul className="space-y-3 text-gray-700">
             <li className="flex items-center gap-2">
               <PhoneIcon className="w-4 h-4 text-[#0A0A0A]" />
-              <span>+58 4245912150</span>
+              <span>{t("contact.phone")}</span>
             </li>
             <li className="flex items-center gap-2">
               <EnvelopeIcon className="w-4 h-4 text-[#0A0A0A]" />
-              <span>info@vitalfit.com</span>
+              <span>{t("contact.email")}</span>
             </li>
             <li className="flex items-start gap-2">
               <MapPinIcon className="w-4 h-4 text-[#0A0A0A] mt-1" />
-              <span>Av. Principal 123, Centro</span>
+              <span>{t("contact.address")}</span>
             </li>
           </ul>
         </div>
@@ -122,7 +124,7 @@ export default function Footer() {
 
       {/* Copyright */}
       <div className="text-center text-sm text-black py-4 [#EDEDED]">
-        © {new Date().getFullYear()} VitalFit — Todos los derechos reservados.
+        {t("copyright", { year: new Date().getFullYear() })}
       </div>
     </footer>
   );

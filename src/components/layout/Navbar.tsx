@@ -7,14 +7,14 @@ import { Button } from "@/components/ui/button";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import Logo from "@/components/features/Logo";
 import LocaleSwitcher from "../ui/LocaleSwitcher";
-import { useTranslations } from "next-intl";
+import { useTranslations } from "next-intl"; // Importado
 
 interface NavbarProps {
   transparent?: boolean;
 }
 
 export function Navbar({ transparent = false }: NavbarProps) {
-  const t = useTranslations("navbar");
+  const t = useTranslations("Navbar"); // Inicializado
   const pathname = usePathname();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -28,12 +28,13 @@ export function Navbar({ transparent = false }: NavbarProps) {
     return false;
   };
 
-  const navItems = [
-    { label: "Inicio", href: "/" },
-    { label: "Servicios", href: "/services" },
-    { label: "Sucursales", href: "/branches" },
-    { label: "Membresías", href: "/memberships" },
-    { label: "Contacto", href: "/contact" },
+  // Configuración de los ítems de navegación usando claves de traducción
+  const navItemsConfig = [
+    { key: "home", href: "/" },
+    { key: "services", href: "/services" },
+    { key: "branches", href: "/branches" },
+    { key: "memberships", href: "/memberships" },
+    { key: "contact", href: "/contact" },
   ];
 
   return (
@@ -59,7 +60,7 @@ export function Navbar({ transparent = false }: NavbarProps) {
 
       {/* Menu Desktop */}
       <div className="hidden md:flex items-center gap-8">
-        {navItems.map((item) => (
+        {navItemsConfig.map((item) => (
           <Link
             key={item.href}
             href={item.href}
@@ -69,7 +70,7 @@ export function Navbar({ transparent = false }: NavbarProps) {
                 : "text-gray-300 hover:text-primary"
             }`}
           >
-            {item.label}
+            {t(`navItems.${item.key}`)} {/* Traducción */}
           </Link>
         ))}
       </div>
@@ -81,21 +82,21 @@ export function Navbar({ transparent = false }: NavbarProps) {
             variant="ghost"
             className="text-primary border border-primary hover:bg-primary hover:text-white"
           >
-            Iniciar sesión
+            {t("loginButton")} {/* Traducción */}
           </Button>
         </Link>
         <Link href="/register">
           <Button className="bg-primary hover:bg-orange-600 text-white">
-            Unirse
+            {t("registerButton")} {/* Traducción */}
           </Button>
         </Link>
       </div>
 
       {/* Menu Mobile */}
       {isMenuOpen && (
-        <div className="absolute top-16 left-0 right-0 bg-[#303030] border-t md:hidden">
+        <div className="absolute top-16 left-0 right-0 bg-[#303030] border-t md:hidden z-10">
           <div className="flex flex-col p-4 gap-4">
-            {navItems.map((item) => (
+            {navItemsConfig.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
@@ -106,7 +107,7 @@ export function Navbar({ transparent = false }: NavbarProps) {
                     : "text-gray-300 hover:text-white"
                 }`}
               >
-                {item.label}
+                {t(`navItems.${item.key}`)} {/* Traducción */}
               </Link>
             ))}
 
@@ -116,12 +117,12 @@ export function Navbar({ transparent = false }: NavbarProps) {
                   variant="ghost"
                   className="text-primary border border-primary hover:bg-primary hover:text-white w-full"
                 >
-                  Iniciar sesión
+                  {t("loginButton")} {/* Traducción */}
                 </Button>
               </Link>
               <Link href="/register" onClick={() => setIsMenuOpen(false)}>
                 <Button className="bg-primary hover:bg-orange-600 text-white w-full">
-                  Unirse
+                  {t("registerButton")} {/* Traducción */}
                 </Button>
               </Link>
             </div>

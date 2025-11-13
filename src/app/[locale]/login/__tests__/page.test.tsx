@@ -21,28 +21,42 @@ jest.mock("@/i18n/routing", () => {
 });
 
 describe("Login Page", () => {
-  it("should render the login form", () => {
+  it("should render the login form with simulated translation keys", () => {
     render(<LoginPage />);
 
-    // 3. ACTUALIZAMOS las búsquedas para que coincidan con el HTML renderizado
-    //    que vimos en el log de error.
-
-    // El log dice: Name "INICIAR SESIÓN"
-    const heading = screen.getByRole("heading", { name: /iniciar sesión/i });
+    const heading = screen.getByRole("heading", { name: /^title$/i });
     expect(heading).toBeInTheDocument();
 
-    // El log dice: placeholder="Email"
-    const emailInput = screen.getByPlaceholderText(/email/i);
+    const emailInput = screen.getByPlaceholderText(/email.placeholder/i);
     expect(emailInput).toBeInTheDocument();
 
-    // El log dice: placeholder="Ingresa tu contraseña"
-    const passwordInput = screen.getByPlaceholderText(/ingresa tu contraseña/i);
+    const passwordInput = screen.getByPlaceholderText(/password.placeholder/i);
     expect(passwordInput).toBeInTheDocument();
 
-    // El log dice: Name "Iniciar sesión"
     const submitButton = screen.getByRole("button", {
-      name: /^iniciar sesión$/i, // Usamos /^...$/ para un match exacto
+      name: /^submitButton.default$/i,
     });
     expect(submitButton).toBeInTheDocument();
+
+    const googleButton = screen.getByRole("button", { name: /^googleLogin$/i });
+    expect(googleButton).toBeInTheDocument();
+
+    const rememberMeLabelText = screen.getByText(/^rememberMe$/i);
+    expect(rememberMeLabelText).toBeInTheDocument();
+
+    const allCheckboxes = screen.getAllByRole("checkbox");
+
+    expect(allCheckboxes.length).toBeGreaterThan(0);
+
+    const unnamedCheckbox = screen.getByRole("checkbox", { name: "" });
+    expect(unnamedCheckbox).toBeInTheDocument();
+
+    const recoverLink = screen.getByRole("link", {
+      name: /forgotPassword.link/i,
+    });
+    expect(recoverLink).toBeInTheDocument();
+
+    const registerLink = screen.getByRole("link", { name: /noAccount.link/i });
+    expect(registerLink).toBeInTheDocument();
   });
 });

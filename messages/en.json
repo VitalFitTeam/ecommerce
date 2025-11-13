@@ -2,34 +2,34 @@
   "HomePage": {
     "banner": {
       "title": "Transform your <highlight>body</highlight>, transform your <highlight>life</highlight>",
-      "subtitle": "Discover the power of smart and personalized fitness."
+      "subtitle": "Discover the power of smart, personalized fitness."
     },
     "aboutUs": {
       "mission": {
         "title": "Mission",
-        "content": "<p>To be the leading fitness network that empowers individuals to achieve their wellness goals through quality service and advanced technology, guaranteeing a fluid and accessible experience across all our franchises.</p>",
+        "content": "<p>Provide a comprehensive physical and mental wellness service that combines technology, quality, and personalized attention, allowing users to access all VitalFit branches quickly and consistently, enhancing their experience through innovative digital tools.</p>",
         "imageAlt": "Mission"
       },
       "vision": {
         "title": "Vision",
-        "content": "<p>To consolidate ourselves as the smartest and most integrated fitness ecosystem in the market, recognized for its operational excellence, strategic data-driven management, and ability to offer scalable and sustainable growth to all our franchisees.</p>",
+        "content": "<p>To become the most intelligent and integrated fitness ecosystem in the country, leading in technological innovation, customer retention, and sustainable franchise growth.</p>",
         "imageAlt": "Vision"
       },
       "values": {
         "title": "Values",
-        "content": "<p>Our operation is built upon four fundamental values: Operational Coherence, which ensures standardization in every interaction; Data Integrity, as the basis for strategic decisions; Customer Orientation, focused on lasting relationships; and Technological Agility, to continuously adapt to market demands.</p>",
+        "content": "<p>Our operation is based on four fundamental values: Operational Coherence, which ensures standardization in every interaction; Data Integrity, as the foundation for strategic decision-making; Customer Orientation, focused on building long-term relationships; and Technological Agility, enabling us to continuously adapt to market demands.</p>",
         "imageAlt": "Values"
       },
       "objectives": {
         "title": "Objectives",
-        "content": "<p>To transform lives through fitness, creating a community where everyone finds the motivation, equipment, and perfect environment to achieve their physical and mental goals. We are committed to being your ally on this journey of personal growth.</p>",
+        "content": "<p>Transform lives through fitness by creating a community where everyone finds the motivation, equipment, and perfect environment to achieve their physical and mental goals. We are committed to being your ally on this journey of personal growth.</p>",
         "imageAlt": "Objectives"
       }
     }
   },
   "LocaleSwitcher": {
     "label": "Change language",
-    "locale": "{locale, select, en {🇺🇸 English} es {🇪🇸 Español} other {Language}}"
+    "locale": "{locale, select, en {🇺🇸 English} es {🇪🇸 Spanish} other {Language}}"
   },
   "ServicesPage": {
     "title": "<highlight>OUR</highlight> SERVICES",
@@ -57,16 +57,51 @@
     }
   },
   "BranchesPage": {
-    "title": "<highlight>OUR</highlight> <highlight-dark>BRANCHES</highlight-dark>",
-    "subtitle": "Your fitness space, closer than you imagine. Our VITALFIT branches are strategically located to make training accessible, fast, and ensure you never pause your wellness journey.",
-    "viewButton": "View branches",
-    "footerQuote": "Your best version starts here. Visit our branches and feel the energy that transforms. Every VITALFIT space is designed to inspire you, challenge you, and support you every step of your evolution."
+    "title": "<highlight>OUR</highlight> <highlight-dark>LOCATIONS</highlight-dark>",
+    "subtitle": "Your fitness space, closer than you imagine. Our VITALFIT branches are strategically located to make training accessible, fast, and to ensure you never pause your well-being.",
+    "viewButton": "View locations",
+    "footerQuote": "Your best version starts here. Visit our branches and feel the energy that transforms. Every VITALFIT space is designed to inspire, challenge, and accompany you on every step of your evolution."
+  },
+  "LoginPage": {
+    "title": "LOGIN",
+    "googleLogin": "Sign in with Google",
+    "credentialsPrompt": "Enter your credentials to login",
+    "email": {
+      "label": "Email",
+      "placeholder": "Email"
+    },
+    "password": {
+      "label": "Password",
+      "placeholder": "Enter your password"
+    },
+    "rememberMe": "Remember Me",
+    "forgotPassword": {
+      "text": "Forgot your Password?",
+      "link": "Recover"
+    },
+    "submitButton": {
+      "default": "Sign in",
+      "loading": "Loading..."
+    },
+    "noAccount": {
+      "text": "Don't have an Account?",
+      "link": "Sign up"
+    },
+    "errors": {
+      "incorrectCredentials": "Incorrect Credentials",
+      "loginError": "Login Error",
+      "connectionError": "Could not connect to server"
+    }
   },
   "FindBranchPage": {
     "title": "FIND YOUR BRANCH",
-    "description": "Use the map or the search bar to locate our branches",
+    "description": "Use the map or search bar to locate our branches.",
     "search_placeholder": "Search branch...",
     "find_nearest_button": "Find the nearest one",
+    "loading_branches": "Loading branches...",
+    "error_loading_branches": "We couldn’t load the map locations. Please try again later.",
+    "no_valid_branches_found": "No branches with valid coordinates were found.",
+    "branch_hours_default": "Monday - Friday: 6:00 am - 9:00 pm",
     "branch_hours_spain": "Monday - Friday: 6:00 am - 9:00 pm",
     "branch_hours_venezuela": "Monday - Friday: 6:00 am - 8:00 pm",
     "branch_hours_chile": "Monday - Friday: 6:00 am - 9:00 pm"
@@ -96,5 +131,83 @@
       "title": "Verification Error"
     },
     "serverError": "Error verifying the email or the request."
+  "navbar": {
+    "home": "Home",
+    "services": "Services",
+    "branches": "Branches",
+    "memberships": "Memberships",
+    "contact": "Contact",
+    "login": "Login",
+    "register": "Join"
+  },
+  "dashboard": {
+    "navbar": {
+      "logo_alt": "VitalFit Logo",
+      "title": "Dashboard",
+      "welcome": "Welcome to your Dashboard"
+    }
+  },
+  "notifications": "Notifications",
+  "user": {
+    "name": "Name",
+    "email": "Email"
+  },
+  "logo": {
+    "slogan": "Empowering your wellness"
+  },
+  "slogan": "Transform your life. Reach your full potential.",
+  "quickLinks": {
+    "title": "Quick Links",
+    "services": "Services",
+    "membership": "Membership",
+    "branches": "Branches",
+    "contact": "Contact"
+  },
+  "services": {
+    "title": "Our Services",
+    "yoga": "Yoga",
+    "crossfit": "CrossFit",
+    "spinning": "Spinning",
+    "pilates": "Pilates"
+  },
+  "contact": {
+    "title": "Contact",
+    "phone": "+58 4245912150",
+    "email": "info@vitalfit.com",
+    "address": "123 Main Avenue, Downtown"
+  },
+  "rights": "All rights reserved.",
+  "Footer": {
+    "tagline": "Transform your life. Reach your maximum potential.",
+    "quickLinks": {
+      "title": "Quick Links",
+      "links": {
+        "services": "Services",
+        "membership": "Membership",
+        "branches": "Branches",
+        "contact": "Contact"
+      }
+    },
+    "services": {
+      "title": "Our Services",
+      "list": {
+        "yoga": "Yoga",
+        "crossfit": "CrossFit",
+        "spinning": "Spinning",
+        "pilates": "Pilates"
+      }
+    },
+    "contact": {
+      "title": "Contact",
+      "phone": "+58 4245912150",
+      "email": "info@vitalfit.com",
+      "address": "123 Main Avenue, Downtown"
+    },
+    "social": {
+      "instagram": "Instagram",
+      "twitter": "Twitter",
+      "facebook": "Facebook"
+    },
+    "copyright": "© {year} VitalFit — All rights reserved."
   }
 }
