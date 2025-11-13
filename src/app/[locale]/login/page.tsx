@@ -8,13 +8,13 @@ import Logo from "@/components/features/Logo";
 import GoogleLoginButton from "@/components/ui/GoogleLoginButton";
 import PasswordInput from "@/components/ui/PasswordInput";
 import TextInput from "@/components/ui/TextInput";
-import Checkbox from "@/components/ui/Checkbox";
 import { Notification } from "@/components/ui/Notification";
 import { loginSchema } from "@/lib/validation/loginSchema";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "@/i18n/routing";
 import { useAuth } from "@/context/AuthContext";
 import { api } from "@/lib/sdk-config";
+import { Checkbox } from "@/components/ui/Checkbox";
 
 export default function Login() {
   const t = useTranslations("LoginPage");
@@ -168,10 +168,11 @@ export default function Login() {
             <div className="flex flex-col sm:flex-row w-full mt-3 gap-2 sm:gap-0">
               <div className="flex-1 text-sm">
                 <Checkbox
-                  labelText={t("rememberMe")}
-                  isChecked={rememberMe}
-                  onChange={handleCheckboxChange}
+                  checked={rememberMe}
+                  onCheckedChange={(checked) => setRememberMe(!!checked)}
+                  aria-label={t("rememberMe")}
                 />
+                <span>{t("rememberMe")}</span>
               </div>
               <div className="flex-1 text-xs">
                 <AuthFooter
@@ -185,8 +186,7 @@ export default function Login() {
             <div className="mt-4 w-full">
               <Button
                 type="submit"
-                fullWidth
-                variant={"primary"}
+                variant="default"
                 disabled={isSubmitting}
                 className={isSubmitting ? "opacity-50 cursor-not-allowed" : ""}
               >
