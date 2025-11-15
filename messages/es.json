@@ -328,5 +328,89 @@
       "loginPrompt": "¿Ya tienes una Cuenta?",
       "loginLink": "Iniciar Sesión"
     }
+  },
+  "header": {
+    "logo": "VITALFIT",
+    "nav": {
+      "home": "Inicio",
+      "services": "Servicios",
+      "subscriptions": "Suscripciones",
+      "memberships": "Membresias",
+      "contact": "Contacto"
+    }
+  },
+  "sidebar": {
+    "membership": "Membresía premium",
+    "membershipMember": "Miembro desde:",
+    "qrCode": "Ver código QR",
+    "qrModal": {
+      "title": "Codigo QR",
+      "description": "Muestra el Codigo QR en la entrada de Gimnasio"
+    },
+    "stats": {
+      "memberId": "ID de miembro",
+      "classesThisMonth": "Clases de este mes",
+      "totalVisits": "Visitas totales"
+    },
+    "menu": {
+      "profile": "Perfil",
+      "security": "Seguridad",
+      "membership": "Mi membresía",
+      "paymentHistory": "Histórial de Pagos",
+      "wishlist": "Mi Wishlist",
+      "logout": "Cerrar Sesión"
+    },
+    "wishlistSection": {
+      "title": "WISHLIST",
+      "description": "Servicios guardados para más tarde",
+      "pilatesClass": "Clase de Pilates",
+      "price": "Precio"
+    }
+  },
+  "BannerOffer": {
+    "title": "¡OFERTA DE CUMPLEAÑOS!",
+    "description": "50% de descuento en productos del gym",
+    "validity": "válido por 7 días",
+    "button": "Canjear"
+  },
+  "membership": {
+    "title": "RESUMEN DE MEMBRESÍA",
+    "plan": "Plan Premium Anual",
+    "status": "ACTIVO",
+    "startLabel": "Inicio",
+    "nextLabel": "Próximo",
+    "daysRemaining": "días restantes",
+    "expiryLabel": "Fecha de vencimiento",
+    "renewButton": "Renovar",
+    "updatePlan": "Actualizar plan",
+    "cancelMembership": "Cancelar membresía"
+  },
+  "classes": {
+    "title": "PRÓXIMAS CLASES",
+    "viewAll": "Ver todas mis clases",
+    "availability": {
+      "available": "Disponible",
+      "limited": "Cupos limitados",
+      "full": "Completo"
+    },
+    "category": {
+      "pilates": "Pilates",
+      "yoga": "Yoga",
+      "cardio": "Cardio"
+    }
+  },
+  "paymentHistory": {
+    "title": "HISTÓRIAL DE PAGOS",
+    "columns": {
+      "transactionId": "ID de Transacción",
+      "date": "Fecha",
+      "totalPrice": "Precio total",
+      "status": "Estado",
+      "paymentMethod": "Método de Pago",
+      "actions": "Acciones"
+    },
+    "statusPaid": "Pagado",
+    "statusPending": "Pendiente",
+    "statusRefunded": "Reembolsado"
   }
 }

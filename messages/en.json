@@ -359,5 +359,89 @@
       "loginPrompt": "Already have an Account?",
       "loginLink": "Log In"
     }
+  },
+  "header": {
+    "logo": "VITALFIT",
+    "nav": {
+      "home": "Home",
+      "services": "Services",
+      "subscriptions": "Subscriptions",
+      "memberships": "Memberships",
+      "contact": "Contact"
+    }
+  },
+  "sidebar": {
+    "membership": "Premium membership",
+    "membershipMember": "Member from:",
+    "qrCode": "View QR Code",
+    "qrModal": {
+      "title": "QR Code",
+      "description": "Display the QR code at the gym entrance"
+    },
+    "stats": {
+      "memberId": "Member ID",
+      "classesThisMonth": "Classes this month",
+      "totalVisits": "Total visits"
+    },
+    "menu": {
+      "profile": "Profile",
+      "security": "Security",
+      "membership": "My membership",
+      "paymentHistory": "Payment History",
+      "wishlist": "My Wishlist",
+      "logout": "Logout"
+    },
+    "wishlistSection": {
+      "title": "WISHLIST",
+      "description": "Services saved for later",
+      "pilatesClass": "Pilates Class",
+      "price": "Price"
+    }
+  },
+  "BannerOffer": {
+    "title": "BIRTHDAY OFFER!",
+    "description": "50% discount on gym products",
+    "validity": "valid for 7 days",
+    "button": "Get now"
+  },
+  "membership": {
+    "title": "MEMBERSHIP SUMMARY",
+    "plan": "Annual Premium Plan",
+    "status": "ACTIVE",
+    "startLabel": "Start",
+    "nextLabel": "Next",
+    "daysRemaining": "days remaining",
+    "expiryLabel": "Expiry date",
+    "renewButton": "Renew",
+    "updatePlan": "Update plan",
+    "cancelMembership": "Cancel membership"
+  },
+  "classes": {
+    "title": "UPCOMING CLASSES",
+    "viewAll": "View all my classes",
+    "availability": {
+      "available": "Disponible",
+      "limited": "Cupos limitados",
+      "full": "Completo"
+    },
+    "category": {
+      "pilates": "Pilates",
+      "yoga": "Yoga",
+      "cardio": "Cardio"
+    }
+  },
+  "paymentHistory": {
+    "title": "PAYMENT HISTORY",
+    "columns": {
+      "transactionId": "Transaction ID",
+      "date": "Date",
+      "totalPrice": "Total Price",
+      "status": "Status",
+      "paymentMethod": "Payment Method",
+      "actions": "Actions"
+    },
+    "statusPaid": "Paid",
+    "statusPending": "Pending",
+    "statusRefunded": "Refunded"
   }
 }
