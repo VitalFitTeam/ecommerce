@@ -2,6 +2,7 @@
 
 import { useTranslations } from "next-intl";
 import { MoreVertical } from "lucide-react";
+import { DataTable } from "@/components/ui/table/DataTable";
 
 export default function PaymentHistory() {
   const t = useTranslations("paymentHistory");
@@ -13,7 +14,6 @@ export default function PaymentHistory() {
       amount: "$250.00",
       status: t("statusPaid"),
       method: "Tarjeta Crédito***6671",
-      action: "...",
     },
     {
       id: "TX-IA0002",
@@ -21,7 +21,6 @@ export default function PaymentHistory() {
       amount: "$250.00",
       status: t("statusRefunded"),
       method: "Tarjeta Crédito***6671",
-      action: "...",
     },
     {
       id: "TX-IA0003",
@@ -29,7 +28,6 @@ export default function PaymentHistory() {
       amount: "$250.00",
       status: t("statusPending"),
       method: "Tarjeta Crédito***6671",
-      action: "...",
     },
     {
       id: "TX-IA0004",
@@ -37,7 +35,6 @@ export default function PaymentHistory() {
       amount: "$250.00",
       status: t("statusPending"),
       method: "Tarjeta Crédito***6671",
-      action: "...",
     },
     {
       id: "TX-IA0005",
@@ -45,7 +42,6 @@ export default function PaymentHistory() {
       amount: "$250.00",
       status: t("statusPending"),
       method: "Tarjeta Crédito***6671",
-      action: "...",
     },
   ];
 
@@ -62,61 +58,52 @@ export default function PaymentHistory() {
     }
   };
 
+  const columns = [
+    {
+      header: t("columns.transactionId"),
+      accessor: "id" as const,
+    },
+    {
+      header: t("columns.date"),
+      accessor: "date" as const,
+    },
+    {
+      header: t("columns.totalPrice"),
+      accessor: "amount" as const,
+    },
+    {
+      header: t("columns.status"),
+      accessor: "status" as const,
+      render: (value: string) => (
+        <span
+          className={`${getStatusStyle(value)} px-3 py-1 rounded text-xs font-semibold`}
+        >
+          {value}
+        </span>
+      ),
+    },
+    {
+      header: t("columns.paymentMethod"),
+      accessor: "method" as const,
+    },
+  ];
+
+  const actions = (row: any) => (
+    <button className="text-gray-400 hover:text-gray-600">
+      <MoreVertical size={18} />
+    </button>
+  );
+
   return (
     <div className="bg-white rounded-lg p-6 border border-gray-200">
       <h3 className="text-lg font-bold mb-6">{t("title")}</h3>
 
-      <div className="overflow-x-auto">
-        <table className="w-full text-sm">
-          <thead>
-            <tr className="border-b border-gray-200">
-              <th className="text-left py-3 px-4 font-semibold text-gray-700">
-                {t("columns.transactionId")}
-              </th>
-              <th className="text-left py-3 px-4 font-semibold text-gray-700">
-                {t("columns.date")}
-              </th>
-              <th className="text-left py-3 px-4 font-semibold text-gray-700">
-                {t("columns.totalPrice")}
-              </th>
-              <th className="text-left py-3 px-4 font-semibold text-gray-700">
-                {t("columns.status")}
-              </th>
-              <th className="text-left py-3 px-4 font-semibold text-gray-700">
-                {t("columns.paymentMethod")}
-              </th>
-              <th className="text-left py-3 px-4 font-semibold text-gray-700">
-                {t("columns.actions")}
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {payments.map((payment) => (
-              <tr
-                key={payment.id}
-                className="border-b border-gray-100 hover:bg-gray-50"
-              >
-                <td className="py-4 px-4 text-gray-600">{payment.id}</td>
-                <td className="py-4 px-4 text-gray-600">{payment.date}</td>
-                <td className="py-4 px-4 text-gray-600">{payment.amount}</td>
-                <td className="py-4 px-4">
-                  <span
-                    className={`${getStatusStyle(payment.status)} px-3 py-1 rounded text-xs font-semibold`}
-                  >
-                    {payment.status}
-                  </span>
-                </td>
-                <td className="py-4 px-4 text-gray-600">{payment.method}</td>
-                <td className="py-4 px-4 text-center">
-                  <button className="text-gray-400 hover:text-gray-600">
-                    <MoreVertical size={18} />
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+      <DataTable
+        columns={columns}
+        data={payments}
+        actions={actions}
+        enableRowSelection={false}
+      />
     </div>
   );
 }
