@@ -93,6 +93,37 @@
       "chile": "Lunes - Viernes: 6:00 am - 9:00 pm"
     }
   },
+  "LoginPage": {
+    "title": "INICIAR SESIÓN",
+    "googleLogin": "Iniciar sesión con Google",
+    "credentialsPrompt": "Ingresa tus credenciales para iniciar sesión",
+    "email": {
+      "label": "Correo electrónico",
+      "placeholder": "Correo electrónico"
+    },
+    "password": {
+      "label": "Contraseña",
+      "placeholder": "Ingresa tu contraseña"
+    },
+    "rememberMe": "Recordarme",
+    "forgotPassword": {
+      "text": "¿Olvidaste tu contraseña?",
+      "link": "Recuperar"
+    },
+    "submitButton": {
+      "default": "Iniciar sesión",
+      "loading": "Cargando..."
+    },
+    "noAccount": {
+      "text": "¿No tienes una cuenta?",
+      "link": "Regístrate"
+    },
+    "errors": {
+      "incorrectCredentials": "Credenciales incorrectas",
+      "loginError": "Error al iniciar sesión",
+      "connectionError": "No se pudo conectar al servidor"
+    }
+  },
   "RecoverPassword": {
     "title": "RECUPERA TU CONTRASEÑA",
     "subtitle": "Ingrese el correo electrónico asociado a la cuenta para recuperar la contraseña",
