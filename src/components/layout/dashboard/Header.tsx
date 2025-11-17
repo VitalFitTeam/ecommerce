@@ -1,55 +1,68 @@
+"use client";
+
+import { useState } from "react";
+import { Link } from "@/i18n/routing";
 import { useTranslations } from "next-intl";
+import { usePathname } from "next/navigation";
 import { BellIcon } from "@heroicons/react/24/outline";
 import Logo from "@/components/features/Logo";
 
-type HeaderProps = {
-  name: string;
-  email: string;
-};
+export default function Header() {
+  const t = useTranslations("Navbar");
+  const pathname = usePathname();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-const generateAcronym = (fullName: string) => {
-  if (!fullName) {
-    return "";
-  }
+  const isActive = (href: string) => {
+    if (href === "/" && pathname === "/") {
+      return true;
+    }
+    if (href !== "/" && pathname.startsWith(href)) {
+      return true;
+    }
+    return false;
+  };
 
-  return fullName
-    .split(" ")
-    .map((word) => word.charAt(0))
-    .join("")
-    .toUpperCase();
-};
-
-export const Header: React.FC<HeaderProps> = ({ name, email }) => {
-  const t = useTranslations("dashboard");
-
-  const acronym = generateAcronym(name);
+  const navItemsConfig = [
+    { key: "home", href: "/" },
+    { key: "services", href: "/services" },
+    { key: "branches", href: "/branches" },
+    { key: "memberships", href: "/memberships" },
+    { key: "contact", href: "/contact" },
+  ];
 
   return (
-    <header className="border-b bg-white">
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
-        <div className="flex items-center">
-          <Logo slogan={true} />
+    <header className="bg-[#303030] text-white px-6 py-4 flex items-center justify-between">
+      <Logo slogan={true} theme="dark" />
+      <div className="flex items-center gap-8">
+        <div className="hidden md:flex items-center gap-8">
+          {navItemsConfig.map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              className={`transition-colors ${
+                isActive(item.href)
+                  ? "text-white bg-primary rounded border-primary p-2"
+                  : "text-gray-300 hover:text-primary"
+              }`}
+            >
+              {t(`navItems.${item.key}`)} {/* Traducción */}
+            </Link>
+          ))}
         </div>
+      </div>
 
-        <div className="flex items-center gap-4">
-          <button
-            className="rounded-full p-2 hover:bg-gray-100"
-            aria-label={t("notifications")}
-          >
-            <BellIcon className="h-5 w-5 text-gray-600" />
-          </button>
-
-          <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-300 text-sm font-medium text-gray-600">
-              {acronym}
-            </div>
-            <div className="hidden sm:block">
-              <p className="text-sm font-medium text-gray-900">{name}</p>
-              <p className="text-xs text-gray-500">{email}</p>
-            </div>
+      <div className="flex items-center gap-4">
+        <button className="hover:bg-gray-700 p-2 rounded">
+          <BellIcon className="w-6 h-6" />
+        </button>
+        <div className="flex items-center gap-3 ml-2">
+          <div className="w-8 h-8 bg-gray-400 rounded-full"></div>
+          <div className="text-right text-xs">
+            <div className="font-semibold">Albani Barragan</div>
+            <div className="text-gray-400">albania@gmail.com</div>
           </div>
         </div>
       </div>
     </header>
   );
-};
+}
