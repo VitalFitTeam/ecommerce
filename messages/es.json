@@ -412,5 +412,133 @@
     "statusPaid": "Pagado",
     "statusPending": "Pendiente",
     "statusRefunded": "Reembolsado"
+  },
+  "Profile": {
+    "ptitle": "MI PERFIL",
+    "pbutton": "Editar",
+    "personalInfo": "Información Personal",
+    "contactInfo": "Datos de Contacto",
+    "name": "Nombre",
+    "namePlaceholder": "Ingresa tu nombre",
+    "lastName": "Apellido",
+    "lastNamePlaceholder": "Ingresa tu apellido",
+    "birthDate": "Fecha de nacimiento",
+    "gender": "Género",
+    "genderPlaceholder": "Selecciona tu género",
+    "genders": {
+      "male": "Masculino",
+      "female": "Femenino",
+      "other": "Otro"
+    },
+    "address": "Dirección",
+    "addressPlaceholder": "Ingresa tu dirección",
+    "email": "Correo Electrónico",
+    "emailPlaceholder": "tu@email.com",
+    "phone": "Teléfono de Contacto",
+    "phonePlaceholder": "Ingresa tu número de teléfono",
+    "documentType": "Tipo de documento",
+    "documentTypePlaceholder": "tipo",
+    "documentTypes": {
+      "dni": "DNI",
+      "passport": "Pasaporte",
+      "idCard": "Cédula",
+      "driversLicense": "Licencia de conducir"
+    },
+    "documentNumber": "Doc. Identidad",
+    "documentNumberPlaceholder": "Número de documento",
+    "editbutton": "Guardar Cambios",
+    "canceleditbutton": "Cancelar"
+  },
+  "MembershipHistory": {
+    "title": "HISTORIAL DE MEMBRESÍAS",
+    "plans": {
+      "monthly": "Mensual"
+    },
+    "status": {
+      "active": "Activa",
+      "cancelled": "Cancelada",
+      "expired": "Vencida"
+    },
+    "columns": {
+      "planName": "Nombre del plan",
+      "startDate": "Fecha de inicio",
+      "endDate": "Fecha de fin",
+      "totalPrice": "Precio total",
+      "status": "Estado"
+    },
+    "filters": {
+      "planName": "Nombre del plan",
+      "status": "Estado",
+      "startDate": "Desde",
+      "endDate": "Hasta",
+      "clear": "Borrar filtros"
+    },
+    "actions": {
+      "viewDetails": "Ver Detalles",
+      "downloadReceipt": "Descargar Recibo"
+    }
+  },
+  "PaymentHistoryScreen": {
+    "title": "HISTORIAL DE PAGOS",
+    "plans": {
+      "monthly": "Mensual"
+    },
+    "status": {
+      "paid": "Pagado",
+      "pending": "Pendiente",
+      "refunded": "Reembolsado"
+    },
+    "columns": {
+      "transactionId": "ID de Transacción",
+      "date": "Fecha",
+      "totalPrice": "Precio total",
+      "status": "Estado",
+      "paymentMethod": "Método de Pago"
+    },
+    "filters": {
+      "payname": "Filtro",
+      "status": "Estado",
+      "startDate": "Desde",
+      "endDate": "Hasta",
+      "clear": "Borrar filtros"
+    },
+    "actions": {
+      "viewDetails": "Ver Detalles",
+      "downloadReceipt": "Descargar Recibo"
+    }
+  },
+  "PaymentHistoryScreenDetail": {
+    "title": "DETALLE DE LA TRANSACCIÓN",
+    "summary": "Resumen de transacción",
+    "planDetail": "Detalle del plan comprado",
+    "startDate": "Fecha Inicio",
+    "endDate": "Fecha Final",
+    "transactionId": "ID Transacción",
+    "dateTime": "Fecha y hora de pago",
+    "paymentMethod": "Método de pago",
+    "total": "Total Cancelado",
+    "download": "Descargar Comprobante",
+    "sendEmail": "Enviar por correo",
+    "invoice": "Factura Electrónica",
+    "statusBadge": {
+      "paid": "Pagado",
+      "pending": "Pendiente",
+      "refunded": "Reembolsado"
+    },
+    "statusLabel": "Estado",
+    "status": {
+      "paid": "Pagado",
+      "pending": "Pendiente",
+      "refunded": "Reembolsado"
+    },
+
+    "columns": {
+      "type": "Tipo de membresía",
+      "name": "Nombre del plan",
+      "quantity": "Cant.",
+      "unitPrice": "Precio unitario",
+      "discount": "Descuento",
+      "total": "SubTotal"
+    }
   }
 }

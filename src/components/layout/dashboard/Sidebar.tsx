@@ -15,6 +15,7 @@ import {
 import { Button } from "@/components/ui/button";
 import QRCode from "react-qr-code";
 import Wishlist from "./Whislist";
+import { Link } from "@/i18n/routing";
 
 export default function Sidebar() {
   const t = useTranslations("sidebar");
@@ -64,22 +65,28 @@ export default function Sidebar() {
         <hr className="my-6" />
 
         <nav className="space-y-4">
-          <MenuItem
-            icon={<UserIcon className="w-5 h-5" />}
-            label={t("menu.profile")}
-          />
+          <Link href="/profile">
+            <MenuItem
+              icon={<UserIcon className="w-5 h-5" />}
+              label={t("menu.profile")}
+            />
+          </Link>
           <MenuItem
             icon={<ShieldCheckIcon className="w-5 h-5" />}
             label={t("menu.security")}
           />
-          <MenuItem
-            icon={<CreditCardIcon className="w-5 h-5" />}
-            label={t("menu.membership")}
-          />
-          <MenuItem
-            icon={<CurrencyDollarIcon className="w-5 h-5" />}
-            label={t("menu.paymentHistory")}
-          />
+          <Link href="/memberships/history">
+            <MenuItem
+              icon={<CreditCardIcon className="w-5 h-5" />}
+              label={t("menu.membership")}
+            />
+          </Link>
+          <Link href="/payments/history">
+            <MenuItem
+              icon={<CurrencyDollarIcon className="w-5 h-5" />}
+              label={t("menu.paymentHistory")}
+            />
+          </Link>
           <MenuItem
             icon={<HeartIcon className="w-5 h-5" />}
             label={t("menu.wishlist")}
