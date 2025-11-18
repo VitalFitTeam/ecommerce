@@ -75,10 +75,12 @@ export default function Sidebar() {
             icon={<ShieldCheckIcon className="w-5 h-5" />}
             label={t("menu.security")}
           />
-          <MenuItem
-            icon={<CreditCardIcon className="w-5 h-5" />}
-            label={t("menu.membership")}
-          />
+          <Link href="/memberships/history">
+            <MenuItem
+              icon={<CreditCardIcon className="w-5 h-5" />}
+              label={t("menu.membership")}
+            />
+          </Link>
           <MenuItem
             icon={<CurrencyDollarIcon className="w-5 h-5" />}
             label={t("menu.paymentHistory")}

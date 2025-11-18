@@ -479,5 +479,35 @@
     "documentNumberPlaceholder": "Document number",
     "editbutton": "Save",
     "canceleditbutton": "Cancel"
+  },
+  "MembershipHistory": {
+    "title": "MEMBERSHIP HISTORY",
+    "plans": {
+      "monthly": "Monthly"
+    },
+    "status": {
+      "active": "Active",
+      "cancelled": "Cancelled",
+      "expired": "Expired"
+    },
+    "columns": {
+      "planName": "Plan Name",
+      "startDate": "Start Date",
+      "endDate": "End Date",
+      "totalPrice": "Total Price",
+      "status": "Status"
+    },
+    "filters": {
+      "planName": "Search by plan name",
+      "status": "Status",
+      "startDate": "From",
+      "endDate": "To",
+      "clear": "Clear filters"
+    },
+    "actions": {
+      "label": "Actions",
+      "viewDetails": "View Details",
+      "downloadReceipt": "Download Receipt"
+    }
   }
 }

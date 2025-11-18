@@ -479,5 +479,35 @@
     "documentNumberPlaceholder": "Número de documento",
     "editbutton": "Guardar Cambios",
     "canceleditbutton": "Cancelar"
+  },
+  "MembershipHistory": {
+    "title": "HISTORIAL DE MEMBRESÍAS",
+
+    "plans": {
+      "monthly": "Mensual"
+    },
+    "status": {
+      "active": "Activa",
+      "cancelled": "Cancelada",
+      "expired": "Vencida"
+    },
+    "columns": {
+      "planName": "Nombre del plan",
+      "startDate": "Fecha de inicio",
+      "endDate": "Fecha de fin",
+      "totalPrice": "Precio total",
+      "status": "Estado"
+    },
+    "filters": {
+      "planName": "Nombre del plan",
+      "status": "Estado",
+      "startDate": "Desde",
+      "endDate": "Hasta",
+      "clear": "Borrar filtros"
+    },
+    "actions": {
+      "viewDetails": "Ver Detalles",
+      "downloadReceipt": "Descargar Recibo"
+    }
   }
 }
