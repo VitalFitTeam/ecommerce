@@ -412,5 +412,71 @@
     "statusPaid": "Pagado",
     "statusPending": "Pendiente",
     "statusRefunded": "Reembolsado"
+  },
+  "Profile": {
+    "ptitle": "MI PERFIL",
+    "pbutton": "Editar",
+    "personalInfo": "Información Personal",
+    "contactInfo": "Datos de Contacto",
+    "name": "Nombre",
+    "namePlaceholder": "Ingresa tu nombre",
+    "lastName": "Apellido",
+    "lastNamePlaceholder": "Ingresa tu apellido",
+    "birthDate": "Fecha de nacimiento",
+    "gender": "Género",
+    "genderPlaceholder": "Selecciona tu género",
+    "genders": {
+      "male": "Masculino",
+      "female": "Femenino",
+      "other": "Otro"
+    },
+    "address": "Dirección",
+    "addressPlaceholder": "Ingresa tu dirección",
+    "email": "Correo Electrónico",
+    "emailPlaceholder": "tu@email.com",
+    "phone": "Teléfono de Contacto",
+    "phonePlaceholder": "Ingresa tu número de teléfono",
+    "documentType": "Tipo de documento",
+    "documentTypePlaceholder": "tipo",
+    "documentTypes": {
+      "dni": "DNI",
+      "passport": "Pasaporte",
+      "idCard": "Cédula",
+      "driversLicense": "Licencia de conducir"
+    },
+    "documentNumber": "Doc. Identidad",
+    "documentNumberPlaceholder": "Número de documento",
+    "editbutton": "Guardar Cambios",
+    "canceleditbutton": "Cancelar"
+  },
+  "MembershipHistory": {
+    "title": "HISTORIAL DE MEMBRESÍAS",
+
+    "plans": {
+      "monthly": "Mensual"
+    },
+    "status": {
+      "active": "Activa",
+      "cancelled": "Cancelada",
+      "expired": "Vencida"
+    },
+    "columns": {
+      "planName": "Nombre del plan",
+      "startDate": "Fecha de inicio",
+      "endDate": "Fecha de fin",
+      "totalPrice": "Precio total",
+      "status": "Estado"
+    },
+    "filters": {
+      "planName": "Nombre del plan",
+      "status": "Estado",
+      "startDate": "Desde",
+      "endDate": "Hasta",
+      "clear": "Borrar filtros"
+    },
+    "actions": {
+      "viewDetails": "Ver Detalles",
+      "downloadReceipt": "Descargar Recibo"
+    }
   }
 }

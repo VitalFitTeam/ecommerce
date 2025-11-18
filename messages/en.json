@@ -443,5 +443,71 @@
     "statusPaid": "Paid",
     "statusPending": "Pending",
     "statusRefunded": "Refunded"
+  },
+  "Profile": {
+    "ptitle": "MY PROFILE",
+    "pbutton": "Edit",
+    "personalInfo": "Personal Information",
+    "contactInfo": "Contact Information",
+    "name": "Name",
+    "namePlaceholder": "Enter your name",
+    "lastName": "Last Name",
+    "lastNamePlaceholder": "Enter your last name",
+    "birthDate": "Date of birth",
+    "gender": "Gender",
+    "genderPlaceholder": "Select your gender",
+    "genders": {
+      "male": "Male",
+      "female": "Female",
+      "other": "Other"
+    },
+    "address": "Address",
+    "addressPlaceholder": "Enter your address",
+    "email": "Email",
+    "emailPlaceholder": "your@email.com",
+    "phone": "Phone Number",
+    "phonePlaceholder": "Enter your phone number",
+    "documentType": "Document Type",
+    "documentTypePlaceholder": "Select type",
+    "documentTypes": {
+      "dni": "DNI",
+      "passport": "Passport",
+      "idCard": "ID Card",
+      "driversLicense": "Driver's License"
+    },
+    "documentNumber": "Document Number",
+    "documentNumberPlaceholder": "Document number",
+    "editbutton": "Save",
+    "canceleditbutton": "Cancel"
+  },
+  "MembershipHistory": {
+    "title": "MEMBERSHIP HISTORY",
+    "plans": {
+      "monthly": "Monthly"
+    },
+    "status": {
+      "active": "Active",
+      "cancelled": "Cancelled",
+      "expired": "Expired"
+    },
+    "columns": {
+      "planName": "Plan Name",
+      "startDate": "Start Date",
+      "endDate": "End Date",
+      "totalPrice": "Total Price",
+      "status": "Status"
+    },
+    "filters": {
+      "planName": "Search by plan name",
+      "status": "Status",
+      "startDate": "From",
+      "endDate": "To",
+      "clear": "Clear filters"
+    },
+    "actions": {
+      "label": "Actions",
+      "viewDetails": "View Details",
+      "downloadReceipt": "Download Receipt"
+    }
   }
 }
