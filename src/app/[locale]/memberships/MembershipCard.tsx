@@ -35,7 +35,7 @@ export function MembershipCard({
       <div
         className={`rounded-2xl md:rounded-3xl overflow-hidden shadow-lg transition-transform hover:scale-105 ${
           featured
-            ? " bg-primary border-2 border-orange-500"
+            ? " bg-primary border-2 border-orange-400"
             : "bg-gray-100 border border-gray-200"
         }`}
       >
