@@ -509,5 +509,175 @@
       "viewDetails": "View Details",
       "downloadReceipt": "Download Receipt"
     }
+  },
+  "MembershipPurchase": {
+    "title": "PURCHASE MEMBERSHIP",
+    "step1": {
+      "selectedPlans": "SELECTED TRAINING PLANS",
+      "complementPlan": "COMPLEMENT YOUR PLAN (OPTIONAL)",
+      "price": "Price:",
+      "startDate": "Start date",
+      "fee": "Fee {startDate} - {endDate}",
+      "removePlan": "Remove plan"
+    },
+    "step2": {
+      "title": "Payment Information",
+      "description": "All transactions are processed securely. Select a saved card or enter a new one.",
+      "selectBranch": "Select Branch",
+      "selectBranchPlaceholder": "Select a branch",
+      "paymentOptions": "Purchase Options",
+      "mobilePayment": "Mobile Payment",
+      "bankTransfer": "Bank Transfer",
+      "holder": "Cardholder",
+      "fiscalDocument": "Tax ID / ID Number",
+      "important": "Important",
+      "includeExactAmount": "Make sure to include the exact amount",
+      "saveReceipt": "Save the transaction receipt",
+      "associatedBank": "Associated Bank",
+      "accountNumber": "Account Number",
+      "phoneNumber": "Mobile Phone"
+    },
+    "step3": {
+      "purchaseConfirmation": {
+        "purchaseRegistered": "Purchase Registered!",
+        "purchaseInVerification": "Your purchase has been registered and is in verification process",
+        "advancedSubscription": "Advanced Subscription",
+        "moreBenefits": "More benefits for fitness life",
+        "perMonth": "/MONTH",
+        "valid": "Valid",
+        "days": "days",
+        "access": "Access",
+        "unlimited": "unlimited",
+        "benefits": "Benefits",
+        "attachReceipt": "Attach payment receipt",
+        "dragDrop": "Drag & Drop or",
+        "chooseFile": "Choose file",
+        "toUpload": "to upload",
+        "fileTypes": "Ex: jpg, pdf, png, img",
+        "uploaded": "uploaded",
+        "helpCenter": "Help Center",
+        "cancel": "Cancel",
+        "confirm": "Confirm",
+        "paymentVerification": "Payment in Verification",
+        "verificationText": "Your payment is being verified by our team. You will receive a confirmation email when it is approved (1-24 total hours)",
+        "supportText": "Do you have questions? Contact us: soporteq@vitatfit.com or (555) 123-4567",
+        "goHome": "Go to Home"
+      }
+    },
+    "navigation": {
+      "cancel": "Cancel",
+      "continue": "Continue",
+      "back": "Back"
+    },
+    "addOns": {
+      "personal-4": {
+        "title": "Entertainment",
+        "subtitle": "Personal - 4 Sessions",
+        "description": "Package of 4 personalized entertainment sessions with certified instructor"
+      },
+      "personal-8": {
+        "title": "Entertainment",
+        "subtitle": "Personal - 8 Sessions",
+        "description": "Package of 8 personalized entertainment sessions with certified instructor"
+      },
+      "yoga-10": {
+        "title": "Yoga Package",
+        "subtitle": "10 Classes",
+        "description": "Access to 10 specialized yoga classes"
+      }
+    }
+  },
+  "AddOnCard": {
+    "select": "Select",
+    "deselect": "Deselect",
+    "perSession": "per session",
+    "add": "Add",
+    "added": "✓ Added"
+  },
+  "OrderSummary": {
+    "title": "Order Summary",
+    "subtotal": "Subtotal",
+    "taxes": "Taxes",
+    "total": "Total",
+    "noItems": "No items selected",
+    "calculatedAtCheckout": "Calculated at checkout",
+    "items": "items",
+    "item": "item",
+    "addons": "ADD-ONS",
+    "discounts": "Discounts",
+    "tax": "Tax",
+    "makePayment": "Make Payment",
+    "promoPlaceholder": "Promo code",
+    "apply": "Apply"
+  },
+  "PlanCard": {
+    "price": "${price}"
+  },
+  "StepIndicator": {
+    "step1": "Product\nOptions",
+    "step2": "Payment\nMethods",
+    "step3": "Purchase\nConfirmation"
+  },
+  "MembershipDetails": {
+    "title": "Membership Details",
+    "subtitle": "Check your membership status and details.",
+    "planDetails": "Plan Details",
+    "planName": "Plan Name",
+    "statusLabel": "Status",
+    "startDate": "Start Date",
+    "paymentType": "Payment Type",
+    "billingId": "Associated Billing",
+    "dueDate": "Due Date",
+    "cancellationDate": "Cancellation Date",
+    "includedServices": "Included Services",
+    "selectCancelDefaultValue": "Select an option",
+    "descriptionCancelPlaceholder": "Briefly describe why you wish to cancel your membership…",
+    "viewexpired": "You don't have an active membership yet.",
+    "status": {
+      "activa": "Active",
+      "cancelada": "Cancelled",
+      "vencida": "Expired"
+    },
+    "fields": {
+      "paymentName": "Plan name",
+      "paymentType": "Payment Type",
+      "billingId": "Associated Billing",
+      "startDate": "Start Date",
+      "endDate": "End Date",
+      "services": "Included Services"
+    },
+    "actions": {
+      "renew": "Renew",
+      "update": "Update Plan",
+      "cancel": "Cancel Membership"
+    }
+  },
+  "MembershipCancel": {
+    "title": "Cancel Membership",
+    "subtitle": "Cancellation Confirmation",
+    "message": "We're sorry to see you go. Please confirm the reason for canceling your membership.",
+    "fields": {
+      "planName": "Membership Name",
+      "status": "Status",
+      "reason": "Cancellation Reason",
+      "description": "Description"
+    },
+    "status": {
+      "active": "Active"
+    },
+    "placeholders": {
+      "reason": "Choose an option",
+      "description": "Briefly describe why you wish to cancel your membership..."
+    },
+    "reasons": {
+      "price": "High price",
+      "time": "Lack of time",
+      "service": "Service issues",
+      "other": "Other"
+    },
+    "actions": {
+      "cancel": "Cancel",
+      "confirm": "Confirm Cancellation"
+    }
   }
 }

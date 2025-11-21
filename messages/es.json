@@ -482,7 +482,6 @@
   },
   "MembershipHistory": {
     "title": "HISTORIAL DE MEMBRESÍAS",
-
     "plans": {
       "monthly": "Mensual"
     },
@@ -508,6 +507,176 @@
     "actions": {
       "viewDetails": "Ver Detalles",
       "downloadReceipt": "Descargar Recibo"
+    }
+  },
+  "MembershipPurchase": {
+    "title": "COMPRAR MEMBRESÍA",
+    "step1": {
+      "selectedPlans": "PLANES DE ENTRENAMIENTO SELECCIONADOS",
+      "complementPlan": "COMPLEMENTA TU PLAN (OPCIONAL)",
+      "price": "Precio:",
+      "startDate": "Fecha de inicio",
+      "fee": "Cuota {startDate} - {endDate}",
+      "removePlan": "Eliminar plan"
+    },
+    "step2": {
+      "title": "Información pago",
+      "description": "Todas las transacciones se realizan de forma segura, selecciona una tarjeta guardada, o ingresa una nueva.",
+      "selectBranch": "Seleccionar sucursal",
+      "selectBranchPlaceholder": "Selecciona una sucursal",
+      "paymentOptions": "Opciones de Compra",
+      "mobilePayment": "Pago Móvil",
+      "bankTransfer": "Transferencia Bancaria",
+      "holder": "Titular",
+      "fiscalDocument": "Documento fiscal / cédula",
+      "important": "Importante",
+      "includeExactAmount": "Asegúrate de incluir el monto exacto",
+      "saveReceipt": "Guarda el comprobante de la transacción",
+      "associatedBank": "Banco Asociado",
+      "accountNumber": "Número de Cuenta",
+      "phoneNumber": "Teléfono Móvil"
+    },
+    "step3": {
+      "purchaseConfirmation": {
+        "purchaseRegistered": "¡Compra Registrada!",
+        "purchaseInVerification": "Tu compra ha sido registrada y está en proceso de verificación",
+        "advancedSubscription": "Suscripción Avanzada",
+        "moreBenefits": "Más beneficios para la vida fitness",
+        "perMonth": "/MES",
+        "valid": "Válida",
+        "days": "días",
+        "access": "Acceso",
+        "unlimited": "ilimitado",
+        "benefits": "Beneficios",
+        "attachReceipt": "Adjunta el comprobante de pago",
+        "dragDrop": "Arrastra y suelta o",
+        "chooseFile": "Selecciona archivo",
+        "toUpload": "para subir",
+        "fileTypes": "Ej: jpg, pdf, png, img",
+        "uploaded": "subido",
+        "helpCenter": "Centro de ayuda",
+        "cancel": "Cancelar",
+        "confirm": "Confirmar",
+        "paymentVerification": "Pago en Verificación",
+        "verificationText": "Tu pago está verificándose por nuestro equipo. Recibirás un correo de confirmación cuando sea aprobado (1-24 horas totales)",
+        "supportText": "¿Tienes dudas? Contáctanos: soporteq@vitatfit.com o (555) 123-4567",
+        "goHome": "Ir Al Inicio"
+      }
+    },
+    "navigation": {
+      "cancel": "Cancelar",
+      "continue": "Continuar",
+      "back": "Atrás"
+    },
+    "addOns": {
+      "personal-4": {
+        "title": "Entretenimiento",
+        "subtitle": "Personal - 4 Sesiones",
+        "description": "Paquete de 4 sesiones de entretenimiento personalizado con instructor certificado"
+      },
+      "personal-8": {
+        "title": "Entretenimiento",
+        "subtitle": "Personal - 8 Sesiones",
+        "description": "Paquete de 8 sesiones de entretenimiento personalizado con instructor certificado"
+      },
+      "yoga-10": {
+        "title": "Paquete de Yoga",
+        "subtitle": "10 Clases",
+        "description": "Acceso a 10 clases de yoga especializadas"
+      }
+    }
+  },
+  "AddOnCard": {
+    "select": "Seleccionar",
+    "deselect": "Deseleccionar",
+    "perSession": "por sesión",
+    "add": "Agregar",
+    "added": "✓ Agregado"
+  },
+  "OrderSummary": {
+    "title": "Resumen del pedido",
+    "subtotal": "Subtotal",
+    "taxes": "Impuestos",
+    "total": "Total",
+    "noItems": "No hay items seleccionados",
+    "calculatedAtCheckout": "Calculado en el checkout",
+    "items": "items",
+    "item": "item",
+    "addons": "COMPLEMENTOS",
+    "discounts": "Descuentos",
+    "tax": "IVA",
+    "makePayment": "Realizar Pago",
+    "promoPlaceholder": "Código de la promoción",
+    "apply": "Ingresar"
+  },
+  "StepIndicator": {
+    "step1": "Opciones\nde producto",
+    "step2": "Métodos de pago",
+    "step3": "Confirmación de compra"
+  },
+  "PlanCard": {
+    "price": "${price}"
+  },
+  "MembershipDetails": {
+    "title": "Detalles de Membresía",
+    "subtitle": "Consulta el estado y los detalles de la membresía",
+    "planDetails": "Detalles del Plan",
+    "planName": "Nombre del plan",
+    "statusLabel": "Estado",
+    "startDate": "Fecha de inicio",
+    "paymentType": "Tipo de pago",
+    "billingId": "Facturación asociada",
+    "dueDate": "Fecha de vencimiento",
+    "cancellationDate": "Fecha de cancelación",
+    "includedServices": "Servicios incluidos",
+    "selectCancelDefaultValue": "Elige una Opción",
+    "descriptionCancelPlaceholder": "Describe brevemente por qué deseas cancelar tu membresía…",
+    "viewexpired": "Aún no tienes una membresía activa",
+    "status": {
+      "activa": "Activa",
+      "cancelada": "Cancelada",
+      "vencida": "Vencida"
+    },
+    "fields": {
+      "paymentName": "Nombre del plan",
+      "paymentType": "Tipo de pago",
+      "billingId": "Facturación asociada",
+      "startDate": "Fecha de inicio",
+      "endDate": "Fecha de vencimiento",
+      "services": "Servicios incluidos"
+    },
+    "actions": {
+      "renew": "Renovar",
+      "update": "Actualizar plan",
+      "cancel": "Cancelar membresía"
+    }
+  },
+  "MembershipCancel": {
+    "title": "Cancelar membresía",
+    "subtitle": "Confirmación de cancelación",
+    "message": "Lamentamos que desees cancelar tu membresía. Por favor confirma el motivo.",
+    "fields": {
+      "planName": "Nombre de la membresía",
+      "status": "Estado",
+      "reason": "Motivo de cancelación",
+      "description": "Descripción"
+    },
+    "status": {
+      "active": "Activa"
+    },
+    "placeholders": {
+      "reason": "Elige una opción",
+      "description": "Describe brevemente por qué deseas cancelar tu membresía..."
+    },
+    "reasons": {
+      "price": "Precio elevado",
+      "time": "Falta de tiempo",
+      "service": "Problemas con el servicio",
+      "other": "Otro"
+    },
+    "actions": {
+      "cancel": "Cancelar",
+      "confirm": "Confirmar cancelación"
     }
   }
 }
