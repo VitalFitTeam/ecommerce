@@ -1,6 +1,5 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import {
   createContext,
   ReactNode,
@@ -11,10 +10,13 @@ import {
 } from "react";
 import { jwtDecode } from "jwt-decode";
 import { api } from "@/lib/sdk-config";
+import { useRouter } from "@/i18n/routing";
 
 interface JwtPayload {
   exp?: number;
   sub: string;
+  role?: string | string[];
+  roles?: string[];
 }
 
 export interface User {
@@ -22,6 +24,8 @@ export interface User {
   first_name: string;
   last_name: string;
   email: string;
+  role: string;
+  role_label?: string;
   [k: string]: any;
 }
 
@@ -34,7 +38,6 @@ interface AuthContextType {
   logout: () => Promise<void>;
 }
 
-// Context con valores por defecto (para que funcione en tests sin mocks)
 const AuthContext = createContext<AuthContextType>({
   token: null,
   user: null,
@@ -79,12 +82,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         }
 
         const userData = profileResponse.user;
+        const userRole = userData.role?.name?.toLowerCase();
 
         return {
           user_id: userData.user_id,
           first_name: userData.first_name,
           last_name: userData.last_name,
           email: userData.email,
+          role: userRole,
           is_validated: userData.is_validated ?? false,
           profile_picture_url: userData.profile_picture_url,
           phone: userData.phone,
@@ -143,7 +148,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           localStorage.removeItem("access_token");
           setToken(null);
           setUser(null);
-          throw new Error("Credenciales inválidas");
+          throw new Error(
+            "Credenciales inválidas o sin permisos de administrador",
+          );
         }
       } catch (err) {
         console.error("Login error:", err);
