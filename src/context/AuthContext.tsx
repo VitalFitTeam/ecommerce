@@ -34,6 +34,7 @@ interface AuthContextType {
   logout: () => Promise<void>;
 }
 
+// Context con valores por defecto (para que funcione en tests sin mocks)
 const AuthContext = createContext<AuthContextType>({
   token: null,
   user: null,
@@ -165,26 +166,20 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   }, [router]);
 
+  const contextValue: AuthContextType = {
+    token,
+    user,
+    loading: isLoading,
+    isAuthenticated: !!token && !!user,
+    login,
+    logout,
+  };
+
   return (
-    <AuthContext.Provider
-      value={{
-        token,
-        user,
-        loading: isLoading,
-        isAuthenticated: !!token && !!user,
-        login,
-        logout,
-      }}
-    >
-      {children}
-    </AuthContext.Provider>
+    <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>
   );
 };
 
 export const useAuth = () => {
-  const context = useContext(AuthContext);
-  if (context === undefined) {
-    throw new Error("useAuth debe ser usado dentro de un AuthProvider");
-  }
-  return context;
+  return useContext(AuthContext);
 };

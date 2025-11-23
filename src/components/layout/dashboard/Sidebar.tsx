@@ -13,12 +13,15 @@ import {
   XMarkIcon,
 } from "@heroicons/react/24/outline";
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/context/AuthContext";
 import QRCode from "react-qr-code";
 import Wishlist from "./Whislist";
 import { Link } from "@/i18n/routing";
 
 export default function Sidebar() {
   const t = useTranslations("sidebar");
+  const { logout } = useAuth();
+  const handleLogout = () => logout();
   const dateMember = "Enero 2024";
   const idMember = "FM-2024-00134";
   const vencimiento = "31 Dic 2025";
@@ -93,6 +96,7 @@ export default function Sidebar() {
             icon={<ArrowRightOnRectangleIcon className="w-5 h-5" />}
             label={t("menu.logout")}
             isRed
+            onClick={handleLogout}
           />
         </nav>
 
@@ -140,9 +144,15 @@ interface MenuItemProps {
   isRed?: boolean;
 }
 
-function MenuItem({ icon, label, isRed }: MenuItemProps) {
+function MenuItem({
+  icon,
+  label,
+  isRed,
+  onClick,
+}: MenuItemProps & { onClick?: () => void }) {
   return (
     <button
+      onClick={onClick}
       className={`w-full flex items-center gap-3 px-3 py-2 rounded text-sm font-medium transition ${
         isRed
           ? "text-red-500 hover:bg-red-50"

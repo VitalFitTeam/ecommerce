@@ -1,21 +1,47 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
-import { Navbar } from "@/components/layout/Navbar";
+import Header from "@/components/layout/dashboard/Header";
 import Footer from "@/components/layout/Footer";
 import { ChevronLeft, ChevronRight, Trash2 } from "lucide-react";
+import {
+  CheckIcon,
+  DevicePhoneMobileIcon,
+  CurrencyDollarIcon,
+} from "@heroicons/react/24/outline";
+import {
+  ClipboardDocumentListIcon,
+  InformationCircleIcon,
+} from "@heroicons/react/24/outline";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Label } from "@/components/ui/Label";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/Card";
 import StepIndicator from "./step-indicator";
 import AddOnCard from "./add-on-card";
 import OrderSummary from "./order-summary";
+import { useAuth } from "@/context/AuthContext";
+import { useRouter } from "@/i18n/routing";
+import PurchaseConfirmation from "./purchaseConfirmation";
 
 export default function MembershipPurchase() {
   const t = useTranslations("MembershipPurchase");
+  const { token, loading, isAuthenticated } = useAuth(); // Cambié a loading e isAuthenticated
+  const router = useRouter();
   const [currentStep, setCurrentStep] = useState(1);
   const [selectedAddOns, setSelectedAddOns] = useState<string[]>([]);
   const [carouselIndex, setCarouselIndex] = useState(0);
+  const [paymentMethod, setPaymentMethod] = useState<"mobile" | "transfer">(
+    "transfer",
+  );
+  const [authChecked, setAuthChecked] = useState(false);
 
   const addOns = [
     {
@@ -79,9 +105,34 @@ export default function MembershipPurchase() {
     }
   };
 
+  useEffect(() => {
+    if (!loading) {
+      if (!isAuthenticated) {
+        router.push("/login");
+      } else {
+        setAuthChecked(true);
+      }
+    }
+  }, [loading, isAuthenticated, router]);
+
+  if (loading || !authChecked) {
+    return (
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500 mx-auto"></div>
+          <p className="mt-4 text-gray-600">Cargando...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!isAuthenticated) {
+    return null;
+  }
+
   return (
     <main className="min-h-screen bg-white">
-      <Navbar transparent={false} />
+      <Header />
       <div className="min-h-screen bg-background py-8">
         <div className="mx-auto max-w-7xl px-4">
           <div className="mb-8">
@@ -228,19 +279,177 @@ export default function MembershipPurchase() {
               {currentStep === 2 && (
                 <div className="space-y-8">
                   <div>
-                    <h2 className="mb-6 text-xl font-bold">
-                      {t("step2.title")}
-                    </h2>
                     <Card>
                       <CardContent className="pt-6">
-                        <div className="space-y-4">
+                        <p className="mb-6 text-xl font-bold">
+                          {t("step2.title")}
+                        </p>
+                        <div className="space-y-6">
                           <p className="text-muted-foreground">
                             {t("step2.description")}
                           </p>
-                          <div className="mt-6 p-4 rounded-md bg-muted">
-                            <p className="text-sm font-semibold text-foreground">
-                              {t("step2.genericContent")}
+
+                          {/* Seleccionar sucursal */}
+                          <div className="space-y-3">
+                            <Label htmlFor="branch">
+                              {t("step2.selectBranch")}
+                            </Label>
+                            <Select>
+                              <SelectTrigger className="w-auto">
+                                <SelectValue
+                                  placeholder={t(
+                                    "step2.selectBranchPlaceholder",
+                                  )}
+                                />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="vitalfit">
+                                  <div className="flex items-center gap-2">
+                                    <CheckIcon className="h-4 w-4 text-green-500" />
+                                    <span>VitalFit</span>
+                                  </div>
+                                </SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </div>
+
+                          {/* Opciones de compra */}
+                          <div className="space-y-4">
+                            <p className="font-semibold">
+                              {t("step2.paymentOptions")}
                             </p>
+
+                            {/* Pago Móvil */}
+                            <div
+                              className="flex items-center space-x-3 p-3 border rounded-lg hover:bg-muted/50 cursor-pointer"
+                              onClick={() => setPaymentMethod("mobile")}
+                            >
+                              <div className="flex items-center justify-center h-5 w-5">
+                                <input
+                                  type="radio"
+                                  name="paymentMethod"
+                                  value="mobile"
+                                  checked={paymentMethod === "mobile"}
+                                  onChange={() => setPaymentMethod("mobile")}
+                                  className="h-4 w-4 text-orange-500 border-gray-300 focus:ring-orange-500"
+                                />
+                              </div>
+                              <span className="flex-1">
+                                {t("step2.mobilePayment")}
+                              </span>
+                              <DevicePhoneMobileIcon className="h-5 w-5 text-muted-foreground" />
+                            </div>
+
+                            {/* Transferencia Bancaria */}
+                            <div
+                              className="flex items-center space-x-3 p-3 border rounded-lg hover:bg-muted/50 cursor-pointer"
+                              onClick={() => setPaymentMethod("transfer")}
+                            >
+                              <div className="flex items-center justify-center h-5 w-5">
+                                <input
+                                  type="radio"
+                                  name="paymentMethod"
+                                  value="transfer"
+                                  checked={paymentMethod === "transfer"}
+                                  onChange={() => setPaymentMethod("transfer")}
+                                  className="h-4 w-4 text-orange-500 border-gray-300 focus:ring-orange-500"
+                                />
+                              </div>
+                              <span className="flex-1">
+                                {t("step2.bankTransfer")}
+                              </span>
+                              <CurrencyDollarIcon className="h-5 w-5 text-muted-foreground" />
+                            </div>
+                          </div>
+
+                          {/* Información de pago - Se muestra dinámicamente */}
+                          <div className="space-y-6 mt-6">
+                            {/* Información del titular */}
+                            <div className="space-y-4">
+                              <div className="grid grid-cols-2 gap-4">
+                                <div className="flex items-center">
+                                  <div>
+                                    <p className="font-semibold">
+                                      {t("step2.holder")}
+                                    </p>
+                                    <div className="flex p-3 bg-gray-200 border rounded-lg justify-between">
+                                      <p className="text-sm text-muted-foreground">
+                                        VitalFit Cabudare C.A
+                                      </p>
+                                      <ClipboardDocumentListIcon className="h-5 w-5 text-orange-300 cursor-pointer" />
+                                    </div>
+                                  </div>
+                                </div>
+
+                                <div className="flex items-center">
+                                  <div>
+                                    <p className="font-semibold">
+                                      {t("step2.fiscalDocument")}
+                                    </p>
+                                    <div className="flex p-3 bg-gray-200 border rounded-lg justify-between">
+                                      <p className="text-sm text-muted-foreground">
+                                        J-123456789
+                                      </p>
+                                      <ClipboardDocumentListIcon className="h-5 w-5 text-orange-300 cursor-pointer" />
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+
+                            {/* Información bancaria */}
+                            <div className="space-y-4">
+                              <div className="grid grid-cols-2 gap-4">
+                                <div className="flex items-center">
+                                  <div>
+                                    <p className="font-semibold">
+                                      {t("step2.associatedBank")}
+                                    </p>
+                                    <div className="flex p-3 bg-gray-200 border rounded-lg justify-between">
+                                      <p className="text-sm text-muted-foreground">
+                                        Banco de Venezuela
+                                      </p>
+                                      <ClipboardDocumentListIcon className="h-5 w-5 text-orange-300 cursor-pointer" />
+                                    </div>
+                                  </div>
+                                </div>
+
+                                {/* Campo dinámico según método de pago */}
+                                <div className="flex items-center">
+                                  <div>
+                                    <p className="font-semibold">
+                                      {paymentMethod === "mobile"
+                                        ? t("step2.phoneNumber")
+                                        : t("step2.accountNumber")}
+                                    </p>
+                                    <div className="flex p-3 bg-gray-200 border rounded-lg justify-between">
+                                      <p className="text-sm text-muted-foreground">
+                                        {paymentMethod === "mobile"
+                                          ? "0412-1234567"
+                                          : "0105-0000-0000000000"}
+                                      </p>
+                                      <ClipboardDocumentListIcon className="h-5 w-5 text-orange-300 cursor-pointer" />
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+
+                            {/* Información importante */}
+                            <div className="p-4 rounded-md bg-blue-50 border border-blue-200">
+                              <div className="flex items-start gap-3">
+                                <InformationCircleIcon className="h-5 w-5 text-blue-600 mt-0.5" />
+                                <div className="space-y-2">
+                                  <p className="font-semibold">
+                                    {t("step2.important")}
+                                  </p>
+                                  <ul className="text-sm space-y-1">
+                                    <li>• {t("step2.includeExactAmount")}</li>
+                                    <li>• {t("step2.saveReceipt")}</li>
+                                  </ul>
+                                </div>
+                              </div>
+                            </div>
                           </div>
                         </div>
                       </CardContent>
@@ -267,41 +476,11 @@ export default function MembershipPurchase() {
               )}
 
               {currentStep === 3 && (
-                <div className="space-y-8">
-                  <div>
-                    <h2 className="mb-6 text-xl font-bold">
-                      {t("step3.title")}
-                    </h2>
-                    <Card>
-                      <CardContent className="pt-6">
-                        <div className="space-y-4">
-                          <p className="text-muted-foreground">
-                            {t("step3.description")}
-                          </p>
-                          <div className="mt-6 p-4 rounded-md bg-muted">
-                            <p className="text-sm font-semibold text-foreground">
-                              {t("step3.genericContent")}
-                            </p>
-                          </div>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  </div>
-
-                  {/* Navigation Buttons */}
-                  <div className="flex gap-4">
-                    <Button
-                      onClick={handlePrevStep}
-                      variant="outline"
-                      className="flex-1 bg-transparent"
-                    >
-                      {t("navigation.back")}
-                    </Button>
-                    <Button className="flex-1 bg-orange-500 hover:bg-orange-600">
-                      {t("step3.purchaseButton")}
-                    </Button>
-                  </div>
-                </div>
+                <PurchaseConfirmation
+                  onConfirm={() => console.log("Confirmed")}
+                  onCancel={() => console.log("Cancelled")}
+                  onHome={() => router.push("/dashboard")}
+                />
               )}
             </div>
 
