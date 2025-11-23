@@ -17,7 +17,6 @@ import { useAuth } from "@/context/AuthContext";
 import QRCode from "react-qr-code";
 import Wishlist from "./Whislist";
 import { Link } from "@/i18n/routing";
-import { Link } from "@/i18n/routing";
 
 export default function Sidebar() {
   const t = useTranslations("sidebar");
