@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
-import type { BranchMapData } from "@/app/[locale]/branches/FindBranch";
+import type { BranchMapData } from "@/app/[locale]/(public)/branches/FindBranch";
 
 export type MapboxPickerProps = {
   branches: BranchMapData[];
