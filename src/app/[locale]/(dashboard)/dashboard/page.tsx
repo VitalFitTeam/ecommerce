@@ -17,13 +17,5 @@ export default function DashboardPage() {
     }
   }, [token, router]);
 
-  return (
-    <div className="min-h-screen bg-gray-50">
-      <Header />
-      <div className="flex">
-        <Sidebar />
-        <MainContent />
-      </div>
-    </div>
-  );
+  return <MainContent />;
 }

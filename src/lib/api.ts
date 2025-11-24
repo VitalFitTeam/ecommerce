@@ -1,7 +1,6 @@
 export async function fetchAPI(endpoint: string, options: RequestInit = {}) {
   try {
-    const token = localStorage.getItem("token");
-
+    const token = localStorage.getItem("access_token");
     const headers = new Headers(options.headers);
 
     headers.set("Content-Type", "application/json");

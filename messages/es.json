@@ -478,7 +478,10 @@
     "documentNumber": "Doc. Identidad",
     "documentNumberPlaceholder": "Número de documento",
     "editbutton": "Guardar Cambios",
-    "canceleditbutton": "Cancelar"
+    "canceleditbutton": "Cancelar",
+    "uploadPhoto": "Subir foto",
+    "changePhoto": "Cambiar foto",
+    "removePhoto": "Quitar foto"
   },
   "MembershipHistory": {
     "title": "HISTORIAL DE MEMBRESÍAS",
@@ -677,6 +680,111 @@
     "actions": {
       "cancel": "Cancelar",
       "confirm": "Confirmar cancelación"
+    }
+  },
+  "security": {
+    "changePassword": {
+      "ptitle": "Cambiar Contraseña",
+      "pdescription": "Actualiza tu contraseña para proteger la seguridad de tu cuenta",
+      "currentPasswordLabel": "Contraseña Actual",
+      "currentPasswordPlaceholder": "Ingresa tu contraseña actual",
+      "newPasswordLabel": "Contraseña Nueva",
+      "newPasswordPlaceholder": "Ingresa tu nueva contraseña",
+      "confirmPasswordLabel": "Confirmar contraseña",
+      "confirmPasswordPlaceholder": "Confirma tu nueva contraseña",
+      "forgotPasswordLabel": "¿Olvidaste tu contraseña?",
+      "forgotPasswordLink": "Recuperar",
+      "saveNewPasswordButton": "Guardar Nueva Contraseña"
+    },
+    "forgotPassword": {
+      "title": "Recuperar Contraseña",
+      "subtitle": "Ingresa el código de verificación enviado a tu correo para restablecer tu contraseña",
+      "emailSentTo": "Se ha enviado un código de 6 dígitos a {email}",
+      "enterCodeText": "Ingresa el código de 6 dígitos",
+      "verifyButton": "Verificar Código",
+      "resendButton": "Reenviar Código",
+      "newPasswordTitle": "Crea una Nueva Contraseña",
+      "newPasswordLabel": "Contraseña Nueva",
+      "newPasswordPlaceholder": "Ingresa tu nueva contraseña",
+      "confirmPasswordLabel": "Confirmar contraseña",
+      "confirmPasswordPlaceholder": "Confirma tu nueva contraseña",
+      "resetButton": "Restablecer Contraseña",
+      "errors": {
+        "incompleteCode": "Por favor, ingresa el código completo de 6 caracteres",
+        "invalidCode": "Código inválido o expirado",
+        "passwordsMismatch": "Las contraseñas no coinciden",
+        "fillFields": "Por favor completa todos los campos"
+      },
+      "notifications": {
+        "successResetTitle": "Contraseña Actualizada",
+        "successResetDescription": "Tu contraseña se ha actualizado correctamente",
+        "resendSuccessTitle": "Código Enviado",
+        "resendSuccessDescription": "Se ha enviado un nuevo código de verificación a tu correo",
+        "connectionErrorTitle": "Error de Conexión",
+        "connectionErrorDescription": "No se pudo conectar con el servidor. Por favor inténtalo más tarde."
+      }
+    }
+  },
+  "PaymentHistoryScreen": {
+    "title": "HISTORIAL DE PAGOS",
+    "plans": {
+      "monthly": "Mensual"
+    },
+    "status": {
+      "paid": "Pagado",
+      "pending": "Pendiente",
+      "refunded": "Reembolsado"
+    },
+    "columns": {
+      "transactionId": "ID de Transacción",
+      "date": "Fecha",
+      "totalPrice": "Precio total",
+      "status": "Estado",
+      "paymentMethod": "Método de Pago"
+    },
+    "filters": {
+      "payname": "Filtro",
+      "status": "Estado",
+      "startDate": "Desde",
+      "endDate": "Hasta",
+      "clear": "Borrar filtros"
+    },
+    "actions": {
+      "viewDetails": "Ver Detalles",
+      "downloadReceipt": "Descargar Recibo"
+    }
+  },
+  "PaymentHistoryScreenDetail": {
+    "title": "DETALLE DE LA TRANSACCIÓN",
+    "summary": "Resumen de transacción",
+    "planDetail": "Detalle del plan comprado",
+    "startDate": "Fecha Inicio",
+    "endDate": "Fecha Final",
+    "transactionId": "ID Transacción",
+    "dateTime": "Fecha y hora de pago",
+    "paymentMethod": "Método de pago",
+    "total": "Total Cancelado",
+    "download": "Descargar Comprobante",
+    "sendEmail": "Enviar por correo",
+    "invoice": "Factura Electrónica",
+    "statusBadge": {
+      "paid": "Pagado",
+      "pending": "Pendiente",
+      "refunded": "Reembolsado"
+    },
+    "statusLabel": "Estado",
+    "status": {
+      "paid": "Pagado",
+      "pending": "Pendiente",
+      "refunded": "Reembolsado"
+    },
+    "columns": {
+      "type": "Tipo de membresía",
+      "name": "Nombre del plan",
+      "quantity": "Cant.",
+      "unitPrice": "Precio unitario",
+      "discount": "Descuento",
+      "total": "SubTotal"
     }
   }
 }
