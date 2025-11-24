@@ -478,7 +478,10 @@
     "documentNumber": "Doc. Identidad",
     "documentNumberPlaceholder": "Número de documento",
     "editbutton": "Guardar Cambios",
-    "canceleditbutton": "Cancelar"
+    "canceleditbutton": "Cancelar",
+    "uploadPhoto": "Subir foto",
+    "changePhoto": "Cambiar foto",
+    "removePhoto": "Quitar foto"
   },
   "MembershipHistory": {
     "title": "HISTORIAL DE MEMBRESÍAS",

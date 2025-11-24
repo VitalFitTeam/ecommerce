@@ -478,7 +478,10 @@
     "documentNumber": "Document Number",
     "documentNumberPlaceholder": "Document number",
     "editbutton": "Save",
-    "canceleditbutton": "Cancel"
+    "canceleditbutton": "Cancel",
+    "uploadPhoto": "Upload Photo",
+    "changePhoto": "Change Photo",
+    "removePhoto": "Remove Photo"
   },
   "MembershipHistory": {
     "title": "MEMBERSHIP HISTORY",

@@ -18,6 +18,8 @@ export default function Profile() {
     return;
   }
 
+  const profileImage = null; // Reemplaza con la imagen real del usuario
+
   return (
     <main className="min-h-screen bg-white">
       <Header />
@@ -31,6 +33,25 @@ export default function Profile() {
             {t("pbutton")}
           </Button>
         </PageHeader>
+
+        <div className="flex flex-col items-center justify-center mb-6">
+          <div className="relative">
+            <div className="w-32 h-32 rounded-full border-2 border-gray-300 overflow-hidden bg-gray-100 flex items-center justify-center">
+              {profileImage ? (
+                <img
+                  src={profileImage}
+                  alt="Profile"
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <div className="text-gray-400 text-4xl">
+                  {t("name")?.charAt(0) || "U"}
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+
         <ProfileForm />
       </div>
       <Footer />
