@@ -1,9 +1,6 @@
 "use client";
 
 import MagnifyingGlassIcon from "@heroicons/react/24/outline/MagnifyingGlassIcon";
-import Header from "@/components/layout/dashboard/Header";
-import Sidebar from "@/components/layout/dashboard/Sidebar";
-import Footer from "@/components/layout/Footer";
 import { useAuth } from "@/context/AuthContext";
 import { useTranslations } from "next-intl";
 import { PageHeader } from "@/components/ui/PageHeader";
@@ -147,71 +144,66 @@ export default function DashboardPage() {
   );
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <Header />
-      <div className="flex">
-        <Sidebar />
-        <main className="flex-1 p-8">
-          <PageHeader title={t("title")} />
-          <div className="space-y-4 my-4">
-            <div className="flex flex-wrap gap-4 items-end">
-              <div className="relative w-full sm:w-[250px]">
-                <MagnifyingGlassIcon className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                <Input
-                  type="text"
-                  placeholder={t("filters.planName")}
-                  className="w-64 pl-9"
-                  value={planName}
-                  onChange={(e) => setPlanName(e.target.value)}
-                />
-              </div>
-
-              <Select value={status} onValueChange={setStatus}>
-                <SelectTrigger className="w-48">
-                  <SelectValue placeholder={t("filters.status")} />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">{t("filters.status")}</SelectItem>
-                  <SelectItem value="active">{t("status.active")}</SelectItem>
-                  <SelectItem value="cancelled">
-                    {t("status.cancelled")}
-                  </SelectItem>
-                  <SelectItem value="expired">{t("status.expired")}</SelectItem>
-                </SelectContent>
-              </Select>
-
+    <div className="min-h-screen">
+      <main className="p-8">
+        <PageHeader title={t("title")} />
+        <div className="space-y-4 my-4">
+          <div className="flex flex-wrap gap-4 items-end">
+            <div className="relative w-full sm:w-[250px]">
+              <MagnifyingGlassIcon className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
               <Input
-                type="date"
-                placeholder={t("filters.startDate")}
-                className="w-40"
-                value={startDate}
-                onChange={(e) => setStartDate(e.target.value)}
+                type="text"
+                placeholder={t("filters.planName")}
+                className="w-64 pl-9"
+                value={planName}
+                onChange={(e) => setPlanName(e.target.value)}
               />
-              <Input
-                type="date"
-                placeholder={t("filters.endDate")}
-                className="w-40"
-                value={endDate}
-                onChange={(e) => setEndDate(e.target.value)}
-              />
-
-              {showClearFilters && (
-                <Button variant="outline" onClick={clearFilters}>
-                  {t("filters.clear")}
-                </Button>
-              )}
             </div>
 
-            <DataTable
-              columns={columns}
-              data={memberships}
-              actions={actions}
-              enableRowSelection={false}
+            <Select value={status} onValueChange={setStatus}>
+              <SelectTrigger className="w-48">
+                <SelectValue placeholder={t("filters.status")} />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">{t("filters.status")}</SelectItem>
+                <SelectItem value="active">{t("status.active")}</SelectItem>
+                <SelectItem value="cancelled">
+                  {t("status.cancelled")}
+                </SelectItem>
+                <SelectItem value="expired">{t("status.expired")}</SelectItem>
+              </SelectContent>
+            </Select>
+
+            <Input
+              type="date"
+              placeholder={t("filters.startDate")}
+              className="w-40"
+              value={startDate}
+              onChange={(e) => setStartDate(e.target.value)}
             />
+            <Input
+              type="date"
+              placeholder={t("filters.endDate")}
+              className="w-40"
+              value={endDate}
+              onChange={(e) => setEndDate(e.target.value)}
+            />
+
+            {showClearFilters && (
+              <Button variant="outline" onClick={clearFilters}>
+                {t("filters.clear")}
+              </Button>
+            )}
           </div>
-        </main>
-      </div>
-      <Footer />
+
+          <DataTable
+            columns={columns}
+            data={memberships}
+            actions={actions}
+            enableRowSelection={false}
+          />
+        </div>
+      </main>
     </div>
   );
 }

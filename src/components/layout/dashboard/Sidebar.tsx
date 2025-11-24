@@ -82,18 +82,20 @@ export default function Sidebar() {
 
           <hr className="my-6 border-gray-200" />
 
-          <nav className="space-y-1 mb-6">
+          <nav className="space-y-1 mb-6 items-start">
             <Link href="/profile">
               <MenuItem
                 icon={<UserIcon className="w-5 h-5" />}
                 label={t("menu.profile")}
               />
             </Link>
-            <MenuItem
-              icon={<ShieldCheckIcon className="w-5 h-5" />}
-              label={t("menu.security")}
-            />
-            <Link href="/memberships/history">
+            <Link href="/security/changePassword">
+              <MenuItem
+                icon={<ShieldCheckIcon className="w-5 h-5" />}
+                label={t("menu.security")}
+              />
+            </Link>
+            <Link href="/history">
               <MenuItem
                 icon={<CreditCardIcon className="w-5 h-5" />}
                 label={t("menu.membership")}
@@ -151,7 +153,7 @@ function MenuItem({
   return (
     <Button
       onClick={onClick}
-      className={`w-full flex items-center gap-3 px-3 py-2 rounded text-sm font-medium transition ${
+      className={`w-full bg-transparent flex gap-3 px-3 py-2 rounded text-sm font-medium transition justify-start ${
         isRed
           ? "text-red-500 hover:bg-red-50"
           : "text-gray-700 hover:bg-gray-100"
