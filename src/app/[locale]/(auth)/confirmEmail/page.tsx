@@ -98,37 +98,23 @@ function ConfirmEmailContent() {
 
     setLoading(true);
 
-    if (flow !== "recover") {
-      try {
-        const response = api.auth.verifyEmail(verificationCode);
-        console.warn(response);
-        setIncorrectCode(false);
-        setErrorMessage(null);
-        setShowAlert(true);
-      } catch (error) {
-        console.error("Error al conectar con la API:", error);
-        setIncorrectCode(true);
-        setErrorMessage(
-          "No se pudo conectar con el servidor. Intenta más tarde.",
-        );
-        setShowConnectionError(true);
-      } finally {
-        setLoading(false);
-      }
-    } else {
-      const emailCode = localStorage.getItem("code");
-      if (emailCode !== verificationCode) {
-        setIncorrectCode(true);
-        setErrorMessage("Código incorrecto");
-        setLoading(false);
-        return;
-      }
+    try {
+      const response = api.auth.verifyEmail(verificationCode);
+      console.warn(response);
+      localStorage.setItem("code", verificationCode);
+      setIncorrectCode(false);
+      setErrorMessage(null);
+      setShowAlert(true);
+    } catch (error) {
+      console.error("Error al conectar con la API:", error);
+      setIncorrectCode(true);
+      setErrorMessage(
+        "No se pudo conectar con el servidor. Intenta más tarde.",
+      );
+      setShowConnectionError(true);
+    } finally {
+      setLoading(false);
     }
-
-    setLoading(false);
-    setIncorrectCode(false);
-    setErrorMessage(null);
-    setShowAlert(true);
   };
 
   const isCodeComplete = code.every((char) => char !== "");
