@@ -17,7 +17,7 @@ export async function fetchAPI(endpoint: string, options: RequestInit = {}) {
     if (!res.ok) {
       const errorText = await res.text();
       if (res.status === 401) {
-        localStorage.removeItem("token");
+        localStorage.removeItem("access_token");
         window.location.href = "/login";
       }
       throw new Error(`Error ${res.status}: ${errorText}`);
