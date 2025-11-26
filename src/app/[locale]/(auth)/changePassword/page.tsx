@@ -10,6 +10,7 @@ import { passwordSchema } from "@/lib/validation/passwordSchema";
 import { Notification } from "@/components/ui/Notification"; // La importación ya está aquí
 import { Button } from "@/components/ui/button";
 import { useRouter } from "@/i18n/routing";
+import { api } from "@/lib/sdk-config";
 
 export default function PasswordReset() {
   const router = useRouter();
@@ -62,11 +63,9 @@ export default function PasswordReset() {
     }
 
     try {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL;
       const tokenCode = localStorage.getItem("code");
 
       if (!tokenCode) {
-        // 1. Reemplazamos el primer alert (Error en obtener token)
         setShowServerError({
           visible: true,
           message:
@@ -75,37 +74,11 @@ export default function PasswordReset() {
         return;
       }
 
-      const response = await fetch(`${apiUrl}/auth/password/reset`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          confirm_password: formData.confirmPassword,
-          password: formData.password,
-          token: tokenCode,
-        }),
-      });
-
-      if (!response.ok) {
-        const errorText = await response.text();
-        // Intentamos parsear el JSON si es posible para un mensaje más limpio
-        let errorMessage = "Error al cambiar contraseña";
-        try {
-          const errorData = JSON.parse(errorText);
-          errorMessage = errorData.message || errorMessage;
-        } catch {
-          errorMessage = errorText || errorMessage;
-        }
-
-        // 2. Reemplazamos el segundo alert (Error al cambiar contraseña)
-        setShowServerError({
-          visible: true,
-          message: errorMessage,
-        });
-        setIsLoading(false);
-        return;
-      }
+      const response = await api.auth.resetPassword(
+        tokenCode,
+        formData.password,
+        formData.confirmPassword,
+      );
 
       setErrors({});
       setFormData({
@@ -113,11 +86,22 @@ export default function PasswordReset() {
         confirmPassword: "",
       });
       setShowAlert(true);
-    } catch (error) {
-      console.error("Error al conectar con la API:", error);
-      setShowConnectionError(true);
+    } catch (error: any) {
+      console.error("Error al cambiar contraseña:", error);
+
+      if (
+        error.name === "NetworkError" ||
+        error.message?.includes("network") ||
+        error.message?.includes("conectar")
+      ) {
+        setShowConnectionError(true);
+      } else {
+        setShowServerError({
+          visible: true,
+          message: error.message || "Error al cambiar contraseña",
+        });
+      }
     } finally {
-      // Use finally to ensure setIsLoading(false) runs
       setIsLoading(false);
     }
   };
@@ -142,7 +126,7 @@ export default function PasswordReset() {
           onClose={() => setShowConnectionError(false)}
         />
       )}
-      {/* Nueva Notificación de Error del Servidor/Token */}
+
       {showServerError.visible && (
         <Notification
           variant="destructive"
@@ -162,7 +146,6 @@ export default function PasswordReset() {
 
             <form className="w-full" onSubmit={handleSubmit} noValidate>
               <div className="space-y-3 w-full">
-                {/* ... Campos de Contraseña ... */}
                 <div className="flex flex-col">
                   <label
                     htmlFor="password"
