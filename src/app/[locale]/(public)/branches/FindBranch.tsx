@@ -3,20 +3,24 @@
 import { Input } from "@/components/ui/Input";
 import { BranchCardInfo } from "./BranchCardInfo";
 import { Button } from "@/components/ui/button";
-import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import {
-  ClockIcon,
+  MagnifyingGlassIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon,
   MapPinIcon,
-  PhoneIcon,
-  BuildingStorefrontIcon,
 } from "@heroicons/react/24/outline";
-
 import dynamic from "next/dynamic";
 import { useTranslations } from "next-intl";
-import { useEffect, useState, useMemo } from "react";
+import { useMemo, useState } from "react";
 
 const MapboxPicker = dynamic(() => import("@/components/ui/MapboxPicker"), {
   ssr: false,
+  loading: () => (
+    <div className="w-full h-full bg-gray-100 animate-pulse flex flex-col items-center justify-center text-gray-400 gap-2">
+      <MapPinIcon className="w-8 h-8 opacity-50" />
+      <span>Cargando mapa...</span>
+    </div>
+  ),
 });
 
 export type BranchMapData = {
@@ -28,128 +32,151 @@ export type BranchMapData = {
   phone: string;
 };
 
-export default function FindBranch() {
+type FindBranchProps = {
+  initialBranches: BranchMapData[];
+};
+
+export default function FindBranch({ initialBranches }: FindBranchProps) {
   const t = useTranslations("FindBranchPage");
-  const [mapBranches, setMapBranches] = useState<BranchMapData[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    async function fetchMapBranches() {
-      setIsLoading(true);
-      setError(null);
-      try {
-        const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-        const response = await fetch(`${apiUrl}/public/branches-map`);
+  const [mapBranches] = useState(initialBranches);
+  const [selectedBranch, setSelectedBranch] = useState<BranchMapData | null>(
+    null,
+  );
+  const [currentPage, setCurrentPage] = useState(0);
 
-        if (!response.ok) {
-          throw new Error(
-            `Error al obtener las sucursales: ${response.status} ${response.statusText}`,
-          );
-        }
+  const cardsPerPage = 3;
 
-        const data: { data: BranchMapData[] } = await response.json();
-        setMapBranches(data.data);
-      } catch (err) {
-        console.error("Fetch error:", err);
-        setError(
-          "No pudimos cargar las ubicaciones del mapa. Verifica la URL de la API.",
-        );
-      } finally {
-        setIsLoading(false);
-      }
-    }
-    fetchMapBranches();
-  }, []);
+  const validBranches = useMemo(
+    () =>
+      mapBranches
+        .filter(
+          (b) =>
+            typeof b.latitude === "number" &&
+            typeof b.longitude === "number" &&
+            !(b.latitude === 0 && b.longitude === 0),
+        )
+        .map((b) => ({
+          title: b.name,
+          location: b.address,
+          phone: b.phone,
+        })),
+    [mapBranches],
+  );
 
-  const validBranches = useMemo(() => {
-    return mapBranches
-      .filter((branch) => {
-        const isValid =
-          typeof branch.latitude === "number" &&
-          typeof branch.longitude === "number" &&
-          !(branch.latitude === 0 && branch.longitude === 0);
-        return isValid;
-      })
-      .map((branch) => ({
-        title: branch.name,
-        location: branch.address,
-        phone: branch.phone,
-      }));
-  }, [mapBranches, t]);
+  const totalPages = Math.ceil(validBranches.length / cardsPerPage);
+
+  const currentBranches = validBranches.slice(
+    currentPage * cardsPerPage,
+    currentPage * cardsPerPage + cardsPerPage,
+  );
 
   return (
-    <>
-      <section className="py-10 px-6 bg-white">
-        <div className="max-w-6xl mx-auto">
-          <h1 className="text-4xl md:text-5xl font-extrabold md:text-left text-center mb-2 text-gray-900">
+    <div className="bg-gray-50 min-h-screen text-gray-900 flex flex-col">
+      <section className="py-8 px-6 bg-white border-b shadow-sm">
+        <div className="max-w-7xl mx-auto text-center md:text-left">
+          <h1 className="text-3xl md:text-4xl font-bold mb-2 uppercase">
             {t("title")}
           </h1>
-          <p className="text-lg text-gray-600 w-full md:w-2/3 mx-auto md:mx-0 text-center md:text-left">
+          <p className="text-base md:text-lg text-gray-500 max-w-2xl">
             {t("description")}
           </p>
         </div>
       </section>
 
-      <section className="px-6 bg-white">
-        <div className="max-w-6xl mx-auto py-8">
-          <div className="flex flex-col md:flex-row gap-6 mb-8 items-start">
-            <div className="w-full md:w-1/3 flex flex-col gap-3">
-              <div className="relative">
+      <section className="px-4 md:px-6 py-6 max-w-screen-2xl mx-auto w-full">
+        <div className="flex flex-col gap-8 lg:flex-row lg:items-start">
+          <div className="w-full lg:w-1/3 xl:w-[380px] flex flex-col gap-5">
+            <div className="bg-white p-4 rounded-xl shadow-sm border">
+              <div className="relative mb-3">
                 <MagnifyingGlassIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
                 <Input
                   placeholder={t("search_placeholder")}
-                  className="w-full p-3 pl-10 border border-gray-300 rounded-lg shadow-sm focus:ring-1 focus:ring-blue-500 focus:border-blue-500 transition duration-150"
+                  className="w-full h-11 pl-10 bg-gray-50 border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-200"
                 />
               </div>
-              <Button className="w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold py-2.5 px-4 rounded-lg shadow-md transition duration-200 flex items-center justify-center gap-2 text-base">
-                <MagnifyingGlassIcon className="w-5 h-5" />
+
+              <Button className="w-full h-11 bg-orange-500 hover:bg-orange-600 text-white font-semibold rounded-xl flex items-center justify-center gap-2 text-sm">
+                <MapPinIcon className="w-5 h-5" />
                 {t("find_nearest_button")}
               </Button>
             </div>
 
-            <div className="hidden md:block md:w-2/3" />
-          </div>
-          {/* Fila de Sucursales y Mapa */}
-          <div className="flex flex-col-reverse md:flex-row gap-6">
-            <div className="w-full md:w-1/3 space-y-4">
-              {" "}
-              {isLoading && (
-                <div className="p-4 bg-white rounded-lg shadow-md text-center text-orange-600 font-semibold flex items-center justify-center">
-                  <div className="animate-spin inline-block w-5 h-5 border-2 border-current border-t-transparent rounded-full mr-2"></div>
-                  {t("loading_branches")}{" "}
+            <div className="space-y-4">
+              {!validBranches.length && (
+                <div className="p-8 bg-white border border-dashed rounded-xl text-center text-gray-500">
+                  {t("no_valid_branches_found")}
                 </div>
               )}
-              {error && (
-                <div className="p-4 bg-red-50 border border-red-200 rounded-lg shadow-md text-center text-red-700 font-medium">
-                  🚨 {t("error_loading_branches")}{" "}
-                </div>
-              )}
-              {!isLoading &&
-                !error &&
-                validBranches.map((branch, index) => (
+
+              <div className="flex flex-col gap-3">
+                {currentBranches.map((branch) => (
                   <BranchCardInfo
-                    key={index}
+                    key={branch.title}
                     title={branch.title}
                     location={branch.location}
                     phone={branch.phone}
+                    onClick={() =>
+                      setSelectedBranch(
+                        mapBranches.find((b) => b.name === branch.title) ||
+                          null,
+                      )
+                    }
                   />
                 ))}
-              {!isLoading &&
-                !error &&
-                validBranches.length === 0 &&
-                mapBranches.length > 0 && (
-                  <div className="p-4 bg-yellow-50 border border-yellow-200 rounded-lg shadow-md text-center text-yellow-700 font-medium">
-                    {t("no_valid_branches_found")}
-                  </div>
-                )}
+              </div>
+
+              {validBranches.length > 0 && (
+                <div className="flex items-center justify-between bg-white px-3 py-2 rounded-xl border shadow-sm">
+                  <Button
+                    onClick={() => setCurrentPage((p) => Math.max(p - 1, 0))}
+                    disabled={currentPage === 0}
+                    variant="ghost"
+                    size="icon"
+                    className="text-gray-600 hover:text-orange-500 disabled:opacity-30"
+                  >
+                    <ChevronLeftIcon className="w-5 h-5" />
+                  </Button>
+
+                  <span className="text-xs font-semibold text-gray-600">
+                    Página {currentPage + 1} de {totalPages}
+                  </span>
+
+                  <Button
+                    onClick={() =>
+                      setCurrentPage((p) => Math.min(p + 1, totalPages - 1))
+                    }
+                    disabled={currentPage >= totalPages - 1}
+                    variant="ghost"
+                    size="icon"
+                    className="text-gray-600 hover:text-orange-500 disabled:opacity-30"
+                  >
+                    <ChevronRightIcon className="w-5 h-5" />
+                  </Button>
+                </div>
+              )}
             </div>
-            <div className="w-full md:w-2/3 rounded-xl shadow-lg overflow-hidden min-h-[550px]">
-              <MapboxPicker branches={mapBranches} isLoading={isLoading} />
+          </div>
+          <div className="w-full lg:w-2/3">
+            <div
+              className="
+                h-[320px] 
+                md:h-[400px] 
+                lg:h-[calc(100vh-180px)] 
+                xl:h-[calc(100vh-150px)]
+                lg:sticky lg:top-6 
+                rounded-2xl overflow-hidden shadow-xl border bg-gray-100
+              "
+            >
+              <MapboxPicker
+                branches={mapBranches}
+                isLoading={false}
+                selectedBranch={selectedBranch}
+              />
             </div>
           </div>
         </div>
       </section>
-    </>
+    </div>
   );
 }
