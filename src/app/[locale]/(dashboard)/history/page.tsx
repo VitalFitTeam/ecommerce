@@ -128,8 +128,7 @@ export default function DashboardPage() {
           label: t("actions.viewDetails"),
           icon: Eye,
           onClick: () => {
-            console.log("Ver detalles de:", row);
-            // router.push(`/membership/${row.id}`);
+            router.push(`/history/${row.id}`);
           },
         },
         {
