@@ -24,10 +24,19 @@ export interface User {
   first_name: string;
   last_name: string;
   email: string;
+  phone?: string;
+  identity_document?: string;
+  birth_date?: string;
+  gender?: string;
   role: string;
-  role_label?: string;
+  role_id?: string;
+  profile_picture_url?: string;
+  is_validated?: boolean;
   [k: string]: any;
 }
+type SetUserType = (
+  value: User | null | ((prev: User | null) => User | null),
+) => void;
 
 interface AuthContextType {
   token: string | null;
@@ -36,6 +45,7 @@ interface AuthContextType {
   isAuthenticated: boolean;
   login: (token: string, remember?: boolean) => Promise<void>;
   logout: () => Promise<void>;
+  setUser: SetUserType;
 }
 
 const AuthContext = createContext<AuthContextType>({
@@ -45,6 +55,7 @@ const AuthContext = createContext<AuthContextType>({
   isAuthenticated: false,
   login: async () => {},
   logout: async () => {},
+  setUser: () => {},
 });
 
 const decodeToken = (token: string): JwtPayload | null => {
@@ -54,17 +65,25 @@ const decodeToken = (token: string): JwtPayload | null => {
       return null;
     }
     return decoded;
-  } catch (err) {
-    console.warn("decodeToken error", err);
+  } catch {
     return null;
   }
 };
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [token, setToken] = useState<string | null>(null);
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUserState] = useState<User | null>(null);
+
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
+  const setUser: SetUserType = (value) => {
+    setUserState((prev) => {
+      if (typeof value === "function") {
+        return value(prev);
+      }
+      return value;
+    });
+  };
 
   const getUserProfile = useCallback(
     async (token: string): Promise<User | null> => {
@@ -75,26 +94,26 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
       try {
         const profileResponse = await api.user.WhoAmI(token);
-
-        if (!profileResponse || !profileResponse.user) {
+        if (!profileResponse?.user) {
           console.error("Respuesta de WhoAmI inválida");
           return null;
         }
 
         const userData = profileResponse.user;
-        const userRole = userData.role?.name?.toLowerCase();
 
         return {
           user_id: userData.user_id,
           first_name: userData.first_name,
           last_name: userData.last_name,
           email: userData.email,
-          role: userRole,
+          role: userData.role?.name?.toLowerCase(),
+          role_id: userData.role_id,
           is_validated: userData.is_validated ?? false,
           profile_picture_url: userData.profile_picture_url,
           phone: userData.phone,
           identity_document: userData.identity_document,
           birth_date: userData.birth_date,
+          gender: userData.gender ?? "",
         };
       } catch (error) {
         console.error("Error al obtener perfil del usuario:", error);
@@ -111,7 +130,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         const storedToken = localStorage.getItem("access_token");
         if (storedToken) {
           const userProfile = await getUserProfile(storedToken);
-
           if (userProfile) {
             setToken(storedToken);
             setUser(userProfile);
@@ -148,9 +166,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           localStorage.removeItem("access_token");
           setToken(null);
           setUser(null);
-          throw new Error(
-            "Credenciales inválidas o sin permisos de administrador",
-          );
+          throw new Error("Credenciales inválidas o sin permisos");
         }
       } catch (err) {
         console.error("Login error:", err);
@@ -180,6 +196,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     isAuthenticated: !!token && !!user,
     login,
     logout,
+    setUser,
   };
 
   return (
@@ -187,6 +204,4 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   );
 };
 
-export const useAuth = () => {
-  return useContext(AuthContext);
-};
+export const useAuth = () => useContext(AuthContext);

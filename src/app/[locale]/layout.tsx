@@ -7,6 +7,7 @@ import { getMessages } from "next-intl/server";
 import { AuthProvider } from "@/context/AuthContext";
 
 import "../../styles/globals.css";
+import ToasterProvider from "@/components/ToasterProvider";
 
 export const metadata: Metadata = {
   title: "VITALFIT",
@@ -33,7 +34,10 @@ export default async function RootLayout({ children, params }: Props) {
     <html lang={locale} className={`${montserrat.variable} ${bebas.variable}`}>
       <body className="antialiased">
         <NextIntlClientProvider locale={locale} messages={serializableMessages}>
-          <AuthProvider>{children}</AuthProvider>
+          <AuthProvider>
+            {children}
+            <ToasterProvider />
+          </AuthProvider>
         </NextIntlClientProvider>
       </body>
     </html>
