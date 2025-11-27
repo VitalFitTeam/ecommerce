@@ -8,6 +8,7 @@ import {
   Bars3Icon,
   XMarkIcon,
   UserCircleIcon,
+  ShoppingCartIcon,
 } from "@heroicons/react/24/outline";
 import Logo from "@/components/features/Logo";
 import LocaleSwitcher from "../ui/LocaleSwitcher";
@@ -17,14 +18,18 @@ import { UserNav } from "./UserNav";
 
 interface NavbarProps {
   transparent?: boolean;
+  cartItemCount?: number; // opcional, para mostrar badge
 }
 
-export function Navbar({ transparent = false }: NavbarProps) {
+export function Navbar({
+  transparent = false,
+  cartItemCount = 0,
+}: NavbarProps) {
   const t = useTranslations("Navbar");
   const pathname = usePathname();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  const { user, token, logout, loading } = useAuth();
+  const { user, token, logout } = useAuth();
   const router = useRouter();
 
   const isActive = (href: string) =>
@@ -38,6 +43,10 @@ export function Navbar({ transparent = false }: NavbarProps) {
     { key: "contact", href: "/contact" },
   ];
 
+  const handleCartClick = () => {
+    router.push("/purchase");
+  };
+
   return (
     <nav
       className={`
@@ -47,10 +56,10 @@ export function Navbar({ transparent = false }: NavbarProps) {
         flex items-center justify-between
         backdrop-blur-md
         transition-all duration-300
-        sticky top-0 z-50
         ${transparent ? "bg-transparent" : "bg-[#303030]/95 shadow-md"}
       `}
     >
+      {/* Mobile Hamburger */}
       <button
         className="md:hidden p-2 text-white hover:bg-white/10 rounded-lg transition"
         onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -62,18 +71,19 @@ export function Navbar({ transparent = false }: NavbarProps) {
         )}
       </button>
 
+      {/* Logo */}
       <div className="flex items-center gap-3">
         <Logo slogan={true} theme="dark" />
       </div>
 
+      {/* Desktop Nav Items */}
       <div className="hidden md:flex items-center gap-10">
         {navItemsConfig.map((item) => (
           <Link
             key={item.href}
             href={item.href}
             className={`
-              text-sm font-medium 
-              transition-all px-2 py-1 rounded-md
+              text-sm font-medium transition-all px-2 py-1 rounded-md
               ${
                 isActive(item.href)
                   ? "text-white bg-primary shadow-sm"
@@ -86,12 +96,21 @@ export function Navbar({ transparent = false }: NavbarProps) {
         ))}
       </div>
 
+      {/* Right Section */}
       <div className="hidden md:flex items-center gap-4">
         <LocaleSwitcher />
 
-        {loading ? (
-          <div className="w-9 h-9 rounded-full bg-white/20 animate-pulse" />
-        ) : user && token ? (
+        {/* Carrito */}
+        <div className="relative cursor-pointer" onClick={handleCartClick}>
+          <ShoppingCartIcon className="w-6 h-6 text-white hover:text-primary transition" />
+          {cartItemCount > 0 && (
+            <span className="absolute -top-2 -right-2 inline-flex items-center justify-center px-1.5 py-0.5 text-xs font-bold leading-none text-white bg-red-600 rounded-full">
+              {cartItemCount}
+            </span>
+          )}
+        </div>
+
+        {user && token ? (
           <UserNav
             user={user}
             onHomeClick={() => router.push("/dashboard")}
@@ -117,8 +136,9 @@ export function Navbar({ transparent = false }: NavbarProps) {
         )}
       </div>
 
+      {/* Mobile Menu */}
       {isMenuOpen && (
-        <div className="absolute top-16 left-0 right-0 bg-[#303030] border-t md:hidden z-40 shadow-xl animate-fade-in">
+        <div className="absolute top-16 left-0 right-0 bg-[#303030] border-t md:hidden z-40 shadow-xl">
           <div className="flex flex-col p-4 gap-4">
             {navItemsConfig.map((item) => (
               <Link
@@ -126,8 +146,7 @@ export function Navbar({ transparent = false }: NavbarProps) {
                 href={item.href}
                 onClick={() => setIsMenuOpen(false)}
                 className={`
-                  py-3 px-4 rounded-lg 
-                  text-sm font-medium
+                  py-3 px-4 rounded-lg text-sm font-medium
                   ${
                     isActive(item.href)
                       ? "text-white bg-primary"
@@ -138,16 +157,24 @@ export function Navbar({ transparent = false }: NavbarProps) {
                 {t(`navItems.${item.key}`)}
               </Link>
             ))}
+
+            {/* Mobile User */}
             <div className="flex flex-col gap-3 pt-3 border-t border-white/10">
-              {loading ? (
-                <div className="w-full h-10 bg-white/10 animate-pulse rounded-lg" />
-              ) : user && token ? (
-                <Link href="/dashboard" onClick={() => setIsMenuOpen(false)}>
-                  <Button className="bg-slate-700 w-full flex items-center justify-center gap-2 text-white shadow">
-                    <UserCircleIcon className="w-5 h-5" />
-                    {user.first_name}
-                  </Button>
-                </Link>
+              {user && token ? (
+                <>
+                  <Link href="/purchase" onClick={() => setIsMenuOpen(false)}>
+                    <Button className="bg-slate-700 w-full flex items-center justify-center gap-2 text-white shadow">
+                      <ShoppingCartIcon className="w-5 h-5" />
+                      {t("cart")}
+                    </Button>
+                  </Link>
+                  <Link href="/dashboard" onClick={() => setIsMenuOpen(false)}>
+                    <Button className="bg-slate-700 w-full flex items-center justify-center gap-2 text-white shadow">
+                      <UserCircleIcon className="w-5 h-5" />
+                      {user.first_name}
+                    </Button>
+                  </Link>
+                </>
               ) : (
                 <>
                   <Link href="/login" onClick={() => setIsMenuOpen(false)}>
@@ -167,6 +194,8 @@ export function Navbar({ transparent = false }: NavbarProps) {
                 </>
               )}
             </div>
+
+            {/* Locale Mobile */}
             <div className="pt-3 border-t border-white/10">
               <LocaleSwitcher />
             </div>
