@@ -73,7 +73,7 @@ export function Navbar({
 
       {/* Logo */}
       <div className="flex items-center gap-3">
-        <Logo slogan={true} theme="dark" />
+        <Logo slogan={true} theme="light" />
       </div>
 
       {/* Desktop Nav Items */}
