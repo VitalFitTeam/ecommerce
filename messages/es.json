@@ -724,5 +724,10 @@
         "connectionErrorDescription": "No se pudo conectar con el servidor. Por favor inténtalo más tarde."
       }
     }
+  },
+  "UserNav": {
+    "home": "Inicio",
+    "profile": "Perfil",
+    "logout": "Cerrar sesión"
   }
 }
