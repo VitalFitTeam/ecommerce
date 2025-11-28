@@ -14,7 +14,6 @@ import {
 } from "@vitalfit/sdk";
 import { useAuth } from "@/context/AuthContext";
 
-// Tipos internos
 interface InvoicePayment {
   amount_paid: number;
   receipt_url?: string;
@@ -41,7 +40,6 @@ export default function CheckoutPage() {
   const [error, setError] = useState("");
   const [invoiceData, setInvoiceData] = useState<InvoiceData | null>(null);
 
-  // Cargar membresía seleccionada
   useEffect(() => {
     const loadMembership = async () => {
       if (!membershipId) {
@@ -99,7 +97,6 @@ export default function CheckoutPage() {
         ],
       };
 
-      // Crear factura
       const invoiceRes = await api.billing.createInvoice(invoicePayload, token);
       const invoiceId = invoiceRes.invoice_id;
 
@@ -116,7 +113,6 @@ export default function CheckoutPage() {
           token,
         );
 
-      // Guardar datos para StepSuccess
       setInvoiceData({
         invoice_number: invoiceRes.invoice_id,
         payments: [{ amount_paid: bookingData.price, receipt_url: "" }],

@@ -20,7 +20,7 @@ interface Props {
   currency: string;
   date: string;
   receiptUrl?: string;
-  isPending?: boolean; // Prop para alternar entre "Éxito total" y "En verificación"
+  isPending?: boolean;
 }
 
 export const StepSuccess = ({
@@ -29,9 +29,8 @@ export const StepSuccess = ({
   currency,
   date,
   receiptUrl,
-  isPending = false, // Por defecto asume éxito, cambia a true si es transferencia
+  isPending = false,
 }: Props) => {
-  // Icono y colores dinámicos según el estado
   const statusColor = isPending ? "text-orange-500" : "text-green-500";
   const statusBg = isPending ? "bg-orange-500" : "bg-green-500";
   const statusLightBg = isPending ? "bg-orange-50" : "bg-green-50";
@@ -40,11 +39,9 @@ export const StepSuccess = ({
   return (
     <div className="max-w-3xl mx-auto animate-in fade-in zoom-in-95 duration-500 p-4">
       <Card className="bg-white rounded-xl shadow-xl border-0 overflow-hidden relative">
-        {/* Decoración superior */}
         <div className={`absolute top-0 left-0 w-full h-2 ${statusBg}`} />
 
         <div className="p-8">
-          {/* HEADER: ÍCONO Y TÍTULO */}
           <div className="text-center mb-8">
             <div className="flex justify-center mb-4">
               <div
@@ -67,7 +64,6 @@ export const StepSuccess = ({
             </p>
           </div>
 
-          {/* ALERTA DE VERIFICACIÓN (Solo si está pendiente) */}
           {isPending && (
             <div
               className={`mb-8 flex gap-4 p-4 rounded-lg ${statusLightBg} border ${statusBorder}`}
@@ -86,7 +82,6 @@ export const StepSuccess = ({
           )}
 
           <div className="grid md:grid-cols-2 gap-8">
-            {/* COLUMNA IZQ: RESUMEN FINANCIERO (Ticket) */}
             <div className="bg-slate-50 rounded-xl border border-gray-200 overflow-hidden flex flex-col">
               <div className="bg-slate-100/80 p-3 border-b border-gray-200 flex items-center gap-2 text-gray-500">
                 <Receipt size={16} />
@@ -122,27 +117,7 @@ export const StepSuccess = ({
               </div>
             </div>
 
-            {/* COLUMNA DER: BENEFICIOS (Del segundo código) */}
             <div className="flex flex-col justify-between">
-              <div>
-                <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wide mb-3 flex items-center gap-2">
-                  <Star className="text-orange-500 w-4 h-4" /> Tu plan incluye:
-                </h3>
-                <div className="grid grid-cols-2 gap-3">
-                  <div className="p-3 border border-gray-100 rounded-lg bg-gray-50/50 hover:bg-orange-50 hover:border-orange-200 transition-colors">
-                    <Trophy className="text-orange-400 w-5 h-5 mb-2" />
-                    <p className="text-xs text-gray-500 font-medium">Validez</p>
-                    <p className="font-bold text-gray-800">30 Días</p>
-                  </div>
-                  <div className="p-3 border border-gray-100 rounded-lg bg-gray-50/50 hover:bg-orange-50 hover:border-orange-200 transition-colors">
-                    <Dumbbell className="text-orange-400 w-5 h-5 mb-2" />
-                    <p className="text-xs text-gray-500 font-medium">Acceso</p>
-                    <p className="font-bold text-gray-800">Ilimitado</p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Texto de soporte */}
               <div className="mt-6 text-center md:text-left">
                 <p className="text-xs text-gray-400">
                   ¿Dudas? Contáctanos en{" "}
@@ -154,7 +129,6 @@ export const StepSuccess = ({
             </div>
           </div>
 
-          {/* BOTONES DE ACCIÓN */}
           <div className="flex flex-col sm:flex-row gap-3 justify-center items-center mt-8 pt-6 border-t border-gray-100">
             <Link href="/dashboard" className="w-full sm:w-auto">
               <Button
