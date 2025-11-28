@@ -70,7 +70,7 @@ export default function RecoverPassword() {
           description={t("successNotification.description")}
           onClose={() => {
             setShowAlert(false);
-            router.push("/confirmEmail?flow=recover");
+            router.replace("/confirmEmail?flow=recover");
           }}
         />
       )}

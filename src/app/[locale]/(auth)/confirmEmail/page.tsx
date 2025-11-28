@@ -145,7 +145,9 @@ function ConfirmEmailContent() {
           }
           onClose={() => {
             setShowAlert(false);
-            router.push(flow === "recover" ? "/changePassword" : "/dashboard");
+            router.replace(
+              flow === "recover" ? "/changePassword" : "/dashboard",
+            );
           }}
         />
       )}

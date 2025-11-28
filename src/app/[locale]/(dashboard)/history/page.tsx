@@ -35,7 +35,7 @@ export default function DashboardPage() {
 
   useEffect(() => {
     if (!token) {
-      router.push("/login");
+      router.replace("/login");
     }
   }, [token, router]);
 
@@ -128,7 +128,7 @@ export default function DashboardPage() {
           label: t("actions.viewDetails"),
           icon: Eye,
           onClick: () => {
-            router.push(`/history/${row.id}`);
+            router.replace(`/history/${row.id}`);
           },
         },
         {

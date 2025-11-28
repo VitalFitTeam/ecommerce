@@ -40,7 +40,7 @@ export default function CancelMembershipPage() {
   useEffect(() => {
     const found = memberships.find((m) => m.id === id);
     if (!found || found.status !== "activa") {
-      router.push("/history");
+      router.replace("/history");
     } else {
       setMembership(found);
     }
@@ -118,7 +118,7 @@ export default function CancelMembershipPage() {
               <Button
                 className="w-1/2"
                 variant="outline"
-                onClick={() => router.push("/history")}
+                onClick={() => router.replace("/history")}
               >
                 {t("actions.cancel")}
               </Button>

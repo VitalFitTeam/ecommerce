@@ -114,7 +114,7 @@ export default function PasswordReset() {
           description="¡Contraseña restablecida exitosamente!"
           onClose={() => {
             setShowAlert(false);
-            router.push("/login");
+            router.replace("/login");
           }}
         />
       )}
