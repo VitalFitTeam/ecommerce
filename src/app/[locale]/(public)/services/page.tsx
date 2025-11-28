@@ -139,7 +139,6 @@ export default function ServicesPage() {
               placeholder={t("filters.maxPrice")}
               value={maxPrice ?? ""}
               onChange={(e) => setMaxPrice(Number(e.target.value))}
-              className="w-40 px-3 py-2 border rounded-lg text-sm text-gray-700"
             />
             <select
               value={sort}
