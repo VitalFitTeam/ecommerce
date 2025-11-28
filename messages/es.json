@@ -48,29 +48,19 @@
     }
   },
   "ServicesPage": {
-    "title": "<highlight>NUESTROS</highlight> SERVICIOS",
-    "subtitle": "Explora la variedad de clases que ofrecemos para ayudarte a alcanzar tus metas de fitness.",
     "filters": {
-      "searchPlaceholder": "Buscar servicio por nombre...",
-      "ratingDefault": "Calificación",
-      "categoryDefault": "Categoría",
-      "viewLabel": "Vista:",
+      "searchPlaceholder": "Buscar servicios...",
+      "categoryDefault": "Todas las categorías",
+      "maxPrice": "Precio máximo",
+      "sortDesc": "Mayor precio",
+      "sortAsc": "Menor precio",
+      "viewLabel": "Vista",
       "viewGrid": "Cuadrícula",
       "viewList": "Lista",
       "clear": "Limpiar filtros"
     },
-    "ratings": {
-      "5stars": "(5 estrellas)",
-      "4stars": "(4 estrellas o más)",
-      "3stars": "(3 estrellas o más)"
-    },
-    "categories": {
-      "yoga": "Yoga",
-      "crossfit": "CrossFit",
-      "spinning": "Spinning",
-      "strength": "Fuerza",
-      "cardio": "Cardio"
-    }
+    "title": "Nuestros <highlight>Servicios</highlight>",
+    "subtitle": "Explora todo lo que ofrecemos para tu bienestar."
   },
   "BranchesPage": {
     "title": "<highlight>NUESTRAS</highlight> <highlight-dark>SUCURSALES</highlight-dark>",
@@ -729,5 +719,21 @@
     "home": "Inicio",
     "profile": "Perfil",
     "logout": "Cerrar sesión"
+  },
+  "ServiceModal": {
+    "nonMember": "No miembro",
+    "member": "Miembro",
+    "minutes": "minutos",
+    "description": "Descripción",
+    "availableSchedules": "Horarios disponibles",
+    "bookNow": "Reservar ahora",
+    "moreInfo": "Más información"
+  },
+  "ServiceCard": {
+    "member": "Miembro",
+    "nonMember": "No miembro",
+    "minutes": "minutos",
+    "learnMore": "Saber más",
+    "categoryDefault": "General"
   }
 }

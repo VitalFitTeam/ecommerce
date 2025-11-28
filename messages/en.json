@@ -48,29 +48,19 @@
     }
   },
   "ServicesPage": {
-    "title": "<highlight>OUR</highlight> SERVICES",
-    "subtitle": "Explore the variety of classes we offer to help you reach your fitness goals.",
     "filters": {
-      "searchPlaceholder": "Search service by name...",
-      "ratingDefault": "Rating",
-      "categoryDefault": "Category",
-      "viewLabel": "View:",
+      "searchPlaceholder": "Search services...",
+      "categoryDefault": "All categories",
+      "maxPrice": "Maximum price",
+      "sortDesc": "Higher price",
+      "sortAsc": "Lower price",
+      "viewLabel": "View",
       "viewGrid": "Grid",
       "viewList": "List",
       "clear": "Clear filters"
     },
-    "ratings": {
-      "5stars": "(5 stars)",
-      "4stars": "(4 stars or more)",
-      "3stars": "(3 stars or more)"
-    },
-    "categories": {
-      "yoga": "Yoga",
-      "crossfit": "CrossFit",
-      "spinning": "Spinning",
-      "strength": "Strength",
-      "cardio": "Cardio"
-    }
+    "title": "Our <highlight>Services</highlight>",
+    "subtitle": "Explore everything we offer for your well-being."
   },
   "BranchesPage": {
     "title": "<highlight>OUR</highlight> <highlight-dark>LOCATIONS</highlight-dark>",
@@ -730,5 +720,21 @@
     "home": "Home",
     "profile": "Profile",
     "logout": "Sign out"
+  },
+  "ServiceModal": {
+    "nonMember": "Non-member",
+    "member": "Member",
+    "minutes": "minutes",
+    "description": "Description",
+    "availableSchedules": "Available Schedules",
+    "bookNow": "Book Now",
+    "moreInfo": "More Info"
+  },
+  "ServiceCard": {
+    "member": "Member",
+    "nonMember": "Non-member",
+    "minutes": "minutes",
+    "learnMore": "Learn more",
+    "categoryDefault": "General"
   }
 }
