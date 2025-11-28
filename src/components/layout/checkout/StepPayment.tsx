@@ -1,5 +1,6 @@
 "use client";
 
+import { Store, CreditCard, AlertCircle } from "lucide-react";
 import {
   Select,
   SelectTrigger,
@@ -7,16 +8,19 @@ import {
   SelectContent,
   SelectItem,
 } from "@/components/ui/select";
-import { useAuth } from "@/context/AuthContext";
-import { api } from "@/lib/sdk-config";
-import { PaginatedBranch, BranchPaymentMethodInfo } from "@vitalfit/sdk";
-import { useEffect, useState } from "react";
+import type { PaginatedBranch, BranchPaymentMethodInfo } from "@vitalfit/sdk";
 
+// 1. Interfaz extendida: Ahora recibimos la data, no la buscamos.
 interface Props {
   selectedBranch: string;
   setSelectedBranch: (value: string) => void;
   selectedMethod: string;
   setSelectedMethod: (value: string) => void;
+
+  // Datos que vienen del hook padre
+  branches: PaginatedBranch[];
+  methods: BranchPaymentMethodInfo[];
+  loading?: boolean; // Opcional, para estados de carga generales
 }
 
 export const StepPayment = ({
@@ -24,113 +28,124 @@ export const StepPayment = ({
   setSelectedBranch,
   selectedMethod,
   setSelectedMethod,
+  branches,
+  methods,
+  loading = false,
 }: Props) => {
-  const { token } = useAuth();
-
-  const [branches, setBranches] = useState<PaginatedBranch[]>([]);
-  const [methods, setMethods] = useState<BranchPaymentMethodInfo[]>([]);
-  const [loadingBranches, setLoadingBranches] = useState(true);
-  const [loadingMethods, setLoadingMethods] = useState(false);
-  const [error, setError] = useState("");
-
-  useEffect(() => {
-    if (!token) {
-      return;
-    }
-
-    setLoadingBranches(true);
-    api.branch
-      .getBranches({ page: 1, search: "" }, token)
-      .then((res) => {
-        setBranches(res.data || []);
-      })
-      .catch((err) => {
-        console.error(err);
-        setError("No se pudieron cargar las sucursales");
-      })
-      .finally(() => setLoadingBranches(false));
-  }, [token]);
-
-  useEffect(() => {
-    if (!selectedBranch || !token) {
-      setMethods([]);
-      return;
-    }
-
-    setLoadingMethods(true);
-    api.paymentMethod
-      .getBranchPaymentMethods(selectedBranch, token)
-      .then((res) => setMethods(res.data || []))
-      .catch((err) => {
-        console.error(err);
-        setMethods([]);
-        setError("No se pudieron cargar los métodos de pago");
-      })
-      .finally(() => setLoadingMethods(false));
-  }, [selectedBranch, token]);
+  // Lógica derivada simple (Computed state)
+  const isMethodDisabled = !selectedBranch || methods.length === 0;
 
   return (
-    <div className="space-y-6">
-      {error && <p className="text-red-500 text-sm">{error}</p>}
+    <div className="space-y-6 bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
+      <div className="border-b border-gray-100 pb-4 mb-4">
+        <h2 className="text-lg font-semibold text-gray-900">
+          Detalles de Facturación
+        </h2>
+        <p className="text-sm text-gray-500">
+          Selecciona dónde y cómo deseas pagar.
+        </p>
+      </div>
 
-      <div>
-        <label className="block text-sm font-medium mb-1">Sucursal</label>
+      {/* 1. Selector de Sucursal */}
+      <div className="space-y-2">
+        <label className="text-sm font-medium text-gray-700 flex items-center gap-2">
+          <Store size={16} className="text-gray-400" />
+          Sucursal
+        </label>
+
         <Select
-          onValueChange={setSelectedBranch}
           value={selectedBranch}
-          disabled={loadingBranches}
+          onValueChange={(val) => {
+            setSelectedBranch(val);
+            // Nota: El reset del método se maneja en el padre o aquí si prefieres
+            // setSelectedMethod("");
+          }}
+          disabled={loading || branches.length === 0}
         >
-          <SelectTrigger className="w-full">
+          <SelectTrigger className="w-full h-11 bg-gray-50/50 border-gray-200 focus:ring-orange-500">
             <SelectValue
               placeholder={
-                loadingBranches ? "Cargando..." : "Selecciona una sucursal"
+                loading ? "Cargando sucursales..." : "Selecciona una sucursal"
               }
             />
           </SelectTrigger>
 
-          <SelectContent className="max-h-60 overflow-y-auto">
-            {branches.map((branch) => (
-              <SelectItem key={branch.branch_id} value={branch.branch_id}>
-                {branch.name}
-              </SelectItem>
-            ))}
+          <SelectContent>
+            {branches.length > 0 ? (
+              branches.map((branch) => (
+                <SelectItem
+                  key={branch.branch_id}
+                  value={branch.branch_id}
+                  className="cursor-pointer"
+                >
+                  <span className="font-medium">{branch.name}</span>
+                </SelectItem>
+              ))
+            ) : (
+              <div className="p-3 text-sm text-gray-500 text-center">
+                No hay sucursales disponibles
+              </div>
+            )}
           </SelectContent>
         </Select>
       </div>
 
-      <div>
-        <label className="block text-sm font-medium mb-1">
-          Métodos de pago
+      {/* 2. Selector de Método de Pago */}
+      <div className="space-y-2 animate-in fade-in slide-in-from-top-2 duration-300">
+        <label className="text-sm font-medium text-gray-700 flex items-center gap-2">
+          <CreditCard size={16} className="text-gray-400" />
+          Método de Pago
         </label>
+
         <Select
-          onValueChange={setSelectedMethod}
           value={selectedMethod}
-          disabled={!selectedBranch || loadingMethods}
+          onValueChange={setSelectedMethod}
+          disabled={isMethodDisabled}
         >
-          <SelectTrigger className="w-full">
+          <SelectTrigger
+            className={`w-full h-11 transition-colors ${
+              !selectedBranch
+                ? "bg-gray-100 text-gray-400"
+                : "bg-gray-50/50 border-gray-200"
+            }`}
+          >
             <SelectValue
               placeholder={
-                loadingMethods
-                  ? "Cargando métodos..."
-                  : "Selecciona un método de pago"
+                !selectedBranch
+                  ? "Primero selecciona una sucursal"
+                  : "Selecciona cómo pagar"
               }
             />
           </SelectTrigger>
 
-          <SelectContent className="max-h-60 overflow-y-auto">
-            {methods.length === 0 && !loadingMethods ? (
-              <div className="p-2 text-gray-500 text-sm">
-                No hay métodos disponibles
+          <SelectContent>
+            {methods.length === 0 ? (
+              <div className="p-4 text-center text-sm text-gray-500 flex flex-col items-center gap-2">
+                <AlertCircle size={20} className="text-orange-400" />
+                <p>No hay métodos para esta sucursal</p>
               </div>
             ) : (
               methods.map((method) => (
-                <SelectItem key={method.method_id} value={method.method_id}>
-                  {method.name || "(Método sin nombre)"}
+                <SelectItem
+                  key={method.method_id}
+                  value={method.method_id}
+                  className="cursor-pointer"
+                >
+                  {/* Aquí podrías mapear iconos según el nombre del método si quisieras */}
+                  {method.name || "Método estándar"}
                 </SelectItem>
               ))
             )}
           </SelectContent>
         </Select>
+
+        {/* Mensaje de ayuda contextual */}
+        {!selectedBranch && (
+          <p className="text-xs text-orange-600/80 bg-orange-50 p-2 rounded border border-orange-100">
+            ⓘ Debes seleccionar una sucursal para ver los métodos de pago
+            disponibles.
+          </p>
+        )}
       </div>
     </div>
   );
