@@ -65,7 +65,7 @@ export default function MembershipDetailsPage() {
   useEffect(() => {
     const found = memberships.find((m) => m.id === id);
     if (!found) {
-      router.push("/memberships");
+      router.replace("/memberships");
     } else {
       setMembership(found);
     }
@@ -126,7 +126,7 @@ export default function MembershipDetailsPage() {
           <Button variant="outline">{t("actions.update")}</Button>
           <Button
             variant="outline"
-            onClick={() => router.push(`${id}/cancel`)}
+            onClick={() => router.replace(`${id}/cancel`)}
             className="text-red-500"
           >
             {t("actions.cancel")}

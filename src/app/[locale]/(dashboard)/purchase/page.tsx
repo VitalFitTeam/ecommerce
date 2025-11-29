@@ -108,7 +108,7 @@ export default function MembershipPurchase() {
   useEffect(() => {
     if (!loading) {
       if (!isAuthenticated) {
-        router.push("/login");
+        router.replace("/login");
       } else {
         setAuthChecked(true);
       }
@@ -479,7 +479,7 @@ export default function MembershipPurchase() {
                 <PurchaseConfirmation
                   onConfirm={() => console.log("Confirmed")}
                   onCancel={() => console.log("Cancelled")}
-                  onHome={() => router.push("/dashboard")}
+                  onHome={() => router.replace("/dashboard")}
                 />
               )}
             </div>
