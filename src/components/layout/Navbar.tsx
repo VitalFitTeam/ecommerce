@@ -1,22 +1,22 @@
 "use client";
 
 import { useState } from "react";
-import { Link } from "@/i18n/routing";
-import { usePathname } from "next/navigation";
+import { Link, usePathname } from "@/i18n/routing";
 import { Button } from "@/components/ui/button";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import Logo from "@/components/features/Logo";
 import LocaleSwitcher from "../ui/LocaleSwitcher";
-import { useTranslations } from "next-intl"; // Importado
+import { useTranslations } from "next-intl";
 
 interface NavbarProps {
   transparent?: boolean;
 }
 
 export function Navbar({ transparent = false }: NavbarProps) {
-  const t = useTranslations("Navbar"); // Inicializado
+  const t = useTranslations("Navbar");
   const pathname = usePathname();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const isHome = pathname === "/";
 
   const isActive = (href: string) => {
     if (href === "/" && pathname === "/") {
@@ -28,7 +28,6 @@ export function Navbar({ transparent = false }: NavbarProps) {
     return false;
   };
 
-  // Configuración de los ítems de navegación usando claves de traducción
   const navItemsConfig = [
     { key: "home", href: "/" },
     { key: "services", href: "/services" },
@@ -64,6 +63,7 @@ export function Navbar({ transparent = false }: NavbarProps) {
           <Link
             key={item.href}
             href={item.href}
+            replace={!isHome}
             className={`transition-colors ${
               isActive(item.href)
                 ? "text-white bg-primary rounded border-primary p-2"
@@ -77,7 +77,7 @@ export function Navbar({ transparent = false }: NavbarProps) {
 
       {/* Botones Desktop */}
       <div className="hidden md:flex items-center gap-3">
-        <Link href="/login">
+        <Link href="/login" replace={!isHome}>
           <Button
             variant="ghost"
             className="text-primary border border-primary hover:bg-primary hover:text-white"
@@ -85,7 +85,7 @@ export function Navbar({ transparent = false }: NavbarProps) {
             {t("loginButton")} {/* Traducción */}
           </Button>
         </Link>
-        <Link href="/register">
+        <Link href="/register" replace={!isHome}>
           <Button className="bg-primary hover:bg-orange-600 text-white">
             {t("registerButton")} {/* Traducción */}
           </Button>
@@ -101,6 +101,7 @@ export function Navbar({ transparent = false }: NavbarProps) {
                 key={item.href}
                 href={item.href}
                 onClick={() => setIsMenuOpen(false)}
+                replace={!isHome}
                 className={`transition-colors py-2 px-4 rounded-lg ${
                   isActive(item.href)
                     ? "text-white bg-primary"
@@ -112,7 +113,11 @@ export function Navbar({ transparent = false }: NavbarProps) {
             ))}
 
             <div className="flex flex-col gap-2 pt-2 border-t border-slate-800">
-              <Link href="/login" onClick={() => setIsMenuOpen(false)}>
+              <Link
+                href="/login"
+                onClick={() => setIsMenuOpen(false)}
+                replace={!isHome}
+              >
                 <Button
                   variant="ghost"
                   className="text-primary border border-primary hover:bg-primary hover:text-white w-full"
@@ -120,7 +125,11 @@ export function Navbar({ transparent = false }: NavbarProps) {
                   {t("loginButton")} {/* Traducción */}
                 </Button>
               </Link>
-              <Link href="/register" onClick={() => setIsMenuOpen(false)}>
+              <Link
+                href="/register"
+                onClick={() => setIsMenuOpen(false)}
+                replace={!isHome}
+              >
                 <Button className="bg-primary hover:bg-orange-600 text-white w-full">
                   {t("registerButton")} {/* Traducción */}
                 </Button>

@@ -201,6 +201,7 @@ export default function Login() {
             text={t("noAccount.text")}
             linkText={t("noAccount.link")}
             href="/register"
+            replace={true}
           />
         </AuthCard>
       </div>

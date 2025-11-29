@@ -211,6 +211,7 @@ export default function PasswordReset() {
               text="¿Recuerdas tu Contraseña?"
               linkText="Iniciar Sesión"
               href="/login"
+              replace={true}
             />
           </AuthCard>
         </div>

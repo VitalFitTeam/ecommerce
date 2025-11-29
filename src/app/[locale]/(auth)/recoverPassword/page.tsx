@@ -141,6 +141,7 @@ export default function RecoverPassword() {
               text={t("footer.text")}
               linkText={t("footer.linkText")}
               href="/login"
+              replace={true}
             />
           </AuthCard>
         </div>
