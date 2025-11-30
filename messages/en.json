@@ -133,9 +133,38 @@
       "submitButton": "Continue",
       "processing": "Processing..."
     },
-    "footer": {
-      "text": "Remember your Password?",
-      "linkText": "Log In"
+    "Footer": {
+      "tagline": "Your health, our passion.",
+      "quickLinks": {
+        "title": "Quick Links",
+        "links": {
+          "services": "Services",
+          "membership": "Membership",
+          "branches": "Branches",
+          "contact": "Contact"
+        }
+      },
+      "services": {
+        "title": "Our Services",
+        "list": {
+          "yoga": "Yoga",
+          "crossfit": "CrossFit",
+          "spinning": "Spinning",
+          "pilates": "Pilates"
+        }
+      },
+      "contact": {
+        "title": "Contact Us",
+        "phone": "+1 234 567 890",
+        "email": "info@example.com",
+        "address": "123 Wellness St, City, Country"
+      },
+      "social": {
+        "instagram": "https://www.instagram.com/vitalfit.68?igsh=eGQ2b3EycmsyZGZk",
+        "twitter": "https://x.com/VITALFIT68?t=1RTd9CVa29nfzK9RtHvw5w&s=08",
+        "facebook": "https://www.facebook.com/profile.php?id=61584110738046&mibextid=rS40aB7S9Ucbxw6v"
+      },
+      "copyright": "© {year} VitalFit. All rights reserved."
     },
     "successNotification": {
       "title": "Check your email",
