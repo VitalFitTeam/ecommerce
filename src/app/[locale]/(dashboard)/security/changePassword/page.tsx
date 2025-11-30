@@ -80,7 +80,7 @@ export default function Profile() {
             {t("forgotPasswordLabel")}{" "}
             <a
               onClick={() => {
-                router.push("/security/forgotPassword");
+                router.replace("/security/forgotPassword");
               }}
               className="text-orange-400 hover:text-blue-800"
             >

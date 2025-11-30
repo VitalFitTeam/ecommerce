@@ -114,7 +114,7 @@ export default function PasswordReset() {
           description="¡Contraseña restablecida exitosamente!"
           onClose={() => {
             setShowAlert(false);
-            router.push("/login");
+            router.replace("/login");
           }}
         />
       )}
@@ -211,6 +211,7 @@ export default function PasswordReset() {
               text="¿Recuerdas tu Contraseña?"
               linkText="Iniciar Sesión"
               href="/login"
+              replace={true}
             />
           </AuthCard>
         </div>

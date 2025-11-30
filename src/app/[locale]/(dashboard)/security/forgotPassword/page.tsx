@@ -32,7 +32,9 @@ export default function ForgotPassword() {
 
   const handleInputChange = (index: number, value: string) => {
     const char = value.slice(-1).toUpperCase();
-    if (!isValidChar(char) && char !== "") {return;}
+    if (!isValidChar(char) && char !== "") {
+      return;
+    }
 
     const newCode = [...code];
     newCode[index] = char;
@@ -119,7 +121,9 @@ export default function ForgotPassword() {
 
   const handleResetSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!token) {return;}
+    if (!token) {
+      return;
+    }
     if (!password || !confirmPassword) {
       setErrorMessage("Por favor completa todos los campos");
       setIncorrectCode(true);
@@ -135,7 +139,7 @@ export default function ForgotPassword() {
     try {
       await api.auth.resetPassword(token, password, confirmPassword);
       setShowAlert(true);
-      setTimeout(() => router.push("/login"), 1200);
+      setTimeout(() => router.replace("/login"), 1200);
     } catch (error) {
       console.error("Error al resetear contraseña:", error);
       setShowConnectionError(true);

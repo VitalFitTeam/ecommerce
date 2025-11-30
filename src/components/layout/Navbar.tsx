@@ -28,6 +28,7 @@ export function Navbar({
   const t = useTranslations("Navbar");
   const pathname = usePathname();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const isHome = pathname === "/";
 
   const { user, token, logout } = useAuth();
   const router = useRouter();
