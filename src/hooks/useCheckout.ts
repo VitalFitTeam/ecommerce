@@ -155,12 +155,9 @@ export const useCheckout = (membershipId: string | null) => {
       return;
     }
 
-    console.log("Busco métodos para Branch ID:", state.branchId);
-
     api.paymentMethod
       .getBranchPaymentMethods(state.branchId, token)
       .then((res) => {
-        console.log("Respuesta API:", res);
         setData((prev) => ({ ...prev, methods: res.data || [] }));
       })
       .catch((e) => console.error("Error loading payment methods", e));
