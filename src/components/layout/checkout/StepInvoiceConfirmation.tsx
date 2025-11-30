@@ -5,45 +5,50 @@ import {
   CheckCircle2,
   ArrowLeft,
   Loader2,
-  RefreshCcw,
   Banknote,
   Building2,
   CreditCard,
+  RefreshCcw,
+  X,
+  FileText,
   UploadCloud,
+  DollarSign,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/Input";
 import { Label } from "@/components/ui/Label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { OrderSummary } from "@/components/layout/checkout/OrderSummary";
 import { PackageOption } from "@/components/layout/checkout/PackageCarousel";
+import { mainCurrencies, PublicMembershipResponse } from "@vitalfit/sdk";
+import { supabase } from "@/lib/supabase";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { api } from "@/lib/sdk-config";
+import { cn } from "@/lib/utils";
 
-// IMPORTANTE: Definimos la interfaz localmente para asegurar que coincida
-// con lo que tu SDK espera (AddPaymentToInvoicePayload).
-// Nota: 'receipt_url' es string obligatorio, no opcional.
-interface PaymentPayload {
-  invoice_id: string;
-  amount_paid: number;
-  currency_paid: string;
-  payment_method_id: string;
-  receipt_url: string;
-  transaction_id: string;
+interface Branch {
+  branch_id: string;
+  name: string;
+}
+
+interface Method {
+  method_id: string;
+  name: string;
 }
 
 interface Props {
   invoiceId: string;
-  membership: any;
+  membership: PublicMembershipResponse | null;
   selectedPackage: PackageOption | null;
   branchId: string;
   methodId: string;
-  branches: { branch_id: string; name: string }[];
-  methods: { method_id: string; name: string }[];
+  branches: Branch[];
+  methods: Method[];
   currency: string;
+  conversionRate: number;
   onBack: () => void;
-  onSuccess: () => void;
+  onSuccess: (amountPaid: number, receiptUrl?: string) => void;
+
   token: string;
 }
 
@@ -56,86 +61,87 @@ export const StepInvoiceConfirmation = ({
   branches,
   methods,
   currency = "USD",
+  conversionRate = 1,
   onBack,
   onSuccess,
   token,
 }: Props) => {
-  // Cálculo de precios referenciales (Fase 2)
-  const basePrice = membership.price + (selectedPackage?.price || 0);
-  const refPrice = membership.ref_price
-    ? membership.ref_price +
-      (selectedPackage
-        ? selectedPackage.price * (membership.ref_price / membership.price)
-        : 0)
-    : 0;
-  const refCurrency = membership.ref_currency_code || "VES";
-
-  const [currencyMode, setCurrencyMode] = useState<string>("USD");
+  const [currencyMode, setCurrencyMode] = useState<string>(currency);
   const [formData, setFormData] = useState({
-    amount: basePrice,
+    amount: 0,
     reference: "",
-    fileUrl: "",
+    filePath: "",
   });
-
-  const [fetchingInvoice, setFetchingInvoice] = useState(true);
   const [status, setStatus] = useState({ loading: false, error: "" });
+  const [uploadingFile, setUploadingFile] = useState(false);
 
   const branchName =
-    branches.find((b) => b.branch_id === branchId)?.name || branchId;
+    branches.find((b) => b.branch_id === branchId)?.name ?? branchId;
   const methodName =
-    methods.find((m) => m.method_id === methodId)?.name || methodId;
+    methods.find((m) => m.method_id === methodId)?.name ?? methodId;
 
-  // =========================================================
-  // 1. Sincronización con Backend (GET /billing/invoices/{id})
-  // =========================================================
+  const basePriceUSD =
+    Number(membership?.price) + Number(selectedPackage?.price || 0);
+  const convertedPrice = basePriceUSD * conversionRate;
+  const refCurrency = membership?.ref_currency ?? "VES";
+  const selectedCurrency =
+    mainCurrencies.find((c) => c.code === currencyMode) || mainCurrencies[0];
+
   useEffect(() => {
-    let isMounted = true;
+    setFormData((prev) => ({
+      ...prev,
+      amount: currencyMode === "USD" ? basePriceUSD : convertedPrice,
+    }));
+  }, [currencyMode, basePriceUSD, convertedPrice]);
 
-    const fetchInvoiceDetails = async () => {
-      try {
-        setFetchingInvoice(true);
-        // 🚨 CORRECCIÓN CLAVE: Usamos 'getInvoiceByID' (con D mayúscula) según tu SDK
-        const res = await api.billing.getInvoiceByID(invoiceId, token);
+  const handleFileUpload = async (file: File) => {
+    setUploadingFile(true);
+    setStatus((s) => ({ ...s, error: "" }));
 
-        if (isMounted && res.data) {
-          // Aquí podrías actualizar el 'amount' si quisieras forzar el total del backend
-          // Pero mantenemos la lógica de sugerencia por Tabs para la Fase 4
-        }
-      } catch (err) {
-        console.error("Error fetching invoice details:", err);
-      } finally {
-        if (isMounted) {
-          setFetchingInvoice(false);
-        }
+    try {
+      const safeFileName = `${Date.now()}_${Math.floor(Math.random() * 1000)}_${file.name
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/\s/g, "_")}`;
+
+      const { data: uploadData, error: uploadError } = await supabase.storage
+        .from("vitalfit_file")
+        .upload(safeFileName, file, {
+          cacheControl: "3600",
+          upsert: false,
+        });
+
+      if (uploadError || !uploadData) {
+        throw uploadError || new Error("Error al subir archivo");
       }
-    };
 
-    if (invoiceId && token) {
-      fetchInvoiceDetails();
+      const { data: publicData } = supabase.storage
+        .from("vitalfit_file")
+        .getPublicUrl(safeFileName);
+
+      if (!publicData?.publicUrl) {
+        throw new Error("No se pudo generar URL pública");
+      }
+
+      console.log("URL público del archivo:", publicData.publicUrl);
+      setFormData((prev) => ({ ...prev, filePath: publicData.publicUrl }));
+    } catch (err: any) {
+      console.error(err);
+      setStatus((s) => ({
+        ...s,
+        error: "Error al subir comprobante. Intente de nuevo.",
+      }));
+    } finally {
+      setUploadingFile(false);
     }
-
-    return () => {
-      isMounted = false;
-    };
-  }, [invoiceId, token]);
-
-  // Efecto para actualizar monto sugerido al cambiar tabs
-  useEffect(() => {
-    if (currencyMode === currency) {
-      setFormData((prev) => ({ ...prev, amount: basePrice }));
-    } else if (currencyMode === refCurrency && refPrice > 0) {
-      setFormData((prev) => ({ ...prev, amount: Number(refPrice.toFixed(2)) }));
-    } else {
-      setFormData((prev) => ({ ...prev, amount: 0 }));
-    }
-  }, [currencyMode, basePrice, refPrice, currency, refCurrency]);
+  };
 
   const handleSubmit = async () => {
     if (!formData.amount || formData.amount <= 0) {
       setStatus({ loading: false, error: "El monto debe ser mayor a 0." });
       return;
     }
-    if (!formData.reference) {
+    if (!formData.reference.trim()) {
       setStatus({ loading: false, error: "La referencia es obligatoria." });
       return;
     }
@@ -143,115 +149,133 @@ export const StepInvoiceConfirmation = ({
     setStatus({ loading: true, error: "" });
 
     try {
-      // Construimos el Payload compatible con 'AddPaymentToInvoicePayload'
-      const payload: PaymentPayload = {
-        invoice_id: invoiceId,
+      const payload = {
         amount_paid: Number(formData.amount),
         currency_paid: currencyMode,
+        invoice_id: invoiceId,
         payment_method_id: methodId,
-        // 🚨 CORRECCIÓN TIPADO: Si está vacío, enviamos string vacío "", nunca undefined
-        receipt_url: formData.fileUrl || "",
+        receipt_url: formData.filePath,
         transaction_id: formData.reference,
       };
 
-      // 🚨 CORRECCIÓN NOMBRE: Usamos 'AddPaymentToInvoice' (Mayúscula) según tu SDK
-      await api.billing.AddPaymentToInvoice(payload, token);
+      console.log("Submitting payment via SDK:", payload);
 
-      onSuccess();
+      const sdkResponse = await api.billing.AddPaymentToInvoice(
+        payload,
+        token || "",
+      );
+
+      if (!sdkResponse || (sdkResponse as any)?.error) {
+        throw new Error(
+          (sdkResponse as any)?.error || "Error al registrar el pago",
+        );
+      }
+
+      onSuccess(Number(formData.amount), formData.filePath);
     } catch (err: any) {
       console.error(err);
       setStatus({
         loading: false,
-        error: err?.message || "Error al registrar el pago.",
+        error: err.message || "Error al registrar el pago",
       });
     } finally {
-      setStatus((prev) => ({ ...prev, loading: false }));
+      setStatus((p) => ({ ...p, loading: false }));
     }
   };
 
   return (
-    <div className="grid gap-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
-      {/* 1. Confirmación Visual */}
-      <Card className="border-green-200 bg-green-50/40 shadow-none">
-        <CardContent className="pt-6 pb-4 flex flex-col items-center text-center">
-          <div className="h-12 w-12 bg-green-100 rounded-full flex items-center justify-center mb-3 text-green-600">
-            <CheckCircle2 size={24} />
-          </div>
-          <h2 className="text-xl font-bold text-green-900">¡Factura Creada!</h2>
-          <p className="text-green-700/80 text-sm mt-1">
-            Tu orden <strong>#{invoiceId.slice(-6)}</strong> está lista.
+    <div className="max-w-2xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500 space-y-6">
+      <div className="bg-emerald-50 border border-emerald-100 rounded-2xl p-6 flex items-start sm:items-center gap-4 shadow-sm">
+        <div className="bg-emerald-100 p-3 rounded-full flex-shrink-0 text-emerald-600">
+          <CheckCircle2 size={28} strokeWidth={2.5} />
+        </div>
+        <div className="flex-1">
+          <h2 className="text-lg font-bold text-emerald-950">
+            Orden #{invoiceId.slice(-6)} generada
+          </h2>
+          <p className="text-emerald-700/80 text-sm mt-1">
+            Realiza el pago a la cuenta de <strong>{branchName}</strong> y
+            adjunta el comprobante abajo.
           </p>
+        </div>
+      </div>
 
-          <div className="flex gap-2 text-xs font-medium text-green-800 bg-white/60 p-2 rounded-lg border border-green-100 mt-3">
-            <span className="flex items-center gap-1">
-              <Building2 size={12} /> {branchName}
+      <Card className="bg-white border-gray-200 shadow-xl shadow-gray-100/50 overflow-hidden rounded-2xl">
+        <div className="bg-slate-50/80 border-b border-gray-100 p-6 grid grid-cols-2 gap-4">
+          <div>
+            <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider">
+              Concepto
             </span>
-            <span className="text-green-300">|</span>
-            <span className="flex items-center gap-1">
-              <CreditCard size={12} /> {methodName}
-            </span>
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* 2. Resumen */}
-      <OrderSummary
-        membership={membership}
-        selectedPackage={selectedPackage}
-        isStep1={false}
-      />
-
-      {/* 3. Formulario de Pago */}
-      <Card className="border-blue-100 shadow-md">
-        <CardHeader className="bg-blue-50/50 border-b border-blue-100 py-4">
-          <CardTitle className="text-base flex items-center justify-between text-blue-900">
-            <span className="flex items-center gap-2">
-              <Banknote className="text-blue-600" size={18} /> Reportar Pago
-            </span>
-            {fetchingInvoice && (
-              <span className="text-xs font-normal flex items-center gap-1 text-blue-500">
-                <Loader2 size={12} className="animate-spin" /> Sincronizando...
-              </span>
+            <div className="font-medium text-gray-900 mt-1">
+              {membership?.name}
+            </div>
+            {selectedPackage && (
+              <div className="text-sm text-gray-500">
+                + {selectedPackage.name}
+              </div>
             )}
-          </CardTitle>
-        </CardHeader>
+          </div>
+          <div className="text-right">
+            <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider">
+              Total a Pagar
+            </span>
+            <div className="text-2xl font-bold text-gray-900 mt-1">
+              {selectedCurrency.symbol} {formData.amount.toFixed(2)}
+            </div>
+            {currencyMode !== "USD" && (
+              <div className="text-xs text-gray-400">
+                Base: ${basePriceUSD.toFixed(2)} USD
+              </div>
+            )}
+          </div>
+        </div>
 
-        <CardContent className="space-y-6 pt-6">
+        <div className="p-6 md:p-8 space-y-8">
           {status.error && (
-            <div className="p-3 bg-red-50 text-red-600 text-sm rounded border border-red-100">
-              🚨 {status.error}
+            <div className="p-4 bg-red-50 text-red-700 text-sm rounded-xl border border-red-100 flex items-center gap-3 animate-pulse">
+              <div className="w-1.5 h-1.5 rounded-full bg-red-500" />
+              {status.error}
             </div>
           )}
 
           <div className="space-y-3">
-            <Label>¿En qué moneda pagaste?</Label>
-            <Tabs
-              value={currencyMode}
-              onValueChange={setCurrencyMode}
-              className="w-full"
-            >
-              <TabsList className="grid w-full grid-cols-2">
-                <TabsTrigger value={currency}>🇺🇸 {currency}</TabsTrigger>
-                <TabsTrigger value={refCurrency}>🇻🇪 {refCurrency}</TabsTrigger>
-              </TabsList>
-            </Tabs>
-
-            {currencyMode === refCurrency && (
-              <p className="text-xs text-blue-600 flex items-center gap-1 bg-blue-50 p-2 rounded">
-                <RefreshCcw size={12} />
-                Monto sugerido según tasa del día.
-              </p>
-            )}
+            <Label className="text-sm font-medium text-gray-700">
+              ¿En qué moneda realizaste el pago?
+            </Label>
+            <div className="grid grid-cols-2 bg-gray-100 p-1 rounded-xl">
+              <button
+                onClick={() => setCurrencyMode("USD")}
+                className={cn(
+                  "flex items-center justify-center gap-2 py-2.5 text-sm font-medium rounded-lg transition-all duration-200",
+                  currencyMode === "USD"
+                    ? "bg-white text-gray-900 shadow-sm ring-1 ring-black/5"
+                    : "text-gray-500 hover:text-gray-700",
+                )}
+              >
+                <DollarSign size={16} /> Dólares (USD)
+              </button>
+              <button
+                onClick={() => setCurrencyMode(refCurrency)}
+                className={cn(
+                  "flex items-center justify-center gap-2 py-2.5 text-sm font-medium rounded-lg transition-all duration-200",
+                  currencyMode === refCurrency
+                    ? "bg-white text-gray-900 shadow-sm ring-1 ring-black/5"
+                    : "text-gray-500 hover:text-gray-700",
+                )}
+              >
+                {refCurrency}
+              </button>
+            </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <div className="grid md:grid-cols-2 gap-6">
             <div className="space-y-2">
-              <Label htmlFor="amount">
-                Monto Transferido <span className="text-red-500">*</span>
+              <Label htmlFor="amount" className="text-gray-700">
+                Monto Transferido
               </Label>
-              <div className="relative">
-                <span className="absolute left-3 top-2.5 text-gray-500 font-bold text-sm">
-                  {currencyMode === "USD" ? "$" : "Bs"}
+              <div className="relative group">
+                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 font-medium text-lg pointer-events-none">
+                  {selectedCurrency.symbol}
                 </span>
                 <Input
                   id="amount"
@@ -259,73 +283,125 @@ export const StepInvoiceConfirmation = ({
                   disabled={status.loading}
                   value={formData.amount}
                   onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      amount: parseFloat(e.target.value),
-                    })
+                    setFormData({ ...formData, amount: Number(e.target.value) })
                   }
-                  className="pl-8 font-mono font-bold text-lg"
+                  className="pl-10 h-12 text-lg font-bold bg-white border-gray-200 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:border-transparent transition-all"
+                  placeholder="0.00"
                 />
               </div>
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="ref">
-                Referencia / Recibo <span className="text-red-500">*</span>
+              <Label htmlFor="ref" className="text-gray-700">
+                Nro. de Referencia
               </Label>
               <Input
                 id="ref"
-                placeholder="Ej: 123456"
+                placeholder="Ej: 00123456"
                 disabled={status.loading}
                 value={formData.reference}
                 onChange={(e) =>
                   setFormData({ ...formData, reference: e.target.value })
                 }
+                className="h-12 border-gray-200 font-mono text-gray-800 tracking-wide"
               />
             </div>
           </div>
 
           <div className="space-y-2">
-            <Label className="flex justify-between">
-              Link del Comprobante{" "}
-              <span className="text-gray-400 font-normal text-xs">
-                (Opcional)
-              </span>
-            </Label>
-            <div className="relative">
-              <UploadCloud className="absolute left-3 top-2.5 h-4 w-4 text-gray-400" />
-              <Input
-                className="pl-9"
-                placeholder="https://..."
-                disabled={status.loading}
-                value={formData.fileUrl}
-                onChange={(e) =>
-                  setFormData({ ...formData, fileUrl: e.target.value })
-                }
-              />
-            </div>
+            <Label className="text-gray-700">Comprobante de Pago</Label>
+
+            {!formData.filePath ? (
+              <div className="relative group">
+                <Input
+                  id="file-upload"
+                  type="file"
+                  accept="image/*,application/pdf"
+                  disabled={status.loading || uploadingFile}
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (file) {
+                      handleFileUpload(file);
+                    }
+                  }}
+                  className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20 disabled:cursor-not-allowed"
+                />
+                <div className="border-2 border-dashed border-gray-300 rounded-xl p-8 flex flex-col items-center justify-center text-center bg-gray-50/50 group-hover:bg-blue-50/50 group-hover:border-blue-300 transition-all duration-300">
+                  {uploadingFile ? (
+                    <>
+                      <Loader2 className="w-10 h-10 text-blue-500 animate-spin mb-3" />
+                      <p className="text-sm font-medium text-blue-600">
+                        Subiendo archivo...
+                      </p>
+                    </>
+                  ) : (
+                    <>
+                      <div className="w-12 h-12 bg-white rounded-full shadow-sm border border-gray-100 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+                        <UploadCloud className="w-6 h-6 text-gray-400 group-hover:text-blue-500" />
+                      </div>
+                      <p className="text-sm font-medium text-gray-900">
+                        Haz clic para subir imagen o PDF
+                      </p>
+                      <p className="text-xs text-gray-500 mt-1">Máximo 5MB</p>
+                    </>
+                  )}
+                </div>
+              </div>
+            ) : (
+              <div className="flex items-center justify-between p-4 bg-blue-50 border border-blue-100 rounded-xl animate-in fade-in zoom-in-95">
+                <div className="flex items-center gap-3 overflow-hidden">
+                  <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <FileText className="w-5 h-5 text-blue-600" />
+                  </div>
+                  <div className="min-w-0">
+                    <p className="text-sm font-medium text-blue-900 truncate max-w-[200px]">
+                      {formData.filePath.split("/").pop() || "comprobante_pago"}
+                    </p>
+                    <p className="text-xs text-blue-600">Listo para enviar</p>
+                  </div>
+                </div>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="text-blue-400 hover:text-red-500 hover:bg-red-50 rounded-full"
+                  onClick={() => setFormData({ ...formData, filePath: "" })}
+                >
+                  <X size={18} />
+                </Button>
+              </div>
+            )}
           </div>
 
-          <div className="flex justify-between items-center pt-2">
-            <Button variant="ghost" onClick={onBack} disabled={status.loading}>
-              <ArrowLeft size={16} className="mr-2" /> Volver
+          <div className="pt-4 border-t border-gray-100 flex items-center justify-between">
+            <Button
+              variant="ghost"
+              onClick={onBack}
+              disabled={status.loading}
+              className="text-gray-500 hover:text-gray-900 hover:bg-gray-100"
+            >
+              <ArrowLeft size={16} className="mr-2" /> Atrás
             </Button>
 
             <Button
               onClick={handleSubmit}
-              disabled={status.loading}
-              className="bg-blue-600 hover:bg-blue-700 min-w-[150px]"
+              disabled={
+                status.loading ||
+                uploadingFile ||
+                !formData.reference ||
+                !formData.amount
+              }
+              className="bg-gray-900 hover:bg-gray-800 text-white px-8 h-12 rounded-xl font-medium shadow-lg shadow-gray-200 transition-all hover:scale-[1.02] disabled:opacity-50 disabled:hover:scale-100"
             >
               {status.loading ? (
                 <>
-                  <Loader2 size={16} className="animate-spin mr-2" /> Procesando
+                  <Loader2 size={18} className="animate-spin mr-2" /> Procesando
                 </>
               ) : (
                 "Confirmar Pago"
               )}
             </Button>
           </div>
-        </CardContent>
+        </div>
       </Card>
     </div>
   );

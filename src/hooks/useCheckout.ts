@@ -14,7 +14,25 @@ interface CheckoutState {
   branchId: string;
   methodId: string;
   selectedPackage: PackageOption | null;
-  invoiceData: any | null;
+  invoiceData: {
+    invoice_number: string;
+    currency: string;
+    payments: any[];
+  } | null;
+  currency: string;
+}
+
+interface CheckoutData {
+  membership: PublicMembershipResponse | null;
+  branches: PaginatedBranch[];
+  methods: BranchPaymentMethodInfo[];
+  packages: PackageOption[];
+  prices?: {
+    baseTotal: number;
+    refTotal: number;
+    refSymbol: string;
+    refCurrency: string;
+  };
 }
 
 export const useCheckout = (membershipId: string | null) => {
@@ -26,13 +44,14 @@ export const useCheckout = (membershipId: string | null) => {
     methodId: "",
     selectedPackage: null,
     invoiceData: null,
+    currency: "USD",
   });
 
-  const [data, setData] = useState({
-    membership: null as PublicMembershipResponse | null,
-    branches: [] as PaginatedBranch[],
-    methods: [] as BranchPaymentMethodInfo[],
-    packages: [] as PackageOption[],
+  const [data, setData] = useState<CheckoutData>({
+    membership: null,
+    branches: [],
+    methods: [],
+    packages: [],
   });
 
   const [status, setStatus] = useState({
@@ -44,9 +63,6 @@ export const useCheckout = (membershipId: string | null) => {
   const updateState = (updates: Partial<CheckoutState>) =>
     setState((prev) => ({ ...prev, ...updates }));
 
-  // =========================================================
-  // Carga inicial: membership + packages
-  // =========================================================
   useEffect(() => {
     if (!membershipId) {
       setStatus((prev) => ({ ...prev, loading: false }));
@@ -55,19 +71,21 @@ export const useCheckout = (membershipId: string | null) => {
 
     const init = async () => {
       try {
+        const currency = state.currency;
+
         const [membershipRes, packagesRes] = await Promise.all([
           api.membership.publicGetMemberships(
             "",
             { page: 1, limit: 50 },
-            "USD",
+            currency,
           ),
-          api.public.getPackages({ page: 1, limit: 50, currency: "USD" }),
+          api.public.getPackages({ page: 1, limit: 50, currency }),
         ]);
 
+        const memberships: PublicMembershipResponse[] = membershipRes.data;
         const membership =
-          membershipRes.data.find(
-            (m: any) => m.membership_type_id === membershipId,
-          ) || null;
+          memberships.find((m) => m.membership_type_id === membershipId) ||
+          null;
 
         const mappedPackages: PackageOption[] = (packagesRes.data || []).map(
           (p: PackagePublicItem) => ({
@@ -84,53 +102,62 @@ export const useCheckout = (membershipId: string | null) => {
           }),
         );
 
-        setData({
+        const baseTotal =
+          Number(membership?.price || 0) +
+          (state.selectedPackage
+            ? Number(state.selectedPackage.price || 0)
+            : 0);
+
+        const refTotal =
+          Number(membership?.ref_price || 0) +
+          (state.selectedPackage
+            ? Number(state.selectedPackage.price || 0)
+            : 0);
+
+        const refSymbol =
+          membership?.ref_currency === "VES"
+            ? "Bs."
+            : membership?.ref_currency || "$";
+        const refCurrency = membership?.ref_currency || "VES";
+
+        setData((prev) => ({
+          ...prev,
           membership,
-          branches: [],
-          methods: [],
           packages: mappedPackages,
-        });
+          prices: { baseTotal, refTotal, refSymbol, refCurrency },
+        }));
       } catch (e) {
         console.error(e);
-        setStatus((prev) => ({
-          ...prev,
-          error: "Error cargando datos iniciales",
-        }));
+        setStatus((prev) => ({ ...prev, error: "Error cargando datos" }));
       } finally {
         setStatus((prev) => ({ ...prev, loading: false }));
       }
     };
 
     init();
-  }, [membershipId]);
+  }, [membershipId, state.currency]);
 
-  // =========================================================
-  // Carga de sucursales
-  // =========================================================
   useEffect(() => {
-    if (token) {
-      api.branch
-        .getBranches({ page: 1, search: "" }, token)
-        .then((res) => setData((d) => ({ ...d, branches: res.data || [] })));
-    }
+    if (!token) {return;}
+
+    api.branch
+      .getBranches({ page: 1, search: "" }, token)
+      .then((res) =>
+        setData((prev) => ({ ...prev, branches: res.data || [] })),
+      );
   }, [token]);
 
-  // =========================================================
-  // Carga de métodos de pago por sucursal
-  // =========================================================
   useEffect(() => {
-    if (state.branchId && token) {
-      api.paymentMethod
-        .getBranchPaymentMethods(state.branchId, token)
-        .then((res) => setData((d) => ({ ...d, methods: res.data || [] })));
-    } else {
-      setData((d) => ({ ...d, methods: [] }));
+    if (!state.branchId || !token) {
+      setData((prev) => ({ ...prev, methods: [] }));
+      return;
     }
+
+    api.paymentMethod
+      .getBranchPaymentMethods(state.branchId, token)
+      .then((res) => setData((prev) => ({ ...prev, methods: res.data || [] })));
   }, [state.branchId, token]);
 
-  // =========================================================
-  // Checkout: crear invoice
-  // =========================================================
   const processCheckout = async () => {
     if (!data.membership || !state.branchId || !state.methodId) {return;}
 
@@ -139,6 +166,7 @@ export const useCheckout = (membershipId: string | null) => {
     try {
       const payload: any = {
         branch_id: state.branchId,
+        currency: state.currency,
         items: [
           {
             item_id: data.membership.membership_type_id,
@@ -156,19 +184,21 @@ export const useCheckout = (membershipId: string | null) => {
         });
       }
 
-      if (user?.role !== "client") {payload.user_id = user?.user_id;}
+      if (user?.role !== "client") {
+        payload.user_id = user?.user_id;
+      }
 
       const res = await api.billing.createInvoice(payload, token || "");
 
       updateState({
         invoiceData: {
           invoice_number: res.invoice_id || res.message,
-          currency: "USD",
+          currency: state.currency,
           payments: [],
         },
         step: 3,
       });
-    } catch (err) {
+    } catch {
       setStatus((s) => ({ ...s, error: "Error al procesar la compra." }));
     } finally {
       setStatus((s) => ({ ...s, processing: false }));
@@ -181,14 +211,17 @@ export const useCheckout = (membershipId: string | null) => {
     status,
     actions: {
       setStep: (step: number) => updateState({ step }),
+      setCurrency: (currency: string) => updateState({ currency }),
       setPackage: (pkg: PackageOption | null) =>
         updateState({ selectedPackage: pkg }),
       setBranch: (id: string) => updateState({ branchId: id, methodId: "" }),
       setMethod: (id: string) => updateState({ methodId: id }),
       processCheckout,
-      // ⚡ Ahora acepta null correctamente
       updateMembership: (m: PublicMembershipResponse | null) =>
         setData((d) => ({ ...d, membership: m })),
+
+      setInvoiceData: (invoiceData: CheckoutState["invoiceData"]) =>
+        updateState({ invoiceData }),
     },
   };
 };

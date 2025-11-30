@@ -8,9 +8,8 @@ import {
   CardHeader,
   CardTitle,
   CardDescription,
-} from "@/components/ui/Card"; // Ajusta el import según tu estructura real
+} from "@/components/ui/Card";
 
-// Interfaces (Mantenemos las tuyas)
 export interface PackageOption {
   id: string;
   name: string;
@@ -24,10 +23,9 @@ interface Props {
   packages: PackageOption[];
   selectedPackageId: string | null;
   onSelectPackage: (pkgId: string) => void;
-  itemsVisible?: number; // ✨ Nuevo: Hacemos esto configurable
+  itemsVisible?: number;
 }
 
-// ✨ Sub-componente extraído (ver arriba para la explicación)
 const PackageCard = ({
   pkg,
   isSelected,
@@ -62,7 +60,7 @@ const PackageCard = ({
         </p>
       )}
       <div className="font-bold text-gray-900 text-lg">
-        ${pkg.price}{" "}
+        ${pkg.price}
         <span className="text-xs font-normal text-gray-500">
           {pkg.base_currency}
         </span>
@@ -75,20 +73,18 @@ export const PackageCarousel = ({
   packages,
   selectedPackageId,
   onSelectPackage,
-  itemsVisible = 3, // Valor por defecto
+  itemsVisible = 3,
 }: Props) => {
   const [startIndex, setStartIndex] = useState(0);
 
-  // Lógica defensiva: Si no hay paquetes, no mostramos nada
-  if (!packages || packages.length === 0) {return null;}
+  if (!packages || packages.length === 0) {
+    return null;
+  }
 
-  // ✨ Mejora Lógica: Deslizar de 1 en 1 es más natural para el usuario que saltar bloques
-  // Si prefieres saltar bloques, cambia el 1 por itemsVisible
   const handlePrev = () => setStartIndex((prev) => Math.max(prev - 1, 0));
 
   const handleNext = () => {
     setStartIndex((prev) => {
-      // Evitamos pasarnos del final de la lista
       const maxIndex = packages.length - itemsVisible;
       return prev < maxIndex ? prev + 1 : prev;
     });
@@ -96,13 +92,11 @@ export const PackageCarousel = ({
 
   const visiblePackages = packages.slice(startIndex, startIndex + itemsVisible);
 
-  // Estados derivados para deshabilitar botones
   const isPrevDisabled = startIndex === 0;
   const isNextDisabled = startIndex + itemsVisible >= packages.length;
 
   return (
     <div className="space-y-3">
-      {/* Header y Controles */}
       <div className="flex justify-between items-end">
         <div>
           <h4 className="font-medium text-gray-900 text-sm">
@@ -114,11 +108,11 @@ export const PackageCarousel = ({
         <div className="flex gap-2">
           <Button
             variant="outline"
-            size="icon" // Usamos size="icon" que es cuadrado perfecto en shadcn
+            size="icon"
             className="h-8 w-8"
             onClick={handlePrev}
             disabled={isPrevDisabled}
-            aria-label="Ver anteriores" // Accesibilidad
+            aria-label="Ver anteriores"
           >
             <ChevronLeft size={14} />
           </Button>
@@ -135,7 +129,6 @@ export const PackageCarousel = ({
         </div>
       </div>
 
-      {/* Grid de Tarjetas */}
       <div className="flex gap-4 overflow-hidden py-1">
         {visiblePackages.map((pkg) => (
           <PackageCard
@@ -146,7 +139,6 @@ export const PackageCarousel = ({
           />
         ))}
 
-        {/* State vacío para rellenar espacio si hay pocos items (opcional) */}
         {visiblePackages.length < itemsVisible &&
           Array.from({ length: itemsVisible - visiblePackages.length }).map(
             (_, i) => (

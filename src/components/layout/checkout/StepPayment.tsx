@@ -10,17 +10,15 @@ import {
 } from "@/components/ui/select";
 import type { PaginatedBranch, BranchPaymentMethodInfo } from "@vitalfit/sdk";
 
-// 1. Interfaz extendida: Ahora recibimos la data, no la buscamos.
 interface Props {
   selectedBranch: string;
   setSelectedBranch: (value: string) => void;
   selectedMethod: string;
   setSelectedMethod: (value: string) => void;
 
-  // Datos que vienen del hook padre
   branches: PaginatedBranch[];
   methods: BranchPaymentMethodInfo[];
-  loading?: boolean; // Opcional, para estados de carga generales
+  loading?: boolean;
 }
 
 export const StepPayment = ({
@@ -32,7 +30,6 @@ export const StepPayment = ({
   methods,
   loading = false,
 }: Props) => {
-  // Lógica derivada simple (Computed state)
   const isMethodDisabled = !selectedBranch || methods.length === 0;
 
   return (
@@ -46,7 +43,6 @@ export const StepPayment = ({
         </p>
       </div>
 
-      {/* 1. Selector de Sucursal */}
       <div className="space-y-2">
         <label className="text-sm font-medium text-gray-700 flex items-center gap-2">
           <Store size={16} className="text-gray-400" />
@@ -57,8 +53,6 @@ export const StepPayment = ({
           value={selectedBranch}
           onValueChange={(val) => {
             setSelectedBranch(val);
-            // Nota: El reset del método se maneja en el padre o aquí si prefieres
-            // setSelectedMethod("");
           }}
           disabled={loading || branches.length === 0}
         >
@@ -90,7 +84,6 @@ export const StepPayment = ({
         </Select>
       </div>
 
-      {/* 2. Selector de Método de Pago */}
       <div className="space-y-2 animate-in fade-in slide-in-from-top-2 duration-300">
         <label className="text-sm font-medium text-gray-700 flex items-center gap-2">
           <CreditCard size={16} className="text-gray-400" />
@@ -131,7 +124,6 @@ export const StepPayment = ({
                   value={method.method_id}
                   className="cursor-pointer"
                 >
-                  {/* Aquí podrías mapear iconos según el nombre del método si quisieras */}
                   {method.name || "Método estándar"}
                 </SelectItem>
               ))
@@ -139,7 +131,6 @@ export const StepPayment = ({
           </SelectContent>
         </Select>
 
-        {/* Mensaje de ayuda contextual */}
         {!selectedBranch && (
           <p className="text-xs text-orange-600/80 bg-orange-50 p-2 rounded border border-orange-100">
             ⓘ Debes seleccionar una sucursal para ver los métodos de pago

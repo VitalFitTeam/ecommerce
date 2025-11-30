@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { MembershipType } from "@vitalfit/sdk";
 
 interface Props {
-  plan: MembershipType; // <--- Debe llamarse 'plan' aquí
+  plan: MembershipType;
   onRemove: () => void;
 }
 
@@ -32,7 +32,6 @@ export const MembershipSummary = ({ plan, onRemove }: Props) => (
       </Button>
     </div>
 
-    {/* Sección de Precio y Detalles */}
     <div className="bg-gray-50/50 p-6 flex flex-col sm:flex-row justify-between items-center gap-4">
       <div className="flex flex-col">
         <span className="text-sm text-gray-500 font-medium uppercase tracking-wide">
@@ -42,7 +41,6 @@ export const MembershipSummary = ({ plan, onRemove }: Props) => (
           <span className="text-3xl font-bold text-gray-900">
             ${plan.price}
           </span>
-          <span className="text-gray-600 font-medium">{plan.price}</span>
         </div>
       </div>
       {plan.duration_days && (

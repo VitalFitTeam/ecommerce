@@ -1,4 +1,3 @@
-// components/CheckoutStepper.tsx
 import { Check } from "lucide-react";
 
 export const CheckoutStepper = ({ currentStep }: { currentStep: number }) => {
@@ -24,7 +23,6 @@ export const CheckoutStepper = ({ currentStep }: { currentStep: number }) => {
             >
               {label}
             </span>
-            {/* Línea conectora (opcional visualmente) */}
           </div>
         );
       })}
