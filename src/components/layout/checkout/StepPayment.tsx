@@ -110,7 +110,7 @@ export const StepPayment = ({
               placeholder={
                 !selectedBranch
                   ? "Primero selecciona una sucursal"
-                  : "Selecciona cómo pagar"
+                  : "No hay métodos de pago disponibles"
               }
             />
           </SelectTrigger>
