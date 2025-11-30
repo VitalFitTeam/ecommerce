@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
 import { api } from "@/lib/sdk-config";
 import { useAuth } from "@/context/AuthContext";
+
 import type {
   PublicMembershipResponse,
-  PaginatedBranch,
+  BranchInfo,
   BranchPaymentMethodInfo,
   PackagePublicItem,
 } from "@vitalfit/sdk";
@@ -24,10 +25,10 @@ interface CheckoutState {
 
 interface CheckoutData {
   membership: PublicMembershipResponse | null;
-  branches: PaginatedBranch[];
+  branches: BranchInfo[];
   methods: BranchPaymentMethodInfo[];
   packages: PackageOption[];
-  prices?: {
+  prices: {
     baseTotal: number;
     refTotal: number;
     refSymbol: string;
@@ -52,6 +53,12 @@ export const useCheckout = (membershipId: string | null) => {
     branches: [],
     methods: [],
     packages: [],
+    prices: {
+      baseTotal: 0,
+      refTotal: 0,
+      refSymbol: "$",
+      refCurrency: "USD",
+    },
   });
 
   const [status, setStatus] = useState({
@@ -102,33 +109,17 @@ export const useCheckout = (membershipId: string | null) => {
           }),
         );
 
-        const baseTotal =
-          Number(membership?.price || 0) +
-          (state.selectedPackage
-            ? Number(state.selectedPackage.price || 0)
-            : 0);
-
-        const refTotal =
-          Number(membership?.ref_price || 0) +
-          (state.selectedPackage
-            ? Number(state.selectedPackage.price || 0)
-            : 0);
-
-        const refSymbol =
-          membership?.ref_currency === "VES"
-            ? "Bs."
-            : membership?.ref_currency || "$";
-        const refCurrency = membership?.ref_currency || "VES";
-
         setData((prev) => ({
           ...prev,
           membership,
           packages: mappedPackages,
-          prices: { baseTotal, refTotal, refSymbol, refCurrency },
         }));
       } catch (e) {
         console.error(e);
-        setStatus((prev) => ({ ...prev, error: "Error cargando datos" }));
+        setStatus((prev) => ({
+          ...prev,
+          error: "Error cargando datos iniciales",
+        }));
       } finally {
         setStatus((prev) => ({ ...prev, loading: false }));
       }
@@ -138,13 +129,24 @@ export const useCheckout = (membershipId: string | null) => {
   }, [membershipId, state.currency]);
 
   useEffect(() => {
-    if (!token) {return;}
+    if (!token) {
+      return;
+    }
 
-    api.branch
-      .getBranches({ page: 1, search: "" }, token)
-      .then((res) =>
-        setData((prev) => ({ ...prev, branches: res.data || [] })),
-      );
+    const fetchBranches = async () => {
+      try {
+        const res = await api.public.getBranchMap(token);
+
+        setData((prev) => ({
+          ...prev,
+          branches: res.data || [],
+        }));
+      } catch (error) {
+        console.error("Error fetching branches map:", error);
+      }
+    };
+
+    fetchBranches();
   }, [token]);
 
   useEffect(() => {
@@ -153,13 +155,51 @@ export const useCheckout = (membershipId: string | null) => {
       return;
     }
 
+    console.log("Busco métodos para Branch ID:", state.branchId);
+
     api.paymentMethod
       .getBranchPaymentMethods(state.branchId, token)
-      .then((res) => setData((prev) => ({ ...prev, methods: res.data || [] })));
+      .then((res) => {
+        console.log("Respuesta API:", res);
+        setData((prev) => ({ ...prev, methods: res.data || [] }));
+      })
+      .catch((e) => console.error("Error loading payment methods", e));
   }, [state.branchId, token]);
 
+  useEffect(() => {
+    if (!data.membership) {
+      return;
+    }
+
+    const basePrice = Number(data.membership.price || 0);
+    const packagePrice = state.selectedPackage
+      ? Number(state.selectedPackage.price || 0)
+      : 0;
+
+    const refBasePrice = Number(data.membership.ref_price || 0);
+    const packageRefPrice = state.selectedPackage
+      ? Number(state.selectedPackage.price || 0)
+      : 0;
+
+    const baseTotal = basePrice + packagePrice;
+    const refTotal = refBasePrice + packageRefPrice;
+
+    const refSymbol =
+      data.membership.ref_currency === "VES"
+        ? "Bs."
+        : data.membership.ref_currency || "$";
+
+    const refCurrency = data.membership.ref_currency || "VES";
+
+    setData((prev) => ({
+      ...prev,
+      prices: { baseTotal, refTotal, refSymbol, refCurrency },
+    }));
+  }, [data.membership, state.selectedPackage]);
   const processCheckout = async () => {
-    if (!data.membership || !state.branchId || !state.methodId) {return;}
+    if (!data.membership || !state.branchId || !state.methodId) {
+      return;
+    }
 
     setStatus((s) => ({ ...s, processing: true, error: "" }));
 
@@ -219,7 +259,6 @@ export const useCheckout = (membershipId: string | null) => {
       processCheckout,
       updateMembership: (m: PublicMembershipResponse | null) =>
         setData((d) => ({ ...d, membership: m })),
-
       setInvoiceData: (invoiceData: CheckoutState["invoiceData"]) =>
         updateState({ invoiceData }),
     },

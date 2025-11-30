@@ -205,7 +205,7 @@ export default function CheckoutPage() {
 
                 {status.error && (
                   <div className="mt-4 p-4 bg-red-50 border border-red-100 rounded-xl flex gap-3 items-start animate-in shake">
-                    <AlertCircle className="w-5 h-5 text-red-600  mt-0.5" />
+                    <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
                     <p className="text-sm text-red-600 font-medium">
                       {status.error}
                     </p>

@@ -8,7 +8,11 @@ import {
   SelectContent,
   SelectItem,
 } from "@/components/ui/select";
-import type { PaginatedBranch, BranchPaymentMethodInfo } from "@vitalfit/sdk";
+import type {
+  PaginatedBranch,
+  BranchPaymentMethodInfo,
+  BranchInfo,
+} from "@vitalfit/sdk";
 
 interface Props {
   selectedBranch: string;
@@ -16,7 +20,7 @@ interface Props {
   selectedMethod: string;
   setSelectedMethod: (value: string) => void;
 
-  branches: PaginatedBranch[];
+  branches: BranchInfo[];
   methods: BranchPaymentMethodInfo[];
   loading?: boolean;
 }
