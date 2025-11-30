@@ -48,6 +48,11 @@
     }
   },
   "ServicesPage": {
+    "title": "Nuestros <highlight>Servicios</highlight>",
+    "subtitle": "Explora todo lo que ofrecemos para tu bienestar.",
+
+    "recentlyViewed": "Recientemente visto",
+
     "filters": {
       "searchPlaceholder": "Buscar servicios...",
       "categoryDefault": "Todas las categorías",
@@ -57,10 +62,21 @@
       "viewLabel": "Vista",
       "viewGrid": "Cuadrícula",
       "viewList": "Lista",
-      "clear": "Limpiar filtros"
+      "clear": "Limpiar filtros",
+      "label": "Filtros"
     },
-    "title": "Nuestros <highlight>Servicios</highlight>",
-    "subtitle": "Explora todo lo que ofrecemos para tu bienestar."
+
+    "empty": {
+      "noResults": "No encontramos servicios",
+      "adjustFilters": "Ajusta tus filtros para ver más resultados.",
+      "showAll": "Ver todos los servicios"
+    },
+
+    "pagination": {
+      "previous": "Anterior",
+      "next": "Siguiente",
+      "pageOf": "Página {page} / {totalPages}"
+    }
   },
   "BranchesPage": {
     "title": "<highlight>NUESTRAS</highlight> <highlight-dark>SUCURSALES</highlight-dark>",

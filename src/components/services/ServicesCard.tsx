@@ -2,22 +2,25 @@
 
 import Image from "next/image";
 import { FaStar, FaClock } from "react-icons/fa";
-import logoVitalFit from "../../../public/images/gym-training-chile.png"; 
+import logoVitalFit from "../../../public/images/gym-training-chile.png";
 import { Button } from "../ui/button";
 import { useTranslations } from "next-intl";
+import { cn } from "@/lib/utils";
 
 interface ServiceCardProps {
   service: any;
   view?: "grid" | "list";
   onLearnMore?: () => void;
+  className?: string;
 }
 
 export default function ServiceCard({
   service,
   view = "grid",
   onLearnMore,
+  className,
 }: ServiceCardProps) {
-  const t = useTranslations("ServiceCard"); 
+  const t = useTranslations("ServiceCard");
 
   const {
     name,
@@ -29,33 +32,40 @@ export default function ServiceCard({
     lowest_price_member,
     lowest_price_no_member,
     base_currency,
-  } = service;
+  } = service ?? {};
 
-  const title = name;
+  const title = name ?? t("noTitle");
   const category = service_category?.name ?? t("categoryDefault");
-  const desc = description ?? t("categoryDefault");
+  const desc = description ?? t("noDescription");
   const duration = duration_minutes ?? 0;
   const rating = priority_score ?? 0;
   const imgSrc = images?.length > 0 ? images[0] : logoVitalFit;
 
-  const formatPrice = (price: number) => `${base_currency ?? "USD"} ${price}`;
+  const formatPrice = (price: number) =>
+    `${base_currency ?? "USD"} ${price ?? 0}`;
 
   const CardContent = () => (
     <div className="p-5 flex flex-col justify-between flex-grow">
       <div className="mb-4">
         <div className="flex items-center justify-between mb-2">
-          <h2 className="text-[#F27F2A] font-bold text-2xl">{title}</h2>
+          <h2 className="text-[#F27F2A] font-bold text-xl line-clamp-2">
+            {title}
+          </h2>
+
           <div className="flex items-center text-sm text-gray-700 gap-1">
             <FaStar className="text-yellow-400" />
             {rating}
           </div>
         </div>
-        <p className="text-gray-500 text-sm mb-1">{category}</p>
 
-        <p className="text-gray-600 text-sm leading-relaxed">{desc}</p>
+        <p className="text-gray-500 text-sm mb-1 line-clamp-1">{category}</p>
+
+        <p className="text-gray-600 text-sm leading-relaxed line-clamp-3">
+          {desc}
+        </p>
       </div>
 
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between mt-4 gap-2">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between mt-4 gap-3">
         <div className="flex items-center gap-1 text-gray-700 text-sm">
           <FaClock /> {duration} {t("minutes")}
         </div>
@@ -64,7 +74,8 @@ export default function ServiceCard({
           <span className="text-lg font-bold text-black">
             {t("member")}: {formatPrice(lowest_price_member)}
           </span>
-          <span className="text-lg font-bold text-gray-600 line-through">
+
+          <span className="text-lg font-semibold text-gray-500 line-through">
             {t("nonMember")}: {formatPrice(lowest_price_no_member)}
           </span>
         </div>
@@ -76,13 +87,19 @@ export default function ServiceCard({
 
   if (view === "grid") {
     return (
-      <div className="bg-white rounded-xl shadow-md overflow-hidden flex flex-col hover:shadow-lg transition-shadow">
+      <div
+        className={cn(
+          "bg-white rounded-xl shadow-md overflow-hidden flex flex-col hover:shadow-lg transition-shadow",
+          "border border-gray-200",
+          className,
+        )}
+      >
         <Image
           src={imgSrc}
           alt={title}
           width={400}
           height={250}
-          className="w-full h-64 object-cover"
+          className="w-full h-56 object-cover"
         />
         <CardContent />
       </div>
@@ -90,7 +107,13 @@ export default function ServiceCard({
   }
 
   return (
-    <div className="bg-white max-w-7xl mx-auto rounded-xl shadow-md flex flex-col sm:flex-row overflow-hidden hover:shadow-lg transition-shadow w-full">
+    <div
+      className={cn(
+        "bg-white rounded-xl shadow-md flex flex-col sm:flex-row overflow-hidden hover:shadow-lg transition-shadow w-full",
+        "border border-gray-200",
+        className,
+      )}
+    >
       <Image
         src={imgSrc}
         alt={title}
