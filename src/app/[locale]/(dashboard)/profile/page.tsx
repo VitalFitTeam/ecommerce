@@ -22,7 +22,7 @@ export default function ProfilePage() {
         <h1 className="text-2xl font-bold">Mi Perfil</h1>
         <button
           className="bg-orange-500 text-white px-4 py-2 rounded"
-          onClick={() => router.push("/profile/edit")}
+          onClick={() => router.replace("/profile/edit")}
         >
           Editar
         </button>

@@ -146,7 +146,7 @@ export default function RegisterPage() {
           description={t("notifications.success.description")}
           onClose={() => {
             setShowAlert(false);
-            router.push("/confirmEmail?flow=register");
+            router.replace("/confirmEmail?flow=register");
           }}
         />
       )}
@@ -492,6 +492,7 @@ export default function RegisterPage() {
               text={t("footer.loginPrompt")}
               linkText={t("footer.loginLink")}
               href="/login"
+              replace={true}
             />
           </AuthCard>
         </div>

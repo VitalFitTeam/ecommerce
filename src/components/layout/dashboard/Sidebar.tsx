@@ -20,7 +20,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Card, CardContent } from "@/components/ui/Card";
 
 import Wishlist from "./Whislist";
-import { Link } from "@/i18n/routing";
+import { Link, usePathname } from "@/i18n/routing";
 import QRCodeModal from "../QRCodeModal";
 
 export default function Sidebar() {
@@ -32,6 +32,8 @@ export default function Sidebar() {
   const vencimiento = "31 Dic 2025";
   const userName = "Albani Barragan";
   const [showQR, setShowQR] = useState(false);
+  const pathname = usePathname();
+  const isDashboardHome = pathname === "/dashboard";
 
   const activePath = "/profile";
 
@@ -83,19 +85,19 @@ export default function Sidebar() {
           <hr className="my-6 border-gray-200" />
 
           <nav className="space-y-1 mb-6 items-start">
-            <Link href="/profile">
+            <Link href="/profile" replace={!isDashboardHome}>
               <MenuItem
                 icon={<UserIcon className="w-5 h-5" />}
                 label={t("menu.profile")}
               />
             </Link>
-            <Link href="/security/changePassword">
+            <Link href="/security/changePassword" replace={!isDashboardHome}>
               <MenuItem
                 icon={<ShieldCheckIcon className="w-5 h-5" />}
                 label={t("menu.security")}
               />
             </Link>
-            <Link href="/history">
+            <Link href="/history" replace={!isDashboardHome}>
               <MenuItem
                 icon={<CreditCardIcon className="w-5 h-5" />}
                 label={t("menu.membership")}
