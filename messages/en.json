@@ -738,5 +738,34 @@
     "home": "Home",
     "profile": "Profile",
     "logout": "Sign out"
+  },
+  "PaymentHistoryScreen": {
+    "title": "PAYMENT HISTORY",
+    "plans": {
+      "monthly": "Monthly"
+    },
+    "status": {
+      "paid": "Paid",
+      "pending": "Pending",
+      "refunded": "Refunded"
+    },
+    "columns": {
+      "transactionId": "Transaction ID",
+      "date": "Date",
+      "totalPrice": "Total Price",
+      "status": "Status",
+      "paymentMethod": "Payment Method"
+    },
+    "filters": {
+      "payname": "Filter",
+      "status": "Status",
+      "startDate": "From",
+      "endDate": "To",
+      "clear": "Clear filters"
+    },
+    "actions": {
+      "viewDetails": "View Details",
+      "downloadReceipt": "Download Receipt"
+    }
   }
 }
