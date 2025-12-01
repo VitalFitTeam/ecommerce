@@ -725,5 +725,10 @@
         "connectionErrorDescription": "Could not connect to the server. Please try again later."
       }
     }
+  },
+  "UserNav": {
+    "home": "Home",
+    "profile": "Profile",
+    "logout": "Sign out"
   }
 }

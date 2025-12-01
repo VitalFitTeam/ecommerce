@@ -15,6 +15,7 @@ import { Card, CardContent, CardTitle } from "@/components/ui/Card";
 import { api } from "@/lib/sdk-config";
 import { useEffect, useState } from "react";
 import { PublicMembershipResponse } from "@vitalfit/sdk";
+import { useRouter } from "@/i18n/routing";
 
 type MembershipWithFeatured = PublicMembershipResponse & {
   featured: boolean;
@@ -22,12 +23,14 @@ type MembershipWithFeatured = PublicMembershipResponse & {
 
 export default function Memberships() {
   const t = useTranslations("MembershipsPage");
+  const router = useRouter();
 
   const [membershipPlans, setMembershipPlans] = useState<
     MembershipWithFeatured[]
   >([]);
   const [isLoading, setIsLoading] = useState(true);
 
+  // Fetch memberships
   useEffect(() => {
     (async () => {
       try {
@@ -57,7 +60,7 @@ export default function Memberships() {
     })();
   }, []);
 
-  const cardsForDisplay = () => {
+  const cardsForDisplay = (): MembershipWithFeatured[] => {
     if (membershipPlans.length === 0) {
       return [];
     }
@@ -70,14 +73,16 @@ export default function Memberships() {
     const featuredCard = membershipPlans[featuredIndex];
     const others = membershipPlans.filter((_, idx) => idx !== featuredIndex);
 
-    // Si hay 3 cards: [card1, featured, card2]
-    // Si hay 4 cards: [card1, featured, card2, card3]
     const middleIndex = Math.floor(others.length / 2);
     return [
       ...others.slice(0, middleIndex),
       featuredCard,
       ...others.slice(middleIndex),
     ];
+  };
+
+  const handleBuyMembership = (membership: MembershipWithFeatured) => {
+    router.push(`/checkout?membershipId=${membership.membership_type_id}`);
   };
 
   return (
@@ -121,6 +126,7 @@ export default function Memberships() {
                     ]}
                     featured={m.featured}
                     buttonText="Comprar"
+                    onButtonClick={() => handleBuyMembership(m)}
                   />
                 </div>
               ))}
