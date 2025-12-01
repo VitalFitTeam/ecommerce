@@ -221,8 +221,8 @@ export const useCheckout = (membershipId: string | null) => {
         });
       }
 
-      if (user?.role !== "client") {
-        payload.user_id = user?.user_id;
+      if ((user as any)?.role !== "client") {
+        payload.user_id = (user as any)?.user_id;
       }
 
       const res = await api.billing.createInvoice(payload, token || "");

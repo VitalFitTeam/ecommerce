@@ -19,22 +19,10 @@ import {
   ArrowRightStartOnRectangleIcon,
 } from "@heroicons/react/24/outline";
 import { useTranslations } from "next-intl";
-
-export interface AuthUser {
-  user_id: string;
-  first_name: string;
-  last_name: string;
-  email: string;
-  role: string;
-  profile_picture_url?: string;
-  birth_date?: string;
-  identity_document?: string;
-  phone?: string;
-  gender?: string;
-}
+import { User } from "@vitalfit/sdk";
 
 interface UserNavProps {
-  user: AuthUser;
+  user: User;
   onSignOut?: () => void;
   onProfileClick?: () => void;
   onHomeClick?: () => void;
