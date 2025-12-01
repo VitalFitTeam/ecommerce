@@ -112,7 +112,7 @@ export default function ProfileForm({ user, mode }: ProfileFormProps) {
       );
       toast.success("Datos actualizados correctamente");
       setSelectedFile(null);
-      router.push("/profile");
+      router.replace("/profile");
       setUser((prev: any) => ({
         ...prev,
         first_name: firstName,
@@ -294,7 +294,7 @@ export default function ProfileForm({ user, mode }: ProfileFormProps) {
           <Button onClick={handleSave} disabled={saving} variant="default">
             {saving ? "Guardando..." : "Guardar cambios"}
           </Button>
-          <Button variant="outline" onClick={() => router.push("/profile")}>
+          <Button variant="outline" onClick={() => router.replace("/profile")}>
             Cancelar
           </Button>
         </div>
