@@ -405,16 +405,24 @@
     "button": "Get now"
   },
   "membership": {
-    "title": "MEMBERSHIP SUMMARY",
-    "plan": "Annual Premium Plan",
-    "status": "ACTIVE",
-    "startLabel": "Start",
-    "nextLabel": "Next",
+    "title": "My Membership",
+    "noMembership": "You do not have an active membership at this time.",
+
+    "active": "Active",
+    "expired": "Expired",
+    "cancelled": "Cancelled",
+    "pending": "Pending",
+
+    "nextLabel": "Time Remaining",
+    "expiredLabel": "Plan Ended",
     "daysRemaining": "days remaining",
-    "expiryLabel": "Expiry date",
-    "renewButton": "Renew",
-    "updatePlan": "Update plan",
-    "cancelMembership": "Cancel membership"
+
+    "startLabel": "Start Date",
+    "expiryLabel": "Expires on",
+
+    "renewButton": "Renew Plan",
+    "reactivateButton": "Reactivate Membership",
+    "cancelMembership": "Cancel Subscription"
   },
   "classes": {
     "title": "UPCOMING CLASSES",

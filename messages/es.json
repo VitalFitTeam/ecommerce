@@ -405,16 +405,24 @@
     "button": "Canjear"
   },
   "membership": {
-    "title": "RESUMEN DE MEMBRESÍA",
-    "plan": "Plan Premium Anual",
-    "status": "ACTIVO",
-    "startLabel": "Inicio",
-    "nextLabel": "Próximo",
+    "title": "Mi Membresía",
+    "noMembership": "No tienes una membresía activa en este momento.",
+
+    "active": "Activa",
+    "expired": "Vencida",
+    "cancelled": "Cancelada",
+    "pending": "Pendiente",
+
+    "nextLabel": "Tiempo Restante",
+    "expiredLabel": "Plan Finalizado",
     "daysRemaining": "días restantes",
-    "expiryLabel": "Fecha de vencimiento",
-    "renewButton": "Renovar",
-    "updatePlan": "Actualizar plan",
-    "cancelMembership": "Cancelar membresía"
+
+    "startLabel": "Fecha Inicio",
+    "expiryLabel": "Vence el",
+
+    "renewButton": "Renovar Plan",
+    "reactivateButton": "Reactivar Membresía",
+    "cancelMembership": "Cancelar Suscripción"
   },
   "classes": {
     "title": "PRÓXIMAS CLASES",
