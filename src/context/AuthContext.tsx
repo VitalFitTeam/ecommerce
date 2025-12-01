@@ -11,6 +11,7 @@ import {
 import { jwtDecode } from "jwt-decode";
 import { api } from "@/lib/sdk-config";
 import { useRouter } from "@/i18n/routing";
+import { User } from "@vitalfit/sdk";
 
 interface JwtPayload {
   exp?: number;
@@ -19,21 +20,6 @@ interface JwtPayload {
   roles?: string[];
 }
 
-export interface User {
-  user_id: string;
-  first_name: string;
-  last_name: string;
-  email: string;
-  phone?: string;
-  identity_document?: string;
-  birth_date?: string;
-  gender?: string;
-  role: string;
-  role_id?: string;
-  profile_picture_url?: string;
-  is_validated?: boolean;
-  [k: string]: any;
-}
 type SetUserType = (
   value: User | null | ((prev: User | null) => User | null),
 ) => void;
@@ -102,18 +88,34 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         const userData = profileResponse.user;
 
         return {
+          // --- Identidad y Contacto ---
           user_id: userData.user_id,
           first_name: userData.first_name,
           last_name: userData.last_name,
           email: userData.email,
-          role: userData.role?.name?.toLowerCase(),
-          role_id: userData.role_id,
-          is_validated: userData.is_validated ?? false,
-          profile_picture_url: userData.profile_picture_url,
           phone: userData.phone,
           identity_document: userData.identity_document,
           birth_date: userData.birth_date,
           gender: userData.gender ?? "",
+          profile_picture_url: userData.profile_picture_url ?? "",
+
+          // --- Estatus y Seguridad ---
+          status: userData.status,
+          is_validated: userData.is_validated ?? false,
+          block_justification: userData.block_justification ?? "", // Fallback a string vacío si viene null
+
+          // --- Roles y Relaciones ---
+          role_id: userData.role_id,
+          role: userData.role,
+          ClientProfile: userData.ClientProfile,
+
+          // Opcional (puede ser undefined)
+          client_membership: userData.client_membership,
+
+          // --- Timestamps ---
+          created_at: userData.created_at,
+          updated_at: userData.updated_at,
+          deleted_at: userData.deleted_at ?? null,
         };
       } catch (error) {
         console.error("Error al obtener perfil del usuario:", error);
