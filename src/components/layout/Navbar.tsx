@@ -45,7 +45,7 @@ export function Navbar({
   ];
 
   const handleCartClick = () => {
-    router.push("/purchase");
+    router.push("/checkout");
   };
 
   return (
@@ -60,7 +60,6 @@ export function Navbar({
         ${transparent ? "bg-transparent" : "bg-[#303030]/95 shadow-md"}
       `}
     >
-      {/* Mobile Hamburger */}
       <button
         className="md:hidden p-2 text-white hover:bg-white/10 rounded-lg transition"
         onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -72,12 +71,10 @@ export function Navbar({
         )}
       </button>
 
-      {/* Logo */}
       <div className="flex items-center gap-3">
         <Logo slogan={true} theme="light" />
       </div>
 
-      {/* Desktop Nav Items */}
       <div className="hidden md:flex items-center gap-10">
         {navItemsConfig.map((item) => (
           <Link
@@ -97,11 +94,9 @@ export function Navbar({
         ))}
       </div>
 
-      {/* Right Section */}
       <div className="hidden md:flex items-center gap-4">
         <LocaleSwitcher />
 
-        {/* Carrito */}
         <div className="relative cursor-pointer" onClick={handleCartClick}>
           <ShoppingCartIcon className="w-6 h-6 text-white hover:text-primary transition" />
           {cartItemCount > 0 && (
@@ -137,7 +132,6 @@ export function Navbar({
         )}
       </div>
 
-      {/* Mobile Menu */}
       {isMenuOpen && (
         <div className="absolute top-16 left-0 right-0 bg-[#303030] border-t md:hidden z-40 shadow-xl">
           <div className="flex flex-col p-4 gap-4">
@@ -159,11 +153,10 @@ export function Navbar({
               </Link>
             ))}
 
-            {/* Mobile User */}
             <div className="flex flex-col gap-3 pt-3 border-t border-white/10">
               {user && token ? (
                 <>
-                  <Link href="/purchase" onClick={() => setIsMenuOpen(false)}>
+                  <Link href="/checkout" onClick={() => setIsMenuOpen(false)}>
                     <Button className="bg-slate-700 w-full flex items-center justify-center gap-2 text-white shadow">
                       <ShoppingCartIcon className="w-5 h-5" />
                       {t("cart")}
@@ -195,8 +188,6 @@ export function Navbar({
                 </>
               )}
             </div>
-
-            {/* Locale Mobile */}
             <div className="pt-3 border-t border-white/10">
               <LocaleSwitcher />
             </div>
