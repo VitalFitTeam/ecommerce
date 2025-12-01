@@ -361,9 +361,38 @@
         "description": "No se pudo conectar con el servidor. Por favor, inténtalo de nuevo más tarde."
       }
     },
-    "footer": {
-      "loginPrompt": "¿Ya tienes una Cuenta?",
-      "loginLink": "Iniciar Sesión"
+    "Footer": {
+      "tagline": "Tu salud, nuestra pasión.",
+      "quickLinks": {
+        "title": "Enlaces rápidos",
+        "links": {
+          "services": "Servicios",
+          "membership": "Membresía",
+          "branches": "Sucursales",
+          "contact": "Contacto"
+        }
+      },
+      "services": {
+        "title": "Nuestros Servicios",
+        "list": {
+          "yoga": "Yoga",
+          "crossfit": "CrossFit",
+          "spinning": "Spinning",
+          "pilates": "Pilates"
+        }
+      },
+      "contact": {
+        "title": "Contáctanos",
+        "phone": "+1 234 567 890",
+        "email": "info@example.com",
+        "address": "123 Wellness St, Ciudad, País"
+      },
+      "social": {
+        "instagram": "https://www.instagram.com/vitalfit.68?igsh=eGQ2b3EycmsyZGZk",
+        "twitter": "https://x.com/VITALFIT68?t=1RTd9CVa29nfzK9RtHvw5w&s=08",
+        "facebook": "https://www.facebook.com/profile.php?id=61584110738046&mibextid=rS40aB7S9Ucbxw6v"
+      },
+      "copyright": "© {year} VitalFit. Todos los derechos reservados."
     }
   },
   "header": {
