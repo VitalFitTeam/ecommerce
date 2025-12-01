@@ -1,6 +1,6 @@
 "use client";
 
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import { Navbar } from "@/components/layout/Navbar";
 import { MembershipCard } from "./MembershipCard";
 import Footer from "@/components/layout/Footer";
@@ -15,7 +15,7 @@ import { Card, CardContent, CardTitle } from "@/components/ui/Card";
 import { api } from "@/lib/sdk-config";
 import { useEffect, useState } from "react";
 import { PublicMembershipResponse } from "@vitalfit/sdk";
-import { useRouter } from "@/i18n/routing";
+import { useRouter } from "next/navigation";
 
 type MembershipWithFeatured = PublicMembershipResponse & {
   featured: boolean;
@@ -24,13 +24,13 @@ type MembershipWithFeatured = PublicMembershipResponse & {
 export default function Memberships() {
   const t = useTranslations("MembershipsPage");
   const router = useRouter();
+  const locale = useLocale();
 
   const [membershipPlans, setMembershipPlans] = useState<
     MembershipWithFeatured[]
   >([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Fetch memberships
   useEffect(() => {
     (async () => {
       try {
@@ -42,7 +42,7 @@ export default function Memberships() {
 
         const data = response?.data ?? [];
 
-        // Ordenar por precio (barato → caro)
+        // Ordenar por precio (barato ? caro)
         const sorted = [...data].sort((a, b) => a.price - b.price);
 
         // Destacar el más caro
@@ -60,7 +60,7 @@ export default function Memberships() {
     })();
   }, []);
 
-  const cardsForDisplay = (): MembershipWithFeatured[] => {
+  const cardsForDisplay = () => {
     if (membershipPlans.length === 0) {
       return [];
     }
@@ -79,10 +79,6 @@ export default function Memberships() {
       featuredCard,
       ...others.slice(middleIndex),
     ];
-  };
-
-  const handleBuyMembership = (membership: MembershipWithFeatured) => {
-    router.push(`/checkout?membershipId=${membership.membership_type_id}`);
   };
 
   return (
@@ -126,7 +122,11 @@ export default function Memberships() {
                     ]}
                     featured={m.featured}
                     buttonText="Comprar"
-                    onButtonClick={() => handleBuyMembership(m)}
+                    onButtonClick={() =>
+                      router.push(
+                        `/${locale}/memberships/${m.membership_type_id}`,
+                      )
+                    }
                   />
                 </div>
               ))}
