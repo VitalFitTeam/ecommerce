@@ -6,6 +6,8 @@ import {
   CalendarDaysIcon,
 } from "@heroicons/react/24/solid";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 
 export interface BranchCardProps {
   branch: {
@@ -22,6 +24,10 @@ export interface BranchCardProps {
 }
 
 export function BranchCard({ branch, index = 0 }: BranchCardProps) {
+  const router = useRouter();
+  const params = useParams();
+  const locale = params.locale as string;
+
   const isFeatured = index % 2 === 1;
 
   const DEFAULT_IMAGES = [
@@ -35,10 +41,16 @@ export function BranchCard({ branch, index = 0 }: BranchCardProps) {
       ? branch.imageUrl
       : DEFAULT_IMAGES[index % DEFAULT_IMAGES.length];
 
+  const handleClick = () => {
+    // Navegar a la página de detalle de la sucursal INCLUYENDO el locale
+    router.push(`/${locale}/branches/${branch.branch_id}`);
+  };
+
   return (
     <div
+      onClick={handleClick}
       className={`
-        relative flex flex-col h-full min-h-[600px] rounded-2xl overflow-hidden border transition-transform duration-300
+        relative flex flex-col h-full min-h-[600px] rounded-2xl overflow-hidden border transition-all duration-300 cursor-pointer
         hover:scale-105 ${
           isFeatured
             ? "bg-gradient-to-r from-orange-500 to-orange-600 border-transparent shadow-lg text-white"
@@ -96,6 +108,26 @@ export function BranchCard({ branch, index = 0 }: BranchCardProps) {
                 "Lunes - Viernes: 6:00 am - 9:00 pm\nSábado: 7:00 am - 5:00 pm"}
             </p>
           </div>
+        </div>
+
+        {/* Botón de acción agregado */}
+        <div className="mt-6 pt-4 border-t border-gray-200 border-opacity-50">
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              handleClick();
+            }}
+            className={`
+              w-full py-3 px-4 rounded-xl font-semibold transition-all duration-200
+              ${
+                isFeatured
+                  ? "bg-white text-orange-500 hover:bg-gray-100 hover:shadow-lg"
+                  : "bg-orange-500 text-white hover:bg-orange-600 hover:shadow-lg"
+              }
+            `}
+          >
+            Ver Detalles
+          </button>
         </div>
       </div>
     </div>
