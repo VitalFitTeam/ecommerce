@@ -17,7 +17,7 @@ export default function Sidebar() {
 
   const [showQR, setShowQR] = useState(false);
   const [qrToken, setQrToken] = useState<string | null>(null);
-  const [qrDuration, setQrDuration] = useState<number>(180);
+  const [qrDuration, setQrDuration] = useState<number>(30);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 

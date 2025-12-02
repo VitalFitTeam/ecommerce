@@ -440,16 +440,24 @@
     "button": "Get now"
   },
   "membership": {
-    "title": "MEMBERSHIP SUMMARY",
-    "plan": "Annual Premium Plan",
-    "status": "ACTIVE",
-    "startLabel": "Start",
-    "nextLabel": "Next",
+    "title": "My Membership",
+    "noMembership": "You do not have an active membership at this time.",
+
+    "active": "Active",
+    "expired": "Expired",
+    "cancelled": "Cancelled",
+    "pending": "Pending",
+
+    "nextLabel": "Time Remaining",
+    "expiredLabel": "Plan Ended",
     "daysRemaining": "days remaining",
-    "expiryLabel": "Expiry date",
-    "renewButton": "Renew",
-    "updatePlan": "Update plan",
-    "cancelMembership": "Cancel membership"
+
+    "startLabel": "Start Date",
+    "expiryLabel": "Expires on",
+
+    "renewButton": "Renew Plan",
+    "reactivateButton": "Reactivate Membership",
+    "cancelMembership": "Cancel Subscription"
   },
   "classes": {
     "title": "UPCOMING CLASSES",
@@ -466,18 +474,33 @@
     }
   },
   "paymentHistory": {
-    "title": "PAYMENT HISTORY",
+    "title": "Payment History",
     "columns": {
       "transactionId": "Transaction ID",
       "date": "Date",
-      "totalPrice": "Total Price",
+      "totalPrice": "Total Amount",
       "status": "Status",
-      "paymentMethod": "Payment Method",
-      "actions": "Actions"
+      "paymentMethod": "Payment Method"
     },
-    "statusPaid": "Paid",
-    "statusPending": "Pending",
-    "statusRefunded": "Refunded"
+    "status": {
+      "completed": "Completed",
+      "pending": "Pending",
+      "refunded": "Refunded",
+      "failed": "Failed",
+      "unpaid": "Unpaid",
+      "paid": "Paid"
+    },
+    "actions": {
+      "viewDetails": "View details",
+      "downloadReceipt": "Download receipt"
+    },
+    "filters": {
+      "payname": "Payment Name",
+      "status": "Status",
+      "startDate": "Start Date",
+      "endDate": "End Date",
+      "clear": "Clear Filters"
+    }
   },
   "Profile": {
     "ptitle": "MY PROFILE",

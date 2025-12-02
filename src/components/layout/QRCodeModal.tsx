@@ -11,7 +11,7 @@ interface QRCodeModalProps {
   vencimiento: string | null;
   hasMembership?: boolean;
   onClose: () => void;
-  duration?: number; // duración configurable en segundos
+  duration?: number;
 }
 
 export default function QRCodeModal({
@@ -20,7 +20,7 @@ export default function QRCodeModal({
   vencimiento,
   hasMembership = true,
   onClose,
-  duration = 25, // default 25s
+  duration = 25,
 }: QRCodeModalProps) {
   const modalRef = useRef<HTMLDivElement>(null);
   const [countdown, setCountdown] = useState(duration);
@@ -89,7 +89,7 @@ export default function QRCodeModal({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm animate-in fade-in duration-200"
+      className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/40 backdrop-blur-sm animate-in fade-in duration-200"
       onClick={handleBackdropClick}
       aria-modal="true"
       role="dialog"
@@ -111,7 +111,6 @@ export default function QRCodeModal({
           Presenta este código en recepción
         </p>
 
-        {/* QR Container */}
         <div className="flex justify-center mb-4 bg-white p-4 rounded-xl border shadow-sm shadow-gray-100">
           {token ? (
             <QRCode
@@ -125,17 +124,16 @@ export default function QRCodeModal({
           )}
         </div>
 
-        {/* User info */}
         <div className="space-y-1 mb-4 text-center">
           <h4 className="text-md font-bold text-gray-900">{userName}</h4>
 
           {hasMembership ? (
             <span className="inline-block text-xs font-semibold text-green-600">
-              ✔ Miembro activo
+              Miembro activo
             </span>
           ) : (
             <span className="inline-block text-xs font-semibold text-red-600">
-              ❌ Sin membresía activa
+              Sin membresía activa
             </span>
           )}
 
@@ -151,7 +149,6 @@ export default function QRCodeModal({
           )}
         </div>
 
-        {/* Download button */}
         <Button
           onClick={handleDownload}
           disabled={!token}
