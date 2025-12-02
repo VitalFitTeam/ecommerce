@@ -48,28 +48,34 @@
     }
   },
   "ServicesPage": {
-    "title": "<highlight>NUESTROS</highlight> SERVICIOS",
-    "subtitle": "Explora la variedad de clases que ofrecemos para ayudarte a alcanzar tus metas de fitness.",
+    "title": "Nuestros <highlight>Servicios</highlight>",
+    "subtitle": "Explora todo lo que ofrecemos para tu bienestar.",
+
+    "recentlyViewed": "Recientemente visto",
+
     "filters": {
-      "searchPlaceholder": "Buscar servicio por nombre...",
-      "ratingDefault": "Calificación",
-      "categoryDefault": "Categoría",
-      "viewLabel": "Vista:",
+      "searchPlaceholder": "Buscar servicios...",
+      "categoryDefault": "Todas las categorías",
+      "maxPrice": "Precio máximo",
+      "sortDesc": "Mayor precio",
+      "sortAsc": "Menor precio",
+      "viewLabel": "Vista",
       "viewGrid": "Cuadrícula",
       "viewList": "Lista",
-      "clear": "Limpiar filtros"
+      "clear": "Limpiar filtros",
+      "label": "Filtros"
     },
-    "ratings": {
-      "5stars": "(5 estrellas)",
-      "4stars": "(4 estrellas o más)",
-      "3stars": "(3 estrellas o más)"
+
+    "empty": {
+      "noResults": "No encontramos servicios",
+      "adjustFilters": "Ajusta tus filtros para ver más resultados.",
+      "showAll": "Ver todos los servicios"
     },
-    "categories": {
-      "yoga": "Yoga",
-      "crossfit": "CrossFit",
-      "spinning": "Spinning",
-      "strength": "Fuerza",
-      "cardio": "Cardio"
+
+    "pagination": {
+      "previous": "Anterior",
+      "next": "Siguiente",
+      "pageOf": "Página {page} / {totalPages}"
     }
   },
   "BranchesPage": {
@@ -758,5 +764,21 @@
     "home": "Inicio",
     "profile": "Perfil",
     "logout": "Cerrar sesión"
+  },
+  "ServiceModal": {
+    "nonMember": "No miembro",
+    "member": "Miembro",
+    "minutes": "minutos",
+    "description": "Descripción",
+    "availableSchedules": "Horarios disponibles",
+    "bookNow": "Reservar ahora",
+    "moreInfo": "Más información"
+  },
+  "ServiceCard": {
+    "member": "Miembro",
+    "nonMember": "No miembro",
+    "minutes": "minutos",
+    "learnMore": "Saber más",
+    "categoryDefault": "General"
   }
 }

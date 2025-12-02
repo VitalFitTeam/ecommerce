@@ -4,26 +4,32 @@ import Image from "next/image";
 import {
   XMarkIcon,
   StarIcon,
-  UserGroupIcon,
   ClockIcon,
   MapPinIcon,
 } from "@heroicons/react/24/solid";
 import { motion, AnimatePresence } from "framer-motion";
-
-interface Service {
-  id: number;
-  title: string;
-  description: string;
-  price: number;
-  rating: number;
-  image: string;
-  capacity?: number;
-  duration?: string;
-  branch?: string;
-}
+import { Button } from "@/components/ui/button";
+import { useTranslations } from "next-intl";
 
 interface ServiceModalProps {
-  service: Service | null;
+  service: {
+    service_id: string;
+    name: string;
+    description: string;
+    duration_minutes: number;
+    priority_score: number;
+    is_featured: boolean;
+    created_at: string;
+    updated_at: string;
+    service_category: {
+      category_id: string;
+      name: string;
+    };
+    images: string[];
+    lowest_price_member: number;
+    lowest_price_no_member: number;
+    base_currency: string;
+  } | null;
   isOpen: boolean;
   onClose: () => void;
 }
@@ -33,7 +39,21 @@ export default function ServiceModal({
   isOpen,
   onClose,
 }: ServiceModalProps) {
-  if (!isOpen || !service) {return null;}
+  const t = useTranslations("ServiceModal");
+
+  if (!isOpen || !service) {
+    return null;
+  }
+
+  const schedule = [
+    "6:00 AM",
+    "10:00 AM",
+    "12:00 PM",
+    "3:00 PM",
+    "5:00 PM",
+    "8:00 PM",
+  ];
+  const imgSrc = service.images?.[0] ?? "/images/gym-training-chile.png";
 
   return (
     <AnimatePresence>
@@ -51,94 +71,92 @@ export default function ServiceModal({
           onClick={(e) => e.stopPropagation()}
           className="bg-white rounded-2xl shadow-lg w-full max-w-md sm:max-w-lg md:max-w-xl overflow-y-auto max-h-[90vh] flex flex-col"
         >
-          {/* Header con imagen y botón cerrar */}
           <div className="relative">
             <Image
-              src={service.image}
-              alt={service.title}
+              src={imgSrc}
+              alt={service.name}
               width={600}
               height={300}
               className="w-full h-48 sm:h-56 md:h-64 object-cover"
             />
-            <button
+            <Button
+              variant="ghost"
+              size="icon"
+              className="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-1"
               onClick={onClose}
-              className="absolute top-3 right-3 bg-white/80 hover:bg-white text-gray-800 rounded-full p-1 transition cursor-pointer"
             >
               <XMarkIcon className="w-5 h-5 sm:w-6 sm:h-6" />
-            </button>
+            </Button>
           </div>
 
-          {/* Contenido */}
           <div className="p-5 sm:p-6 md:p-8 flex flex-col justify-between flex-grow">
-            {/* Título y rating */}
             <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-3">
               <h2 className="text-[#F27F2A] font-semibold text-2xl sm:text-3xl uppercase mb-2 sm:mb-0">
-                {service.title}
+                {service.name}
               </h2>
               <div className="flex items-center text-gray-700 text-sm sm:text-base">
                 <StarIcon className="w-4 h-4 text-yellow-400 mr-1" />
-                {service.rating}
+                {service.priority_score}
               </div>
             </div>
 
-            <p className="text-xl sm:text-2xl font-bold mb-5">
-              ${service.price}
-            </p>
+            <div className="flex gap-4 mb-5 text-xl sm:text-2xl font-bold">
+              <span className="text-black">
+                {t("nonMember")}: ${service.lowest_price_no_member}{" "}
+                {service.base_currency}
+              </span>
+              <span className="text-green-600">
+                {t("member")}: ${service.lowest_price_member}{" "}
+                {service.base_currency}
+              </span>
+            </div>
 
-            {/* Info breve: capacidad, duración, sucursal */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-6 text-sm sm:text-base text-gray-700">
-              <div className="flex items-center gap-2">
-                <UserGroupIcon className="w-5 h-5 text-[#F27F2A]" />
-                <span>{service.capacity ?? 10} personas</span>
-              </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6 text-sm sm:text-base text-gray-700">
               <div className="flex items-center gap-2">
                 <ClockIcon className="w-5 h-5 text-[#F27F2A]" />
-                <span>{service.duration ?? "60 min"}</span>
+                <span>
+                  {service.duration_minutes} {t("minutes")}
+                </span>
               </div>
               <div className="flex items-center gap-2">
                 <MapPinIcon className="w-5 h-5 text-[#F27F2A]" />
-                <span>{service.branch ?? "Sucursal Central"}</span>
+                <span>{service.service_category?.name}</span>
               </div>
             </div>
 
-            {/* Descripción */}
             <h3 className="font-medium text-lg sm:text-xl text-gray-800 mb-2">
-              Descripción
+              {t("description")}
             </h3>
             <p className="text-gray-600 text-sm sm:text-base leading-relaxed mb-6">
               {service.description}
             </p>
 
-            {/* Horarios */}
             <h3 className="font-medium text-lg sm:text-xl text-gray-800 mb-2">
-              Horarios disponibles
+              {t("availableSchedules")}
             </h3>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 mb-6">
-              {[
-                "6:00 AM",
-                "10:00 AM",
-                "12:00 PM",
-                "3:00 PM",
-                "5:00 PM",
-                "8:00 PM",
-              ].map((hour) => (
-                <button
+              {schedule.map((hour) => (
+                <Button
                   key={hour}
-                  className="border border-gray-300 rounded-md py-2 text-sm hover:border-[#F27F2A] hover:text-[#F27F2A] transition"
+                  variant="outline"
+                  size="sm"
+                  className="border-gray-300 hover:border-[#F27F2A] hover:text-[#F27F2A]"
                 >
                   {hour}
-                </button>
+                </Button>
               ))}
             </div>
 
-            {/* Botones */}
             <div className="flex flex-col sm:flex-row gap-3">
-              <button className="flex-1 bg-[#F27F2A] text-white text-sm sm:text-base py-2 rounded-md hover:bg-[#d66d1f] transition">
-                Reservar ahora
-              </button>
-              <button className="flex-1 border border-gray-300 text-gray-700 text-sm sm:text-base py-2 rounded-md hover:border-[#F27F2A] hover:text-[#F27F2A] transition">
-                Más información
-              </button>
+              <Button>
+                {t("bookNow")}
+              </Button>
+              <Button
+                variant="outline"
+              
+              >
+                {t("moreInfo")}
+              </Button>
             </div>
           </div>
         </motion.div>
