@@ -1,18 +1,29 @@
 "use client";
 
+import PaymentHistoryTable from "@/components/layout/dashboard/PaymentHistoryTable"; // Asegúrate que esta ruta sea correcta
 import BannerOffer from "./BannerOffer";
 import { MembershipSummary } from "./MembershipSummary";
 import UpcomingClasses from "./UpcomingClasses";
-import PaymentHistory from "./PaymentHistory";
 import { useAuth } from "@/context/AuthContext";
+import { useMyInvoices } from "@/hooks/useClientInvoices";
 
 export default function MainContent() {
-  const { user, loading } = useAuth();
+  const { user, loading: authLoading } = useAuth();
 
-  if (loading) {
-    // Tip: Usa un Skeleton Loader aquí en lugar de texto plano para mejor UX
+  const {
+    invoices,
+    loading: invoicesLoading,
+    page,
+    setPage,
+    totalPages,
+  } = useMyInvoices({ limit: 5 });
+
+  if (authLoading) {
     return (
-      <div className="flex-1 p-8 animate-pulse bg-gray-50">Cargando...</div>
+      <div className="flex-1 p-8 animate-pulse bg-gray-50">
+        <div className="h-32 bg-gray-200 rounded mb-4"></div>
+        <div className="h-64 bg-gray-200 rounded"></div>
+      </div>
     );
   }
 
@@ -24,20 +35,23 @@ export default function MainContent() {
     );
   }
 
-  // Verificar si tiene membresía activa para decidir si mostramos el banner
   const hasActiveMembership = user.client_membership?.status === "Active";
 
   return (
     <main className="flex-1 p-8">
       <div className="space-y-6">
-        {/* Lógica de UX: Solo mostramos oferta si NO tiene membresía activa */}
         {!hasActiveMembership && <BannerOffer />}
 
-        {/* TypeScript ahora está feliz porque los tipos coinciden */}
         <MembershipSummary clientMembership={user.client_membership} />
 
         <UpcomingClasses />
-        <PaymentHistory />
+        <PaymentHistoryTable
+          data={invoices}
+          loading={invoicesLoading}
+          page={page}
+          totalPages={totalPages}
+          onPageChange={setPage}
+        />
       </div>
     </main>
   );

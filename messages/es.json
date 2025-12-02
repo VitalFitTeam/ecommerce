@@ -436,19 +436,15 @@
   "membership": {
     "title": "Mi Membresía",
     "noMembership": "No tienes una membresía activa en este momento.",
-
     "active": "Activa",
     "expired": "Vencida",
     "cancelled": "Cancelada",
     "pending": "Pendiente",
-
     "nextLabel": "Tiempo Restante",
     "expiredLabel": "Plan Finalizado",
     "daysRemaining": "días restantes",
-
     "startLabel": "Fecha Inicio",
     "expiryLabel": "Vence el",
-
     "renewButton": "Renovar Plan",
     "reactivateButton": "Reactivar Membresía",
     "cancelMembership": "Cancelar Suscripción"
@@ -468,18 +464,33 @@
     }
   },
   "paymentHistory": {
-    "title": "HISTÓRIAL DE PAGOS",
+    "title": "Historial de pagos",
     "columns": {
       "transactionId": "ID de Transacción",
       "date": "Fecha",
-      "totalPrice": "Precio total",
+      "totalPrice": "Monto Total",
       "status": "Estado",
-      "paymentMethod": "Método de Pago",
-      "actions": "Acciones"
+      "paymentMethod": "Método de Pago"
     },
-    "statusPaid": "Pagado",
-    "statusPending": "Pendiente",
-    "statusRefunded": "Reembolsado"
+    "status": {
+      "completed": "Completado",
+      "pending": "Pendiente",
+      "refunded": "Reembolsado",
+      "failed": "Fallido",
+      "unpaid": "No pagado",
+      "paid": "Pagado"
+    },
+    "actions": {
+      "viewDetails": "Ver detalle",
+      "downloadReceipt": "Descargar recibo"
+    },
+    "filters": {
+      "payname": "Nombre de pago",
+      "status": "Estado",
+      "startDate": "Fecha inicio",
+      "endDate": "Fecha fin",
+      "clear": "Limpiar filtros"
+    }
   },
   "Profile": {
     "ptitle": "MI PERFIL",
@@ -766,34 +777,5 @@
     "home": "Inicio",
     "profile": "Perfil",
     "logout": "Cerrar sesión"
-  },
-  "PaymentHistoryScreen": {
-    "title": "HISTORIAL DE PAGOS",
-    "plans": {
-      "monthly": "Mensual"
-    },
-    "status": {
-      "paid": "Pagado",
-      "pending": "Pendiente",
-      "refunded": "Reembolsado"
-    },
-    "columns": {
-      "transactionId": "ID de Transacción",
-      "date": "Fecha",
-      "totalPrice": "Precio total",
-      "status": "Estado",
-      "paymentMethod": "Método de Pago"
-    },
-    "filters": {
-      "payname": "Filtro",
-      "status": "Estado",
-      "startDate": "Desde",
-      "endDate": "Hasta",
-      "clear": "Borrar filtros"
-    },
-    "actions": {
-      "viewDetails": "Ver Detalles",
-      "downloadReceipt": "Descargar Recibo"
-    }
   }
 }

@@ -86,6 +86,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         }
 
         const userData = profileResponse.user;
+        console.log("Usuario", userData);
 
         return {
           // --- Identidad y Contacto ---

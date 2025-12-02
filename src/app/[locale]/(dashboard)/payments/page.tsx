@@ -1,14 +1,13 @@
 "use client";
 
-import MagnifyingGlassIcon from "@heroicons/react/24/outline/MagnifyingGlassIcon";
-import { useAuth } from "@/context/AuthContext";
+import { useState, useMemo } from "react";
+import { useRouter } from "@/i18n/routing";
 import { useTranslations } from "next-intl";
-import { PageHeader } from "@/components/ui/PageHeader";
-import { DataTable } from "@/components/ui/table/DataTable";
+import MagnifyingGlassIcon from "@heroicons/react/24/outline/MagnifyingGlassIcon";
 import { Eye, Download } from "lucide-react";
-import { RowActions } from "@/components/ui/table/RowActions";
+
+import { PageHeader } from "@/components/ui/PageHeader";
 import { Input } from "@/components/ui/Input";
-import { useState, useMemo, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -17,127 +16,72 @@ import {
   SelectContent,
   SelectItem,
 } from "@/components/ui/select";
-import { useRouter } from "@/i18n/routing";
+import { RowActions } from "@/components/ui/table/RowActions";
+import PaymentHistoryTable from "@/components/layout/dashboard/PaymentHistoryTable";
+import { useMyInvoices } from "@/hooks/useClientInvoices";
 
 export default function HistoryPaymentPage() {
-  const { token } = useAuth();
+  const t = useTranslations("paymentHistory");
   const router = useRouter();
-  const t = useTranslations("PaymentHistoryScreen");
 
-  const [payName, setpayName] = useState("");
+  const [payName, setPayName] = useState("");
   const [status, setStatus] = useState("all");
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
 
-  const showClearFilters = useMemo(() => {
-    return payName || status !== "all" || startDate || endDate;
-  }, [payName, status, startDate, endDate]);
+  const {
+    invoices,
+    loading: invoicesLoading,
+    page,
+    setPage,
+    totalPages,
+    setSearch,
+  } = useMyInvoices({ limit: 10 });
 
-  useEffect(() => {
-    if (!token) {
-      router.push("/login");
-    }
-  }, [token, router]);
-
-  if (!token) {
-    return null;
-  }
+  const showClearFilters = payName || status !== "all";
 
   const clearFilters = () => {
-    setpayName("");
+    setPayName("");
     setStatus("all");
-    setStartDate("");
-    setEndDate("");
+    setSearch("");
+    setPage(1);
   };
 
-  const payments = [
-    {
-      id: "m1",
-      transactionId: "TX-149D03",
-      date: "10/11/2025",
-      totalPrice: "$250.00",
-      status: t("status.paid"),
-      paymentMethod: "****4567",
-    },
-    {
-      id: "m2",
-      transactionId: "TX-149D03",
-      date: "10/11/2025",
-      totalPrice: "$250.00",
-      status: t("status.refunded"),
-      paymentMethod: "****4567",
-    },
-    {
-      id: "m3",
-      transactionId: "TX-149D03",
-      date: "10/11/2025",
-      totalPrice: "$250.00",
-      status: t("status.pending"),
-      paymentMethod: "****4567",
-    },
-  ];
-
-  const getStatusStyle = (status: string) => {
-    switch (status) {
-      case t("status.paid"):
-        return "border border-green-300 text-green-600";
-      case t("status.pending"):
-        return "border border-yellow-300 text-yellow-500";
-      case t("status.refunded"):
-        return "border border-gray-300 text-gray-500";
-      default:
-        return "border border-gray-300 text-gray-800";
-    }
+  const handleSearchChange = (value: string) => {
+    setPayName(value);
+    setSearch(value);
+    setPage(1);
   };
 
-  const columns = [
-    {
-      header: t("columns.transactionId"),
-      accessor: "transactionId" as const,
-    },
-    {
-      header: t("columns.date"),
-      accessor: "date" as const,
-    },
-    {
-      header: t("columns.totalPrice"),
-      accessor: "totalPrice" as const,
-    },
-    {
-      header: t("columns.status"),
-      accessor: "status" as const,
-      render: (value: string) => (
-        <span
-          className={`${getStatusStyle(value)} px-3 py-1 rounded text-xs font-semibold`}
-        >
-          {value}
-        </span>
-      ),
-    },
-    {
-      header: t("columns.paymentMethod"),
-      accessor: "paymentMethod" as const,
-    },
-  ];
+  const filteredInvoices = useMemo(() => {
+    return invoices.filter((inv) => {
+      let matches = true;
+
+      if (status !== "all") {
+        matches = matches && inv.status.toLowerCase() === status.toLowerCase();
+      }
+
+      if (payName) {
+        matches =
+          matches &&
+          inv.invoice_id.toLowerCase().includes(payName.toLowerCase());
+      }
+
+      return matches;
+    });
+  }, [invoices, status, payName]);
 
   const actions = (row: any) => (
     <RowActions
-      menuLabel={""}
+      menuLabel=""
       actions={[
         {
           label: t("actions.viewDetails"),
           icon: Eye,
-          onClick: () => {
-            console.log("Ver detalles de:", row);
-            router.push(`/payments/history/${row.id}`);
-          },
+          onClick: () => router.push(`/payments/history/${row.invoice_id}`),
         },
         {
           label: t("actions.downloadReceipt"),
           icon: Download,
-          onClick: () => {
-            console.log("Descargar recibo de:", row);
-          },
+          onClick: () => console.log("Descargar recibo de:", row.invoice_id),
         },
       ]}
     />
@@ -147,6 +91,7 @@ export default function HistoryPaymentPage() {
     <div className="min-h-screen">
       <main className="p-8">
         <PageHeader title={t("title")} />
+
         <div className="space-y-4 my-4">
           <div className="flex flex-wrap gap-4 items-end">
             <div className="relative w-full sm:w-[250px]">
@@ -156,7 +101,7 @@ export default function HistoryPaymentPage() {
                 placeholder={t("filters.payname")}
                 className="w-64 pl-9"
                 value={payName}
-                onChange={(e) => setpayName(e.target.value)}
+                onChange={(e) => handleSearchChange(e.target.value)}
               />
             </div>
 
@@ -166,26 +111,14 @@ export default function HistoryPaymentPage() {
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">{t("filters.status")}</SelectItem>
-                <SelectItem value="paid">{t("status.paid")}</SelectItem>
-                <SelectItem value="refunded">{t("status.refunded")}</SelectItem>
+                <SelectItem value="completed">
+                  {t("status.completed")}
+                </SelectItem>
                 <SelectItem value="pending">{t("status.pending")}</SelectItem>
+                <SelectItem value="refunded">{t("status.refunded")}</SelectItem>
+                <SelectItem value="failed">{t("status.failed")}</SelectItem>
               </SelectContent>
             </Select>
-
-            <Input
-              type="date"
-              placeholder={t("filters.startDate")}
-              className="w-40"
-              value={startDate}
-              onChange={(e) => setStartDate(e.target.value)}
-            />
-            <Input
-              type="date"
-              placeholder={t("filters.endDate")}
-              className="w-40"
-              value={endDate}
-              onChange={(e) => setEndDate(e.target.value)}
-            />
 
             {showClearFilters && (
               <Button variant="outline" onClick={clearFilters}>
@@ -194,11 +127,12 @@ export default function HistoryPaymentPage() {
             )}
           </div>
 
-          <DataTable
-            columns={columns}
-            data={payments}
-            actions={actions}
-            enableRowSelection={false}
+          <PaymentHistoryTable
+            data={filteredInvoices}
+            loading={invoicesLoading}
+            page={page}
+            totalPages={totalPages}
+            onPageChange={setPage}
           />
         </div>
       </main>
