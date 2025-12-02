@@ -15,108 +15,134 @@ export default function BranchDetailPage() {
       <Navbar transparent={false} />
 
       <section className="py-8 px-4">
-        <div className="max-w-4xl mx-auto">
-          <div className="mb-8">
-            <Image
-              src="/images/Rectangle 87.png"
-              alt="VITALFIT CENTRAL"
-              width={800}
-              height={400}
-              className="w-full h-64 object-cover rounded-lg"
-              priority
-            />
-          </div>
+        <div className="max-w-6xl mx-auto">
+          <div className="flex flex-col md:flex-row gap-8 mb-8">
+            <div className="md:w-1/2">
+              <Image
+                src="/images/Rectangle 87.png"
+                alt="VITALFIT CENTRAL"
+                width={600}
+                height={400}
+                className="w-full h-64 object-cover"
+                priority
+              />
+            </div>
 
-          <div className="text-center mb-8">
-            <h1 className="text-4xl font-bold text-gray-900 mb-6">
-              VITALFIT CENTRAL
-            </h1>
-          </div>
+            <div className="md:w-1/2">
+              <h1 className="text-3xl font-bold text-black mb-6">
+                VITALFIT CENTRAL
+              </h1>
 
-          <div className="space-y-4 mb-8">
-            <div className="flex items-start">
-              <span className="text-gray-900 mr-2">-</span>
-              <div>
-                <p className="text-gray-900">Av. Principal 121, Centro</p>
-                <p className="text-gray-600 ml-4">-58 424 581 2350</p>
+              <div className="space-y-4">
+                <div className="flex items-start">
+                  <img
+                    src="/logo/map-pin.png"
+                    alt="ubicación"
+                    className="w-5 h-5 mt-1 mr-3 flex-shrink-0"
+                  />
+                  <div>
+                    <p className="text-black">- Av. Principal 121, Centro</p>
+                    <div className="flex items-center ml-6">
+                      <img
+                        src="/logo/phone.png"
+                        alt="teléfono"
+                        className="w-4 h-4 mr-2"
+                      />
+                      <p className="text-black">+58 424 581 2350</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flex items-center">
+                  <img
+                    src="/logo/envelope.png"
+                    alt="email"
+                    className="w-5 h-5 mr-3"
+                  />
+                  <h2 className="text-xl font-bold text-black">
+                    info@vitalfitcentral.com
+                  </h2>
+                </div>
+
+                <div className="flex items-start">
+                  <img
+                    src="/logo/Frame 1686555439.png"
+                    alt="horarios"
+                    className="w-5 h-5 mt-1 mr-3 flex-shrink-0"
+                  />
+                  <div>
+                    <p className="text-black">- Atención al Público:</p>
+                    <p className="text-black ml-6">
+                      Lunes - Viernes: 06:00am a 10:00pm
+                    </p>
+                    <p className="text-black ml-6">
+                      Sabados - Domingos: 09:00am - 03:00pm
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-start">
+                  <img
+                    src="/logo/user.png"
+                    alt="administrador"
+                    className="w-5 h-5 mt-1 mr-3 flex-shrink-0"
+                  />
+                  <div>
+                    <h2 className="text-xl font-bold text-black">
+                      Administrador Asignado:
+                    </h2>
+                    <p className="text-black ml-6">Gabriela Ramos</p>
+                    <p className="text-black ml-6">
+                      gabriela.r@vitalfitcentral.com
+                    </p>
+                  </div>
+                </div>
               </div>
             </div>
-
-            <div className="mb-4">
-              <h2 className="text-xl font-semibold text-gray-900 mb-2">
-                Info@vitalfitcentral.com
-              </h2>
-            </div>
-
-            <div className="mb-4">
-              <p className="text-gray-900 mb-2">- Atención al Público:</p>
-              <p className="text-gray-600 ml-4">
-                Lunes - Viernes: 06:00am a 10:00pm
-              </p>
-              <p className="text-gray-600 ml-4">
-                Sábado - Domingo: 09:00am - 03:00pm
-              </p>
-            </div>
-
-            <div>
-              <h2 className="text-xl font-semibold text-gray-900 mb-2">
-                Administrador Asignado:
-              </h2>
-              <p className="text-gray-900 ml-4">Gabriela Ramos</p>
-              <p className="text-gray-600 ml-4">
-                gabriela.r@vitalfitcentral.com
-              </p>
-            </div>
           </div>
 
-          <div className="border-t border-gray-300 my-8"></div>
+          <hr className="border-t border-gray-300 my-8" />
 
           <div className="mb-8">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">SERVICIOS</h2>
+            <h2 className="text-2xl font-bold text-black mb-4">SERVICIOS</h2>
 
             <div className="mb-6">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">
-                Generación
-              </h3>
-
-              <div className="grid grid-cols-3 gap-4 mb-4">
-                <div className="text-sm font-medium text-gray-700">
-                  Filosofía
-                </div>
-                <div className="text-sm font-medium text-gray-700">Tipo</div>
-                <div className="text-sm font-medium text-gray-700">
-                  Contrato
+              <div className="mb-6">
+                <div className="flex mb-2">
+                  <div className="w-1/4 font-bold text-black">Gimnasio</div>
+                  <div className="w-1/4 font-bold text-black">Piscina</div>
+                  <div className="w-1/4 font-bold text-black">Yoga</div>
+                  <div className="w-1/4 font-bold text-black">Crossfit</div>
                 </div>
               </div>
 
-              <div className="mb-6">
-                <h4 className="text-lg font-bold text-gray-900 mb-4">
+              <div>
+                <h4 className="text-lg font-bold text-black mb-3">
                   BENEFICIOS
                 </h4>
-
-                <ul className="space-y-2 ml-4">
-                  <li className="flex">
-                    <span className="text-gray-900 mr-2">-</span>
-                    <span className="text-gray-700">
-                      Acceso ilimitado a todas las áreas del gimnasio incluyendo
-                      el área de Yoga.
+                <ul className="space-y-2">
+                  <li className="flex items-start">
+                    <span className="inline-block w-2 h-2 bg-black rounded-full mt-2 mr-3 flex-shrink-0"></span>
+                    <span className="text-black">
+                      Acceso ilimitado a todas las áreas del gimnasio,
+                      incluyendo el área de Yoga.
                     </span>
                   </li>
-                  <li className="flex">
-                    <span className="text-gray-900 mr-2">-</span>
-                    <span className="text-gray-700">
-                      Una clase premium al mes incluyendo spinning.
+                  <li className="flex items-start">
+                    <span className="inline-block w-2 h-2 bg-black rounded-full mt-2 mr-3 flex-shrink-0"></span>
+                    <span className="text-black">
+                      6 clases premium al mes incluyendo spinning.
                     </span>
                   </li>
-                  <li className="flex">
-                    <span className="text-gray-900 mr-2">-</span>
-                    <span className="text-gray-700">
-                      Sesión exclusiva para orientación con nuestro personal.
+                  <li className="flex items-start">
+                    <span className="inline-block w-2 h-2 bg-black rounded-full mt-2 mr-3 flex-shrink-0"></span>
+                    <span className="text-black">
+                      Sala exclusiva para entrenamiento personal.
                     </span>
                   </li>
-                  <li className="flex">
-                    <span className="text-gray-900 mr-2">-</span>
-                    <span className="text-gray-700">
+                  <li className="flex items-start">
+                    <span className="inline-block w-2 h-2 bg-black rounded-full mt-2 mr-3 flex-shrink-0"></span>
+                    <span className="text-black">
                       Descuento en productos y eventos especiales.
                     </span>
                   </li>
@@ -125,134 +151,98 @@ export default function BranchDetailPage() {
             </div>
           </div>
 
-          <div className="border-t border-gray-300 my-8"></div>
+          <hr className="border-t border-gray-300 my-8" />
 
           <div className="mb-8">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">
-              MEMBRESÍAS
-            </h2>
+            <h2 className="text-2xl font-bold text-black mb-6">MEMBRESÍAS</h2>
 
-            <div className="space-y-6">
-              <div className="space-y-2">
-                <div className="flex justify-between items-start">
-                  <h3 className="text-lg font-semibold text-gray-900">
-                    - Plan Full
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              <div className="space-y-2 p-4 border border-gray-200 rounded-lg">
+                <div className="flex flex-col mb-2">
+                  <h3 className="text-lg font-bold text-orange-500">
+                    {" "}
+                    Plan Full
                   </h3>
-                  <span className="text-lg font-bold text-gray-900">
-                    $75/mes
-                  </span>
+                  <span className="text-xl font-bold text-black">$75/mes</span>
                 </div>
-                <p className="text-gray-600 ml-4">
-                  Más beneficios por su vida fitness
+                <p className="text-black text-sm">
+                  Más beneficios para tu vida fitness
                 </p>
-                <div className="flex gap-2 ml-4">
-                  <button className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-1 rounded text-sm font-medium">
+                <div className="flex gap-2 mt-3">
+                  <button className="border border-orange-500 text-orange-500 px-3 py-2 rounded text-sm font-medium w-full">
                     Saber más
                   </button>
-                  <button className="border border-orange-500 text-orange-500 hover:bg-orange-50 px-4 py-1 rounded text-sm font-medium">
-                    Afiliarte
+                  <button className="bg-orange-500 text-white px-3 py-2 rounded text-sm font-medium w-full">
+                    Afiliate
                   </button>
                 </div>
               </div>
 
-              <div className="space-y-2">
-                <div className="flex justify-between items-start">
-                  <h3 className="text-lg font-semibold text-gray-900">
-                    - Plan Básico
+              <div className="space-y-2 p-4 border border-gray-200 rounded-lg">
+                <div className="flex flex-col mb-2">
+                  <h3 className="text-lg font-bold text-orange-500">
+                    {" "}
+                    Plan Básico
                   </h3>
-                  <span className="text-lg font-bold text-gray-900">
-                    $50/mes
-                  </span>
+                  <span className="text-xl font-bold text-black">$50/mes</span>
                 </div>
-                <p className="text-gray-600 ml-4">
-                  Más beneficios por su vida fitness
+                <p className="text-black text-sm">
+                  Más beneficios para tu vida fitness
                 </p>
-                <div className="flex gap-2 ml-4">
-                  <button className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-1 rounded text-sm font-medium">
+                <div className="flex gap-2 mt-3">
+                  <button className="border border-orange-500 text-orange-500 px-3 py-2 rounded text-sm font-medium w-full">
                     Saber más
                   </button>
-                  <button className="border border-orange-500 text-orange-500 hover:bg-orange-50 px-4 py-1 rounded text-sm font-medium">
-                    Afiliarte
+                  <button className="bg-orange-500 text-white px-3 py-2 rounded text-sm font-medium w-full">
+                    Afiliate
                   </button>
                 </div>
               </div>
 
-              <div className="space-y-2">
-                <div className="flex justify-between items-start">
-                  <h3 className="text-lg font-semibold text-gray-900">
-                    - Plan Estándar
+              <div className="space-y-2 p-4 border border-gray-200 rounded-lg">
+                <div className="flex flex-col mb-2">
+                  <h3 className="text-lg font-bold text-orange-500">
+                    {" "}
+                    Plan Estándor
                   </h3>
-                  <span className="text-lg font-bold text-gray-900">
-                    $88/mes
-                  </span>
+                  <span className="text-xl font-bold text-black">$88/mes</span>
                 </div>
-                <p className="text-gray-600 ml-4">
-                  Más beneficios por su vida fitness
+                <p className="text-black text-sm">
+                  Más beneficios para tu vida fitness
                 </p>
-                <div className="flex gap-2 ml-4">
-                  <button className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-1 rounded text-sm font-medium">
+                <div className="flex gap-2 mt-3">
+                  <button className="border border-orange-500 text-orange-500 px-3 py-2 rounded text-sm font-medium w-full">
                     Saber más
                   </button>
-                  <button className="border border-orange-500 text-orange-500 hover:bg-orange-50 px-4 py-1 rounded text-sm font-medium">
-                    Afiliarte
+                  <button className="bg-orange-500 text-white px-3 py-2 rounded text-sm font-medium w-full">
+                    Afiliate
                   </button>
                 </div>
               </div>
 
-              <div className="space-y-2">
-                <div className="flex justify-between items-start">
-                  <h3 className="text-lg font-semibold text-gray-900">
-                    - Plan Nuevo
+              <div className="space-y-2 p-4 border border-gray-200 rounded-lg">
+                <div className="flex flex-col mb-2">
+                  <h3 className="text-lg font-bold text-orange-500">
+                    Plan Nuevo
                   </h3>
-                  <span className="text-lg font-bold text-gray-900">
-                    $35/mes
-                  </span>
+                  <span className="text-xl font-bold text-black">$35/mes</span>
                 </div>
-                <p className="text-gray-600 ml-4">
-                  Más beneficios por su vida fitness
+                <p className="text-black text-sm">
+                  Más beneficios para tu vida fitness
                 </p>
-                <div className="flex gap-2 ml-4">
-                  <button className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-1 rounded text-sm font-medium">
+                <div className="flex gap-2 mt-3">
+                  <button className="border border-orange-500 text-orange-500 px-3 py-2 rounded text-sm font-medium w-full">
                     Saber más
                   </button>
-                  <button className="border border-orange-500 text-orange-500 hover:bg-orange-50 px-4 py-1 rounded text-sm font-medium">
-                    Afiliarte
+                  <button className="bg-orange-500 text-white px-3 py-2 rounded text-sm font-medium w-full">
+                    Afiliate
                   </button>
                 </div>
               </div>
             </div>
           </div>
 
-          <div className="border-t border-gray-300 my-8"></div>
-
-          <div className="text-center">
-            <h2 className="text-2xl font-bold text-gray-900 mb-2">Vitalfit</h2>
-            <p className="text-gray-600 italic mb-6">
-              Empieza tu vida: Alcanza tu máximo potencial.
-            </p>
-
-            <div className="grid grid-cols-2 gap-8 text-left max-w-md mx-auto">
-              <div>
-                <p className="text-gray-900 mb-2">- Énfasis: Pilates</p>
-                <p className="text-gray-900 mb-1">- Servicios:</p>
-                <p className="text-gray-900 mb-1">- Membresías:</p>
-                <p className="text-gray-900 mb-1">- Sucursales:</p>
-                <p className="text-gray-900">- Contacto:</p>
-              </div>
-              <div>
-                <p className="text-gray-900 mb-2">- Nuestros Servicios:</p>
-                <p className="text-gray-600 ml-4">- Yoga:</p>
-                <p className="text-gray-600 ml-4">- Cardio:</p>
-                <p className="text-gray-600 ml-4">- Spinning:</p>
-                <p className="text-gray-600 ml-4">- Pilates:</p>
-
-                <p className="text-gray-900 mt-4 mb-2">- Contacto:</p>
-                <p className="text-gray-600 ml-4">+58 424 581 2350</p>
-                <p className="text-gray-600 ml-4">info@vitalfit.com</p>
-                <p className="text-gray-600 ml-4">Av. Principal 123, Centro</p>
-              </div>
-            </div>
-          </div>
+          <hr className="border-t border-gray-300 my-8" />
         </div>
       </section>
 
