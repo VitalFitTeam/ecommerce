@@ -5,10 +5,6 @@ import {
   CheckCircle2,
   ArrowLeft,
   Loader2,
-  Banknote,
-  Building2,
-  CreditCard,
-  RefreshCcw,
   X,
   FileText,
   UploadCloud,
@@ -19,6 +15,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/Input";
 import { Label } from "@/components/ui/Label";
 import { Card } from "@/components/ui/Card";
+
 import { mainCurrencies, PublicMembershipResponse } from "@vitalfit/sdk";
 import { supabase } from "@/lib/supabase";
 import { api } from "@/lib/sdk-config";
@@ -76,8 +73,6 @@ export const StepInvoiceConfirmation = ({
 
   const branchName =
     branches.find((b) => b.branch_id === branchId)?.name ?? branchId;
-  const methodName =
-    methods.find((m) => m.method_id === methodId)?.name ?? methodId;
 
   const basePriceUSD =
     Number(membership?.price) + Number(selectedPackage?.price || 0);
@@ -185,7 +180,7 @@ export const StepInvoiceConfirmation = ({
   return (
     <div className="max-w-2xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500 space-y-6">
       <div className="bg-emerald-50 border border-emerald-100 rounded-2xl p-6 flex items-start sm:items-center gap-4 shadow-sm">
-        <div className="bg-emerald-100 p-3 rounded-full flex-shrink-0 text-emerald-600">
+        <div className="bg-emerald-100 p-3 rounded-full  text-emerald-600">
           <CheckCircle2 size={28} strokeWidth={2.5} />
         </div>
         <div className="flex-1">

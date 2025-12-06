@@ -8,11 +8,7 @@ import {
   SelectContent,
   SelectItem,
 } from "@/components/ui/select";
-import type {
-  PaginatedBranch,
-  BranchPaymentMethodInfo,
-  BranchInfo,
-} from "@vitalfit/sdk";
+import type { BranchPaymentMethodInfo, BranchInfo } from "@vitalfit/sdk";
 
 interface Props {
   selectedBranch: string;
