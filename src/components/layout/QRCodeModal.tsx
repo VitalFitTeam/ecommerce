@@ -23,6 +23,7 @@ export default function QRCodeModal({
   duration = 25,
 }: QRCodeModalProps) {
   const modalRef = useRef<HTMLDivElement>(null);
+
   const [countdown, setCountdown] = useState(duration);
 
   useEffect(() => {
@@ -52,12 +53,13 @@ export default function QRCodeModal({
     if (!token) {
       return;
     }
-    setCountdown(duration);
+
     const interval = setInterval(() => {
       setCountdown((prev) => (prev > 0 ? prev - 1 : 0));
     }, 1000);
+
     return () => clearInterval(interval);
-  }, [token, duration]);
+  }, [token]);
 
   const formatTime = (seconds: number) => {
     const m = Math.floor(seconds / 60);

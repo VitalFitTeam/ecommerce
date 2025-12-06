@@ -1,13 +1,10 @@
-// eslint.config.mjs
 import nextConfig from "eslint-config-next";
 import prettierConfig from "eslint-config-prettier";
 
-// Importar plugin y parser de TypeScript
 import tseslint from "@typescript-eslint/eslint-plugin";
 import tsparser from "@typescript-eslint/parser";
 
 export default [
-  // Ignorar directorios
   {
     ignores: [
       "node_modules/**",
@@ -19,10 +16,8 @@ export default [
     ],
   },
 
-  // Configuración oficial de Next.js (es un array)
   ...nextConfig,
 
-  // Config de Prettier
   prettierConfig,
 
   {
@@ -36,7 +31,6 @@ export default [
     },
 
     rules: {
-      // Reglas personalizadas
       quotes: [
         "error",
         "double",

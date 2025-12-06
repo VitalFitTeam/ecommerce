@@ -14,7 +14,7 @@ import {
   SelectItem,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/Textarea";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useRouter } from "@/i18n/routing";
 
 const memberships = [
@@ -60,16 +60,13 @@ export default function MembershipDetailsPage() {
   const router = useRouter();
   const t = useTranslations("MembershipDetails");
 
-  const [membership, setMembership] = useState<any>(null);
+  const membership = memberships.find((m) => m.id === id);
 
   useEffect(() => {
-    const found = memberships.find((m) => m.id === id);
-    if (!found) {
+    if (!membership) {
       router.replace("/memberships");
-    } else {
-      setMembership(found);
     }
-  }, [id, router]);
+  }, [membership, router]);
 
   if (!membership) {
     return null;
@@ -194,13 +191,13 @@ export default function MembershipDetailsPage() {
               <label className="text-sm font-semibold block mb-2">
                 Motivo de cancelación
               </label>
-              <Select disabled defaultValue={membership.cancellationReason}>
+              <Select disabled defaultValue={membership.cancellationDate}>
                 <SelectTrigger className="w-full">
                   <SelectValue placeholder={t("selectCancelDefaultValue")} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value={membership.cancellationReason}>
-                    {membership.cancellationReason}
+                  <SelectItem value={""}>
+                    {membership.cancellationDate}
                   </SelectItem>
                 </SelectContent>
               </Select>
@@ -218,7 +215,7 @@ export default function MembershipDetailsPage() {
                 Descripción
               </label>
               <Textarea
-                value={membership.cancellationDescription}
+                value={membership.cancellationDate}
                 disabled
                 placeholder={t("descriptionCancelPlaceholder")}
                 className="resize-none"
