@@ -2,14 +2,14 @@
 
 import { useState, useEffect, useCallback, useRef } from "react";
 import { useAuth } from "@/context/AuthContext";
-import QRCodeModal from "../QRCodeModal";
 import { api } from "@/lib/sdk-config";
 import type { QrToken as QrTokenType } from "@vitalfit/sdk";
 import { Button } from "@/components/ui/button";
-import UserHeader from "../Sidebar/UserHeader";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import MenuList from "../Sidebar/MenuList";
 import { usePathname } from "@/i18n/routing";
+import UserHeader from "@/components/layout/Sidebar/UserHeader";
+import MenuList from "@/components/layout/Sidebar/MenuList";
+import QRCodeModal from "@/components/layout/QRCodeModal";
 
 export default function Sidebar() {
   const { user, logout, token } = useAuth();

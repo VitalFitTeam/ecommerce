@@ -9,7 +9,8 @@
       "services": "Servicios",
       "branches": "Sucursales",
       "memberships": "Membresías",
-      "contact": "Contacto"
+      "contact": "Contacto",
+      "Cart": "Carrito"
     },
     "loginButton": "Iniciar Sesión",
     "registerButton": "Unirse",

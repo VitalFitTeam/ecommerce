@@ -1,6 +1,6 @@
 "use client";
 
-import PaymentHistoryTable from "@/components/layout/dashboard/PaymentHistoryTable"; // Asegúrate que esta ruta sea correcta
+import PaymentHistoryTable from "@/components/features/dashboard/PaymentHistoryTable";
 import BannerOffer from "./BannerOffer";
 import { MembershipSummary } from "./MembershipSummary";
 import UpcomingClasses from "./UpcomingClasses";
