@@ -8,12 +8,14 @@ import {
   ArrowPathIcon,
   ClockIcon,
   NoSymbolIcon,
+  PlusCircleIcon,
 } from "@heroicons/react/24/outline";
 import { ClientMembership } from "@vitalfit/sdk";
 import {
   MEMBERSHIP_STATUS_CONFIG,
   MembershipStatusType,
 } from "@/constants/membershipStatus";
+import { useRouter } from "@/i18n/routing";
 
 interface MembershipSummaryProps {
   clientMembership: ClientMembership | null | undefined;
@@ -24,6 +26,7 @@ export const MembershipSummary: React.FC<MembershipSummaryProps> = ({
 }) => {
   const t = useTranslations("membership");
   const format = useFormatter();
+  const router = useRouter();
 
   const statusInfo = useMemo(() => {
     if (!clientMembership) {
@@ -76,7 +79,30 @@ export const MembershipSummary: React.FC<MembershipSummaryProps> = ({
   }, [clientMembership]);
 
   if (!statusInfo) {
-    return <Card>...</Card>;
+    return (
+      <Card className="bg-white overflow-hidden">
+        <div className="p-8 flex flex-col items-center justify-center text-center space-y-4">
+          <div className="p-3 bg-blue-50 rounded-full">
+            <PlusCircleIcon className="w-8 h-8 text-orange-400" />
+          </div>
+          <div className="space-y-1">
+            <h3 className="text-lg font-bold text-gray-900">
+              {t("noMembershipTitle")}
+            </h3>
+            <p className="text-sm text-gray-500 max-w-xs mx-auto">
+              {t("noMembershipDescription")}
+            </p>
+          </div>
+
+          <Button
+            className="w-full sm:w-auto"
+            onClick={() => router.push("/memberships")}
+          >
+            {t("acquireMembershipButton")}
+          </Button>
+        </div>
+      </Card>
+    );
   }
 
   const {
@@ -106,12 +132,10 @@ export const MembershipSummary: React.FC<MembershipSummaryProps> = ({
           </span>
         </div>
 
-        {/* PROGRESO */}
         <div className="space-y-2">
           <div className="flex justify-between text-sm">
             <span className="text-gray-500">{t("nextLabel")}</span>
             <span className={`font-bold flex gap-1 items-center text-gray-900`}>
-              {/* Icono cambia o se colorea según estado */}
               {statusKey === "cancel" ? (
                 <NoSymbolIcon className={`w-4 h-4 ${config.iconColor}`} />
               ) : (
@@ -119,7 +143,7 @@ export const MembershipSummary: React.FC<MembershipSummaryProps> = ({
               )}
 
               {statusKey === "expired"
-                ? t("expiredLabel") // "Vencido"
+                ? t("expiredLabel")
                 : `${daysRemaining} ${t("daysRemaining")}`}
             </span>
           </div>
@@ -154,9 +178,7 @@ export const MembershipSummary: React.FC<MembershipSummaryProps> = ({
           </div>
         </div>
 
-        {/* BOTONES DE ACCIÓN INTELIGENTES */}
         <div className="flex flex-col sm:flex-row gap-3 pt-4 border-t border-gray-100 mt-4">
-          {/* Si está activo, mostramos Renovar. Si está Vencido, mostramos Reactivar */}
           <Button
             className={`w-full sm:w-auto gap-2 ${statusKey === "expired" ? "bg-red-600 hover:bg-red-700" : ""}`}
           >
@@ -164,7 +186,6 @@ export const MembershipSummary: React.FC<MembershipSummaryProps> = ({
             {statusKey === "active" ? t("renewButton") : t("reactivateButton")}
           </Button>
 
-          {/* Solo mostramos Cancelar si NO está ya cancelado ni vencido */}
           {statusKey === "active" && (
             <Button variant="ghost" className="text-red-600 hover:bg-red-50">
               {t("cancelMembership")}

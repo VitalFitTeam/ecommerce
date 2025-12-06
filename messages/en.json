@@ -51,9 +51,7 @@
   "ServicesPage": {
     "title": "Our <highlight>Services</highlight>",
     "subtitle": "Explore everything we offer for your well-being.",
-
     "recentlyViewed": "Recently viewed",
-
     "filters": {
       "searchPlaceholder": "Search services...",
       "categoryDefault": "All categories",
@@ -66,13 +64,11 @@
       "clear": "Clear filters",
       "label": "Filters"
     },
-
     "empty": {
       "noResults": "We couldn't find any services",
       "adjustFilters": "Adjust your filters to see more results.",
       "showAll": "Show all services"
     },
-
     "pagination": {
       "previous": "Previous",
       "next": "Next",
@@ -443,22 +439,21 @@
   "membership": {
     "title": "My Membership",
     "noMembership": "You do not have an active membership at this time.",
-
     "active": "Active",
     "expired": "Expired",
     "cancelled": "Cancelled",
     "pending": "Pending",
-
     "nextLabel": "Time Remaining",
     "expiredLabel": "Plan Ended",
     "daysRemaining": "days remaining",
-
     "startLabel": "Start Date",
     "expiryLabel": "Expires on",
-
     "renewButton": "Renew Plan",
     "reactivateButton": "Reactivate Membership",
-    "cancelMembership": "Cancel Subscription"
+    "cancelMembership": "Cancel Subscription",
+    "noMembershipTitle": "No Active Membership",
+    "noMembershipDescription": "Purchase a membership to start your training today.",
+    "acquireMembershipButton": "View Available Plans"
   },
   "classes": {
     "title": "UPCOMING CLASSES",
