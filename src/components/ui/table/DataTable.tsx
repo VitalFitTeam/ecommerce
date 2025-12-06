@@ -8,7 +8,6 @@ import {
   flexRender,
   type ColumnDef,
   type SortingState,
-  ColumnFiltersState,
   VisibilityState,
   getFilteredRowModel,
   getPaginationRowModel,
@@ -99,6 +98,7 @@ export function DataTable<T extends object>({
       ...columns.map((col) => ({
         accessorKey: col.accessor as string,
         header: col.header,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         cell: ({ getValue, row }: { getValue: any; row: any }) => {
           const value = getValue() as T[keyof T];
           const originalRow = row.original;
@@ -124,6 +124,7 @@ export function DataTable<T extends object>({
     return cols;
   }, [columns, actions, enableRowSelection]);
 
+  // eslint-disable-next-line
   const table = useReactTable({
     data,
     columns: columnDefs,
@@ -138,16 +139,20 @@ export function DataTable<T extends object>({
     getRowId: (row) => String(row[rowIdKey]),
   });
 
-  //Paginación
+  // Paginación
   const pageRows = table.getRowModel().rows;
   const [internalPage, setInternalPage] = React.useState(1);
-  const [internalPageSize, setInternalPageSize] = React.useState(10);
 
   const currentPage = page ?? internalPage;
-  const currentPageSize = pageSize ?? internalPageSize;
+  // CORRECCIÓN 1: Eliminamos 'currentPageSize' que no se usaba.
 
+  // CORRECCIÓN 2: Usamos if/else en lugar de ternario para evitar el error de "unused expression"
   const handlePageChange = (newPage: number) => {
-    onPageChange ? onPageChange(newPage) : setInternalPage(newPage);
+    if (onPageChange) {
+      onPageChange(newPage);
+    } else {
+      setInternalPage(newPage);
+    }
   };
 
   React.useEffect(() => {
@@ -176,7 +181,7 @@ export function DataTable<T extends object>({
                     ...prev,
                     [col.accessor as string]: value,
                   }));
-                  onFilterChange?.(col.accessor as string, value); // avisamos al padre
+                  onFilterChange?.(col.accessor as string, value);
                 }}
                 className="border rounded p-2 text-sm"
               >
@@ -197,7 +202,7 @@ export function DataTable<T extends object>({
                     ...prev,
                     [col.accessor as string]: value,
                   }));
-                  onFilterChange?.(col.accessor as string, value); // avisamos al padre
+                  onFilterChange?.(col.accessor as string, value);
                 }}
               />
             )}
@@ -274,9 +279,7 @@ export function DataTable<T extends object>({
 
       <PaginationControls
         page={currentPage}
-        totalPages={
-          totalPages ?? Math.ceil(renderFilters.length / currentPageSize)
-        }
+        totalPages={totalPages ?? table.getPageCount()}
         onPageChange={handlePageChange}
       />
     </div>
