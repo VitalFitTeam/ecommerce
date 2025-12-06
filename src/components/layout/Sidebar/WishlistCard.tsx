@@ -1,5 +1,5 @@
+import Wishlist from "@/components/features/dashboard/Whislist";
 import { HeartIcon } from "@heroicons/react/24/outline";
-import Wishlist from "../dashboard/Whislist";
 
 export default function WishlistCard() {
   return (
