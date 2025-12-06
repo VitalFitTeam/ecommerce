@@ -7,6 +7,69 @@ import { Button } from "../ui/button";
 import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
 
+interface CardContentProps {
+  title: string;
+  rating: number;
+  category: string;
+  desc: string;
+  duration: number;
+  priceMember: string;
+  priceNonMember: string;
+  t: any;
+  onLearnMore?: () => void;
+}
+
+const ServiceCardContent = ({
+  title,
+  rating,
+  category,
+  desc,
+  duration,
+  priceMember,
+  priceNonMember,
+  t,
+  onLearnMore,
+}: CardContentProps) => (
+  <div className="p-5 flex flex-col justify-between ">
+    <div className="mb-4">
+      <div className="flex items-center justify-between mb-2">
+        <h2 className="text-[#F27F2A] font-bold text-xl line-clamp-2">
+          {title}
+        </h2>
+
+        <div className="flex items-center text-sm text-gray-700 gap-1">
+          <FaStar className="text-yellow-400" />
+          {rating}
+        </div>
+      </div>
+
+      <p className="text-gray-500 text-sm mb-1 line-clamp-1">{category}</p>
+
+      <p className="text-gray-600 text-sm leading-relaxed line-clamp-3">
+        {desc}
+      </p>
+    </div>
+
+    <div className="flex flex-col sm:flex-row sm:items-center justify-between mt-4 gap-3">
+      <div className="flex items-center gap-1 text-gray-700 text-sm">
+        <FaClock /> {duration} {t("minutes")}
+      </div>
+
+      <div className="flex flex-col sm:flex-row sm:items-center gap-2">
+        <span className="text-lg font-bold text-black">
+          {t("member")}: {priceMember}
+        </span>
+
+        <span className="text-lg font-semibold text-gray-500 line-through">
+          {t("nonMember")}: {priceNonMember}
+        </span>
+      </div>
+
+      <Button onClick={onLearnMore}>{t("learnMore")}</Button>
+    </div>
+  </div>
+);
+
 interface ServiceCardProps {
   service: any;
   view?: "grid" | "list";
@@ -44,46 +107,8 @@ export default function ServiceCard({
   const formatPrice = (price: number) =>
     `${base_currency ?? "USD"} ${price ?? 0}`;
 
-  const CardContent = () => (
-    <div className="p-5 flex flex-col justify-between flex-grow">
-      <div className="mb-4">
-        <div className="flex items-center justify-between mb-2">
-          <h2 className="text-[#F27F2A] font-bold text-xl line-clamp-2">
-            {title}
-          </h2>
-
-          <div className="flex items-center text-sm text-gray-700 gap-1">
-            <FaStar className="text-yellow-400" />
-            {rating}
-          </div>
-        </div>
-
-        <p className="text-gray-500 text-sm mb-1 line-clamp-1">{category}</p>
-
-        <p className="text-gray-600 text-sm leading-relaxed line-clamp-3">
-          {desc}
-        </p>
-      </div>
-
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between mt-4 gap-3">
-        <div className="flex items-center gap-1 text-gray-700 text-sm">
-          <FaClock /> {duration} {t("minutes")}
-        </div>
-
-        <div className="flex flex-col sm:flex-row sm:items-center gap-2">
-          <span className="text-lg font-bold text-black">
-            {t("member")}: {formatPrice(lowest_price_member)}
-          </span>
-
-          <span className="text-lg font-semibold text-gray-500 line-through">
-            {t("nonMember")}: {formatPrice(lowest_price_no_member)}
-          </span>
-        </div>
-
-        <Button onClick={onLearnMore}>{t("learnMore")}</Button>
-      </div>
-    </div>
-  );
+  const priceMemberFormatted = formatPrice(lowest_price_member);
+  const priceNonMemberFormatted = formatPrice(lowest_price_no_member);
 
   if (view === "grid") {
     return (
@@ -101,7 +126,17 @@ export default function ServiceCard({
           height={250}
           className="w-full h-56 object-cover"
         />
-        <CardContent />
+        <ServiceCardContent
+          title={title}
+          rating={rating}
+          category={category}
+          desc={desc}
+          duration={duration}
+          priceMember={priceMemberFormatted}
+          priceNonMember={priceNonMemberFormatted}
+          t={t}
+          onLearnMore={onLearnMore}
+        />
       </div>
     );
   }
@@ -121,7 +156,17 @@ export default function ServiceCard({
         height={200}
         className="w-full sm:w-64 h-56 object-cover"
       />
-      <CardContent />
+      <ServiceCardContent
+        title={title}
+        rating={rating}
+        category={category}
+        desc={desc}
+        duration={duration}
+        priceMember={priceMemberFormatted}
+        priceNonMember={priceNonMemberFormatted}
+        t={t}
+        onLearnMore={onLearnMore}
+      />
     </div>
   );
 }

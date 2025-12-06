@@ -33,20 +33,18 @@ export default function CancelMembershipPage() {
   const router = useRouter();
   const t = useTranslations("MembershipCancel");
 
-  const [membership, setMembership] = useState<any>(null);
   const [reason, setReason] = useState("");
   const [description, setDescription] = useState("");
 
-  useEffect(() => {
-    const found = memberships.find((m) => m.id === id);
-    if (!found || found.status !== "activa") {
-      router.replace("/history");
-    } else {
-      setMembership(found);
-    }
-  }, [id, router]);
+  const membership = memberships.find((m) => m.id === id);
 
-  if (!membership) {
+  useEffect(() => {
+    if (!membership || membership.status !== "activa") {
+      router.replace("/history");
+    }
+  }, [membership, router]);
+
+  if (!membership || membership.status !== "activa") {
     return null;
   }
 

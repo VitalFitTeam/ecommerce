@@ -1,29 +1,14 @@
 "use client";
 
-import { useState } from "react";
 import { Link } from "@/i18n/routing";
-import { useTranslations } from "next-intl";
 import { usePathname } from "next/navigation";
 import { BellIcon } from "@heroicons/react/24/outline";
 import { useAuth } from "@/context/AuthContext";
 import Logo from "@/components/features/Logo";
 
 export default function Header() {
-  const t = useTranslations("Navbar");
   const { token } = useAuth();
   const { user } = useAuth();
-  const pathname = usePathname();
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-
-  const isActive = (href: string) => {
-    if (href === "/" && pathname === "/") {
-      return true;
-    }
-    if (href !== "/" && pathname.startsWith(href)) {
-      return true;
-    }
-    return false;
-  };
 
   if (!user && !token) {
     return null;
