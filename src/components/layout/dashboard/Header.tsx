@@ -9,17 +9,6 @@ import Logo from "@/components/features/Logo";
 export default function Header() {
   const { token } = useAuth();
   const { user } = useAuth();
-  const pathname = usePathname();
-
-  const isActive = (href: string) => {
-    if (href === "/" && pathname === "/") {
-      return true;
-    }
-    if (href !== "/" && pathname.startsWith(href)) {
-      return true;
-    }
-    return false;
-  };
 
   if (!user && !token) {
     return null;
