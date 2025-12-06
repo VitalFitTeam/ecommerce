@@ -69,23 +69,27 @@ const NavbarDashboard = ({ onSignOut, transparent }: NavbarProps) => {
           />
         </button>
 
-        {/* RIGHT SECTION */}
         <div className="flex items-center gap-4">
           {user ? (
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-4">
+              <div className="hidden sm:flex flex-col items-end mr-1">
+                <div className="flex items-center gap-1.5">
+                  <span className="text-emerald-400 font-bold text-sm leading-none">
+                    {user.ClientProfile.scoring} pts
+                  </span>
+                </div>
+
+                <span className="text-gray-400 text-[10px] font-medium uppercase tracking-wider mt-0.5">
+                  {user.ClientProfile.category || "Sin categoria"}
+                </span>
+              </div>
+              <div className="h-8 w-px bg-white/10 hidden sm:block"></div>
               <UserNav
                 user={user}
                 onSignOut={onSignOut}
                 onProfileClick={handleProfileClick}
                 onHomeClick={handleHomeClick}
               />
-
-              <div className="leading-tight hidden sm:block">
-                <p className="text-lg font-medium text-white/90">
-                  {user.first_name} {user.last_name}
-                </p>
-                <p className="text-xs text-white/60">{user.email}</p>
-              </div>
             </div>
           ) : (
             <Button onClick={() => router.push("/login")}>{t("login")}</Button>

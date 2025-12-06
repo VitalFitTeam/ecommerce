@@ -17,8 +17,8 @@ import {
   SelectItem,
 } from "@/components/ui/select";
 import { RowActions } from "@/components/ui/table/RowActions";
-import PaymentHistoryTable from "@/components/layout/dashboard/PaymentHistoryTable";
 import { useMyInvoices } from "@/hooks/useClientInvoices";
+import PaymentHistoryTable from "@/components/features/dashboard/PaymentHistoryTable";
 
 export default function HistoryPaymentPage() {
   const t = useTranslations("paymentHistory");

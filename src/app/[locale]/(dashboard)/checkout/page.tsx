@@ -1,15 +1,16 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
-import { CheckoutStepper } from "@/components/layout/checkout/CheckoutStepper";
-import { OrderSummary } from "@/components/layout/checkout/OrderSummary";
-import { StepPayment } from "@/components/layout/checkout/StepPayment";
-import { StepSelectPlan } from "@/components/layout/checkout/StepSelectPlan";
-import { StepInvoiceConfirmation } from "@/components/layout/checkout/StepInvoiceConfirmation";
-import { StepSuccess } from "@/components/layout/checkout/StepSuccess";
+
 import { useCheckout } from "@/hooks/useCheckout";
 import { useAuth } from "@/context/AuthContext";
 import { Loader2, AlertCircle } from "lucide-react";
+import { StepSelectPlan } from "@/components/features/checkout/StepSelectPlan";
+import { StepPayment } from "@/components/features/checkout/StepPayment";
+import { StepInvoiceConfirmation } from "@/components/features/checkout/StepInvoiceConfirmation";
+import { StepSuccess } from "@/components/features/checkout/StepSuccess";
+import { CheckoutStepper } from "@/components/features/checkout/CheckoutStepper";
+import { OrderSummary } from "@/components/features/checkout/OrderSummary";
 
 export default function CheckoutPage() {
   const searchParams = useSearchParams();
@@ -205,7 +206,7 @@ export default function CheckoutPage() {
 
                 {status.error && (
                   <div className="mt-4 p-4 bg-red-50 border border-red-100 rounded-xl flex gap-3 items-start animate-in shake">
-                    <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
+                    <AlertCircle className="w-5 h-5 text-red-600  mt-0.5" />
                     <p className="text-sm text-red-600 font-medium">
                       {status.error}
                     </p>

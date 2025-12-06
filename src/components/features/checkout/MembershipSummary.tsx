@@ -1,4 +1,3 @@
-// components/MembershipSummary.tsx
 import { Info, Trash2, CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { MembershipType } from "@vitalfit/sdk";

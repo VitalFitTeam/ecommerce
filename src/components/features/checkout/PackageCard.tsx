@@ -7,7 +7,6 @@ import {
   CardTitle,
 } from "@/components/ui/Card";
 
-// Reutilizamos tu interfaz original o la importamos de tus tipos globales
 export interface PackageOption {
   id: string;
   name: string;
@@ -37,12 +36,11 @@ export const PackageCard = ({ pkg, isSelected, onClick }: PackageCardProps) => {
         }
       `}
     >
-      {/* Cabecera: Título y Duración */}
       <CardHeader className="p-4 pb-2">
         <div className="flex justify-between items-start gap-2">
           <CardTitle
             className="text-sm font-bold text-gray-900 truncate"
-            title={pkg.name} // Tooltip nativo por si se corta el texto
+            title={pkg.name}
           >
             {pkg.name}
           </CardTitle>
@@ -67,9 +65,7 @@ export const PackageCard = ({ pkg, isSelected, onClick }: PackageCardProps) => {
         )}
       </CardHeader>
 
-      {/* Contenido: Descripción y Precio */}
-      <CardContent className="p-4 pt-0 flex-grow flex flex-col justify-between">
-        {/* Descripción con altura fija para alinear las tarjetas */}
+      <CardContent className="p-4 pt-0  flex flex-col justify-between">
         <div className="mb-3 h-10">
           {pkg.description ? (
             <p
@@ -85,7 +81,6 @@ export const PackageCard = ({ pkg, isSelected, onClick }: PackageCardProps) => {
           )}
         </div>
 
-        {/* Precio */}
         <div className="pt-3 border-t border-dashed border-gray-100 flex items-baseline gap-1">
           <span className="text-lg font-bold text-gray-900">
             ${pkg.price.toLocaleString("en-US", { minimumFractionDigits: 2 })}

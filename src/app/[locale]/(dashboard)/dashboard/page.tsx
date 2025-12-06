@@ -1,7 +1,5 @@
 "use client";
 
-import Header from "@/components/layout/dashboard/Header";
-import Sidebar from "@/components/layout/dashboard/Sidebar";
 import MainContent from "./MainContent";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "@/i18n/routing";

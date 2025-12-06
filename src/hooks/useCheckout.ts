@@ -8,7 +8,7 @@ import type {
   BranchPaymentMethodInfo,
   PackagePublicItem,
 } from "@vitalfit/sdk";
-import type { PackageOption } from "@/components/layout/checkout/PackageCarousel";
+import { PackageOption } from "@/components/features/checkout/PackageCarousel";
 
 interface CheckoutState {
   step: number;

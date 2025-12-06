@@ -9,7 +9,8 @@
       "services": "Services",
       "branches": "Branches",
       "memberships": "Memberships",
-      "contact": "Contact"
+      "contact": "Contact",
+      "Cart": "Cart"
     },
     "loginButton": "Login",
     "registerButton": "Join",

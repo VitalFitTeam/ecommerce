@@ -10,7 +10,7 @@ import FindBranch from "./FindBranch";
 import { useTranslations } from "next-intl";
 import { api } from "@/lib/sdk-config";
 import { BranchInfo } from "@vitalfit/sdk";
-import { BranchCard } from "@/components/layout/branch/BranchCard";
+import { BranchCard } from "@/components/features/branch/BranchCard";
 
 export default function Branches() {
   const t = useTranslations("BranchesPage");

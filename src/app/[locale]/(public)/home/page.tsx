@@ -1,10 +1,10 @@
 "use client";
 
-import SectionAboutUs from "@/components/home/AboutUs";
-import Banner from "@/components/home/Banner";
+import Banner from "@/components/features/home/Banner";
 import { Navbar } from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import { useTranslations } from "next-intl";
+import SectionAboutUs from "@/components/features/home/AboutUs";
 
 const aboutUsConfig = [
   {
@@ -52,7 +52,7 @@ export default function Home() {
 
   return (
     <div>
-      <Navbar></Navbar>
+      <Navbar />
       <Banner
         imageUrl="/images/banner-home.png"
         title={t.rich("banner.title", {

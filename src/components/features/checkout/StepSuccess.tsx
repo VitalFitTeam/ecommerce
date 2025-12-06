@@ -1,13 +1,7 @@
 "use client";
 
 import { Link } from "@/i18n/routing";
-import {
-  CheckCircle2,
-  ArrowRight,
-  Clock,
-  Download,
-  HelpCircle,
-} from "lucide-react";
+import { CheckCircle2, ArrowRight, Clock, HelpCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/Card";
 
