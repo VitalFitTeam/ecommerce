@@ -29,7 +29,6 @@ export function Navbar({
   const pathname = usePathname();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  // 1. BLOQUEO DE SCROLL: Evita que la página se mueva cuando el menú móvil está abierto
   useEffect(() => {
     if (isMenuOpen) {
       document.body.style.overflow = "hidden";
@@ -54,13 +53,13 @@ export function Navbar({
 
   const handleCartClick = () => {
     router.push("/checkout");
-    setIsMenuOpen(false); // Cierra el menú si se clickea en móvil
+    setIsMenuOpen(false);
   };
 
   return (
     <nav
       className={`
-        fixed top-0 left-0 right-0 z-[999] /* <--- SOLUCIÓN AL PROBLEMA DEL BANNER */
+        fixed top-0 left-0 right-0 z-[999] 
         w-full 
         px-6 lg:px-10 
         py-4 
@@ -74,7 +73,6 @@ export function Navbar({
         }
       `}
     >
-      {/* BOTÓN HAMBURGUESA (MÓVIL) */}
       <button
         className="md:hidden p-2 text-gray-300 hover:text-white hover:bg-white/10 rounded-full transition active:scale-95"
         onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -86,12 +84,10 @@ export function Navbar({
         )}
       </button>
 
-      {/* LOGO */}
       <div className="flex items-center gap-3">
         <Logo slogan={true} theme="light" />
       </div>
 
-      {/* --- DESKTOP MENU --- */}
       <div className="hidden md:flex items-center gap-6 xl:gap-8">
         {navItemsConfig.map((item) => (
           <Link
@@ -101,7 +97,7 @@ export function Navbar({
               text-sm font-bold tracking-wide transition-all px-4 py-2 rounded-full
               ${
                 isActive(item.href)
-                  ? "text-white bg-primary shadow-[0_0_15px_rgba(234,88,12,0.4)]" // Efecto Neón
+                  ? "text-white bg-primary shadow-[0_0_15px_rgba(234,88,12,0.4)]"
                   : "text-white/80 hover:text-white hover:bg-white/10"
               }
             `}
@@ -111,7 +107,6 @@ export function Navbar({
         ))}
       </div>
 
-      {/* --- DESKTOP RIGHT ACTIONS --- */}
       <div className="hidden md:flex items-center gap-5">
         <LocaleSwitcher />
 
@@ -171,7 +166,6 @@ export function Navbar({
         )}
       </div>
 
-      {/* --- MOBILE MENU (FULL SCREEN) --- */}
       {isMenuOpen && (
         <div className="fixed inset-0 top-[72px] z-[998] bg-[#1c1c1c] md:hidden animate-in slide-in-from-top-5 duration-300 flex flex-col h-[calc(100vh-72px)] overflow-y-auto">
           <div className="flex flex-col p-6 gap-2 pb-20">
@@ -187,7 +181,7 @@ export function Navbar({
                       {user.first_name}
                     </p>
                     <p className="text-emerald-400 text-xs font-bold">
-                      {user.points || 270} Puntos
+                      {user.ClientProfile.scoring} Pts
                     </p>
                   </div>
                 </div>
