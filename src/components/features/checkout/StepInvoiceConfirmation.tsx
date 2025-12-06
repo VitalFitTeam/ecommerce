@@ -18,13 +18,12 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/Input";
 import { Label } from "@/components/ui/Label";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
-import { PackageOption } from "@/components/layout/checkout/PackageCarousel";
+import { Card } from "@/components/ui/Card";
 import { mainCurrencies, PublicMembershipResponse } from "@vitalfit/sdk";
 import { supabase } from "@/lib/supabase";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { api } from "@/lib/sdk-config";
 import { cn } from "@/lib/utils";
+import { PackageOption } from "./PackageCarousel";
 
 interface Branch {
   branch_id: string;
