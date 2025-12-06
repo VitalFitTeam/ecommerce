@@ -51,9 +51,7 @@
   "ServicesPage": {
     "title": "Nuestros <highlight>Servicios</highlight>",
     "subtitle": "Explora todo lo que ofrecemos para tu bienestar.",
-
     "recentlyViewed": "Recientemente visto",
-
     "filters": {
       "searchPlaceholder": "Buscar servicios...",
       "categoryDefault": "Todas las categorías",
@@ -66,13 +64,11 @@
       "clear": "Limpiar filtros",
       "label": "Filtros"
     },
-
     "empty": {
       "noResults": "No encontramos servicios",
       "adjustFilters": "Ajusta tus filtros para ver más resultados.",
       "showAll": "Ver todos los servicios"
     },
-
     "pagination": {
       "previous": "Anterior",
       "next": "Siguiente",
@@ -454,7 +450,10 @@
     "expiryLabel": "Vence el",
     "renewButton": "Renovar Plan",
     "reactivateButton": "Reactivar Membresía",
-    "cancelMembership": "Cancelar Suscripción"
+    "cancelMembership": "Cancelar Suscripción",
+    "noMembershipTitle": "No tienes una membresía activa",
+    "noMembershipDescription": "Adquiere una membresía para comenzar tu entrenamiento hoy mismo.",
+    "acquireMembershipButton": "Ver Planes Disponibles"
   },
   "classes": {
     "title": "PRÓXIMAS CLASES",
