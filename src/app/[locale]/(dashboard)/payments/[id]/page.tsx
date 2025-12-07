@@ -159,7 +159,7 @@ export default function InvoiceDetailsPage({
         </h2>
         <Link
           href="/payments"
-          className="text-sm font-medium text-blue-600 hover:text-blue-700 transition-colors"
+          className="text-sm font-medium text-orange-600 hover:text-orange-700 transition-colors"
         >
           &larr; {t("backToHistory")}
         </Link>
@@ -224,9 +224,6 @@ export default function InvoiceDetailsPage({
                     {t("summary.paymentMethod")}
                   </span>
                   <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center text-blue-600">
-                      <CreditCard size={14} />
-                    </div>
                     {loadingPaymentMethod ? (
                       <span className="text-gray-300 italic">
                         {t("summary.loading")}
@@ -242,9 +239,6 @@ export default function InvoiceDetailsPage({
                     {t("summary.branch")}
                   </span>
                   <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-full bg-purple-50 flex items-center justify-center text-purple-600">
-                      <Store size={14} />
-                    </div>
                     {branchesLoading ? (
                       <span className="text-gray-300 italic">
                         {t("summary.loading")}
