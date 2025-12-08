@@ -4,6 +4,7 @@ import { useTranslations } from "next-intl";
 import { Eye, Download, Loader2 } from "lucide-react";
 import { DataTable, Column } from "@/components/ui/table/DataTable";
 import { ClientInvoice } from "@vitalfit/sdk";
+import { useRouter } from "@/i18n/routing";
 
 interface PaymentHistoryTableProps {
   data: ClientInvoice[];
@@ -21,6 +22,7 @@ export default function PaymentHistoryTable({
   onPageChange,
 }: PaymentHistoryTableProps) {
   const t = useTranslations("paymentHistory");
+  const router = useRouter();
 
   const formatCurrency = (amount: string | number) => {
     return new Intl.NumberFormat("en-US", {
@@ -38,24 +40,24 @@ export default function PaymentHistoryTable({
 
   const getStatusStyle = (status: string) => {
     const s = String(status).toLowerCase();
-    s;
-    if (s === "completed" || s === "paid") {
+    if (s === "paid") {
       return "border border-green-200 bg-green-100 text-green-700";
     }
-
-    if (s === "pending" || s === "unpaid") {
+    if (s === "unpaid") {
       return "border border-yellow-200 bg-yellow-100 text-yellow-700";
     }
-
-    if (s === "refunded") {
-      return "border border-gray-200 bg-gray-100 text-gray-700";
-    }
-
-    if (s === "failed" || s === "cancelled") {
+    if (s === "overdue") {
       return "border border-red-200 bg-red-100 text-red-700";
     }
-
+    if (s === "void") {
+      return "border border-gray-200 bg-gray-100 text-gray-700";
+    }
     return "border border-gray-200 text-gray-600";
+  };
+
+  const handleViewDetails = (invoiceId: string) => {
+    console.log("Navegando al detalle:", invoiceId);
+    router.push(`/payments/${invoiceId}`);
   };
 
   const columns: Column<ClientInvoice>[] = [
@@ -103,14 +105,16 @@ export default function PaymentHistoryTable({
       <button
         title={t("actions.viewDetails")}
         className="p-2 hover:bg-gray-100 rounded-full text-gray-500 transition-colors"
-        onClick={() => console.log("Ver detalle ID:", row.invoice_id)}
+        onClick={() => handleViewDetails(row.invoice_id)}
       >
         <Eye size={18} />
       </button>
       <button
         title={t("actions.downloadReceipt")}
         className="p-2 hover:bg-gray-100 rounded-full text-gray-500 transition-colors"
-        onClick={() => console.log("Descargar ID:", row.invoice_id)}
+        onClick={() =>
+          console.log("Lógica de descarga pendiente para ID:", row.invoice_id)
+        }
       >
         <Download size={18} />
       </button>
@@ -121,7 +125,9 @@ export default function PaymentHistoryTable({
     <div className="bg-white rounded-lg p-6 border border-gray-200 shadow-sm">
       <div className="flex justify-between items-center mb-6">
         <h3 className="text-lg font-bold text-gray-800">{t("title")}</h3>
-        {loading && <Loader2 className="animate-spin text-blue-600 h-5 w-5" />}
+        {loading && (
+          <Loader2 className="animate-spin text-orange-400 h-5 w-5" />
+        )}
       </div>
 
       {loading && data.length === 0 ? (

@@ -1,11 +1,8 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { useRouter } from "@/i18n/routing";
 import { useTranslations } from "next-intl";
 import MagnifyingGlassIcon from "@heroicons/react/24/outline/MagnifyingGlassIcon";
-import { Eye, Download } from "lucide-react";
-
 import { PageHeader } from "@/components/ui/PageHeader";
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/button";
@@ -16,16 +13,14 @@ import {
   SelectContent,
   SelectItem,
 } from "@/components/ui/select";
-import { RowActions } from "@/components/ui/table/RowActions";
 import { useMyInvoices } from "@/hooks/useClientInvoices";
 import PaymentHistoryTable from "@/components/features/dashboard/PaymentHistoryTable";
 
 export default function HistoryPaymentPage() {
   const t = useTranslations("paymentHistory");
-  const router = useRouter();
 
-  const [payName, setPayName] = useState("");
-  const [status, setStatus] = useState("all");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [statusFilter, setStatusFilter] = useState("all");
 
   const {
     invoices,
@@ -36,56 +31,30 @@ export default function HistoryPaymentPage() {
     setSearch,
   } = useMyInvoices({ limit: 10 });
 
-  const showClearFilters = payName || status !== "all";
+  const showClearFilters = searchTerm !== "" || statusFilter !== "all";
 
   const clearFilters = () => {
-    setPayName("");
-    setStatus("all");
+    setSearchTerm("");
+    setStatusFilter("all");
     setSearch("");
     setPage(1);
   };
 
   const handleSearchChange = (value: string) => {
-    setPayName(value);
+    setSearchTerm(value);
     setSearch(value);
     setPage(1);
   };
 
   const filteredInvoices = useMemo(() => {
-    return invoices.filter((inv) => {
-      let matches = true;
+    if (statusFilter === "all") {
+      return invoices;
+    }
 
-      if (status !== "all") {
-        matches = matches && inv.status.toLowerCase() === status.toLowerCase();
-      }
-
-      if (payName) {
-        matches =
-          matches &&
-          inv.invoice_id.toLowerCase().includes(payName.toLowerCase());
-      }
-
-      return matches;
-    });
-  }, [invoices, status, payName]);
-
-  const actions = (row: any) => (
-    <RowActions
-      menuLabel=""
-      actions={[
-        {
-          label: t("actions.viewDetails"),
-          icon: Eye,
-          onClick: () => router.push(`/payments/history/${row.invoice_id}`),
-        },
-        {
-          label: t("actions.downloadReceipt"),
-          icon: Download,
-          onClick: () => console.log("Descargar recibo de:", row.invoice_id),
-        },
-      ]}
-    />
-  );
+    return invoices.filter(
+      (inv) => inv.status.toLowerCase() === statusFilter.toLowerCase(),
+    );
+  }, [invoices, statusFilter]);
 
   return (
     <div className="min-h-screen">
@@ -100,23 +69,22 @@ export default function HistoryPaymentPage() {
                 type="text"
                 placeholder={t("filters.payname")}
                 className="w-64 pl-9"
-                value={payName}
+                value={searchTerm}
                 onChange={(e) => handleSearchChange(e.target.value)}
               />
             </div>
 
-            <Select value={status} onValueChange={setStatus}>
+            <Select value={statusFilter} onValueChange={setStatusFilter}>
               <SelectTrigger className="w-48">
                 <SelectValue placeholder={t("filters.status")} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">{t("filters.status")}</SelectItem>
-                <SelectItem value="completed">
-                  {t("status.completed")}
-                </SelectItem>
-                <SelectItem value="pending">{t("status.pending")}</SelectItem>
-                <SelectItem value="refunded">{t("status.refunded")}</SelectItem>
-                <SelectItem value="failed">{t("status.failed")}</SelectItem>
+                <SelectItem value="all">{t("filters.status")}</SelectItem>{" "}
+                {/* Opción "Todos" */}
+                <SelectItem value="Paid">{t("status.paid")}</SelectItem>
+                <SelectItem value="Unpaid">{t("status.unpaid")}</SelectItem>
+                <SelectItem value="Overdue">{t("status.overdue")}</SelectItem>
+                <SelectItem value="Void">{t("status.void")}</SelectItem>
               </SelectContent>
             </Select>
 

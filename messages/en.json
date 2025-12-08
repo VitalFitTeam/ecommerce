@@ -479,12 +479,10 @@
       "paymentMethod": "Payment Method"
     },
     "status": {
-      "completed": "Completed",
-      "pending": "Pending",
-      "refunded": "Refunded",
-      "failed": "Failed",
+      "paid": "Paid",
       "unpaid": "Unpaid",
-      "paid": "Paid"
+      "void": "Void",
+      "overdue": "Overdue"
     },
     "actions": {
       "viewDetails": "View details",
@@ -800,5 +798,49 @@
     "minutes": "minutes",
     "learnMore": "Learn more",
     "categoryDefault": "General"
+  },
+  "invoiceDetails": {
+    "backToHistory": "Back to history",
+    "title": "Transaction Details",
+    "status": {
+      "paid": "Paid",
+      "confirmed": "Confirmed",
+      "pending": "Pending",
+      "overdue": "Overdue",
+      "void": "Void",
+      "unknown": "Unknown"
+    },
+    "summary": {
+      "title": "Summary",
+      "issueDate": "Issue Date",
+      "statusLabel": "Status",
+      "paymentMethod": "Payment Method",
+      "branch": "Branch",
+      "loading": "Loading...",
+      "unspecified": "Unspecified",
+      "mainBranch": "Main Branch",
+      "unknownBranch": "Unknown Branch"
+    },
+    "actions": {
+      "title": "Actions",
+      "download": "Download Receipt",
+      "email": "Send via Email",
+      "electronic": "Electronic Invoice"
+    },
+    "planValidity": {
+      "from": "Valid From",
+      "to": "Valid Until"
+    },
+    "conceptsTitle": "Billed Concepts",
+    "totals": {
+      "subtotal": "Subtotal",
+      "tax": "Tax",
+      "total": "Total Paid"
+    },
+    "errors": {
+      "notFound": "Invoice not found",
+      "loadError": "Error loading",
+      "checkConnection": "Check your connection or the ID."
+    }
   }
 }

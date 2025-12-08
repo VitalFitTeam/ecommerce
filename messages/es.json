@@ -479,12 +479,10 @@
       "paymentMethod": "Método de Pago"
     },
     "status": {
-      "completed": "Completado",
-      "pending": "Pendiente",
-      "refunded": "Reembolsado",
-      "failed": "Fallido",
+      "paid": "Pagado",
       "unpaid": "No pagado",
-      "paid": "Pagado"
+      "void": "Anulado",
+      "overdue": "Vencido"
     },
     "actions": {
       "viewDetails": "Ver detalle",
@@ -799,5 +797,49 @@
     "minutes": "minutos",
     "learnMore": "Saber más",
     "categoryDefault": "General"
+  },
+  "invoiceDetails": {
+    "backToHistory": "Volver al historial",
+    "title": "Detalle de Transacción",
+    "status": {
+      "paid": "Pagado",
+      "confirmed": "Confirmado",
+      "pending": "Pendiente",
+      "overdue": "Vencido",
+      "void": "Anulado",
+      "unknown": "Desconocido"
+    },
+    "summary": {
+      "title": "Resumen",
+      "issueDate": "Fecha de Emisión",
+      "statusLabel": "Estado",
+      "paymentMethod": "Método de pago",
+      "branch": "Sucursal",
+      "loading": "Cargando...",
+      "unspecified": "No especificado",
+      "mainBranch": "Sede Principal",
+      "unknownBranch": "Sucursal desconocida"
+    },
+    "actions": {
+      "title": "Acciones",
+      "download": "Descargar Recibo",
+      "email": "Enviar por Correo",
+      "electronic": "Factura Electrónica"
+    },
+    "planValidity": {
+      "from": "Válido Desde",
+      "to": "Válido Hasta"
+    },
+    "conceptsTitle": "Conceptos Facturados",
+    "totals": {
+      "subtotal": "Subtotal",
+      "tax": "Impuestos",
+      "total": "Total Pagado"
+    },
+    "errors": {
+      "notFound": "No se encontró la factura",
+      "loadError": "Error al cargar",
+      "checkConnection": "Verifica tu conexión o el ID."
+    }
   }
 }
