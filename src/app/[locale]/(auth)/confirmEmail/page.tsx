@@ -108,9 +108,7 @@ function ConfirmEmailContent() {
     } catch (error) {
       console.error("Error al conectar con la API:", error);
       setIncorrectCode(true);
-      setErrorMessage(
-        "No se pudo conectar con el servidor. Intenta más tarde.",
-      );
+      setErrorMessage("No se pudo conectar con el servidor");
       setShowConnectionError(true);
     } finally {
       setLoading(false);
@@ -164,8 +162,8 @@ function ConfirmEmailContent() {
       {showConnectionError && (
         <Notification
           variant="destructive"
-          title="Error de Conexión"
-          description="No se pudo conectar con el servidor. Por favor, inténtalo de nuevo más tarde."
+          title="Error"
+          description={`${errorMessage}`}
           onClose={() => setShowConnectionError(false)}
         />
       )}

@@ -19,17 +19,11 @@ export default function RecoverPassword() {
   const [error, setError] = useState<{ usuario?: string[] }>({});
   const [showAlert, setShowAlert] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [showConnectionError, setShowConnectionError] = useState(false);
-  const [showServerError, setShowServerError] = useState<{
-    visible: boolean;
-    message: string;
-  }>({ visible: false, message: "" });
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    setShowServerError({ visible: false, message: "" });
 
     const result = recoverSchema.safeParse(formData);
 
@@ -53,8 +47,7 @@ export default function RecoverPassword() {
       setError({});
       setFormData({ usuario: "" });
     } catch (error) {
-      console.error("Error al conectar con la API:", error);
-      setShowConnectionError(true);
+      setShowAlert(true);
     }
 
     setIsLoading(false);
@@ -72,24 +65,6 @@ export default function RecoverPassword() {
             setShowAlert(false);
             router.replace("/confirmEmail?flow=recover");
           }}
-        />
-      )}
-      {/* Notificación de Error de Conexión */}
-      {showConnectionError && (
-        <Notification
-          variant="destructive"
-          title={t("connectionError.title")}
-          description={t("connectionError.description")}
-          onClose={() => setShowConnectionError(false)}
-        />
-      )}
-      {/* Notificación de Error del Servidor/Email */}
-      {showServerError.visible && (
-        <Notification
-          variant="destructive"
-          title={t("serverErrorNotification.title")}
-          description={showServerError.message}
-          onClose={() => setShowServerError({ visible: false, message: "" })}
         />
       )}
 

@@ -43,6 +43,7 @@ export default function RegisterPage() {
   const [showAlertError, setShowAlertError] = useState(false);
   const [showConnectionError, setShowConnectionError] = useState(false);
   const [submitError, setSubmitError] = useState("");
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [terms, setTerms] = useState(false);
   const router = useRouter();
 
@@ -121,9 +122,11 @@ export default function RegisterPage() {
           cpassword: "",
         });
         setTerms(false);
+        setErrorMessage(null);
         setShowAlert(true);
       } catch (error) {
         console.error("Error al conectar con la API:", error);
+        setErrorMessage(`${error}`);
         setShowConnectionError(true);
       }
     }
@@ -161,8 +164,8 @@ export default function RegisterPage() {
       {showConnectionError && (
         <Notification
           variant="destructive"
-          title={t("notifications.connectionError.title")}
-          description={t("notifications.connectionError.description")}
+          title={`Error`}
+          description={`${errorMessage}`}
           onClose={() => setShowConnectionError(false)}
         />
       )}

@@ -342,6 +342,10 @@
         "preferNotToSayValue": "prefiero no especificarlo"
       }
     },
+    "footer": {
+      "loginPrompt": "¿Ya tienes una cuenta?",
+      "loginLink": "Iniciar Sesión"
+    },
     "validation": {
       "termsRequired": "Debes aceptar los términos y condiciones"
     },
