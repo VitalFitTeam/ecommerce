@@ -3,29 +3,24 @@
 import { useState, useRef, useEffect, Suspense } from "react";
 import { typography } from "@/styles/styles";
 import AuthCard from "@/components/features/AuthCard";
-import { Notification } from "@/components/ui/Notification";
 import Logo from "@/components/features/Logo";
 import { useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "@/i18n/routing";
 import { api } from "@/lib/sdk-config";
-
-type ActivateResponse = {
-  message?: string;
-};
+import { useAuth } from "@/context/AuthContext";
+import { toast } from "sonner";
 
 function ConfirmEmailContent() {
   const [code, setCode] = useState<string[]>(["", "", "", "", "", ""]);
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
-  const [showAlert, setShowAlert] = useState(false);
-  const [showAlertConfirmation, setShowAlertConfirmation] = useState(false);
-  const [showConnectionError, setShowConnectionError] = useState(false);
-  const [incorrectCode, setIncorrectCode] = useState(false);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
   const [loading, setLoading] = useState(false);
   const searchParams = useSearchParams();
   const flow = searchParams.get("flow");
   const router = useRouter();
+
+  const { login } = useAuth();
 
   useEffect(() => {
     inputRefs.current[0]?.focus();
@@ -35,19 +30,13 @@ function ConfirmEmailContent() {
 
   const handleInputChange = (index: number, value: string) => {
     const char = value.slice(-1).toUpperCase();
-    if (!isValidChar(char) && char !== "") {
-      return;
-    }
+    if (!isValidChar(char) && char !== "") {return;}
 
     const newCode = [...code];
     newCode[index] = char;
     setCode(newCode);
 
-    // clear previous error state when the user changes input
-    if (incorrectCode) {
-      setIncorrectCode(false);
-      setErrorMessage(null);
-    }
+    if (char !== "") {toast.dismiss();}
 
     if (index < code.length - 1 && char !== "") {
       inputRefs.current[index + 1]?.focus();
@@ -87,11 +76,11 @@ function ConfirmEmailContent() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    toast.dismiss();
 
     const verificationCode = code.join("").trim();
     if (verificationCode.length !== 6) {
-      setIncorrectCode(true);
-      setErrorMessage("Por favor, ingresa el código completo de 6 caracteres");
+      toast.error("Por favor, ingresa el código completo de 6 caracteres");
       setLoading(false);
       return;
     }
@@ -99,74 +88,84 @@ function ConfirmEmailContent() {
     setLoading(true);
 
     try {
-      const response = api.auth.verifyEmail(verificationCode);
-      console.warn(response);
+      if (flow === "register") {
+        await api.auth.verifyEmail(verificationCode);
+      } else {
+        await api.auth.validateResetToken(verificationCode);
+      }
+
       localStorage.setItem("code", verificationCode);
-      setIncorrectCode(false);
-      setErrorMessage(null);
-      setShowAlert(true);
+
+      if (flow === "register") {
+        const tempEmail = sessionStorage.getItem("temp_email");
+        const tempPassword = sessionStorage.getItem("temp_password");
+
+        if (tempEmail && tempPassword) {
+          try {
+            const loginResponse = await api.auth.login({
+              email: tempEmail,
+              password: tempPassword,
+            });
+
+            if (loginResponse.token) {
+              toast.success("Registro exitoso");
+
+              setTimeout(() => {
+                login(loginResponse.token);
+                sessionStorage.removeItem("temp_email");
+                sessionStorage.removeItem("temp_password");
+                router.replace("/dashboard");
+              }, 2000);
+              return;
+            }
+          } catch (error) {
+            console.error("Falló el auto-login:", error);
+          }
+        }
+      }
+
+      const mensajeExito =
+        flow === "recover"
+          ? "Código verificado correctamente"
+          : "¡Registro exitoso!";
+
+      toast.success(mensajeExito);
+
+      setTimeout(() => {
+        router.replace(flow === "recover" ? "/changePassword" : "/dashboard");
+      }, 2000);
     } catch (error) {
-      console.error("Error al conectar con la API:", error);
-      setIncorrectCode(true);
-      setErrorMessage("No se pudo conectar con el servidor");
-      setShowConnectionError(true);
-    } finally {
+      console.error("Error validación:", error);
+      toast.error("Código incorrecto o expirado");
+      // ✅ CORRECCIÓN: Si hay error, quitamos el loading SIEMPRE
       setLoading(false);
     }
+    // Quitamos el finally complicado. Si es éxito, el loading se queda true (bien). Si es error, el catch lo quita (bien).
   };
 
   const isCodeComplete = code.every((char) => char !== "");
 
   const resendCode = async () => {
-    const email = localStorage.getItem("email");
+    const email =
+      localStorage.getItem("email") || sessionStorage.getItem("temp_email");
+
+    if (!email) {
+      toast.error("No se encontró el email para reenviar");
+      return;
+    }
+
     try {
       const response = await api.auth.forgotPassword(String(email));
       console.warn(response);
-      setShowAlertConfirmation(true);
+      toast.success("Código de Confirmación Reenviado");
     } catch (error) {
       console.error("Error al conectar con la API:", error);
-      setIncorrectCode(true);
-      setErrorMessage("No se pudo conectar con el servidor");
+      toast.error("No se pudo reenviar el código");
     }
   };
 
   return (
     <div className="flex items-center justify-center min-h-screen px-5 py-4">
-      {showAlert && (
-        <Notification
-          variant="success"
-          title={flow === "recover" ? "Email confirmado" : "Registro exitoso"}
-          description={
-            flow === "recover"
-              ? "Email confirmado"
-              : "¡Te has registrado exitosamente!"
-          }
-          onClose={() => {
-            setShowAlert(false);
-            router.replace(
-              flow === "recover" ? "/changePassword" : "/dashboard",
-            );
-          }}
-        />
-      )}
-      {showAlertConfirmation && (
-        <Notification
-          variant="success"
-          title={"Código de Confirmación Reenviado"}
-          description={""}
-          onClose={() => {
-            setShowAlertConfirmation(false);
-          }}
-        />
-      )}
-      {showConnectionError && (
-        <Notification
-          variant="destructive"
-          title="Error"
-          description={`${errorMessage}`}
-          onClose={() => setShowConnectionError(false)}
-        />
-      )}
       <div className="flex justify-center w-full">
         <div className="max-w-sm w-full">
           <AuthCard>
@@ -196,13 +195,7 @@ function ConfirmEmailContent() {
                   />
                 ))}
               </div>
-              {incorrectCode && (
-                <div className="text-left font-medium my-5">
-                  <span className="text-red-500">
-                    {errorMessage ?? "Codigo Incorrecto"}
-                  </span>
-                </div>
-              )}
+
               <Button type="submit" disabled={!isCodeComplete || loading}>
                 {loading ? "Verificando..." : "Verificar Correo"}
               </Button>
@@ -212,8 +205,7 @@ function ConfirmEmailContent() {
                   onClick={() => {
                     resendCode();
                   }}
-                  className="text-green-500 hover:underline"
-                  href="#"
+                  className="text-green-500 hover:underline cursor-pointer"
                 >
                   <h2>Reenviar Código</h2>
                 </a>

@@ -8,7 +8,7 @@ import Logo from "@/components/features/Logo";
 import PasswordInput from "@/components/ui/PasswordInput";
 import TextInput from "@/components/ui/TextInput";
 import { PhoneInput } from "@/components/ui/phone-input";
-import { Notification } from "@/components/ui/Notification";
+// Eliminamos: import { Notification } from "@/components/ui/Notification";
 import { registerSchema } from "@/lib/validation/registerSchema";
 import { RegisterFormData } from "@/lib/validation/registerSchema";
 import GoogleLoginButton from "@/components/ui/GoogleLoginButton";
@@ -17,11 +17,12 @@ import { Button } from "@/components/ui/button";
 import { useRouter } from "@/i18n/routing";
 import { api } from "@/lib/sdk-config";
 import { UserGender } from "@vitalfit/sdk";
-import { useTranslations } from "next-intl"; // Importado para traducción
+import { useTranslations } from "next-intl";
 import { Checkbox } from "@/components/ui/Checkbox";
+// 1. Importamos toast de sonner
+import { toast } from "sonner";
 
 export default function RegisterPage() {
-  // Inicializamos la función de traducción
   const t = useTranslations("RegisterPage");
 
   const [formData, setFormData] = useState<RegisterFormData>({
@@ -39,11 +40,9 @@ export default function RegisterPage() {
   const [error, setError] = useState<
     Partial<Record<keyof RegisterFormData | "terms", string[]>>
   >({});
-  const [showAlert, setShowAlert] = useState(false);
-  const [showAlertError, setShowAlertError] = useState(false);
-  const [showConnectionError, setShowConnectionError] = useState(false);
-  const [submitError, setSubmitError] = useState("");
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  // Eliminamos estados de alertas manuales (showAlert, submitError, etc.)
+
   const [terms, setTerms] = useState(false);
   const router = useRouter();
 
@@ -53,6 +52,8 @@ export default function RegisterPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    // Limpiamos toasts previos
+    toast.dismiss();
 
     const result = registerSchema.safeParse(formData);
 
@@ -78,13 +79,16 @@ export default function RegisterPage() {
       setError(
         fieldErrors as Partial<Record<keyof RegisterFormData, string[]>>,
       );
+      // Opcional: Mostrar error general si faltan campos
+      toast.error(
+        t("notifications.error.title") || "Por favor verifica el formulario",
+      );
       return;
     } else {
       const birthDateISO = formData.nacimiento
         ? new Date(formData.nacimiento).toISOString().split("T")[0]
         : "";
 
-      // Mapeo de género usando claves de traducción
       const genderMapping = {
         [t("form.gender.maleValue")]: "male",
         [t("form.gender.femaleValue")]: "female",
@@ -108,7 +112,10 @@ export default function RegisterPage() {
         });
         console.warn(response);
 
-        setShowAlertError(false);
+        // Guardamos credenciales temporalmente
+        sessionStorage.setItem("temp_email", formData.email);
+        sessionStorage.setItem("temp_password", formData.password);
+
         setError({});
         setFormData({
           nombre: "",
@@ -122,12 +129,24 @@ export default function RegisterPage() {
           cpassword: "",
         });
         setTerms(false);
-        setErrorMessage(null);
-        setShowAlert(true);
+
+        // ✅ ÉXITO: Usamos toast de sonner
+        toast.success(t("notifications.success.title"), {
+          description: t("notifications.success.description"),
+        });
+
+        // ⏳ Esperamos 2 segundos antes de redirigir
+        setTimeout(() => {
+          router.replace("/confirmEmail?flow=register");
+        }, 2000);
       } catch (error) {
         console.error("Error al conectar con la API:", error);
-        setErrorMessage(`${error}`);
-        setShowConnectionError(true);
+
+        // ❌ ERROR: Usamos toast de sonner
+        // Usamos el título traducido o un genérico, y mostramos el error si existe
+        toast.error(t("notifications.error.title") || "Error en el registro", {
+          description: String(error) || "Inténtalo de nuevo más tarde",
+        });
       }
     }
   };
@@ -142,33 +161,7 @@ export default function RegisterPage() {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen px-4 py-6 sm:px-6 lg:px-8">
-      {showAlert && (
-        <Notification
-          variant="success"
-          title={t("notifications.success.title")}
-          description={t("notifications.success.description")}
-          onClose={() => {
-            setShowAlert(false);
-            router.replace("/confirmEmail?flow=register");
-          }}
-        />
-      )}
-      {showAlertError && (
-        <Notification
-          variant="destructive"
-          title={t("notifications.error.title")}
-          description={submitError}
-          onClose={() => setShowAlertError(false)}
-        />
-      )}
-      {showConnectionError && (
-        <Notification
-          variant="destructive"
-          title={`Error`}
-          description={`${errorMessage}`}
-          onClose={() => setShowConnectionError(false)}
-        />
-      )}
+      {/* Eliminamos los componentes <Notification /> que estaban aquí */}
 
       <div className="flex justify-center w-full max-w-6xl">
         <div className="w-full max-w-2xl lg:max-w-4xl">
@@ -185,7 +178,6 @@ export default function RegisterPage() {
             </div>
 
             <form className="w-full" onSubmit={handleSubmit} noValidate>
-              {/* Nombre y Apellido */}
               <div className="flex flex-col mb-4 space-y-4 sm:flex-row sm:space-y-0 sm:space-x-4">
                 <div className="flex-1">
                   <label
