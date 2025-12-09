@@ -7,20 +7,17 @@ import AuthCard from "@/components/features/AuthCard";
 import Logo from "@/components/features/Logo";
 import PasswordInput from "@/components/ui/PasswordInput";
 import { passwordSchema } from "@/lib/validation/passwordSchema";
-import { Notification } from "@/components/ui/Notification"; // La importación ya está aquí
+// Eliminamos: import { Notification } from "@/components/ui/Notification";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "@/i18n/routing";
 import { api } from "@/lib/sdk-config";
+// 1. Importamos toast
+import { toast } from "sonner";
 
 export default function PasswordReset() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
-  const [showAlert, setShowAlert] = useState(false);
-  const [showConnectionError, setShowConnectionError] = useState(false);
-  const [showServerError, setShowServerError] = useState<{
-    visible: boolean;
-    message: string;
-  }>({ visible: false, message: "" });
+  // Eliminamos estados manuales de notificación
 
   const [formData, setFormData] = useState({
     password: "",
@@ -35,7 +32,7 @@ export default function PasswordReset() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    setShowServerError({ visible: false, message: "" });
+    toast.dismiss(); // Limpiamos notificaciones previas
 
     const result = passwordSchema.safeParse({
       password: formData.password,
@@ -66,15 +63,14 @@ export default function PasswordReset() {
       const tokenCode = localStorage.getItem("code");
 
       if (!tokenCode) {
-        setShowServerError({
-          visible: true,
-          message:
-            "Error en obtener el código de confirmación. Por favor, solicita nuevamente el restablecimiento de contraseña.",
+        toast.error("Error de Token", {
+          description:
+            "No se encontró el código de confirmación. Solicítalo de nuevo.",
         });
         return;
       }
 
-      const response = await api.auth.resetPassword(
+      await api.auth.resetPassword(
         tokenCode,
         formData.password,
         formData.confirmPassword,
@@ -85,7 +81,13 @@ export default function PasswordReset() {
         password: "",
         confirmPassword: "",
       });
-      setShowAlert(true);
+
+      // ✅ ÉXITO: Mensaje y redirección con espera
+      toast.success("¡Contraseña restablecida exitosamente!");
+
+      setTimeout(() => {
+        router.replace("/login");
+      }, 2000);
     } catch (error: any) {
       console.error("Error al cambiar contraseña:", error);
 
@@ -94,11 +96,13 @@ export default function PasswordReset() {
         error.message?.includes("network") ||
         error.message?.includes("conectar")
       ) {
-        setShowConnectionError(true);
+        toast.error("Error de Conexión", {
+          description:
+            "No se pudo conectar con el servidor. Inténtalo más tarde.",
+        });
       } else {
-        setShowServerError({
-          visible: true,
-          message: error.message || "Error al cambiar contraseña",
+        toast.error("Error al Restablecer Contraseña", {
+          description: error.message || "Ocurrió un error inesperado.",
         });
       }
     } finally {
@@ -108,33 +112,8 @@ export default function PasswordReset() {
 
   return (
     <div className="flex flex-col items-center justify-center px-5 py-4">
-      {showAlert && (
-        <Notification
-          variant="success"
-          description="¡Contraseña restablecida exitosamente!"
-          onClose={() => {
-            setShowAlert(false);
-            router.replace("/login");
-          }}
-        />
-      )}
-      {showConnectionError && (
-        <Notification
-          variant="destructive"
-          title="Error de Conexión"
-          description="No se pudo conectar con el servidor. Por favor, inténtalo de nuevo más tarde."
-          onClose={() => setShowConnectionError(false)}
-        />
-      )}
+      {/* Eliminamos los componentes <Notification /> */}
 
-      {showServerError.visible && (
-        <Notification
-          variant="destructive"
-          title="Error al Restablecer Contraseña"
-          description={showServerError.message}
-          onClose={() => setShowServerError({ visible: false, message: "" })}
-        />
-      )}
       <div className="flex justify-center w-full">
         <div className="max-w-sm w-full">
           <AuthCard>

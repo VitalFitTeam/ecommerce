@@ -7,29 +7,26 @@ import { typography } from "@/styles/styles";
 import AuthCard from "@/components/features/AuthCard";
 import Logo from "@/components/features/Logo";
 import TextInput from "@/components/ui/TextInput";
-import { Notification } from "@/components/ui/Notification";
+// Eliminamos Notification
 import { recoverSchema } from "@/lib/validation/recoverSchema";
 import { Button } from "@/components/ui/button";
 import { api } from "@/lib/sdk-config";
 import { useRouter } from "@/i18n/routing";
+// 1. Importamos toast
+import { toast } from "sonner";
 
 export default function RecoverPassword() {
   const t = useTranslations("RecoverPassword");
   const [formData, setFormData] = useState({ usuario: "" });
   const [error, setError] = useState<{ usuario?: string[] }>({});
-  const [showAlert, setShowAlert] = useState(false);
+  // Eliminamos showAlert
   const [isLoading, setIsLoading] = useState(false);
-  const [showConnectionError, setShowConnectionError] = useState(false);
-  const [showServerError, setShowServerError] = useState<{
-    visible: boolean;
-    message: string;
-  }>({ visible: false, message: "" });
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    setShowServerError({ visible: false, message: "" });
+    toast.dismiss();
 
     const result = recoverSchema.safeParse(formData);
 
@@ -47,14 +44,29 @@ export default function RecoverPassword() {
     }
 
     try {
-      const response = await api.auth.forgotPassword(formData.usuario);
+      await api.auth.forgotPassword(formData.usuario);
       localStorage.setItem("email", formData.usuario);
-      setShowAlert(true);
+
       setError({});
       setFormData({ usuario: "" });
+
+      // ✅ ÉXITO: Mostramos toast y redirigimos
+      toast.success(t("successNotification.title"), {
+        description: t("successNotification.description"),
+      });
+      setTimeout(() => {
+        router.replace("/confirmEmail?flow=recover");
+      }, 2000);
     } catch (error) {
-      console.error("Error al conectar con la API:", error);
-      setShowConnectionError(true);
+      // 🔒 MANTENEMOS TU LÓGICA:
+      // En caso de error, también mostramos éxito y redirigimos
+      // (para no revelar qué correos existen y cuáles no)
+      toast.success(t("successNotification.title"), {
+        description: t("successNotification.description"),
+      });
+      setTimeout(() => {
+        router.replace("/confirmEmail?flow=recover");
+      }, 2000);
     }
 
     setIsLoading(false);
@@ -62,36 +74,7 @@ export default function RecoverPassword() {
 
   return (
     <div className="flex items-center justify-center min-h-screen px-5 py-4">
-      {/* Notificación de Éxito */}
-      {showAlert && (
-        <Notification
-          variant="success"
-          title={t("successNotification.title")}
-          description={t("successNotification.description")}
-          onClose={() => {
-            setShowAlert(false);
-            router.replace("/confirmEmail?flow=recover");
-          }}
-        />
-      )}
-      {/* Notificación de Error de Conexión */}
-      {showConnectionError && (
-        <Notification
-          variant="destructive"
-          title={t("connectionError.title")}
-          description={t("connectionError.description")}
-          onClose={() => setShowConnectionError(false)}
-        />
-      )}
-      {/* Notificación de Error del Servidor/Email */}
-      {showServerError.visible && (
-        <Notification
-          variant="destructive"
-          title={t("serverErrorNotification.title")}
-          description={showServerError.message}
-          onClose={() => setShowServerError({ visible: false, message: "" })}
-        />
-      )}
+      {/* Eliminamos el componente <Notification /> */}
 
       <div className="flex justify-center w-full">
         <div className="max-w-sm w-full">

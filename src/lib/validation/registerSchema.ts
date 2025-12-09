@@ -65,11 +65,11 @@ export const registerSchema = z
             monthDiff < 0 ||
             (monthDiff === 0 && today.getDate() < birthDate.getDate())
           ) {
-            return age - 1 >= 18;
+            return age - 1 >= 12;
           }
-          return age >= 18;
+          return age >= 12;
         },
-        { message: "Debes ser mayor de 18 años" },
+        { message: "Debes ser mayor de 12 años" },
       ),
 
     password: z
@@ -84,6 +84,9 @@ export const registerSchema = z
       })
       .regex(/[0-9]/, {
         message: "La contraseña debe contener al menos un número",
+      })
+      .regex(/^[^.]+$/, {
+        message: "La contraseña no puede contener el símbolo de punto",
       }),
 
     cpassword: z
