@@ -8,13 +8,15 @@ import Logo from "@/components/features/Logo";
 import GoogleLoginButton from "@/components/ui/GoogleLoginButton";
 import PasswordInput from "@/components/ui/PasswordInput";
 import TextInput from "@/components/ui/TextInput";
-import { Notification } from "@/components/ui/Notification";
+// Eliminamos la importación de Notification manual
 import { loginSchema } from "@/lib/validation/loginSchema";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "@/i18n/routing";
 import { useAuth } from "@/context/AuthContext";
 import { api } from "@/lib/sdk-config";
 import { Checkbox } from "@/components/ui/Checkbox";
+// 1. Importamos toast
+import { toast } from "sonner";
 
 export default function Login() {
   const t = useTranslations("LoginPage");
@@ -23,7 +25,7 @@ export default function Login() {
   const [rememberMe, setRememberMe] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({ email: "", password: "" });
-  const [authError, setAuthError] = useState<string | null>(null);
+  // Eliminamos authError
 
   const { login } = useAuth();
 
@@ -43,6 +45,7 @@ export default function Login() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
+    toast.dismiss(); // Limpiamos mensajes previos
 
     const result = loginSchema.safeParse(formData);
 
@@ -77,11 +80,16 @@ export default function Login() {
       }
 
       login(token);
-      setAuthError(null);
+
+      // Mensaje de éxito (opcional)
+      toast.success(t("title") || "Bienvenido");
+
       router.replace("/dashboard");
     } catch (error) {
-      console.error("Error al conectar con la API:", error);
-      setAuthError(t("errors.connectionError"));
+      console.error("Error Login:", error);
+
+      toast.error(t("errors.incorrectCredentials"));
+
       setIsSubmitting(false);
     }
   };
@@ -94,14 +102,7 @@ export default function Login() {
       }}
     >
       <div className="w-full max-w-sm sm:max-w-md lg:max-w-lg">
-        {authError && (
-          <Notification
-            variant="destructive"
-            title={t("errors.incorrectCredentials")}
-            description={authError}
-            onClose={() => setAuthError(null)}
-          />
-        )}
+        {/* Eliminamos el componente <Notification /> aquí */}
 
         <AuthCard>
           <Logo slogan={false} width={80} />
@@ -115,7 +116,6 @@ export default function Login() {
             <div className="space-y-3 w-full">
               <div className="flex flex-col">
                 <label htmlFor="email" className="text-left font-medium mb-1">
-                  {/* CORRECCIÓN: Agregado el asterisco para mostrar obligatoriedad */}
                   {t("email.label")}*
                 </label>
                 <TextInput
@@ -142,7 +142,6 @@ export default function Login() {
                   htmlFor="password"
                   className="text-left font-medium mb-1"
                 >
-                  {/* CORRECCIÓN: Agregado el asterisco para mostrar obligatoriedad */}
                   {t("password.label")}*
                 </label>
                 <PasswordInput
