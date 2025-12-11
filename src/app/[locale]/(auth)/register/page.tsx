@@ -1,29 +1,28 @@
 "use client";
 
-import { useState } from "react";
-import AuthFooter from "@/components/features/AuthFooter";
-import { typography } from "@/styles/styles";
+import { useState, useEffect, useRef } from "react";
+import { typography, colors } from "@/styles/styles";
 import AuthCard from "@/components/features/AuthCard";
 import Logo from "@/components/features/Logo";
 import PasswordInput from "@/components/ui/PasswordInput";
 import TextInput from "@/components/ui/TextInput";
 import { PhoneInput } from "@/components/ui/phone-input";
-// Eliminamos: import { Notification } from "@/components/ui/Notification";
 import { registerSchema } from "@/lib/validation/registerSchema";
 import { RegisterFormData } from "@/lib/validation/registerSchema";
-import GoogleLoginButton from "@/components/ui/GoogleLoginButton";
-import { colors } from "@/styles/styles";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "@/i18n/routing";
 import { api } from "@/lib/sdk-config";
 import { UserGender } from "@vitalfit/sdk";
 import { useTranslations } from "next-intl";
 import { Checkbox } from "@/components/ui/Checkbox";
-// 1. Importamos toast de sonner
 import { toast } from "sonner";
+import { useUser, useClerk } from "@clerk/nextjs";
 
 export default function RegisterPage() {
   const t = useTranslations("RegisterPage");
+
+  const { user, isSignedIn } = useUser();
+  const { signOut } = useClerk();
 
   const [formData, setFormData] = useState<RegisterFormData>({
     nombre: "",
@@ -41,18 +40,79 @@ export default function RegisterPage() {
     Partial<Record<keyof RegisterFormData | "terms", string[]>>
   >({});
 
-  // Eliminamos estados de alertas manuales (showAlert, submitError, etc.)
-
+  const [isInitialized, setIsInitialized] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [terms, setTerms] = useState(false);
   const router = useRouter();
 
-  const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setTerms(event.target.checked);
+  // Generador de contraseña
+  const generateSecurePassword = () =>
+    `A${Math.random().toString(36).slice(-10)}!1`;
+
+  // Función para LIMPIAR sesión y regresar al Login
+  const handleCleanLogin = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    try {
+      await signOut();
+      sessionStorage.removeItem("temp_email");
+      sessionStorage.removeItem("temp_password");
+      setFormData({
+        nombre: "",
+        apellido: "",
+        email: "",
+        telefono: "",
+        documento: "",
+        genero: "",
+        nacimiento: "",
+        password: "",
+        cpassword: "",
+      });
+      router.replace("/login");
+    } catch (error) {
+      console.error("Error limpiando sesión:", error);
+      router.replace("/login");
+    }
   };
+
+  // Pre-llenar datos (Mantenemos esto por si el usuario ya tenía sesión activa de otra forma,
+  // aunque sin botón de Google es menos probable que se active).
+  const initialized = useRef(false);
+
+  // Pre-llenar datos desde Clerk
+  useEffect(() => {
+    const loadUserData = async () => {
+      // Verifica que haya sesión de Clerk
+      if (isSignedIn && user) {
+        // Genera contraseña segura
+        const phantomPass = generateSecurePassword();
+
+        // Actualiza el estado
+        setFormData((prev) => ({
+          ...prev,
+          nombre: user.firstName || prev.nombre,
+          apellido: user.lastName || prev.apellido,
+          email: user.primaryEmailAddress?.emailAddress || prev.email,
+          password: phantomPass,
+          cpassword: phantomPass,
+        }));
+
+        setIsInitialized(true);
+
+        toast.info("Datos cargados desde Google", {
+          description: "Puedes editar la información si es necesario.",
+          duration: 5000,
+          icon: "📝",
+        });
+      } else {
+        console.warn("No hay sesión de Clerk activa en Register");
+      }
+    };
+
+    loadUserData();
+  }, [isSignedIn, user]); // Solo dependencias necesarias
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Limpiamos toasts previos
     toast.dismiss();
 
     const result = registerSchema.safeParse(formData);
@@ -63,7 +123,6 @@ export default function RegisterPage() {
 
     if (!result.success) {
       const flattened = result.error.flatten();
-
       Object.entries(flattened.fieldErrors).forEach(([key, value]) => {
         if (value) {
           fieldErrors[key as keyof RegisterFormData] = value;
@@ -76,43 +135,48 @@ export default function RegisterPage() {
     }
 
     if (Object.keys(fieldErrors).length > 0) {
-      setError(
-        fieldErrors as Partial<Record<keyof RegisterFormData, string[]>>,
-      );
-      // Opcional: Mostrar error general si faltan campos
-      toast.error(
-        t("notifications.error.title") || "Por favor verifica el formulario",
-      );
+      setError(fieldErrors);
+      const errorCount = Object.keys(fieldErrors).length;
+
+      // Mantenemos tu cambio de toast.error para color rojo
+      toast.error("Formulario incompleto", {
+        description: `Tienes ${errorCount} campo${errorCount > 1 ? "s" : ""} que requieren tu atención.`,
+      });
       return;
-    } else {
-      const birthDateISO = formData.nacimiento
-        ? new Date(formData.nacimiento).toISOString().split("T")[0]
-        : "";
+    }
 
-      const genderMapping = {
-        [t("form.gender.maleValue")]: "male",
-        [t("form.gender.femaleValue")]: "female",
-        [t("form.gender.preferNotToSayValue")]: "prefer-not-to-say",
-      };
+    const birthDateISO = formData.nacimiento
+      ? new Date(formData.nacimiento).toISOString().split("T")[0]
+      : "";
 
-      const apiGender = (genderMapping[
-        formData.genero as keyof typeof genderMapping
-      ] || formData.genero) as UserGender;
+    const genderMapping = {
+      [t("form.gender.maleValue")]: "male",
+      [t("form.gender.femaleValue")]: "female",
+      [t("form.gender.preferNotToSayValue")]: "prefer-not-to-say",
+    };
 
-      try {
-        const response = await api.auth.signUp({
-          first_name: formData.nombre,
-          last_name: formData.apellido,
-          email: formData.email,
-          password: formData.password,
-          identity_document: formData.documento,
-          phone: formData.telefono,
-          birth_date: birthDateISO,
-          gender: apiGender,
-        });
+    const apiGender = (genderMapping[
+      formData.genero as keyof typeof genderMapping
+    ] || formData.genero) as UserGender;
+
+    setIsSubmitting(true);
+
+    const registerPromise = api.auth.signUp({
+      first_name: formData.nombre,
+      last_name: formData.apellido,
+      email: formData.email,
+      password: formData.password,
+      identity_document: formData.documento,
+      phone: formData.telefono,
+      birth_date: birthDateISO,
+      gender: apiGender,
+    });
+
+    toast.promise(registerPromise, {
+      loading: "Creando tu cuenta...",
+      success: (response) => {
         console.warn(response);
 
-        // Guardamos credenciales temporalmente
         sessionStorage.setItem("temp_email", formData.email);
         sessionStorage.setItem("temp_password", formData.password);
 
@@ -130,25 +194,33 @@ export default function RegisterPage() {
         });
         setTerms(false);
 
-        // ✅ ÉXITO: Usamos toast de sonner
-        toast.success(t("notifications.success.title"), {
-          description: t("notifications.success.description"),
-        });
-
-        // ⏳ Esperamos 2 segundos antes de redirigir
         setTimeout(() => {
           router.replace("/confirmEmail?flow=register");
-        }, 2000);
-      } catch (error) {
-        console.error("Error al conectar con la API:", error);
+        }, 1500);
 
-        // ❌ ERROR: Usamos toast de sonner
-        // Usamos el título traducido o un genérico, y mostramos el error si existe
-        toast.error(t("notifications.error.title") || "Error en el registro", {
-          description: String(error) || "Inténtalo de nuevo más tarde",
-        });
-      }
-    }
+        return t("notifications.success.title") || "¡Registro exitoso!";
+      },
+      error: (err: unknown) => {
+        console.error("Error API:", err);
+        setIsSubmitting(false);
+
+        const error = err as { message?: string; messages?: string[] };
+        const errorMsg = (error?.message || String(error)).toLowerCase();
+
+        if (errorMsg.includes("conflict")) {
+          return "Este usuario ya está registrado. Verifica tu correo o documento.";
+        }
+
+        let message = "Ocurrió un error inesperado";
+        if (error?.messages && Array.isArray(error.messages)) {
+          message = error.messages.join(", ");
+        } else if (error?.message) {
+          message = error.message;
+        }
+
+        return message;
+      },
+    });
   };
 
   const handleInputChange = (field: keyof RegisterFormData, value: string) => {
@@ -159,10 +231,10 @@ export default function RegisterPage() {
     }
   };
 
+  const inputBgClass = "bg-white";
+
   return (
     <div className="flex flex-col items-center justify-center min-h-screen px-4 py-6 sm:px-6 lg:px-8">
-      {/* Eliminamos los componentes <Notification /> que estaban aquí */}
-
       <div className="flex justify-center w-full max-w-6xl">
         <div className="w-full max-w-2xl lg:max-w-4xl">
           <AuthCard>
@@ -195,7 +267,7 @@ export default function RegisterPage() {
                     onChange={(e) =>
                       handleInputChange("nombre", e.target.value)
                     }
-                    className="bg-white w-full"
+                    className={`w-full ${inputBgClass}`}
                   />
                   {error.nombre?.[0] && (
                     <p className="text-red-500 text-xs sm:text-sm mt-1">
@@ -219,7 +291,7 @@ export default function RegisterPage() {
                     onChange={(e) =>
                       handleInputChange("apellido", e.target.value)
                     }
-                    className="bg-white w-full"
+                    className={`w-full ${inputBgClass}`}
                   />
                   {error.apellido?.[0] && (
                     <p className="text-red-500 text-xs sm:text-sm mt-1">
@@ -244,7 +316,7 @@ export default function RegisterPage() {
                   placeholder={t("form.emailPlaceholder")}
                   value={formData.email}
                   onChange={(e) => handleInputChange("email", e.target.value)}
-                  className="bg-white w-full"
+                  className={`w-full ${inputBgClass}`}
                 />
                 {error.email?.[0] && (
                   <p className="text-red-500 text-xs sm:text-sm mt-1">
@@ -346,7 +418,6 @@ export default function RegisterPage() {
                       />
                       <span className="ml-2">{t("form.gender.male")}</span>
                     </label>
-
                     <label className="flex items-center">
                       <input
                         type="radio"
@@ -365,7 +436,6 @@ export default function RegisterPage() {
                       />
                       <span className="ml-2">{t("form.gender.female")}</span>
                     </label>
-
                     <label className="flex items-center">
                       <input
                         type="radio"
@@ -413,7 +483,7 @@ export default function RegisterPage() {
                     onChange={(e) =>
                       handleInputChange("password", e.target.value)
                     }
-                    className="bg-white w-full"
+                    className={`w-full ${inputBgClass}`}
                   />
                   {error.password?.[0] && (
                     <p className="text-red-500 text-xs sm:text-sm mt-1">
@@ -437,7 +507,7 @@ export default function RegisterPage() {
                     onChange={(e) =>
                       handleInputChange("cpassword", e.target.value)
                     }
-                    className="bg-white w-full"
+                    className={`w-full ${inputBgClass}`}
                   />
                   {error.cpassword?.[0] && (
                     <p className="text-red-500 text-xs sm:text-sm mt-1">
@@ -474,21 +544,30 @@ export default function RegisterPage() {
               </div>
 
               <div className="mt-6 w-full">
-                <Button type="submit" className="w-full py-3 text-base sm:py-2">
-                  {t("form.submitButton")}
+                <Button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className={`w-full py-3 text-base sm:py-2 ${isSubmitting ? "opacity-50 cursor-wait" : ""}`}
+                >
+                  {isSubmitting ? "Registrando..." : t("form.submitButton")}
                 </Button>
               </div>
-              <div className="mt-6 w-full">
-                <GoogleLoginButton text={t("form.googleLoginText")} />
-              </div>
+
+              {/* SE ELIMINÓ EL BOTÓN DE GOOGLE AQUÍ */}
             </form>
 
-            <AuthFooter
-              text={t("footer.loginPrompt")}
-              linkText={t("footer.loginLink")}
-              href="/login"
-              replace={true}
-            />
+            <div className="mt-6 text-center text-sm">
+              <span className="text-gray-600 dark:text-gray-400">
+                {t("footer.loginPrompt")}{" "}
+              </span>
+              <button
+                onClick={handleCleanLogin}
+                className="font-semibold hover:underline focus:outline-none transition-colors"
+                style={{ color: colors.primary }}
+              >
+                {t("footer.loginLink")}
+              </button>
+            </div>
           </AuthCard>
         </div>
       </div>
