@@ -37,7 +37,7 @@ export default function UpcomingClasses() {
     <div className="bg-white rounded-lg p-6 border border-gray-200">
       <h3 className="text-lg font-bold mb-6">{t("title")}</h3>
 
-      <div className="grid grid-cols-3 gap-4 mb-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-4">
         {classes.map((cls) => (
           <div
             key={cls.id}
