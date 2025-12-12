@@ -10,9 +10,14 @@ import { Button } from "@/components/ui/button";
 interface NavbarProps {
   onSignOut?: () => void;
   transparent?: boolean;
+  onToggleSidebar?: () => void;
 }
 
-const NavbarDashboard = ({ onSignOut, transparent }: NavbarProps) => {
+const NavbarDashboard = ({
+  onSignOut,
+  transparent,
+  onToggleSidebar,
+}: NavbarProps) => {
   const t = useTranslations("Navbar");
   const router = useRouter();
   const { user } = useAuth();
@@ -36,7 +41,29 @@ const NavbarDashboard = ({ onSignOut, transparent }: NavbarProps) => {
       `}
     >
       <div className="w-full max-w-7xl mx-auto px-6 flex items-center justify-between">
-        {/* LOGO */}
+        {/* Mobile toggle button */}
+        {onToggleSidebar && (
+          <button
+            className="md:hidden p-2 rounded-md hover:bg-gray-200"
+            onClick={onToggleSidebar}
+            aria-label="Open sidebar"
+          >
+            <svg
+              className="h-6 w-6 text-white"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M4 6h16M4 12h16M4 18h16"
+              />
+            </svg>
+          </button>
+        )}
         <button
           onClick={handleLogoClick}
           className="relative flex items-center group select-none"
@@ -51,7 +78,6 @@ const NavbarDashboard = ({ onSignOut, transparent }: NavbarProps) => {
             transition-opacity duration-500
           "
           />
-
           <Image
             src="/logo/logo-vitalfit.svg"
             alt="VitalFit Logo"
