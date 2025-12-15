@@ -5,6 +5,8 @@ import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
 import { getMessages } from "next-intl/server";
 import { AuthProvider } from "@/context/AuthContext";
+import { ClerkProvider } from "@clerk/nextjs";
+import { esES, enUS } from "@clerk/localizations";
 
 import "../../styles/globals.css";
 import ToasterProvider from "@/components/ToasterProvider";
@@ -31,13 +33,24 @@ export default async function RootLayout({ children, params }: Props) {
   const serializableMessages = JSON.parse(JSON.stringify(plainMessages));
 
   return (
-    <html lang={locale} className={`${montserrat.variable} ${bebas.variable}`}>
+    // 1. CORRECCIÓN AQUÍ: Agregamos suppressHydrationWarning
+    <html
+      lang={locale}
+      className={`${montserrat.variable} ${bebas.variable}`}
+      suppressHydrationWarning={true}
+    >
       <body className="antialiased">
         <NextIntlClientProvider locale={locale} messages={serializableMessages}>
-          <AuthProvider>
-            {children}
-            <ToasterProvider />
-          </AuthProvider>
+          <ClerkProvider
+            localization={locale === "es" ? esES : enUS}
+            signInFallbackRedirectUrl={`/${locale}/dashboard`}
+            signUpFallbackRedirectUrl={`/${locale}/dashboard`}
+          >
+            <AuthProvider>
+              {children}
+              <ToasterProvider />
+            </AuthProvider>
+          </ClerkProvider>
         </NextIntlClientProvider>
       </body>
     </html>

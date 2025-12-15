@@ -85,6 +85,12 @@ export const registerSchema = z
       .regex(/[0-9]/, {
         message: "La contraseña debe contener al menos un número",
       })
+      // --- NUEVA REGLA (Requerida por el backend) ---
+      .regex(/[^a-zA-Z0-9.]/, {
+        message:
+          "La contraseña debe contener al menos un carácter especial (ej: ! @ # $ % & *)",
+      })
+      // ----------------------------------------------
       .regex(/^[^.]+$/, {
         message: "La contraseña no puede contener el símbolo de punto",
       }),
