@@ -1,0 +1,849 @@
+{
+  "logo": {
+    "slogan": "Potenciando tu bienestar"
+  },
+  "slogan": "Transforma tu vida. Alcanza tu máximo potencial.",
+  "Navbar": {
+    "navItems": {
+      "home": "Inicio",
+      "services": "Servicios",
+      "branches": "Sucursales",
+      "memberships": "Membresías",
+      "contact": "Contacto",
+      "Cart": "Carrito"
+    },
+    "loginButton": "Iniciar Sesión",
+    "registerButton": "Unirse",
+    "logoSlogan": "Potenciando tu bienestar"
+  },
+  "LocaleSwitcher": {
+    "label": "Cambiar idioma",
+    "locale": "{locale, select, en {🇺🇸 English} es {🇪🇸 Español} other {Idioma}}"
+  },
+  "HomePage": {
+    "banner": {
+      "title": "Transforma tu <highlight>cuerpo</highlight>, transforma tu <highlight>vida</highlight>",
+      "subtitle": "Descubre el poder del fitness inteligente y personalizado."
+    },
+    "aboutUs": {
+      "mission": {
+        "title": "Misión",
+        "content": "<p>Ser la red de fitness líder que empodera a las personas para alcanzar sus metas de bienestar mediante servicio de calidad y tecnología avanzada, garantizando una experiencia fluida y accesible en todas nuestras franquicias.</p>",
+        "imageAlt": "Misión"
+      },
+      "vision": {
+        "title": "Visión",
+        "content": "<p>Consolidarnos como el ecosistema de fitness más inteligente e integrado del mercado, reconocido por su excelencia operativa, gestión estratégica basada en datos y capacidad para ofrecer crecimiento escalable y sostenible a todos nuestros franquiciados.</p>",
+        "imageAlt": "Visión"
+      },
+      "values": {
+        "title": "Valores",
+        "content": "<p>Nuestra operación se construye sobre cuatro valores fundamentales: Coherencia Operativa, que garantiza la estandarización en cada interacción; Integridad de Datos, como base para las decisiones estratégicas; Orientación al Cliente, enfocada en relaciones duraderas; y Agilidad Tecnológica, para adaptarnos continuamente a las demandas del mercado.</p>",
+        "imageAlt": "Valores"
+      },
+      "objectives": {
+        "title": "Objetivos",
+        "content": "<p>Transformar vidas a través del fitness, creando una comunidad donde todos encuentren la motivación, equipamiento y ambiente perfecto para alcanzar sus metas físicas y mentales. Estamos comprometidos a ser tu aliado en este camino de crecimiento personal.</p>",
+        "imageAlt": "Objetivos"
+      }
+    }
+  },
+  "ServicesPage": {
+    "title": "Nuestros <highlight>Servicios</highlight>",
+    "subtitle": "Explora todo lo que ofrecemos para tu bienestar.",
+    "recentlyViewed": "Recientemente visto",
+    "filters": {
+      "searchPlaceholder": "Buscar servicios...",
+      "categoryDefault": "Todas las categorías",
+      "maxPrice": "Precio máximo",
+      "sortDesc": "Mayor precio",
+      "sortAsc": "Menor precio",
+      "viewLabel": "Vista",
+      "viewGrid": "Cuadrícula",
+      "viewList": "Lista",
+      "clear": "Limpiar filtros",
+      "label": "Filtros"
+    },
+    "empty": {
+      "noResults": "No encontramos servicios",
+      "adjustFilters": "Ajusta tus filtros para ver más resultados.",
+      "showAll": "Ver todos los servicios"
+    },
+    "pagination": {
+      "previous": "Anterior",
+      "next": "Siguiente",
+      "pageOf": "Página {page} / {totalPages}"
+    }
+  },
+  "BranchesPage": {
+    "title": "<highlight>NUESTRAS</highlight> <highlight-dark>SUCURSALES</highlight-dark>",
+    "subtitle": "Tu espacio fitness, más cerca de lo que imaginas. Nuestras sucursales VITALFIT están ubicadas estratégicamente para hacer tu entrenamiento accesible, rápido y garantizar que nunca pauses tu camino al bienestar.",
+    "viewButton": "Ver sucursales",
+    "footerQuote": "Tu mejor versión comienza aquí. Visita nuestras sucursales y siente la energía que transforma. Cada espacio VITALFIT está diseñado para inspirarte, desafiarte y apoyarte en cada paso de tu evolución."
+  },
+  "FindBranchPage": {
+    "title": "ENCUENTRA TU SUCURSAL",
+    "description": "Usa el mapa o la barra de búsqueda para ubicar nuestras sucursales",
+    "search_placeholder": "Buscar sucursal...",
+    "find_nearest_button": "Encontrar la más cercana",
+    "loading_branches": "Cargando sucursales...",
+    "error_loading_branches": "No pudimos cargar las ubicaciones del mapa. Por favor, inténtalo de nuevo más tarde.",
+    "no_valid_branches_found": "No se encontraron sucursales con coordenadas válidas.",
+    "branch_hours": {
+      "default": "Lunes - Viernes: 6:00 am - 9:00 pm",
+      "spain": "Lunes - Viernes: 6:00 am - 9:00 pm",
+      "venezuela": "Lunes - Viernes: 6:00 am - 8:00 pm",
+      "chile": "Lunes - Viernes: 6:00 am - 9:00 pm"
+    }
+  },
+  "LoginPage": {
+    "title": "INICIAR SESIÓN",
+    "googleLogin": "Iniciar sesión con Google",
+    "credentialsPrompt": "Ingresa tus credenciales para iniciar sesión",
+    "email": {
+      "label": "Correo electrónico",
+      "placeholder": "Correo electrónico"
+    },
+    "password": {
+      "label": "Contraseña",
+      "placeholder": "Ingresa tu contraseña"
+    },
+    "rememberMe": "Recordarme",
+    "forgotPassword": {
+      "text": "¿Olvidaste tu contraseña?",
+      "link": "Recuperar"
+    },
+    "submitButton": {
+      "default": "Iniciar sesión",
+      "loading": "Cargando..."
+    },
+    "noAccount": {
+      "text": "¿No tienes una cuenta?",
+      "link": "Regístrate"
+    },
+    "errors": {
+      "incorrectCredentials": "Credenciales incorrectas",
+      "loginError": "Error al iniciar sesión",
+      "connectionError": "No se pudo conectar al servidor"
+    }
+  },
+  "RecoverPassword": {
+    "title": "RECUPERA TU CONTRASEÑA",
+    "subtitle": "Ingrese el correo electrónico asociado a la cuenta para recuperar la contraseña",
+    "form": {
+      "emailLabel": "Correo Electrónico*",
+      "emailPlaceholder": "usuario@ejemplo.com",
+      "submitButton": "Continuar",
+      "processing": "Procesando..."
+    },
+    "footer": {
+      "text": "¿Recuerdas tu Contraseña?",
+      "linkText": "Iniciar Sesión"
+    },
+    "successNotification": {
+      "title": "Revisa tu correo",
+      "description": "Hemos enviado instrucciones para restablecer tu contraseña a tu correo electrónico. Por favor revisa tu bandeja de entrada y sigue el enlace para restablecer tu contraseña."
+    },
+    "connectionError": {
+      "title": "Error de Conexión",
+      "description": "No se pudo conectar con el servidor. Por favor, inténtalo de nuevo más tarde."
+    },
+    "serverErrorNotification": {
+      "title": "Error de Verificación"
+    },
+    "serverError": "Error al verificar el correo electrónico o la solicitud."
+  },
+  "dashboard": {
+    "navbar": {
+      "logo_alt": "VitalFit Logo",
+      "title": "Panel de Control",
+      "welcome": "Bienvenido a tu Panel de Control"
+    },
+    "notifications": "Notificaciones"
+  },
+  "user": {
+    "name": "Nombre",
+    "email": "Correo"
+  },
+  "Footer": {
+    "tagline": "Transforma tu vida. Alcanza tu máximo potencial.",
+    "quickLinks": {
+      "title": "Enlaces Rápidos",
+      "links": {
+        "services": "Servicios",
+        "membership": "Membresía",
+        "branches": "Sucursales",
+        "contact": "Contacto"
+      }
+    },
+    "services": {
+      "title": "Nuestros Servicios",
+      "list": {
+        "yoga": "Yoga",
+        "crossfit": "CrossFit",
+        "spinning": "Spinning",
+        "pilates": "Pilates"
+      }
+    },
+    "contact": {
+      "title": "Contacto",
+      "phone": "+58 4245912150",
+      "email": "info@vitalfit.com",
+      "address": "Av. Principal 123, Centro"
+    },
+    "social": {
+      "instagram": "Instagram",
+      "twitter": "Twitter",
+      "facebook": "Facebook"
+    },
+    "copyright": "© {year} VitalFit — Todos los derechos reservados."
+  },
+  "MembershipsPage": {
+    "hero": {
+      "titlePart1": "PLANES Y",
+      "titlePart2": "MEMBRESÍAS",
+      "subtitle": "Elige el plan que mejor se adapte a tus necesidades y objetivos de fitness"
+    },
+    "plans": {
+      "advanced": {
+        "title": "Suscripción Avanzada",
+        "description": "Más beneficios para tu vida fitness",
+        "billingPeriod": "mes",
+        "services": {
+          "s1": "Acceso ilimitado al gimnasio",
+          "s2": "7 sesiones con consultor fitness",
+          "s3": "Seguimiento nutricional",
+          "s4": "5 suplementos gratis",
+          "s5": "Credencial de gimnasio",
+          "s6": "Entrenador personal"
+        }
+      },
+      "standard": {
+        "title": "Plan Estándar",
+        "description": "Máximo ahorro y beneficios",
+        "billingPeriod": "año",
+        "services": {
+          "s1": "Uso ilimitado de las instalaciones",
+          "s2": "Consultas con entrenador experto",
+          "s3": "Control de alimentación",
+          "s4": "Recibe 3 suplementos gratuitos",
+          "s5": "Entrena 5 días a la semana",
+          "s6": "Entrenador personal"
+        }
+      },
+      "athlete": {
+        "title": "Paquete Atleta",
+        "description": "La mejor relación calidad-precio",
+        "billingPeriod": "3 meses",
+        "services": {
+          "s1": "Acceso ilimitado al gimnasio",
+          "s2": "Incluye prendas sin costo",
+          "s3": "Entrena Sin Límites",
+          "s4": "Consultor fitness gratis",
+          "s5": "Credencial de gimnasio"
+        }
+      },
+      "basic": {
+        "title": "Paquete Básico",
+        "description": "Ideal para iniciar en el mundo fit",
+        "billingPeriod": "mes",
+        "services": {
+          "s1": "Ahorra con el plan anual",
+          "s2": "2 sesiones con consultor fitness",
+          "s3": "Control de alimentación",
+          "s4": "1 suplemento gratis",
+          "s5": "Entrenador personal"
+        }
+      }
+    },
+    "includes": {
+      "title": "TODOS LOS PLANES INCLUYEN",
+      "item1": {
+        "title": "Todas las Sucursales",
+        "content": "Acceso a todas nuestras ubicaciones"
+      },
+      "item2": {
+        "title": "Entrenador",
+        "content": "Entrenador de planta gratuito"
+      },
+      "item3": {
+        "title": "Clases Grupales",
+        "content": "Diversas clases en todos los lugares"
+      },
+      "item4": {
+        "title": "App Móvil",
+        "content": "Reserva clases y sigue tu progreso"
+      }
+    },
+    "cta": {
+      "heading": "¿No estás seguro de qué plan elegir?",
+      "subheading": "Nuestro equipo está aquí para ayudarte a encontrar el plan perfecto para tus necesidades",
+      "advisorButton": "Hablar con un asesor",
+      "faqButton": "Ver Preguntas Frecuentes"
+    }
+  },
+  "ContactPage": {
+    "hero": {
+      "title": "CONTÁCTANOS",
+      "subtitle": "Rellena los datos del formulario"
+    },
+    "form": {
+      "nameLabel": "Nombre",
+      "namePlaceholder": "Nombre",
+      "lastNameLabel": "Apellido",
+      "lastNamePlaceholder": "Apellido",
+      "emailLabel": "Correo electrónico",
+      "emailPlaceholder": "correo@ejemplo.com",
+      "reasonPlaceholder": "Motivo de contacto",
+      "preferencePlaceholder": "Preferencia de contacto",
+      "messagePlaceholder": "Mensaje",
+      "submitButton": "Enviar",
+      "reasons": {
+        "general": "Consulta general",
+        "memberships": "Información de membresías",
+        "services": "Información de servicios",
+        "complaint": "Reclamo",
+        "suggestion": "Sugerencia"
+      },
+      "preferences": {
+        "email": "Correo electrónico",
+        "phone": "Teléfono",
+        "whatsapp": "WhatsApp"
+      }
+    }
+  },
+  "RegisterPage": {
+    "title": "CREA TU CUENTA",
+    "form": {
+      "firstNameLabel": "Nombre",
+      "firstNamePlaceholder": "Nombre",
+      "lastNameLabel": "Apellido",
+      "lastNamePlaceholder": "Apellido",
+      "emailLabel": "Correo Electrónico",
+      "emailPlaceholder": "correo@ejemplo.com",
+      "phoneLabel": "Número de teléfono",
+      "documentLabel": "Documento de identidad",
+      "documentPlaceholder": "Documento",
+      "birthDateLabel": "Fecha de Nacimiento",
+      "passwordLabel": "Contraseña",
+      "passwordPlaceholder": "Ingresa tu contraseña",
+      "confirmPasswordLabel": "Confirmar Contraseña",
+      "confirmPasswordPlaceholder": "Confirmar contraseña",
+      "termsText": "Acepto los términos, condiciones del servicio y las políticas de seguridad",
+      "submitButton": "Crear Cuenta",
+      "googleLoginText": "Iniciar sesión con Google",
+      "gender": {
+        "label": "Género",
+        "male": "Masculino",
+        "maleValue": "masculino",
+        "female": "Femenino",
+        "femaleValue": "femenino",
+        "preferNotToSay": "Prefiero no especificarlo",
+        "preferNotToSayValue": "prefiero no especificarlo"
+      }
+    },
+    "footer": {
+      "loginPrompt": "¿Ya tienes una cuenta?",
+      "loginLink": "Iniciar Sesión"
+    },
+    "validation": {
+      "termsRequired": "Debes aceptar los términos y condiciones"
+    },
+    "notifications": {
+      "success": {
+        "title": "Revisa tu correo",
+        "description": "¡Gracias por registrarte en VITALFIT! Para completar tu registro, por favor, verifica tu dirección de correo electrónico."
+      },
+      "error": {
+        "title": "Error"
+      },
+      "connectionError": {
+        "title": "Error de Conexión",
+        "description": "No se pudo conectar con el servidor. Por favor, inténtalo de nuevo más tarde."
+      }
+    },
+    "Footer": {
+      "tagline": "Tu salud, nuestra pasión.",
+      "quickLinks": {
+        "title": "Enlaces rápidos",
+        "links": {
+          "services": "Servicios",
+          "membership": "Membresía",
+          "branches": "Sucursales",
+          "contact": "Contacto"
+        }
+      },
+      "services": {
+        "title": "Nuestros Servicios",
+        "list": {
+          "yoga": "Yoga",
+          "crossfit": "CrossFit",
+          "spinning": "Spinning",
+          "pilates": "Pilates"
+        }
+      },
+      "contact": {
+        "title": "Contáctanos",
+        "phone": "+1 234 567 890",
+        "email": "info@example.com",
+        "address": "123 Wellness St, Ciudad, País"
+      },
+      "social": {
+        "instagram": "https://www.instagram.com/vitalfit.68?igsh=eGQ2b3EycmsyZGZk",
+        "twitter": "https://x.com/VITALFIT68?t=1RTd9CVa29nfzK9RtHvw5w&s=08",
+        "facebook": "https://www.facebook.com/profile.php?id=61584110738046&mibextid=rS40aB7S9Ucbxw6v"
+      },
+      "copyright": "© {year} VitalFit. Todos los derechos reservados."
+    }
+  },
+  "header": {
+    "logo": "VITALFIT",
+    "nav": {
+      "home": "Inicio",
+      "services": "Servicios",
+      "subscriptions": "Suscripciones",
+      "memberships": "Membresias",
+      "contact": "Contacto"
+    }
+  },
+  "sidebar": {
+    "membership": "Membresía premium",
+    "membershipMember": "Miembro desde:",
+    "qrCode": "Ver código QR",
+    "qrModal": {
+      "title": "Codigo QR",
+      "description": "Muestra el Codigo QR en la entrada de Gimnasio"
+    },
+    "stats": {
+      "memberId": "ID de miembro",
+      "classesThisMonth": "Clases de este mes",
+      "totalVisits": "Visitas totales"
+    },
+    "menu": {
+      "profile": "Perfil",
+      "security": "Seguridad",
+      "membership": "Mi membresía",
+      "paymentHistory": "Histórial de Pagos",
+      "wishlist": "Mi Wishlist",
+      "logout": "Cerrar Sesión"
+    },
+    "wishlistSection": {
+      "title": "WISHLIST",
+      "description": "Servicios guardados para más tarde",
+      "pilatesClass": "Clase de Pilates",
+      "price": "Precio"
+    }
+  },
+  "BannerOffer": {
+    "title": "¡OFERTA DE CUMPLEAÑOS!",
+    "description": "50% de descuento en productos del gym",
+    "validity": "válido por 7 días",
+    "button": "Canjear"
+  },
+  "membership": {
+    "title": "Mi Membresía",
+    "noMembership": "No tienes una membresía activa en este momento.",
+    "active": "Activa",
+    "expired": "Vencida",
+    "cancelled": "Cancelada",
+    "pending": "Pendiente",
+    "nextLabel": "Tiempo Restante",
+    "expiredLabel": "Plan Finalizado",
+    "daysRemaining": "días restantes",
+    "startLabel": "Fecha Inicio",
+    "expiryLabel": "Vence el",
+    "renewButton": "Renovar Plan",
+    "reactivateButton": "Reactivar Membresía",
+    "cancelMembership": "Cancelar Suscripción",
+    "noMembershipTitle": "No tienes una membresía activa",
+    "noMembershipDescription": "Adquiere una membresía para comenzar tu entrenamiento hoy mismo.",
+    "acquireMembershipButton": "Ver Planes Disponibles"
+  },
+  "classes": {
+    "title": "PRÓXIMAS CLASES",
+    "viewAll": "Ver todas mis clases",
+    "availability": {
+      "available": "Disponible",
+      "limited": "Cupos limitados",
+      "full": "Completo"
+    },
+    "category": {
+      "pilates": "Pilates",
+      "yoga": "Yoga",
+      "cardio": "Cardio"
+    }
+  },
+  "paymentHistory": {
+    "title": "Historial de pagos",
+    "columns": {
+      "transactionId": "ID de Transacción",
+      "date": "Fecha",
+      "totalPrice": "Monto Total",
+      "status": "Estado",
+      "paymentMethod": "Método de Pago"
+    },
+    "status": {
+      "paid": "Pagado",
+      "unpaid": "No pagado",
+      "void": "Anulado",
+      "overdue": "Vencido"
+    },
+    "actions": {
+      "viewDetails": "Ver detalle",
+      "downloadReceipt": "Descargar recibo"
+    },
+    "filters": {
+      "payname": "Nombre de pago",
+      "status": "Estado",
+      "startDate": "Fecha inicio",
+      "endDate": "Fecha fin",
+      "clear": "Limpiar filtros"
+    }
+  },
+  "Profile": {
+    "ptitle": "MI PERFIL",
+    "pbutton": "Editar",
+    "personalInfo": "Información Personal",
+    "contactInfo": "Datos de Contacto",
+    "name": "Nombre",
+    "namePlaceholder": "Ingresa tu nombre",
+    "lastName": "Apellido",
+    "lastNamePlaceholder": "Ingresa tu apellido",
+    "birthDate": "Fecha de nacimiento",
+    "gender": "Género",
+    "genderPlaceholder": "Selecciona tu género",
+    "genders": {
+      "male": "Masculino",
+      "female": "Femenino",
+      "other": "Otro"
+    },
+    "address": "Dirección",
+    "addressPlaceholder": "Ingresa tu dirección",
+    "email": "Correo Electrónico",
+    "emailPlaceholder": "tu@email.com",
+    "phone": "Teléfono de Contacto",
+    "phonePlaceholder": "Ingresa tu número de teléfono",
+    "documentType": "Tipo de documento",
+    "documentTypePlaceholder": "tipo",
+    "documentTypes": {
+      "dni": "DNI",
+      "passport": "Pasaporte",
+      "idCard": "Cédula",
+      "driversLicense": "Licencia de conducir"
+    },
+    "documentNumber": "Doc. Identidad",
+    "documentNumberPlaceholder": "Número de documento",
+    "editbutton": "Guardar Cambios",
+    "canceleditbutton": "Cancelar",
+    "uploadPhoto": "Subir foto",
+    "changePhoto": "Cambiar foto",
+    "removePhoto": "Quitar foto"
+  },
+  "MembershipHistory": {
+    "title": "HISTORIAL DE MEMBRESÍAS",
+    "plans": {
+      "monthly": "Mensual"
+    },
+    "status": {
+      "active": "Activa",
+      "cancelled": "Cancelada",
+      "expired": "Vencida"
+    },
+    "columns": {
+      "planName": "Nombre del plan",
+      "startDate": "Fecha de inicio",
+      "endDate": "Fecha de fin",
+      "totalPrice": "Precio total",
+      "status": "Estado"
+    },
+    "filters": {
+      "planName": "Nombre del plan",
+      "status": "Estado",
+      "startDate": "Desde",
+      "endDate": "Hasta",
+      "clear": "Borrar filtros"
+    },
+    "actions": {
+      "viewDetails": "Ver Detalles",
+      "downloadReceipt": "Descargar Recibo"
+    }
+  },
+  "MembershipPurchase": {
+    "title": "COMPRAR MEMBRESÍA",
+    "step1": {
+      "selectedPlans": "PLANES DE ENTRENAMIENTO SELECCIONADOS",
+      "complementPlan": "COMPLEMENTA TU PLAN (OPCIONAL)",
+      "price": "Precio:",
+      "startDate": "Fecha de inicio",
+      "fee": "Cuota {startDate} - {endDate}",
+      "removePlan": "Eliminar plan"
+    },
+    "step2": {
+      "title": "Información pago",
+      "description": "Todas las transacciones se realizan de forma segura, selecciona una tarjeta guardada, o ingresa una nueva.",
+      "selectBranch": "Seleccionar sucursal",
+      "selectBranchPlaceholder": "Selecciona una sucursal",
+      "paymentOptions": "Opciones de Compra",
+      "mobilePayment": "Pago Móvil",
+      "bankTransfer": "Transferencia Bancaria",
+      "holder": "Titular",
+      "fiscalDocument": "Documento fiscal / cédula",
+      "important": "Importante",
+      "includeExactAmount": "Asegúrate de incluir el monto exacto",
+      "saveReceipt": "Guarda el comprobante de la transacción",
+      "associatedBank": "Banco Asociado",
+      "accountNumber": "Número de Cuenta",
+      "phoneNumber": "Teléfono Móvil"
+    },
+    "step3": {
+      "purchaseConfirmation": {
+        "purchaseRegistered": "¡Compra Registrada!",
+        "purchaseInVerification": "Tu compra ha sido registrada y está en proceso de verificación",
+        "advancedSubscription": "Suscripción Avanzada",
+        "moreBenefits": "Más beneficios para la vida fitness",
+        "perMonth": "/MES",
+        "valid": "Válida",
+        "days": "días",
+        "access": "Acceso",
+        "unlimited": "ilimitado",
+        "benefits": "Beneficios",
+        "attachReceipt": "Adjunta el comprobante de pago",
+        "dragDrop": "Arrastra y suelta o",
+        "chooseFile": "Selecciona archivo",
+        "toUpload": "para subir",
+        "fileTypes": "Ej: jpg, pdf, png, img",
+        "uploaded": "subido",
+        "helpCenter": "Centro de ayuda",
+        "cancel": "Cancelar",
+        "confirm": "Confirmar",
+        "paymentVerification": "Pago en Verificación",
+        "verificationText": "Tu pago está verificándose por nuestro equipo. Recibirás un correo de confirmación cuando sea aprobado (1-24 horas totales)",
+        "supportText": "¿Tienes dudas? Contáctanos: soporteq@vitatfit.com o (555) 123-4567",
+        "goHome": "Ir Al Inicio"
+      }
+    },
+    "navigation": {
+      "cancel": "Cancelar",
+      "continue": "Continuar",
+      "back": "Atrás"
+    },
+    "addOns": {
+      "personal-4": {
+        "title": "Entretenimiento",
+        "subtitle": "Personal - 4 Sesiones",
+        "description": "Paquete de 4 sesiones de entretenimiento personalizado con instructor certificado"
+      },
+      "personal-8": {
+        "title": "Entretenimiento",
+        "subtitle": "Personal - 8 Sesiones",
+        "description": "Paquete de 8 sesiones de entretenimiento personalizado con instructor certificado"
+      },
+      "yoga-10": {
+        "title": "Paquete de Yoga",
+        "subtitle": "10 Clases",
+        "description": "Acceso a 10 clases de yoga especializadas"
+      }
+    }
+  },
+  "AddOnCard": {
+    "select": "Seleccionar",
+    "deselect": "Deseleccionar",
+    "perSession": "por sesión",
+    "add": "Agregar",
+    "added": "✓ Agregado"
+  },
+  "OrderSummary": {
+    "title": "Resumen del pedido",
+    "subtotal": "Subtotal",
+    "taxes": "Impuestos",
+    "total": "Total",
+    "noItems": "No hay items seleccionados",
+    "calculatedAtCheckout": "Calculado en el checkout",
+    "items": "items",
+    "item": "item",
+    "addons": "COMPLEMENTOS",
+    "discounts": "Descuentos",
+    "tax": "IVA",
+    "makePayment": "Realizar Pago",
+    "promoPlaceholder": "Código de la promoción",
+    "apply": "Ingresar"
+  },
+  "StepIndicator": {
+    "step1": "Opciones\nde producto",
+    "step2": "Métodos de pago",
+    "step3": "Confirmación de compra"
+  },
+  "PlanCard": {
+    "price": "${price}"
+  },
+  "MembershipDetails": {
+    "title": "Detalles de Membresía",
+    "subtitle": "Consulta el estado y los detalles de la membresía",
+    "planDetails": "Detalles del Plan",
+    "planName": "Nombre del plan",
+    "statusLabel": "Estado",
+    "startDate": "Fecha de inicio",
+    "paymentType": "Tipo de pago",
+    "billingId": "Facturación asociada",
+    "dueDate": "Fecha de vencimiento",
+    "cancellationDate": "Fecha de cancelación",
+    "includedServices": "Servicios incluidos",
+    "selectCancelDefaultValue": "Elige una Opción",
+    "descriptionCancelPlaceholder": "Describe brevemente por qué deseas cancelar tu membresía…",
+    "viewexpired": "Aún no tienes una membresía activa",
+    "status": {
+      "activa": "Activa",
+      "cancelada": "Cancelada",
+      "vencida": "Vencida"
+    },
+    "fields": {
+      "paymentName": "Nombre del plan",
+      "paymentType": "Tipo de pago",
+      "billingId": "Facturación asociada",
+      "startDate": "Fecha de inicio",
+      "endDate": "Fecha de vencimiento",
+      "services": "Servicios incluidos"
+    },
+    "actions": {
+      "renew": "Renovar",
+      "update": "Actualizar plan",
+      "cancel": "Cancelar membresía"
+    }
+  },
+  "MembershipCancel": {
+    "title": "Cancelar membresía",
+    "subtitle": "Confirmación de cancelación",
+    "message": "Lamentamos que desees cancelar tu membresía. Por favor confirma el motivo.",
+    "fields": {
+      "planName": "Nombre de la membresía",
+      "status": "Estado",
+      "reason": "Motivo de cancelación",
+      "description": "Descripción"
+    },
+    "status": {
+      "active": "Activa"
+    },
+    "placeholders": {
+      "reason": "Elige una opción",
+      "description": "Describe brevemente por qué deseas cancelar tu membresía..."
+    },
+    "reasons": {
+      "price": "Precio elevado",
+      "time": "Falta de tiempo",
+      "service": "Problemas con el servicio",
+      "other": "Otro"
+    },
+    "actions": {
+      "cancel": "Cancelar",
+      "confirm": "Confirmar cancelación"
+    }
+  },
+  "security": {
+    "changePassword": {
+      "ptitle": "Cambiar Contraseña",
+      "pdescription": "Actualiza tu contraseña para proteger la seguridad de tu cuenta",
+      "currentPasswordLabel": "Contraseña Actual",
+      "currentPasswordPlaceholder": "Ingresa tu contraseña actual",
+      "newPasswordLabel": "Contraseña Nueva",
+      "newPasswordPlaceholder": "Ingresa tu nueva contraseña",
+      "confirmPasswordLabel": "Confirmar contraseña",
+      "confirmPasswordPlaceholder": "Confirma tu nueva contraseña",
+      "forgotPasswordLabel": "¿Olvidaste tu contraseña?",
+      "forgotPasswordLink": "Recuperar",
+      "saveNewPasswordButton": "Guardar Nueva Contraseña"
+    },
+    "forgotPassword": {
+      "title": "Recuperar Contraseña",
+      "subtitle": "Ingresa el código de verificación enviado a tu correo para restablecer tu contraseña",
+      "emailSentTo": "Se ha enviado un código de 6 dígitos a {email}",
+      "enterCodeText": "Ingresa el código de 6 dígitos",
+      "verifyButton": "Verificar Código",
+      "resendButton": "Reenviar Código",
+      "newPasswordTitle": "Crea una Nueva Contraseña",
+      "newPasswordLabel": "Contraseña Nueva",
+      "newPasswordPlaceholder": "Ingresa tu nueva contraseña",
+      "confirmPasswordLabel": "Confirmar contraseña",
+      "confirmPasswordPlaceholder": "Confirma tu nueva contraseña",
+      "resetButton": "Restablecer Contraseña",
+      "errors": {
+        "incompleteCode": "Por favor, ingresa el código completo de 6 caracteres",
+        "invalidCode": "Código inválido o expirado",
+        "passwordsMismatch": "Las contraseñas no coinciden",
+        "fillFields": "Por favor completa todos los campos"
+      },
+      "notifications": {
+        "successResetTitle": "Contraseña Actualizada",
+        "successResetDescription": "Tu contraseña se ha actualizado correctamente",
+        "resendSuccessTitle": "Código Enviado",
+        "resendSuccessDescription": "Se ha enviado un nuevo código de verificación a tu correo",
+        "connectionErrorTitle": "Error de Conexión",
+        "connectionErrorDescription": "No se pudo conectar con el servidor. Por favor inténtalo más tarde."
+      }
+    }
+  },
+  "UserNav": {
+    "home": "Inicio",
+    "profile": "Perfil",
+    "logout": "Cerrar sesión"
+  },
+  "ServiceModal": {
+    "nonMember": "No miembro",
+    "member": "Miembro",
+    "minutes": "minutos",
+    "description": "Descripción",
+    "availableSchedules": "Horarios disponibles",
+    "bookNow": "Reservar ahora",
+    "moreInfo": "Más información"
+  },
+  "ServiceCard": {
+    "member": "Miembro",
+    "nonMember": "No miembro",
+    "minutes": "minutos",
+    "learnMore": "Saber más",
+    "categoryDefault": "General"
+  },
+  "invoiceDetails": {
+    "backToHistory": "Volver al historial",
+    "title": "Detalle de Transacción",
+    "status": {
+      "paid": "Pagado",
+      "confirmed": "Confirmado",
+      "pending": "Pendiente",
+      "overdue": "Vencido",
+      "void": "Anulado",
+      "unknown": "Desconocido"
+    },
+    "summary": {
+      "title": "Resumen",
+      "issueDate": "Fecha de Emisión",
+      "statusLabel": "Estado",
+      "paymentMethod": "Método de pago",
+      "branch": "Sucursal",
+      "loading": "Cargando...",
+      "unspecified": "No especificado",
+      "mainBranch": "Sede Principal",
+      "unknownBranch": "Sucursal desconocida"
+    },
+    "actions": {
+      "title": "Acciones",
+      "download": "Descargar Recibo",
+      "email": "Enviar por Correo",
+      "electronic": "Factura Electrónica"
+    },
+    "planValidity": {
+      "from": "Válido Desde",
+      "to": "Válido Hasta"
+    },
+    "conceptsTitle": "Conceptos Facturados",
+    "totals": {
+      "subtotal": "Subtotal",
+      "tax": "Impuestos",
+      "total": "Total Pagado"
+    },
+    "errors": {
+      "notFound": "No se encontró la factura",
+      "loadError": "Error al cargar",
+      "checkConnection": "Verifica tu conexión o el ID."
+    }
+  }
+}

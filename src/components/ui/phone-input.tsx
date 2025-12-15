@@ -28,7 +28,6 @@ type PhoneInputProps = Omit<
   Omit<RPNInput.Props<typeof RPNInput.default>, "onChange"> & {
     // the parameter name here is only used for type clarity; eslint may
     // consider it unused — disable the rule for this line.
-    // eslint-disable-next-line no-unused-vars
     onChange?: (value: RPNInput.Value) => void;
   };
 
@@ -94,7 +93,6 @@ type CountrySelectProps = {
   value: RPNInput.Country;
   options: CountryEntry[];
   // mark parameter name with leading underscore to avoid unused-var warnings in type positions
-  // eslint-disable-next-line no-unused-vars
   onChange: (_country: RPNInput.Country) => void;
 };
 
@@ -184,7 +182,6 @@ const CountrySelect = ({
 
 interface CountrySelectOptionProps extends RPNInput.FlagProps {
   selectedCountry: RPNInput.Country;
-  // eslint-disable-next-line no-unused-vars
   onChange: (_country: RPNInput.Country) => void;
   onSelectComplete: () => void;
 }
