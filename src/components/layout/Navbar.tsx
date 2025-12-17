@@ -143,7 +143,7 @@ export function Navbar({
             <UserNav
               user={user}
               onHomeClick={() => router.push("/dashboard")}
-              onProfileClick={() => router.push("/dashboard/profile")}
+              onProfileClick={() => router.push("/profile")}
               onSignOut={logout}
             />
           </div>
