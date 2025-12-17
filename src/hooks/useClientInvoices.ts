@@ -28,12 +28,16 @@ export const useMyInvoices = ({ limit = 10 }: UseInvoicesOptions = {}) => {
     setError(null);
 
     try {
-      const response = await api.billing.getClientInvoices(token, {
-        page,
-        limit,
-        sort,
-        search: search || undefined,
-      });
+      const response = await api.billing.getClientInvoices(
+        token,
+        {
+          page,
+          limit,
+          sort,
+          search: search || undefined,
+        },
+        user.user_id,
+      );
 
       console.log("Respuesta API:", response);
 
