@@ -86,7 +86,7 @@ export default function Sidebar() {
   return (
     <>
       <aside className="flex h-full w-[280px] xl:w-[320px] flex-col bg-white shadow-lg border-r border-gray-100 p-4 space-y-2">
-        <div className="border-b border-gray-100  from-white to-gray-50/60 pb-2">
+        <div className="border-b border-orange-400 pb-2">
           <UserHeader
             user={user}
             membership={membership}
@@ -107,17 +107,6 @@ export default function Sidebar() {
           Cerrar sesión
         </Button>
       </aside>
-
-      {showQR && (
-        <QRCodeModal
-          token={qrToken}
-          userName={`${user.first_name} ${user.last_name}`}
-          vencimiento={membership?.end_date || null}
-          hasMembership={!!membership}
-          onClose={handleCloseModal}
-          duration={qrDuration}
-        />
-      )}
     </>
   );
 }
