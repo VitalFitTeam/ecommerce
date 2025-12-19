@@ -1,22 +1,118 @@
 "use client";
 
+import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
-import PasswordInput from "@/components/ui/PasswordInput"; // Importación de tu componente
+import PasswordInput from "@/components/ui/PasswordInput";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "@/i18n/routing";
+import { api } from "@/lib/sdk-config";
+import { toast } from "sonner";
+import { registerSchema } from "@/lib/validation/registerSchema";
 
-export default function Profile() {
+export default function ChangePasswordPage() {
   const { token } = useAuth();
   const router = useRouter();
   const t = useTranslations("security.changePassword");
 
-  if (!token) {
-    return null;
-  }
+  // Estado del formulario siguiendo la estructura de tu página de registro
+  const [formData, setFormData] = useState({
+    currentPassword: "",
+    password: "", // Nueva contraseña
+    cpassword: "", // Confirmación (cpassword en tu esquema)
+  });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  // Estado para errores idéntico al de tu Registro
+  const [error, setError] = useState<Partial<Record<string, string[]>>>({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  if (!token) {return null;}
+
+  const handleInputChange = (field: string, value: string) => {
+    setFormData((prev) => ({ ...prev, [field]: value }));
+    // Limpia el error mientras el usuario escribe, igual que en el Registro
+    if (error[field]) {
+      setError((prev) => ({ ...prev, [field]: undefined }));
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    toast.dismiss();
+
+    // Validamos usando solo los campos de contraseña del registerSchema
+    const passwordValidation = registerSchema
+      .pick({
+        password: true,
+        cpassword: true,
+      })
+      .safeParse({
+        password: formData.password,
+        cpassword: formData.cpassword,
+      });
+
+    const fieldErrors: Partial<Record<string, string[]>> = {};
+
+    // Lógica de validación visual idéntica al registro
+    if (!passwordValidation.success) {
+      const flattened = passwordValidation.error.flatten();
+      Object.entries(flattened.fieldErrors).forEach(([key, value]) => {
+        if (value) {fieldErrors[key] = value;}
+      });
+    }
+
+    // Validación manual para la contraseña actual
+    if (!formData.currentPassword) {
+      fieldErrors.currentPassword = ["La contraseña actual es obligatoria"];
+    }
+
+    if (Object.keys(fieldErrors).length > 0) {
+      setError(fieldErrors);
+      toast.error("Formulario incompleto");
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      // Conexión con el SDK de VitalFit
+      await api.user.UpgradePassword(
+        token,
+        formData.currentPassword,
+        formData.password,
+        formData.cpassword,
+      );
+
+      toast.success("Contraseña actualizada correctamente");
+      router.replace("/profile");
+    } catch (err: any) {
+      const errorMsg = err.message?.toLowerCase() || "";
+
+      // Manejo de contraseña actual incorrecta (Unauthorized)
+      if (errorMsg.includes("unauthorized") || err.status === 401) {
+        toast.error("La contraseña actual es incorrecta");
+        setError((prev) => ({
+          ...prev,
+          currentPassword: [
+            "La contraseña ingresada no coincide con la actual",
+          ],
+        }));
+      }
+      // Manejo del error de confirmación del backend (eqfield)
+      else if (
+        errorMsg.includes("confirmpassword") ||
+        errorMsg.includes("eqfield")
+      ) {
+        toast.error("Las contraseñas no coinciden");
+        setError((prev) => ({
+          ...prev,
+          cpassword: ["La confirmación debe ser igual a la nueva contraseña"],
+        }));
+      } else {
+        toast.error(err.message || "Error al cambiar la contraseña");
+      }
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -30,66 +126,67 @@ export default function Profile() {
         <form
           onSubmit={handleSubmit}
           className="max-w-xl mx-auto p-6 md:p-8 space-y-6"
+          noValidate
         >
-          <div className="space-y-2">
-            <label
-              htmlFor="current-password"
-              className="block text-sm font-medium text-gray-700"
-            >
+          {/* Contraseña Actual */}
+          <div className="space-y-2 text-left">
+            <label className="block text-sm font-medium text-gray-700">
               {t("currentPasswordLabel")}
             </label>
             <PasswordInput
-              id="current-password"
+              value={formData.currentPassword}
+              onChange={(e) =>
+                handleInputChange("currentPassword", e.target.value)
+              }
               placeholder={t("currentPasswordPlaceholder")}
-              ariaLabel={t("currentPasswordPlaceholder")}
-              className="py-2"
+              className={`py-2 ${error.currentPassword ? "border-red-500" : ""}`}
             />
+            {error.currentPassword?.[0] && (
+              <p className="text-red-500 text-xs mt-1">
+                {error.currentPassword[0]}
+              </p>
+            )}
           </div>
 
-          <div className="space-y-2">
-            <label
-              htmlFor="new-password"
-              className="block text-sm font-medium text-gray-700"
-            >
+          {/* Nueva Contraseña - Mismas validaciones que Registro */}
+          <div className="space-y-2 text-left">
+            <label className="block text-sm font-medium text-gray-700">
               {t("newPasswordLabel")}
             </label>
             <PasswordInput
-              id="new-password"
+              value={formData.password}
+              onChange={(e) => handleInputChange("password", e.target.value)}
               placeholder={t("newPasswordPlaceholder")}
-              ariaLabel={t("newPasswordPlaceholder")}
-              className="py-2"
+              className={`py-2 ${error.password ? "border-red-500" : ""}`}
             />
+            {error.password?.[0] && (
+              <p className="text-red-500 text-xs mt-1">{error.password[0]}</p>
+            )}
           </div>
 
-          <div className="space-y-2">
-            <label
-              htmlFor="confirm-password"
-              className="block text-sm font-medium text-gray-700"
-            >
+          {/* Confirmar Contraseña - Mismas validaciones que Registro */}
+          <div className="space-y-2 text-left">
+            <label className="block text-sm font-medium text-gray-700">
               {t("confirmPasswordLabel")}
             </label>
             <PasswordInput
-              id="confirm-password"
+              value={formData.cpassword}
+              onChange={(e) => handleInputChange("cpassword", e.target.value)}
               placeholder={t("confirmPasswordPlaceholder")}
-              ariaLabel={t("confirmPasswordPlaceholder")}
-              className="py-2"
+              className={`py-2 ${error.cpassword ? "border-red-500" : ""}`}
             />
+            {error.cpassword?.[0] && (
+              <p className="text-red-500 text-xs mt-1">{error.cpassword[0]}</p>
+            )}
           </div>
 
-          <div className="text-left text-sm pt-2">
-            {t("forgotPasswordLabel")}{" "}
-            <a
-              onClick={() => {
-                router.replace("/security/forgotPassword");
-              }}
-              className="text-orange-400 hover:text-blue-800"
-            >
-              {t("forgotPasswordLink")}
-            </a>
-          </div>
-
-          <Button type="submit" className="w-full" variant="default">
-            {t("saveNewPasswordButton")}
+          <Button
+            type="submit"
+            className="w-full"
+            variant="default"
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? "Guardando..." : t("saveNewPasswordButton")}
           </Button>
         </form>
       </div>
