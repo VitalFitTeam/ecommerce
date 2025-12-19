@@ -7,7 +7,7 @@ import Logo from "@/components/features/Logo";
 import PasswordInput from "@/components/ui/PasswordInput";
 import TextInput from "@/components/ui/TextInput";
 import { PhoneInput } from "@/components/ui/phone-input";
-import { registerSchema } from "@/lib/validation/registerSchema";
+import { getRegisterSchema } from "@/lib/validation/registerSchema";
 import { RegisterFormData } from "@/lib/validation/registerSchema";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "@/i18n/routing";
@@ -98,8 +98,8 @@ export default function RegisterPage() {
 
         setIsInitialized(true);
 
-        toast.info("Datos cargados desde Google", {
-          description: "Puedes editar la información si es necesario.",
+        toast.info(t("notifications.google.success"), {
+          description: t("notifications.google.description"),
           duration: 5000,
           icon: "📝",
         });
@@ -115,6 +115,7 @@ export default function RegisterPage() {
     e.preventDefault();
     toast.dismiss();
 
+    const registerSchema = getRegisterSchema(t);
     const result = registerSchema.safeParse(formData);
 
     const fieldErrors: Partial<
@@ -125,7 +126,7 @@ export default function RegisterPage() {
       const flattened = result.error.flatten();
       Object.entries(flattened.fieldErrors).forEach(([key, value]) => {
         if (value) {
-          fieldErrors[key as keyof RegisterFormData] = value;
+          fieldErrors[key as keyof RegisterFormData] = value as string[];
         }
       });
     }
@@ -139,8 +140,10 @@ export default function RegisterPage() {
       const errorCount = Object.keys(fieldErrors).length;
 
       // Mantenemos tu cambio de toast.error para color rojo
-      toast.error("Formulario incompleto", {
-        description: `Tienes ${errorCount} campo${errorCount > 1 ? "s" : ""} que requieren tu atención.`,
+      toast.error(t("notifications.error.incompleteForm"), {
+        description: t("notifications.error.incompleteFormDescription", {
+          count: errorCount,
+        }),
       });
       return;
     }
@@ -173,7 +176,7 @@ export default function RegisterPage() {
     });
 
     toast.promise(registerPromise, {
-      loading: "Creando tu cuenta...",
+      loading: t("notifications.loading.submitting"),
       success: (response) => {
         console.warn(response);
 
@@ -198,7 +201,7 @@ export default function RegisterPage() {
           router.replace("/confirmEmail?flow=register");
         }, 1500);
 
-        return t("notifications.success.title") || "¡Registro exitoso!";
+        return t("notifications.success.toast") || "¡Registro exitoso!";
       },
       error: (err: unknown) => {
         console.error("Error API:", err);
@@ -208,10 +211,10 @@ export default function RegisterPage() {
         const errorMsg = (error?.message || String(error)).toLowerCase();
 
         if (errorMsg.includes("conflict")) {
-          return "Este usuario ya está registrado. Verifica tu correo o documento.";
+          return t("notifications.error.duplicateUser");
         }
 
-        let message = "Ocurrió un error inesperado";
+        let message = t("notifications.error.unexpected");
         if (error?.messages && Array.isArray(error.messages)) {
           message = error.messages.join(", ");
         } else if (error?.message) {
@@ -268,6 +271,7 @@ export default function RegisterPage() {
                       handleInputChange("nombre", e.target.value)
                     }
                     className={`w-full ${inputBgClass}`}
+                    disabled={isSignedIn && !!user?.firstName}
                   />
                   {error.nombre?.[0] && (
                     <p className="text-red-500 text-xs sm:text-sm mt-1">
@@ -292,6 +296,7 @@ export default function RegisterPage() {
                       handleInputChange("apellido", e.target.value)
                     }
                     className={`w-full ${inputBgClass}`}
+                    disabled={isSignedIn && !!user?.lastName}
                   />
                   {error.apellido?.[0] && (
                     <p className="text-red-500 text-xs sm:text-sm mt-1">
@@ -317,6 +322,9 @@ export default function RegisterPage() {
                   value={formData.email}
                   onChange={(e) => handleInputChange("email", e.target.value)}
                   className={`w-full ${inputBgClass}`}
+                  disabled={
+                    isSignedIn && !!user?.primaryEmailAddress?.emailAddress
+                  }
                 />
                 {error.email?.[0] && (
                   <p className="text-red-500 text-xs sm:text-sm mt-1">
@@ -484,6 +492,7 @@ export default function RegisterPage() {
                       handleInputChange("password", e.target.value)
                     }
                     className={`w-full ${inputBgClass}`}
+                    disabled={isSignedIn}
                   />
                   {error.password?.[0] && (
                     <p className="text-red-500 text-xs sm:text-sm mt-1">
@@ -508,6 +517,7 @@ export default function RegisterPage() {
                       handleInputChange("cpassword", e.target.value)
                     }
                     className={`w-full ${inputBgClass}`}
+                    disabled={isSignedIn}
                   />
                   {error.cpassword?.[0] && (
                     <p className="text-red-500 text-xs sm:text-sm mt-1">
@@ -549,11 +559,11 @@ export default function RegisterPage() {
                   disabled={isSubmitting}
                   className={`w-full py-3 text-base sm:py-2 ${isSubmitting ? "opacity-50 cursor-wait" : ""}`}
                 >
-                  {isSubmitting ? "Registrando..." : t("form.submitButton")}
+                  {isSubmitting
+                    ? t("notifications.loading.submitting")
+                    : t("form.submitButton")}
                 </Button>
               </div>
-
-              {/* SE ELIMINÓ EL BOTÓN DE GOOGLE AQUÍ */}
             </form>
 
             <div className="mt-6 text-center text-sm">

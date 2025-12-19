@@ -125,6 +125,17 @@
       "incorrectCredentials": "Incorrect Credentials",
       "loginError": "Login Error",
       "connectionError": "Could not connect to server"
+    },
+    "validation": {
+      "email": {
+        "required": "Email is required",
+        "invalid": "Must be a valid email address"
+      },
+      "password": {
+        "required": "Password is required",
+        "min": "Must be at least 8 characters",
+        "max": "Cannot exceed 20 characters"
+      }
     }
   },
   "RecoverPassword": {
@@ -135,6 +146,16 @@
       "emailPlaceholder": "user@example.com",
       "submitButton": "Continue",
       "processing": "Processing..."
+    },
+    "footer": {
+      "text": "Remember your Password?",
+      "linkText": "Sign in"
+    },
+    "validation": {
+      "usuario": {
+        "required": "Email is required",
+        "invalid": "Must be a valid email address"
+      }
     },
     "Footer": {
       "tagline": "Your health, our passion.",
@@ -372,15 +393,70 @@
       }
     },
     "validation": {
-      "termsRequired": "You must accept the terms and conditions"
+      "termsRequired": "You must accept the terms and conditions",
+      "firstName": {
+        "required": "First name is required",
+        "min": "First name must be at least 2 characters",
+        "max": "First name cannot exceed 50 characters"
+      },
+      "lastName": {
+        "required": "Last name is required",
+        "min": "Last name must be at least 2 characters",
+        "max": "Last name cannot exceed 50 characters"
+      },
+      "email": {
+        "required": "Email is required",
+        "invalid": "Must be a valid email address"
+      },
+      "phone": {
+        "required": "Phone number is required",
+        "invalid": "Invalid phone format. Use a valid number with or without international prefix (e.g. +1 1234567890)",
+        "minDigits": "Phone number must have at least 7 digits"
+      },
+      "document": {
+        "required": "Identity document is required",
+        "min": "Document must be at least 3 characters"
+      },
+      "gender": {
+        "required": "Select a valid gender"
+      },
+      "birthDate": {
+        "required": "Birth date is required",
+        "minAge": "You must be over 12 years old"
+      },
+      "password": {
+        "required": "Password is required",
+        "min": "Password must be at least 8 characters",
+        "uppercase": "Password must contain at least one uppercase letter",
+        "lowercase": "Password must contain at least one lowercase letter",
+        "number": "Password must contain at least one number",
+        "special": "Password must contain at least one special character (e.g. ! @ # $ % & *)",
+        "noDot": "Password cannot contain a dot symbol"
+      },
+      "confirmPassword": {
+        "required": "Confirm password is required",
+        "mismatch": "Passwords do not match"
+      }
     },
     "notifications": {
       "success": {
         "title": "Check your email",
-        "description": "Thank you for registering with VITALFIT! To complete your registration, please verify your email address."
+        "description": "Thank you for registering with VITALFIT! To complete your registration, please verify your email address.",
+        "toast": "Registration successful!"
       },
       "error": {
-        "title": "Error"
+        "title": "Error",
+        "incompleteForm": "Incomplete form",
+        "incompleteFormDescription": "You have {count} {count, plural, one {field that requires} other {fields that require}} your attention.",
+        "duplicateUser": "This user is already registered. Please check your email or document.",
+        "unexpected": "An unexpected error occurred"
+      },
+      "loading": {
+        "submitting": "Creating your account..."
+      },
+      "google": {
+        "success": "Data loaded from Google",
+        "description": "You can edit the information if necessary."
       },
       "connectionError": {
         "title": "Connection Error",
@@ -747,7 +823,14 @@
       "confirmPasswordPlaceholder": "Confirm your new password",
       "forgotPasswordLabel": "Forgot your password?",
       "forgotPasswordLink": "Recover",
-      "saveNewPasswordButton": "Save New Password"
+      "saveNewPasswordButton": "Save New Password",
+      "success": "Password updated successfully",
+      "error": "Error changing password",
+      "validation": {
+        "currentPasswordRequired": "Current password is required",
+        "currentPasswordIncorrect": "Current password is incorrect",
+        "mismatch": "Passwords do not match"
+      }
     },
     "forgotPassword": {
       "title": "Recover Password",
@@ -762,6 +845,7 @@
       "confirmPasswordLabel": "Confirm Password",
       "confirmPasswordPlaceholder": "Confirm your new password",
       "resetButton": "Reset Password",
+      "success": "Password reset successfully!",
       "errors": {
         "incompleteCode": "Please enter the full 6-character code",
         "invalidCode": "Invalid or expired code",
@@ -775,6 +859,10 @@
         "resendSuccessDescription": "A new verification code has been sent to your email",
         "connectionErrorTitle": "Connection Error",
         "connectionErrorDescription": "Could not connect to the server. Please try again later."
+      },
+      "footer": {
+        "text": "Remember your Password?",
+        "linkText": "Log In"
       }
     }
   },
@@ -841,6 +929,26 @@
       "notFound": "Invoice not found",
       "loadError": "Error loading",
       "checkConnection": "Check your connection or the ID."
+    }
+  },
+  "ConfirmEmail": {
+    "title": "CONFIRM YOUR EMAIL",
+    "description": "Enter the code sent to your email to confirm it",
+    "verifyButton": "Verify Email",
+    "verifying": "Verifying...",
+    "resendCode": "Resend Code",
+    "success": {
+      "register": "Registration successful!",
+      "recover": "Code verified successfully"
+    },
+    "errors": {
+      "incompleteCode": "Please enter the full 6-character code",
+      "invalidCode": "Incorrect or expired code",
+      "noEmail": "No email found to resend"
+    },
+    "notifications": {
+      "resendSuccess": "Confirmation Code Resent",
+      "resendError": "Could not resend the code"
     }
   }
 }
