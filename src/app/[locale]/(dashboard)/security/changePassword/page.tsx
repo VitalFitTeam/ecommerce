@@ -8,12 +8,13 @@ import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "@/i18n/routing";
 import { api } from "@/lib/sdk-config";
 import { toast } from "sonner";
-import { registerSchema } from "@/lib/validation/registerSchema";
+import { getRegisterSchema } from "@/lib/validation/registerSchema";
 
 export default function ChangePasswordPage() {
   const { token } = useAuth();
   const router = useRouter();
   const t = useTranslations("security.changePassword");
+  const tValidation = useTranslations("RegisterPage");
 
   // Estado del formulario siguiendo la estructura de tu página de registro
   const [formData, setFormData] = useState({
@@ -26,7 +27,9 @@ export default function ChangePasswordPage() {
   const [error, setError] = useState<Partial<Record<string, string[]>>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  if (!token) {return null;}
+  if (!token) {
+    return null;
+  }
 
   const handleInputChange = (field: string, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
@@ -41,6 +44,7 @@ export default function ChangePasswordPage() {
     toast.dismiss();
 
     // Validamos usando solo los campos de contraseña del registerSchema
+    const registerSchema = getRegisterSchema(tValidation);
     const passwordValidation = registerSchema
       .pick({
         password: true,
@@ -57,18 +61,20 @@ export default function ChangePasswordPage() {
     if (!passwordValidation.success) {
       const flattened = passwordValidation.error.flatten();
       Object.entries(flattened.fieldErrors).forEach(([key, value]) => {
-        if (value) {fieldErrors[key] = value;}
+        if (value) {
+          fieldErrors[key] = value;
+        }
       });
     }
 
     // Validación manual para la contraseña actual
     if (!formData.currentPassword) {
-      fieldErrors.currentPassword = ["La contraseña actual es obligatoria"];
+      fieldErrors.currentPassword = [t("validation.currentPasswordRequired")];
     }
 
     if (Object.keys(fieldErrors).length > 0) {
       setError(fieldErrors);
-      toast.error("Formulario incompleto");
+      toast.error(tValidation("notifications.error.incompleteForm"));
       return;
     }
 
@@ -82,19 +88,17 @@ export default function ChangePasswordPage() {
         formData.cpassword,
       );
 
-      toast.success("Contraseña actualizada correctamente");
+      toast.success(t("success"));
       router.replace("/profile");
     } catch (err: any) {
       const errorMsg = err.message?.toLowerCase() || "";
 
       // Manejo de contraseña actual incorrecta (Unauthorized)
       if (errorMsg.includes("unauthorized") || err.status === 401) {
-        toast.error("La contraseña actual es incorrecta");
+        toast.error(t("validation.currentPasswordIncorrect"));
         setError((prev) => ({
           ...prev,
-          currentPassword: [
-            "La contraseña ingresada no coincide con la actual",
-          ],
+          currentPassword: [t("validation.currentPasswordIncorrect")],
         }));
       }
       // Manejo del error de confirmación del backend (eqfield)
@@ -102,13 +106,13 @@ export default function ChangePasswordPage() {
         errorMsg.includes("confirmpassword") ||
         errorMsg.includes("eqfield")
       ) {
-        toast.error("Las contraseñas no coinciden");
+        toast.error(t("validation.mismatch"));
         setError((prev) => ({
           ...prev,
-          cpassword: ["La confirmación debe ser igual a la nueva contraseña"],
+          cpassword: [t("validation.mismatch")],
         }));
       } else {
-        toast.error(err.message || "Error al cambiar la contraseña");
+        toast.error(err.message || t("error"));
       }
     } finally {
       setIsSubmitting(false);
@@ -186,7 +190,9 @@ export default function ChangePasswordPage() {
             variant="default"
             disabled={isSubmitting}
           >
-            {isSubmitting ? "Guardando..." : t("saveNewPasswordButton")}
+            {isSubmitting
+              ? tValidation("notifications.loading.submitting")
+              : t("saveNewPasswordButton")}
           </Button>
         </form>
       </div>

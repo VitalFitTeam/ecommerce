@@ -6,7 +6,8 @@ import { typography } from "@/styles/styles";
 import AuthCard from "@/components/features/AuthCard";
 import Logo from "@/components/features/Logo";
 import PasswordInput from "@/components/ui/PasswordInput";
-import { passwordSchema } from "@/lib/validation/passwordSchema";
+import { getPasswordSchema } from "@/lib/validation/passwordSchema";
+import { useTranslations } from "next-intl";
 // Eliminamos: import { Notification } from "@/components/ui/Notification";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "@/i18n/routing";
@@ -16,6 +17,8 @@ import { toast } from "sonner";
 
 export default function PasswordReset() {
   const router = useRouter();
+  const t = useTranslations("security.forgotPassword");
+  const tValidation = useTranslations("RegisterPage");
   const [isLoading, setIsLoading] = useState(false);
   // Eliminamos estados manuales de notificación
 
@@ -34,6 +37,7 @@ export default function PasswordReset() {
     setIsLoading(true);
     toast.dismiss(); // Limpiamos notificaciones previas
 
+    const passwordSchema = getPasswordSchema(tValidation);
     const result = passwordSchema.safeParse({
       password: formData.password,
       confirmPassword: formData.confirmPassword,
@@ -83,7 +87,7 @@ export default function PasswordReset() {
       });
 
       // ✅ ÉXITO: Mensaje y redirección con espera
-      toast.success("¡Contraseña restablecida exitosamente!");
+      toast.success(t("success"));
 
       setTimeout(() => {
         router.replace("/login");
@@ -118,9 +122,9 @@ export default function PasswordReset() {
         <div className="max-w-sm w-full">
           <AuthCard>
             <Logo slogan={false} width={80} />
-            <h2 className={typography.h3}>CAMBIA TU CONTRASEÑA</h2>
+            <h2 className={typography.h3}>{t("newPasswordTitle")}</h2>
             <div className="text-left mb-4">
-              <span>Ingrese su nueva contraseña.</span>
+              <span>{t("subtitle")}</span>
             </div>
 
             <form className="w-full" onSubmit={handleSubmit} noValidate>
@@ -130,7 +134,7 @@ export default function PasswordReset() {
                     htmlFor="password"
                     className="text-left font-medium mb-1"
                   >
-                    Nueva Contraseña
+                    {t("newPasswordLabel")}
                   </label>
                   <PasswordInput
                     id="password"
@@ -155,7 +159,7 @@ export default function PasswordReset() {
                     htmlFor="confirmPassword"
                     className="text-left font-medium mb-1"
                   >
-                    Confirmar Contraseña
+                    {t("confirmPasswordLabel")}
                   </label>
                   <PasswordInput
                     id="confirmPassword"
@@ -181,14 +185,16 @@ export default function PasswordReset() {
 
               <div className="mt-4 w-full">
                 <Button type="submit" disabled={isLoading}>
-                  {isLoading ? "Procesando..." : "Continuar"}
+                  {isLoading
+                    ? tValidation("notifications.loading.submitting")
+                    : t("resetButton")}
                 </Button>
               </div>
             </form>
 
             <AuthFooter
-              text="¿Recuerdas tu Contraseña?"
-              linkText="Iniciar Sesión"
+              text={t("footer.text")}
+              linkText={t("footer.linkText")}
               href="/login"
               replace={true}
             />

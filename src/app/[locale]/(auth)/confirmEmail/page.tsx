@@ -10,8 +10,10 @@ import { useRouter } from "@/i18n/routing";
 import { api } from "@/lib/sdk-config";
 import { useAuth } from "@/context/AuthContext";
 import { toast } from "sonner";
+import { useTranslations } from "next-intl";
 
 function ConfirmEmailContent() {
+  const t = useTranslations("ConfirmEmail");
   const [code, setCode] = useState<string[]>(["", "", "", "", "", ""]);
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
 
@@ -30,13 +32,17 @@ function ConfirmEmailContent() {
 
   const handleInputChange = (index: number, value: string) => {
     const char = value.slice(-1).toUpperCase();
-    if (!isValidChar(char) && char !== "") {return;}
+    if (!isValidChar(char) && char !== "") {
+      return;
+    }
 
     const newCode = [...code];
     newCode[index] = char;
     setCode(newCode);
 
-    if (char !== "") {toast.dismiss();}
+    if (char !== "") {
+      toast.dismiss();
+    }
 
     if (index < code.length - 1 && char !== "") {
       inputRefs.current[index + 1]?.focus();
@@ -80,7 +86,7 @@ function ConfirmEmailContent() {
 
     const verificationCode = code.join("").trim();
     if (verificationCode.length !== 6) {
-      toast.error("Por favor, ingresa el código completo de 6 caracteres");
+      toast.error(t("errors.incompleteCode"));
       setLoading(false);
       return;
     }
@@ -108,7 +114,7 @@ function ConfirmEmailContent() {
             });
 
             if (loginResponse.token) {
-              toast.success("Registro exitoso");
+              toast.success(t("success.register"));
 
               setTimeout(() => {
                 login(loginResponse.token);
@@ -125,9 +131,7 @@ function ConfirmEmailContent() {
       }
 
       const mensajeExito =
-        flow === "recover"
-          ? "Código verificado correctamente"
-          : "¡Registro exitoso!";
+        flow === "recover" ? t("success.recover") : t("success.register");
 
       toast.success(mensajeExito);
 
@@ -136,7 +140,7 @@ function ConfirmEmailContent() {
       }, 2000);
     } catch (error) {
       console.error("Error validación:", error);
-      toast.error("Código incorrecto o expirado");
+      toast.error(t("errors.invalidCode"));
       // ✅ CORRECCIÓN: Si hay error, quitamos el loading SIEMPRE
       setLoading(false);
     }
@@ -150,17 +154,17 @@ function ConfirmEmailContent() {
       localStorage.getItem("email") || sessionStorage.getItem("temp_email");
 
     if (!email) {
-      toast.error("No se encontró el email para reenviar");
+      toast.error(t("errors.noEmail"));
       return;
     }
 
     try {
       const response = await api.auth.forgotPassword(String(email));
       console.warn(response);
-      toast.success("Código de Confirmación Reenviado");
+      toast.success(t("notifications.resendSuccess"));
     } catch (error) {
       console.error("Error al conectar con la API:", error);
-      toast.error("No se pudo reenviar el código");
+      toast.error(t("notifications.resendError"));
     }
   };
 
@@ -170,10 +174,8 @@ function ConfirmEmailContent() {
         <div className="max-w-sm w-full">
           <AuthCard>
             <Logo slogan={false} width={80} />
-            <h2 className={typography.h3}>CONFIRMA TU CORREO ELECTRÓNICO</h2>
-            <p className="text-left mb-4">
-              Introduce el código enviado a tu correo para confirmarlo
-            </p>
+            <h2 className={typography.h3}>{t("title")}</h2>
+            <p className="text-left mb-4">{t("description")}</p>
 
             <form className="w-full" onSubmit={handleSubmit} noValidate>
               <div className="flex justify-between gap-2 mb-6">
@@ -197,7 +199,7 @@ function ConfirmEmailContent() {
               </div>
 
               <Button type="submit" disabled={!isCodeComplete || loading}>
-                {loading ? "Verificando..." : "Verificar Correo"}
+                {loading ? t("verifying") : t("verifyButton")}
               </Button>
 
               <div className="mt-4 w-full text-right">
@@ -207,7 +209,7 @@ function ConfirmEmailContent() {
                   }}
                   className="text-green-500 hover:underline cursor-pointer"
                 >
-                  <h2>Reenviar Código</h2>
+                  <h2>{t("resendCode")}</h2>
                 </a>
               </div>
             </form>
