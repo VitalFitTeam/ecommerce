@@ -125,6 +125,17 @@
       "incorrectCredentials": "Credenciales incorrectas",
       "loginError": "Error al iniciar sesión",
       "connectionError": "No se pudo conectar al servidor"
+    },
+    "validation": {
+      "email": {
+        "required": "El correo electrónico es obligatorio",
+        "invalid": "Debe ser un correo electrónico válido"
+      },
+      "password": {
+        "required": "La contraseña es obligatoria",
+        "min": "Debe tener al menos 8 caracteres",
+        "max": "No puede exceder 20 caracteres"
+      }
     }
   },
   "RecoverPassword": {
@@ -139,6 +150,12 @@
     "footer": {
       "text": "¿Recuerdas tu Contraseña?",
       "linkText": "Iniciar Sesión"
+    },
+    "validation": {
+      "usuario": {
+        "required": "El correo electrónico es obligatorio",
+        "invalid": "Debe ser un correo electrónico válido"
+      }
     },
     "successNotification": {
       "title": "Revisa tu correo",
@@ -347,15 +364,70 @@
       "loginLink": "Iniciar Sesión"
     },
     "validation": {
-      "termsRequired": "Debes aceptar los términos y condiciones"
+      "termsRequired": "Debes aceptar los términos y condiciones",
+      "firstName": {
+        "required": "El nombre es obligatorio",
+        "min": "El nombre debe tener al menos 2 caracteres",
+        "max": "El nombre no puede exceder los 50 caracteres"
+      },
+      "lastName": {
+        "required": "El apellido es obligatorio",
+        "min": "El apellido debe tener al menos 2 caracteres",
+        "max": "El apellido no puede exceder los 50 caracteres"
+      },
+      "email": {
+        "required": "El correo electrónico es obligatorio",
+        "invalid": "Debe ser un correo electrónico válido"
+      },
+      "phone": {
+        "required": "El teléfono es obligatorio",
+        "invalid": "Formato de teléfono inválido. Usa un número válido con o sin prefijo internacional (ej: +58 4121234567)",
+        "minDigits": "El teléfono debe tener al menos 7 dígitos"
+      },
+      "document": {
+        "required": "El documento de identidad es obligatorio",
+        "min": "El documento debe tener al menos 3 caracteres"
+      },
+      "gender": {
+        "required": "Selecciona un género válido"
+      },
+      "birthDate": {
+        "required": "La fecha de nacimiento es obligatoria",
+        "minAge": "Debes ser mayor de 12 años"
+      },
+      "password": {
+        "required": "La contraseña es obligatoria",
+        "min": "La contraseña debe tener al menos 8 caracteres",
+        "uppercase": "La contraseña debe contener al menos una mayúscula",
+        "lowercase": "La contraseña debe contener al menos una minúscula",
+        "number": "La contraseña debe contener al menos un número",
+        "special": "La contraseña debe contener al menos un carácter especial (ej: ! @ # $ % & *)",
+        "noDot": "La contraseña no puede contener el símbolo de punto"
+      },
+      "confirmPassword": {
+        "required": "Confirmar contraseña es obligatorio",
+        "mismatch": "Las contraseñas no coinciden"
+      }
     },
     "notifications": {
       "success": {
         "title": "Revisa tu correo",
-        "description": "¡Gracias por registrarte en VITALFIT! Para completar tu registro, por favor, verifica tu dirección de correo electrónico."
+        "description": "¡Gracias por registrarte en VITALFIT! Para completar tu registro, por favor, verifica tu dirección de correo electrónico.",
+        "toast": "¡Registro exitoso!"
       },
       "error": {
-        "title": "Error"
+        "title": "Error",
+        "incompleteForm": "Formulario incompleto",
+        "incompleteFormDescription": "Tienes {count} {count, plural, one {campo que requiere} other {campos que requieren}} tu atención.",
+        "duplicateUser": "Este usuario ya está registrado. Verifica tu correo o documento.",
+        "unexpected": "Ocurrió un error inesperado"
+      },
+      "loading": {
+        "submitting": "Creando tu cuenta..."
+      },
+      "google": {
+        "success": "Datos cargados desde Google",
+        "description": "Puedes editar la información si es necesario."
       },
       "connectionError": {
         "title": "Error de Conexión",
@@ -750,7 +822,14 @@
       "confirmPasswordPlaceholder": "Confirma tu nueva contraseña",
       "forgotPasswordLabel": "¿Olvidaste tu contraseña?",
       "forgotPasswordLink": "Recuperar",
-      "saveNewPasswordButton": "Guardar Nueva Contraseña"
+      "saveNewPasswordButton": "Guardar Nueva Contraseña",
+      "success": "Contraseña actualizada correctamente",
+      "error": "Error al cambiar la contraseña",
+      "validation": {
+        "currentPasswordRequired": "La contraseña actual es obligatoria",
+        "currentPasswordIncorrect": "La contraseña actual es incorrecta",
+        "mismatch": "Las contraseñas no coinciden"
+      }
     },
     "forgotPassword": {
       "title": "Recuperar Contraseña",
@@ -765,6 +844,7 @@
       "confirmPasswordLabel": "Confirmar contraseña",
       "confirmPasswordPlaceholder": "Confirma tu nueva contraseña",
       "resetButton": "Restablecer Contraseña",
+      "success": "¡Contraseña restablecida exitosamente!",
       "errors": {
         "incompleteCode": "Por favor, ingresa el código completo de 6 caracteres",
         "invalidCode": "Código inválido o expirado",
@@ -778,6 +858,10 @@
         "resendSuccessDescription": "Se ha enviado un nuevo código de verificación a tu correo",
         "connectionErrorTitle": "Error de Conexión",
         "connectionErrorDescription": "No se pudo conectar con el servidor. Por favor inténtalo más tarde."
+      },
+      "footer": {
+        "text": "¿Recuerdas tu Contraseña?",
+        "linkText": "Iniciar Sesión"
       }
     }
   },
@@ -844,6 +928,26 @@
       "notFound": "No se encontró la factura",
       "loadError": "Error al cargar",
       "checkConnection": "Verifica tu conexión o el ID."
+    }
+  },
+  "ConfirmEmail": {
+    "title": "CONFIRMA TU CORREO ELECTRÓNICO",
+    "description": "Introduce el código enviado a tu correo para confirmarlo",
+    "verifyButton": "Verificar Correo",
+    "verifying": "Verificando...",
+    "resendCode": "Reenviar Código",
+    "success": {
+      "register": "¡Registro exitoso!",
+      "recover": "Código verificado correctamente"
+    },
+    "errors": {
+      "incompleteCode": "Por favor, ingresa el código completo de 6 caracteres",
+      "invalidCode": "Código incorrecto o expirado",
+      "noEmail": "No se encontró el email para reenviar"
+    },
+    "notifications": {
+      "resendSuccess": "Código de Confirmación Reenviado",
+      "resendError": "No se pudo reenviar el código"
     }
   }
 }
