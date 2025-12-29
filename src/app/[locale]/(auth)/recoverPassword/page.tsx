@@ -8,7 +8,7 @@ import AuthCard from "@/components/features/AuthCard";
 import Logo from "@/components/features/Logo";
 import TextInput from "@/components/ui/TextInput";
 // Eliminamos Notification
-import { recoverSchema } from "@/lib/validation/recoverSchema";
+import { getRecoverSchema } from "@/lib/validation/recoverSchema";
 import { Button } from "@/components/ui/button";
 import { api } from "@/lib/sdk-config";
 import { useRouter } from "@/i18n/routing";
@@ -28,6 +28,7 @@ export default function RecoverPassword() {
     setIsLoading(true);
     toast.dismiss();
 
+    const recoverSchema = getRecoverSchema(t);
     const result = recoverSchema.safeParse(formData);
 
     if (!result.success) {

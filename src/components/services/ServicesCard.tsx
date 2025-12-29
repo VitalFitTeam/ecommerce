@@ -92,6 +92,7 @@ export default function ServiceCard({
     priority_score,
     service_category,
     images,
+    banners,
     lowest_price_member,
     lowest_price_no_member,
     base_currency,
@@ -102,7 +103,9 @@ export default function ServiceCard({
   const desc = description ?? t("noDescription");
   const duration = duration_minutes ?? 0;
   const rating = priority_score ?? 0;
-  const imgSrc = images?.length > 0 ? images[0] : logoVitalFit;
+  const activeBanner = banners?.find((b: any) => b.is_active);
+  const imgSrc =
+    activeBanner?.image_url || images?.[0]?.image_url || logoVitalFit;
 
   const formatPrice = (price: number) =>
     `${base_currency ?? "USD"} ${price ?? 0}`;

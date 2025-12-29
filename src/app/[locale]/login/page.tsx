@@ -8,7 +8,7 @@ import Logo from "@/components/features/Logo";
 import GoogleLoginButton from "@/components/ui/GoogleLoginButton";
 import PasswordInput from "@/components/ui/PasswordInput";
 import TextInput from "@/components/ui/TextInput";
-import { loginSchema } from "@/lib/validation/loginSchema";
+import { getLoginSchema } from "@/lib/validation/loginSchema";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "@/i18n/routing";
 import { useAuth } from "@/context/AuthContext";
@@ -143,6 +143,7 @@ export default function Login() {
     setIsSubmitting(true);
     toast.dismiss();
 
+    const loginSchema = getLoginSchema(t);
     const result = loginSchema.safeParse(formData);
     if (!result.success) {
       const flattened = result.error.flatten();
