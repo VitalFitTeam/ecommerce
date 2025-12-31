@@ -159,7 +159,7 @@ function ConfirmEmailContent() {
     }
 
     try {
-      const response = await api.auth.forgotPassword(String(email));
+      const response = await api.user.resendActivateOtp(email);
       console.warn(response);
       toast.success(t("notifications.resendSuccess"));
     } catch (error) {

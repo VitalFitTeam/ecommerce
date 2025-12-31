@@ -25,7 +25,20 @@ interface ServiceModalProps {
       category_id: string;
       name: string;
     };
-    images: string[];
+    images: {
+      image_id: string;
+      image_url: string;
+      alt_text: string;
+      display_order: number;
+      is_primary: boolean;
+    }[];
+    banners: {
+      banner_id: string;
+      name: string;
+      image_url: string;
+      link_url: string;
+      is_active: boolean;
+    }[];
     lowest_price_member: number;
     lowest_price_no_member: number;
     base_currency: string;
@@ -53,7 +66,11 @@ export default function ServiceModal({
     "5:00 PM",
     "8:00 PM",
   ];
-  const imgSrc = service.images?.[0] ?? "/images/gym-training-chile.png";
+  const activeBanner = service.banners?.find((b) => b.is_active);
+  const imgSrc =
+    activeBanner?.image_url ??
+    service.images?.[0]?.image_url ??
+    "/images/gym-training-chile.png";
 
   return (
     <AnimatePresence>
@@ -148,15 +165,8 @@ export default function ServiceModal({
             </div>
 
             <div className="flex flex-col sm:flex-row gap-3">
-              <Button>
-                {t("bookNow")}
-              </Button>
-              <Button
-                variant="outline"
-              
-              >
-                {t("moreInfo")}
-              </Button>
+              <Button>{t("bookNow")}</Button>
+              <Button variant="outline">{t("moreInfo")}</Button>
             </div>
           </div>
         </motion.div>
