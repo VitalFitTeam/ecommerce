@@ -1,4 +1,4 @@
-export type MembershipStatusType = "active" | "expired" | "cancel" | "pending";
+export type MembershipStatusType = "active" | "expired" | "cancelled";
 
 interface StatusConfig {
   badgeColor: string;
@@ -23,16 +23,10 @@ export const MEMBERSHIP_STATUS_CONFIG: Record<
     iconColor: "text-red-500",
     translationKey: "expired",
   },
-  cancel: {
+  cancelled: {
     badgeColor: "bg-gray-100 text-gray-600 border-gray-200",
     progressBarColor: "bg-gray-300",
     iconColor: "text-gray-400",
     translationKey: "cancelled",
-  },
-  pending: {
-    badgeColor: "bg-yellow-100 text-yellow-700 border-yellow-200",
-    progressBarColor: "bg-yellow-400",
-    iconColor: "text-yellow-500",
-    translationKey: "pending",
   },
 };
