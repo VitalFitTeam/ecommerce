@@ -50,7 +50,7 @@ export const MembershipSummary: React.FC<MembershipSummaryProps> = ({
       (end.getTime() - now.getTime()) / (1000 * 60 * 60 * 24),
     );
 
-    if (statusKey === "expired" || statusKey === "cancel") {
+    if (statusKey === "expired" || statusKey === "cancelled") {
       daysRemaining = 0;
     }
 
@@ -136,7 +136,7 @@ export const MembershipSummary: React.FC<MembershipSummaryProps> = ({
           <div className="flex justify-between text-sm">
             <span className="text-gray-500">{t("nextLabel")}</span>
             <span className={`font-bold flex gap-1 items-center text-gray-900`}>
-              {statusKey === "cancel" ? (
+              {statusKey === "cancelled" ? (
                 <NoSymbolIcon className={`w-4 h-4 ${config.iconColor}`} />
               ) : (
                 <ClockIcon className={`w-4 h-4 ${config.iconColor}`} />
