@@ -20,7 +20,7 @@ const NavbarDashboard = ({
 }: NavbarProps) => {
   const t = useTranslations("Navbar");
   const router = useRouter();
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
 
   const handleLogoClick = () => router.push("/");
   const handleProfileClick = () => router.push("/profile");
@@ -112,7 +112,7 @@ const NavbarDashboard = ({
               <div className="h-8 w-px bg-white/10 hidden sm:block"></div>
               <UserNav
                 user={user}
-                onSignOut={onSignOut}
+                onSignOut={onSignOut || logout}
                 onProfileClick={handleProfileClick}
                 onHomeClick={handleHomeClick}
               />

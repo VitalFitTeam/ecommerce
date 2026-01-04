@@ -152,15 +152,7 @@ export default function RegisterPage() {
       ? new Date(formData.nacimiento).toISOString().split("T")[0]
       : "";
 
-    const genderMapping = {
-      [t("form.gender.maleValue")]: "male",
-      [t("form.gender.femaleValue")]: "female",
-      [t("form.gender.preferNotToSayValue")]: "prefer-not-to-say",
-    };
-
-    const apiGender = (genderMapping[
-      formData.genero as keyof typeof genderMapping
-    ] || formData.genero) as UserGender;
+    const apiGender = formData.genero as UserGender;
 
     setIsSubmitting(true);
 
@@ -414,14 +406,9 @@ export default function RegisterPage() {
                       <input
                         type="radio"
                         name="genero"
-                        value={t("form.gender.maleValue")}
-                        checked={formData.genero === t("form.gender.maleValue")}
-                        onChange={() =>
-                          handleInputChange(
-                            "genero",
-                            t("form.gender.maleValue"),
-                          )
-                        }
+                        value="male"
+                        checked={formData.genero === "male"}
+                        onChange={() => handleInputChange("genero", "male")}
                         className="form-radio h-4 w-4 text-primary"
                       />
                       <span className="ml-2">{t("form.gender.male")}</span>
@@ -430,16 +417,9 @@ export default function RegisterPage() {
                       <input
                         type="radio"
                         name="genero"
-                        value={t("form.gender.femaleValue")}
-                        checked={
-                          formData.genero === t("form.gender.femaleValue")
-                        }
-                        onChange={() =>
-                          handleInputChange(
-                            "genero",
-                            t("form.gender.femaleValue"),
-                          )
-                        }
+                        value="female"
+                        checked={formData.genero === "female"}
+                        onChange={() => handleInputChange("genero", "female")}
                         className="form-radio h-4 w-4 text-primary"
                       />
                       <span className="ml-2">{t("form.gender.female")}</span>
@@ -448,16 +428,10 @@ export default function RegisterPage() {
                       <input
                         type="radio"
                         name="genero"
-                        value={t("form.gender.preferNotToSayValue")}
-                        checked={
-                          formData.genero ===
-                          t("form.gender.preferNotToSayValue")
-                        }
+                        value="prefer-not-to-say"
+                        checked={formData.genero === "prefer-not-to-say"}
                         onChange={() =>
-                          handleInputChange(
-                            "genero",
-                            t("form.gender.preferNotToSayValue"),
-                          )
+                          handleInputChange("genero", "prefer-not-to-say")
                         }
                         className="form-radio h-4 w-4 text-primary"
                       />

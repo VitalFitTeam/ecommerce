@@ -41,9 +41,9 @@ export const getRegisterSchema = (t: (key: string) => string) =>
 
       genero: z
         .union([
-          z.literal("masculino"),
-          z.literal("femenino"),
-          z.literal("prefiero no especificarlo"),
+          z.literal("male"),
+          z.literal("female"),
+          z.literal("prefer-not-to-say"),
           z.literal(""),
         ])
         .refine((val) => val !== "", {

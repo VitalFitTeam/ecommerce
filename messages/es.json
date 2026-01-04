@@ -14,6 +14,7 @@
     },
     "loginButton": "Iniciar Sesión",
     "registerButton": "Unirse",
+    "logoutButton": "Cerrar Sesión",
     "logoSlogan": "Potenciando tu bienestar"
   },
   "LocaleSwitcher": {

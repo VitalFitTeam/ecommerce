@@ -9,6 +9,7 @@ import {
   XMarkIcon,
   UserCircleIcon,
   ShoppingCartIcon,
+  ArrowRightStartOnRectangleIcon,
 } from "@heroicons/react/24/outline";
 import Logo from "@/components/features/Logo";
 import LocaleSwitcher from "../ui/LocaleSwitcher";
@@ -237,6 +238,16 @@ export function Navbar({
                   >
                     <UserCircleIcon className="w-5 h-5 mr-2" />
                     Dashboard
+                  </Button>
+                  <Button
+                    onClick={() => {
+                      logout();
+                      setIsMenuOpen(false);
+                    }}
+                    className="col-span-2 bg-red-600/10 hover:bg-red-600 text-red-500 hover:text-white border border-red-600/20 h-12 rounded-xl transition-all duration-300"
+                  >
+                    <ArrowRightStartOnRectangleIcon className="w-5 h-5 mr-2" />
+                    {t("logoutButton")}
                   </Button>
                 </div>
               ) : (
