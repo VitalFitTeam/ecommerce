@@ -231,8 +231,12 @@ export default function ProfileForm({ user, mode }: ProfileFormProps) {
                   />
 
                   <Checkbox
-                    checked={gender === "other"}
-                    onCheckedChange={(c) => handleGenderChange("other", c)}
+                    checked={
+                      gender === "prefer-not-to-say" || gender === "other"
+                    }
+                    onCheckedChange={(c) =>
+                      handleGenderChange("prefer-not-to-say", c)
+                    }
                     labelText="Prefiero no especificarlo"
                     disabled={mode === "view"}
                   />
