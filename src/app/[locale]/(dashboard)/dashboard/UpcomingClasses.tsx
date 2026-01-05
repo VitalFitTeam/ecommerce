@@ -1,76 +1,195 @@
 "use client";
 
+import { useState } from "react";
 import { useTranslations } from "next-intl";
-import { ChevronRight } from "lucide-react";
+import {
+  ChevronRight,
+  Calendar,
+  Loader2,
+  MapPin,
+  User,
+  Clock,
+} from "lucide-react";
+import { useClientBookings } from "@/hooks/useClientBookings";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Card, CardContent } from "@/components/ui/Card";
 
 export default function UpcomingClasses() {
   const t = useTranslations("classes");
+  const { bookings, loading, error } = useClientBookings();
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const classes = [
-    {
-      id: 1,
-      name: "Nombre",
-      time: "Today, 07:00 AM",
-      image: "/images/class1.png",
-      availability: t("availability.available"),
-      category: t("category.pilates"),
-    },
-    {
-      id: 2,
-      name: "Nombre",
-      time: "Today, 8:30 AM",
-      image: "/images/class2.png",
-      availability: t("availability.limited"),
-      category: t("category.yoga"),
-    },
-    {
-      id: 3,
-      name: "Nombre",
-      time: "Today, 7:00 PM",
-      image: "/images/class3.png",
-      availability: t("availability.full"),
-      category: t("category.cardio"),
-    },
+  const formatDate = (dateString: string) => {
+    try {
+      const date = new Date(dateString);
+      return new Intl.DateTimeFormat("es-ES", {
+        weekday: "long",
+        day: "numeric",
+        month: "short",
+        hour: "2-digit",
+        minute: "2-digit",
+      }).format(date);
+    } catch (e) {
+      return dateString;
+    }
+  };
+
+  const classImages = [
+    "/images/class1.png",
+    "/images/class2.png",
+    "/images/class3.png",
   ];
+
+  if (loading) {
+    return (
+      <div className="bg-white rounded-lg p-6 border border-gray-200">
+        <h3 className="text-lg font-bold mb-6">{t("title")}</h3>
+        <div className="flex flex-col items-center justify-center py-10">
+          <Loader2 className="animate-spin text-orange-600 mb-2" size={32} />
+          <p className="text-gray-500 text-sm">Cargando tus clases...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="bg-white rounded-lg p-6 border border-gray-200">
+        <h3 className="text-lg font-bold mb-6">{t("title")}</h3>
+        <div className="text-center py-6">
+          <p className="text-red-500 text-sm">{error}</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="bg-white rounded-lg p-6 border border-gray-200">
-      <h3 className="text-lg font-bold mb-6">{t("title")}</h3>
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-4">
-        {classes.map((cls) => (
-          <div
-            key={cls.id}
-            className="relative rounded-lg overflow-hidden h-40"
-          >
-            <img
-              src={cls.image}
-              alt={cls.name}
-              className="absolute inset-0 w-full h-full object-cover z-0"
-            />
-
-            <div className="absolute inset-0 bg-black/40 z-10"></div>
-
-            <div className="absolute inset-0 z-20 flex flex-col justify-end p-4">
-              <p className="text-white font-semibold text-sm">{cls.name}</p>
-              <p className="text-gray-200 text-xs">{cls.time}</p>
-              <div className="flex justify-between items-center mt-1">
-                <p className="text-xs text-white">{cls.availability}</p>
-                <span className="bg-black text-white text-xs px-3 py-1 rounded-full font-medium">
-                  {cls.category}
-                </span>
-              </div>
-            </div>
-          </div>
-        ))}
+      <div className="flex justify-between items-center mb-6">
+        <h3 className="text-lg font-bold">{t("title")}</h3>
       </div>
 
-      <button className="hover:text-orange-600 font-semibold text-sm items-center gap-1 w-full">
-        <div className="flex justify-center items-center">
-          {t("viewAll")}
-          <ChevronRight size={16} />
+      {bookings.length === 0 ? (
+        <div className="flex flex-col items-center justify-center py-8 text-center">
+          <Calendar className="text-gray-300 mb-3" size={48} />
+          <p className="text-gray-500 font-medium">No tienes clases próximas</p>
+          <p className="text-gray-400 text-xs mt-1">
+            Reserva una clase en nuestra sección de servicios
+          </p>
         </div>
-      </button>
+      ) : (
+        <>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-4">
+            {bookings.slice(0, 3).map((booking, index) => (
+              <div
+                key={booking.booking_id}
+                className="relative rounded-lg overflow-hidden h-40"
+              >
+                <img
+                  src={
+                    booking.imageUrl || classImages[index % classImages.length]
+                  }
+                  alt={booking.service_name}
+                  className="absolute inset-0 w-full h-full object-cover z-0"
+                />
+
+                <div className="absolute inset-0 bg-black/40 z-10"></div>
+
+                <div className="absolute inset-0 z-20 flex flex-col justify-end p-4">
+                  <p className="text-white font-bold text-sm leading-tight mb-0.5">
+                    {booking.service_name}
+                  </p>
+                  <p className="text-gray-100 text-[10px] font-medium opacity-90">
+                    {booking.instructor}
+                  </p>
+                  <p className="text-gray-200 text-xs mt-1 font-medium">
+                    {formatDate(booking.starts_at)}
+                  </p>
+                  <div className="flex justify-between items-center mt-2">
+                    <span className="bg-orange-600/90 backdrop-blur-sm text-white text-[10px] px-2 py-0.5 rounded-full font-bold uppercase tracking-wider">
+                      {booking.branch_name}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+            <DialogTrigger asChild>
+              <button className="hover:text-orange-600 font-semibold text-sm items-center gap-1 w-full group transition-all">
+                <div className="flex justify-center items-center py-2">
+                  {t("viewAll")}
+                  <ChevronRight
+                    size={16}
+                    className="group-hover:translate-x-1 transition-transform"
+                  />
+                </div>
+              </button>
+            </DialogTrigger>
+            <DialogContent className="max-w-4xl h-[80vh] flex flex-col p-0 overflow-hidden bg-white/95 backdrop-blur-md">
+              <DialogHeader className="p-6 border-b bg-white">
+                <DialogTitle className="text-2xl font-bold flex items-center gap-2">
+                  <Calendar className="text-orange-600" />
+                  {t("title")}
+                </DialogTitle>
+              </DialogHeader>
+
+              <ScrollArea className="flex-1 p-6">
+                <div className="grid grid-cols-1 md:grid-cols-1 gap-4">
+                  {bookings.map((booking) => (
+                    <Card
+                      key={booking.booking_id}
+                      className="overflow-hidden border-gray-100 hover:border-orange-200 transition-colors shadow-sm"
+                    >
+                      <CardContent className="p-5 flex flex-col justify-center h-full">
+                        <div className="flex flex-col gap-3">
+                          <div className="flex justify-between items-start">
+                            <div>
+                              <h4 className="font-bold text-lg text-gray-900 leading-tight mb-1">
+                                {booking.service_name}
+                              </h4>
+                              <div className="flex items-center gap-2 text-gray-500 text-sm">
+                                <User size={14} className="text-orange-500" />
+                                <span className="font-medium">
+                                  {booking.instructor}
+                                </span>
+                              </div>
+                            </div>
+                            <span className="bg-orange-50 text-orange-600 text-[10px] px-2.5 py-1 rounded-full font-bold uppercase tracking-wider border border-orange-100 flex items-center gap-1 shrink-0">
+                              <MapPin size={10} />
+                              {booking.branch_name}
+                            </span>
+                          </div>
+
+                          <div className="pt-2 border-t border-gray-50 flex items-center justify-between mt-auto">
+                            <div className="flex items-center gap-1.5 text-gray-500 font-medium">
+                              <Clock size={14} className="text-orange-400" />
+                              <span className="text-xs uppercase tracking-tight">
+                                {formatDate(booking.starts_at)}
+                              </span>
+                            </div>
+                            <div className="text-[10px] text-gray-300 font-bold uppercase tracking-widest">
+                              ID: {booking.booking_id.slice(0, 8)}
+                            </div>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              </ScrollArea>
+            </DialogContent>
+          </Dialog>
+        </>
+      )}
     </div>
   );
 }
