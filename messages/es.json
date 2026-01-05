@@ -640,113 +640,139 @@
       "downloadReceipt": "Descargar Recibo"
     }
   },
-  "MembershipPurchase": {
-    "title": "COMPRAR MEMBRESÍA",
-    "step1": {
-      "selectedPlans": "PLANES DE ENTRENAMIENTO SELECCIONADOS",
-      "complementPlan": "COMPLEMENTA TU PLAN (OPCIONAL)",
-      "price": "Precio:",
-      "startDate": "Fecha de inicio",
-      "fee": "Cuota {startDate} - {endDate}",
-      "removePlan": "Eliminar plan"
-    },
-    "step2": {
-      "title": "Información pago",
-      "description": "Todas las transacciones se realizan de forma segura, selecciona una tarjeta guardada, o ingresa una nueva.",
-      "selectBranch": "Seleccionar sucursal",
-      "selectBranchPlaceholder": "Selecciona una sucursal",
-      "paymentOptions": "Opciones de Compra",
-      "mobilePayment": "Pago Móvil",
-      "bankTransfer": "Transferencia Bancaria",
-      "holder": "Titular",
-      "fiscalDocument": "Documento fiscal / cédula",
-      "important": "Importante",
-      "includeExactAmount": "Asegúrate de incluir el monto exacto",
-      "saveReceipt": "Guarda el comprobante de la transacción",
-      "associatedBank": "Banco Asociado",
-      "accountNumber": "Número de Cuenta",
-      "phoneNumber": "Teléfono Móvil"
-    },
-    "step3": {
-      "purchaseConfirmation": {
-        "purchaseRegistered": "¡Compra Registrada!",
-        "purchaseInVerification": "Tu compra ha sido registrada y está en proceso de verificación",
-        "advancedSubscription": "Suscripción Avanzada",
-        "moreBenefits": "Más beneficios para la vida fitness",
-        "perMonth": "/MES",
-        "valid": "Válida",
-        "days": "días",
-        "access": "Acceso",
-        "unlimited": "ilimitado",
-        "benefits": "Beneficios",
-        "attachReceipt": "Adjunta el comprobante de pago",
-        "dragDrop": "Arrastra y suelta o",
-        "chooseFile": "Selecciona archivo",
-        "toUpload": "para subir",
-        "fileTypes": "Ej: jpg, pdf, png, img",
-        "uploaded": "subido",
-        "helpCenter": "Centro de ayuda",
-        "cancel": "Cancelar",
-        "confirm": "Confirmar",
-        "paymentVerification": "Pago en Verificación",
-        "verificationText": "Tu pago está verificándose por nuestro equipo. Recibirás un correo de confirmación cuando sea aprobado (1-24 horas totales)",
-        "supportText": "¿Tienes dudas? Contáctanos: soporteq@vitatfit.com o (555) 123-4567",
-        "goHome": "Ir Al Inicio"
+  "Checkout": {
+    "Page": {
+      "initialLoading": "Sincronizando sistema...",
+      "title": "Realizar compra",
+      "StepPlan": {
+        "title": "Seleccionar Plan"
+      },
+      "StepPayment": {
+        "title": "Pago"
+      },
+      "StepSuccess": {
+        "title": "Confirmación"
       }
     },
-    "navigation": {
-      "cancel": "Cancelar",
-      "continue": "Continuar",
-      "back": "Atrás"
+    "StepPlan": {
+      "branchLabel": "Sede de entrenamiento",
+      "branchPlaceholder": "¿A qué sede asistirás?",
+      "confirmed": "Sede Confirmada",
+      "basePlanLabel": "Plan base seleccionado",
+      "extraServicesTitle": "¿Quieres complementar tu plan?",
+      "extraServicesTitleLocked": "Servicios complementarios",
+      "extraServicesDesc": "Añade servicios extra y potencia tu entrenamiento.",
+      "extraServicesDescLocked": "Los servicios seleccionados ya fueron confirmados.",
+      "explorePlaceholder": "Explorar servicios extra",
+      "onlyBasePlan": "Solo el plan base",
+      "viewExtraServices": "Ver servicios extra ({count})"
     },
-    "addOns": {
-      "personal-4": {
-        "title": "Entretenimiento",
-        "subtitle": "Personal - 4 Sesiones",
-        "description": "Paquete de 4 sesiones de entretenimiento personalizado con instructor certificado"
-      },
-      "personal-8": {
-        "title": "Entretenimiento",
-        "subtitle": "Personal - 8 Sesiones",
-        "description": "Paquete de 8 sesiones de entretenimiento personalizado con instructor certificado"
-      },
-      "yoga-10": {
-        "title": "Paquete de Yoga",
-        "subtitle": "10 Clases",
-        "description": "Acceso a 10 clases de yoga especializadas"
+    "BranchSelector": {
+      "label": "Selecciona tu Sede",
+      "placeholder": "¿En qué sede entrenarás hoy?",
+      "requiredNote": "* Requerido para calcular impuestos y activar tu acceso",
+      "confirmed": "Sede Confirmada"
+    },
+    "PackageCarousel": {
+      "title": "Servicios adicionales",
+      "subtitle": "Selecciona uno o varios para complementar tu plan",
+      "accessDays": "{days} días de acceso"
+    },
+    "MembershipSummary": {
+      "defaultDescription": "Plan de membresía seleccionado.",
+      "totalPrice": "Precio del Plan",
+      "duration": "Duración",
+      "days": "días"
+    },
+    "StepPayment": {
+      "cardTitle": "Registro de Pago",
+      "stepMethod": "1. Forma de pago",
+      "methodPlaceholder": "Selecciona el método",
+      "stepAmount": "2. Moneda y Monto a Informar",
+      "calculatedTotal": "Total calculado",
+      "referenceLabel": "Referencia Bancaria",
+      "referencePlaceholder": "Número de confirmación...",
+      "receiptLabel": "Comprobante",
+      "attachReceipt": "Adjuntar Comprobante",
+      "uploading": "Subiendo...",
+      "submitBtn": "Informar Pago Ahora"
+    },
+    "OrderSummary": {
+      "title": "Resumen",
+      "baseMembership": "Membresía base",
+      "subtotal": "Subtotal",
+      "taxLabel": "Impuestos ({percent}%)",
+      "totalLabel": "Total",
+      "equivalent": "Equivalente a",
+      "requiredBranchTitle": "Sede requerida",
+      "requiredBranchDesc": "Selecciona una sucursal para continuar.",
+      "btnSelectBranch": "Selecciona una sede",
+      "btnConfirmOrder": "Confirmar orden",
+      "btnMakePayment": "Realizar pago"
+    },
+    "Success": {
+      "errorTitle": "No pudimos cargar el recibo",
+      "errorSubtitle": "Tu pago fue procesado, pero hay un error de visualización.",
+      "backToDashboard": "Ir al Dashboard",
+      "pendingTitle": "¡COMPRA REGISTRADA!",
+      "confirmedTitle": "¡PAGO CONFIRMADO!",
+      "pendingDescription": "Tu compra ha sido registrada y está en proceso de verificación por nuestro equipo.",
+      "confirmedDescription": "Tu suscripción ya se encuentra activa y lista para usar.",
+      "orderSummary": "Resumen de Orden",
+      "quantity": "CANTIDAD",
+      "totalAmount": "Monto Total",
+      "membership": "Membresía VitalFit",
+      "additionalService": "Servicio Adicional",
+      "paymentInfo": "Pago Informado",
+      "amountPaid": "Monto Pagado",
+      "reference": "Referencia",
+      "appliedRate": "Tasa aplicada",
+      "pendingBannerTitle": "Pago en Verificación",
+      "pendingBannerText": "Tu pago está siendo verificado por nuestro equipo. Recibirás un correo de confirmación cuando sea aprobado (2-24 horas hábiles).",
+      "goHome": "IR AL HOME",
+      "viewReceipt": "VER COMPROBANTE ENVIADO",
+      "helpCenter": "Centro de ayuda"
+    },
+    "NoMembership": {
+      "title": "Carrito Vacío",
+      "description": "No hemos detectado una membresía seleccionada. Regresa al catálogo para elegir el plan que mejor se adapte a ti.",
+      "backButton": "Volver a Planes"
+    },
+    "Notifications": {
+      "uploadSuccess": "Archivo listo",
+      "uploadSuccessDetail": "El comprobante se ha vinculado correctamente.",
+      "paymentSuccess": "Reporte enviado",
+      "paymentSuccessDetail": "Tu pago ha sido registrado para revisión administrativa.",
+      "validationAmount": "El monto debe ser mayor a 0.",
+      "validationReference": "La referencia es obligatoria.",
+      "validationReceipt": "Debes adjuntar el comprobante.",
+      "validationMethod": "Selecciona un método de pago.",
+      "fileTooLarge": "El archivo es demasiado grande (máx 5MB)",
+      "missingSelection": "Selección incompleta",
+      "missingSelectionDetail": "Por favor selecciona una sede y un plan para continuar.",
+      "invoiceError": "Error de facturación",
+      "invoiceErrorDetail": "No pudimos generar tu factura. Por favor, intenta de nuevo.",
+      "invoiceSuccess": "Factura generada",
+      "invoiceSuccessDetail": "Procesando opciones de pago...",
+      "methodsError": "Error de conexión",
+      "methodsErrorDetail": "No pudimos cargar los métodos de pago de esta sede."
+    },
+    "PaymentMethodDetails": {
+      "loading": "Cargando instrucciones...",
+      "transferTitle": "Datos para transferencia",
+      "transferSubtitle": "Utiliza estos datos para realizar tu pago de forma segura.",
+      "copied": "Copiado",
+      "footerTitle": "¿Ya realizaste el pago?",
+      "footerDesc": "Toma una captura de pantalla clara y súbela en la sección de Comprobante para validar tu activación.",
+      "labels": {
+        "bank_id": "Banco",
+        "tax_id": "Documento de Identidad",
+        "phone": "Teléfono",
+        "email": "Correo",
+        "account_number": "Número de Cuenta",
+        "account_holder": "Nombre del Titular"
       }
     }
-  },
-  "AddOnCard": {
-    "select": "Seleccionar",
-    "deselect": "Deseleccionar",
-    "perSession": "por sesión",
-    "add": "Agregar",
-    "added": "✓ Agregado"
-  },
-  "OrderSummary": {
-    "title": "Resumen del pedido",
-    "subtotal": "Subtotal",
-    "taxes": "Impuestos",
-    "total": "Total",
-    "noItems": "No hay items seleccionados",
-    "calculatedAtCheckout": "Calculado en el checkout",
-    "items": "items",
-    "item": "item",
-    "addons": "COMPLEMENTOS",
-    "discounts": "Descuentos",
-    "tax": "IVA",
-    "makePayment": "Realizar Pago",
-    "promoPlaceholder": "Código de la promoción",
-    "apply": "Ingresar"
-  },
-  "StepIndicator": {
-    "step1": "Opciones\nde producto",
-    "step2": "Métodos de pago",
-    "step3": "Confirmación de compra"
-  },
-  "PlanCard": {
-    "price": "${price}"
   },
   "MembershipDetails": {
     "title": "Detalles de Membresía",
