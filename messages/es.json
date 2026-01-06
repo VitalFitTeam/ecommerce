@@ -137,6 +137,10 @@
         "min": "Debe tener al menos 8 caracteres",
         "max": "No puede exceder 20 caracteres"
       }
+    },
+    "activateAccount": {
+      "text": "¿Cuenta inactiva?",
+      "link": "Activar"
     }
   },
   "RecoverPassword": {
@@ -975,6 +979,32 @@
     "notifications": {
       "resendSuccess": "Código de Confirmación Reenviado",
       "resendError": "No se pudo reenviar el código"
+    }
+  },
+  "ActivateAccount": {
+    "title": "ACTIVAR CUENTA",
+    "description": "Ingresa tu correo electrónico para recibir el código de activación.",
+    "email": {
+      "label": "Correo electrónico",
+      "placeholder": "Correo electrónico"
+    },
+    "submitButton": {
+      "default": "Siguiente",
+      "loading": "Procesando..."
+    },
+    "footer": {
+      "text": "¿Recordaste tu contraseña?",
+      "link": "Iniciar sesión"
+    },
+    "validation": {
+      "email": {
+        "required": "El correo electrónico es obligatorio",
+        "invalid": "Debe ser un correo electrónico válido"
+      }
+    },
+    "notifications": {
+      "success": "Código enviado correctamente",
+      "error": "No se pudo enviar el código. Verifica tu correo."
     }
   }
 }

@@ -137,6 +137,10 @@
         "min": "Must be at least 8 characters",
         "max": "Cannot exceed 20 characters"
       }
+    },
+    "activateAccount": {
+      "text": "Inactive account?",
+      "link": "Activate"
     }
   },
   "RecoverPassword": {
@@ -976,6 +980,32 @@
     "notifications": {
       "resendSuccess": "Confirmation Code Resent",
       "resendError": "Could not resend the code"
+    }
+  },
+  "ActivateAccount": {
+    "title": "ACTIVATE ACCOUNT",
+    "description": "Enter your email to receive the activation code.",
+    "email": {
+      "label": "Email Address",
+      "placeholder": "Email Address"
+    },
+    "submitButton": {
+      "default": "Next",
+      "loading": "Processing..."
+    },
+    "footer": {
+      "text": "Remember your password?",
+      "link": "Log in"
+    },
+    "validation": {
+      "email": {
+        "required": "Email is required",
+        "invalid": "Must be a valid email address"
+      }
+    },
+    "notifications": {
+      "success": "Code sent successfully",
+      "error": "Could not send the code. Please check your email."
     }
   }
 }

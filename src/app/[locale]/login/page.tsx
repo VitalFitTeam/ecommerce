@@ -22,7 +22,7 @@ export default function Login() {
   const t = useTranslations("LoginPage");
   const locale = useLocale();
   const router = useRouter();
-  const searchParams = useSearchParams(); // Hook para leer la URL
+  const searchParams = useSearchParams();
   const { login } = useAuth();
 
   const [rememberMe, setRememberMe] = useState(false);
@@ -38,7 +38,6 @@ export default function Login() {
   const { signIn, isLoaded } = useSignIn();
   const { getToken, isSignedIn, signOut } = useClerkAuth();
 
-  // 1. Botón de Google: Agregamos el parámetro mágico a la URL de retorno
   const handleGoogleLogin = async () => {
     if (!isLoaded) {
       return;
@@ -48,7 +47,6 @@ export default function Login() {
       await signIn.authenticateWithRedirect({
         strategy: "oauth_google",
         redirectUrl: `/${locale}/sso-callback`,
-        // AQUÍ EL CAMBIO: Agregamos ?check_google=true y el locale correcto
         redirectUrlComplete: `/${locale}/login?check_google=true`,
       });
     } catch (err) {
@@ -57,19 +55,12 @@ export default function Login() {
     }
   };
 
-  // 2. Validación SEGURA usando la URL
   useEffect(() => {
     const checkSession = async () => {
-      // Solo nos importa si hay sesión de Clerk
       if (isSignedIn) {
-        // VERIFICACIÓN INFALIBLE:
-        // ¿La URL tiene el parámetro que indica que acabamos de venir de Google?
         const isGoogleRedirect = searchParams.get("check_google") === "true";
 
         if (!isGoogleRedirect) {
-          // Si NO tiene el parámetro, significa que el usuario navegó aquí manualmente
-          // (por ejemplo, volvió del registro).
-          // Borramos la sesión "zombie" y no hacemos NADA más.
           await signOut();
           return;
         }
@@ -109,7 +100,6 @@ export default function Login() {
           }
           errorMsg = errorMsg.toLowerCase();
 
-          // USUARIO NUEVO
           if (
             errorMsg.includes("not found") ||
             errorMsg.includes("404") ||
@@ -119,10 +109,8 @@ export default function Login() {
               description: "Redirigiendo al registro...",
             });
 
-            // Redirigimos al Registro
             router.replace("/register");
           } else {
-            // ERROR REAL
             console.error("Error Backend:", error);
             await signOut();
             setIsValidating(false);
@@ -286,6 +274,11 @@ export default function Login() {
                 linkText={t("noAccount.link")}
                 href="/register"
                 replace={true}
+              />
+              <AuthFooter
+                text={t("activateAccount.text")}
+                linkText={t("activateAccount.link")}
+                href="/login/activate"
               />
             </>
           )}
