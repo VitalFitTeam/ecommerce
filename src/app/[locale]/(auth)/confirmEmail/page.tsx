@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect, Suspense } from "react";
+import { useState, useRef, useEffect, Suspense, useCallback } from "react";
 import { typography } from "@/styles/styles";
 import AuthCard from "@/components/features/AuthCard";
 import Logo from "@/components/features/Logo";
@@ -27,6 +27,31 @@ function ConfirmEmailContent() {
   useEffect(() => {
     inputRefs.current[0]?.focus();
   }, []);
+
+  const resendCode = useCallback(async () => {
+    const email =
+      localStorage.getItem("email") || sessionStorage.getItem("temp_email");
+
+    if (!email) {
+      toast.error(t("errors.noEmail"));
+      return;
+    }
+
+    try {
+      const response = await api.user.resendActivateOtp(email);
+      console.warn(response);
+      toast.success(t("notifications.resendSuccess"));
+    } catch (error) {
+      console.error("Error al conectar con la API:", error);
+      toast.error(t("notifications.resendError"));
+    }
+  }, [t]);
+
+  useEffect(() => {
+    if (flow === "activate") {
+      resendCode();
+    }
+  }, [flow, resendCode]);
 
   const isValidChar = (char: string) => /^[a-zA-Z0-9]$/.test(char);
 
@@ -94,7 +119,7 @@ function ConfirmEmailContent() {
     setLoading(true);
 
     try {
-      if (flow === "register") {
+      if (flow === "register" || flow === "activate") {
         await api.auth.verifyEmail(verificationCode);
       } else {
         await api.auth.validateResetToken(verificationCode);
@@ -136,37 +161,22 @@ function ConfirmEmailContent() {
       toast.success(mensajeExito);
 
       setTimeout(() => {
-        router.replace(flow === "recover" ? "/changePassword" : "/dashboard");
+        if (flow === "recover") {
+          router.replace("/changePassword");
+        } else if (flow === "activate") {
+          router.replace("/login");
+        } else {
+          router.replace("/dashboard");
+        }
       }, 2000);
     } catch (error) {
       console.error("Error validación:", error);
       toast.error(t("errors.invalidCode"));
-      // ✅ CORRECCIÓN: Si hay error, quitamos el loading SIEMPRE
       setLoading(false);
     }
-    // Quitamos el finally complicado. Si es éxito, el loading se queda true (bien). Si es error, el catch lo quita (bien).
   };
 
   const isCodeComplete = code.every((char) => char !== "");
-
-  const resendCode = async () => {
-    const email =
-      localStorage.getItem("email") || sessionStorage.getItem("temp_email");
-
-    if (!email) {
-      toast.error(t("errors.noEmail"));
-      return;
-    }
-
-    try {
-      const response = await api.user.resendActivateOtp(email);
-      console.warn(response);
-      toast.success(t("notifications.resendSuccess"));
-    } catch (error) {
-      console.error("Error al conectar con la API:", error);
-      toast.error(t("notifications.resendError"));
-    }
-  };
 
   return (
     <div className="flex items-center justify-center min-h-screen px-5 py-4">
