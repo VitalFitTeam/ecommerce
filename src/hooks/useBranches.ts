@@ -1,27 +1,34 @@
 import { api } from "@/lib/sdk-config";
 import { BranchInfo } from "@vitalfit/sdk";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 
-export function useBranches(token: string) {
+export function useBranches(token: string | null | undefined) {
   const [branches, setBranches] = useState<BranchInfo[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    async function load() {
-      try {
-        setLoading(true);
-        const { data } = await api.public.getBranchMap(token);
-        setBranches(data);
-      } catch (err) {
-        setError("Error al cargar sucursales");
-      } finally {
-        setLoading(false);
-      }
+  const loadBranches = useCallback(async () => {
+    if (!token) {
+      return;
     }
 
-    load();
+    try {
+      setLoading(true);
+      setError(null);
+
+      const response = await api.public.getBranchMap(token);
+      setBranches(response.data || []);
+    } catch (err) {
+      console.error("Error useBranches:", err);
+      setError("No pudimos cargar las sucursales disponibles.");
+    } finally {
+      setLoading(false);
+    }
   }, [token]);
 
-  return { branches, loading, error };
+  useEffect(() => {
+    loadBranches();
+  }, [loadBranches]);
+
+  return { branches, loading, error, refetch: loadBranches };
 }

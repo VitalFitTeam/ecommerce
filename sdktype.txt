@@ -1,0 +1,1340 @@
+type ClientConfig = {
+    url: string;
+    jwt?: string;
+    data?: object;
+    params?: object;
+};
+declare class Client {
+    private client;
+    jwt?: string;
+    constructor(isDevMode: boolean, origin?: string);
+    call(method: string, config: ClientConfig): Promise<Response>;
+    get(config: ClientConfig): Promise<any>;
+    post(config: ClientConfig): Promise<Response>;
+    put(config: ClientConfig): Promise<Response>;
+    patch(config: ClientConfig): Promise<Response>;
+    delete(config: ClientConfig): Promise<Response>;
+    setJWT(jwt: string): void;
+    removeJWT(): void;
+}
+
+type PaginationRequest = {
+    limit?: number;
+    page?: number;
+    sort?: 'asc' | 'desc';
+    search?: string;
+};
+type Pagination<T> = {
+    data: T;
+    count: number;
+    next: string | null;
+    previous: string | null;
+};
+type PaginatedTotal<T> = Pagination<T> & {
+    total: number;
+};
+type UUIDModel = {
+    id: string;
+};
+type BaseModel = UUIDModel & {
+    created_at: string;
+    updated_at: string;
+    deleted_at: string | null;
+};
+type DataResponse<T> = {
+    data: T;
+};
+type PaginationWithStatus = PaginationRequest & {
+    status?: string;
+};
+
+declare enum UserGender {
+    male = "male",
+    female = "female",
+    preferNotToSay = "prefer-not-to-say"
+}
+type LoginRequest = {
+    email: string;
+    password: string;
+    context?: string;
+};
+type LoginResponse = {
+    token: string;
+};
+type SignUpRequest = {
+    first_name: string;
+    last_name: string;
+    email: string;
+    password: string;
+    identity_document: string;
+    phone?: string | null;
+    birth_date: string;
+    gender?: UserGender | null;
+    profile_picture_url?: string | null;
+    role_name?: string | null;
+};
+type Oauth = {
+    session_token: string;
+};
+
+type ClientProfile = {
+    user_id: string;
+    qr_code: string;
+    scoring: number;
+    category: string;
+    created_at: string;
+    updated_at: string;
+    deleted_at: string | null;
+};
+type Role = {
+    role_id: string;
+    name: string;
+    description: string;
+    created_at: string;
+    updated_at: string;
+};
+type ClientMembership = {
+    client_membership_id: string;
+    user_id: string;
+    membership_type_id: string;
+    start_date: string;
+    end_date: string;
+    status: string;
+    invoice_id: string;
+};
+type User = {
+    user_id: string;
+    first_name: string;
+    last_name: string;
+    email: string;
+    phone: string;
+    identity_document: string;
+    birth_date: string;
+    gender: string;
+    status: string;
+    block_justification: string;
+    profile_picture_url: string;
+    is_validated: boolean;
+    ClientProfile: ClientProfile;
+    role_id: string;
+    role: Role;
+    client_membership?: ClientMembership;
+    created_at: string;
+    updated_at: string;
+    deleted_at: string | null;
+};
+type UserApiResponse = {
+    user: User;
+};
+type GetUserResponse = {
+    birth_date: string;
+    email: string;
+    first_name: string;
+    gender: string;
+    identity_document: string;
+    last_name: string;
+    phone: string;
+    profile_picture_url: string;
+    role_id: string;
+    role_name: string;
+    user_id: string;
+};
+type UpdateUserRequest = {
+    birth_date?: string;
+    email?: string;
+    first_name?: string;
+    gender?: string;
+    identity_document?: string;
+    last_name?: string;
+    phone?: string;
+    profile_picture_url?: string;
+};
+type UpdateUserStaffRequest = UpdateUserRequest & {
+    role_name?: string;
+};
+type UserPaginationOptions = {
+    limit?: number;
+    page?: number;
+    sort?: 'asc' | 'desc';
+    search?: string;
+    role?: string;
+};
+type QrToken = {
+    token: string;
+};
+
+type PaginatedBranch = {
+    branch_id: string;
+    name: string;
+    tax_id: string;
+    state_name: string;
+    country_name: string;
+    manager_name: string;
+    manager_last_name: string;
+    status: 'Active' | 'Inactive' | 'Maintenance';
+};
+type OperatingHour = {
+    hour_id?: string;
+    day_of_week: string;
+    branch_id?: string;
+    open_time: string;
+    close_time: string;
+    is_closed: boolean;
+};
+type BranchDetails = {
+    branch_id: string;
+    name: string;
+    tax_id: string;
+    address: string;
+    latitude: number;
+    longitude: number;
+    max_capacity: number;
+    phone: string;
+    status: 'Active' | 'Inactive' | 'Maintenance';
+    state: string;
+    country: string;
+    manager: string;
+    manager_first_name: string;
+    manager_last_name: string;
+    operating_hours: OperatingHour[];
+};
+type BranchStatusCount = {
+    Active: number;
+    Inactive: number;
+    Maintenance: number;
+    Total: number;
+};
+type PaginationBranchRequest = PaginationRequest & {
+    status?: string;
+    location?: string;
+};
+type CreateBranchRequest = {
+    address: string;
+    country: string;
+    latitude: number;
+    longitude: number;
+    manager_id: string;
+    max_capacity: number;
+    name: string;
+    operating_hours: OperatingHour[];
+    phone: string;
+    state: string;
+    status: string;
+    tax_id: string;
+};
+type UpdateOperatingHour = {
+    day_of_week: string;
+    open_time: string;
+    close_time: string;
+    is_closed: boolean;
+};
+type UpdateBranchRequest = {
+    address: string;
+    country: string;
+    latitude: number;
+    longitude: number;
+    manager_id: string;
+    max_capacity: number;
+    name: string;
+    operating_hours: UpdateOperatingHour[];
+    payment_methods: string[];
+    phone: string;
+    state: string;
+    status: 'Active' | 'Inactive' | 'Maintenance';
+    tax_id: string;
+};
+
+type PaymentMethod = {
+    method_id: string;
+    name: string;
+    type: string;
+    description: string;
+    processing_type: string;
+    configuration: PaymentConfiguration;
+    visibility: BranchPaymentVisibility;
+    surcharge_fixed: number;
+    surcharge_percentage: number;
+    global_status: boolean;
+    created_at: string;
+    updated_at: string;
+};
+type PaymentMethodTypes = {};
+type CreatePaymentMethod = {
+    description: string;
+    name: string;
+    processing_type: 'Gateway' | 'Offline';
+    type: 'Cash' | 'Card' | 'Transfer' | 'Other';
+    configuration: PaymentConfiguration;
+    display_name: string;
+    method_id: string;
+    surcharge_fixed: number;
+    surcharge_percentage: number;
+    visibility: BranchPaymentVisibility;
+};
+type ZelleConfig = {
+    email: string;
+};
+type BankTransferConfig = {
+    bank_name: string;
+    account_number: string;
+    tax_id: string;
+};
+type PagoMovilConfig = {
+    phone: string;
+    bank_id: string;
+    tax_id: string;
+};
+type BranchPaymentVisibility = 'Client' | 'Staff' | 'All';
+type PaymentConfiguration = ZelleConfig | BankTransferConfig | PagoMovilConfig | Record<string, any>;
+type BranchPaymentMethod = {
+    branch_id: string;
+    configuration: PaymentConfiguration;
+    created_at: string;
+    display_name: string;
+    is_active: boolean;
+    method_id: string;
+    surcharge_fixed: number;
+    surcharge_percentage: number;
+    updated_at: string;
+    visibility: BranchPaymentVisibility;
+};
+type UpdateBranchPaymentMethod = {
+    is_active?: boolean;
+};
+type BranchPaymentMethodInfo = {
+    branch_id: string;
+    method_id: string;
+    is_active: boolean;
+    name: string;
+    type: string;
+};
+
+type Specialty = {
+    specialty_id: string;
+    specialty_name?: string;
+};
+type InstructorData = {
+    biography: string;
+    birth_date: string;
+    email: string;
+    first_name: string;
+    gender: string;
+    identity_document: string;
+    instructor_id: string;
+    last_name: string;
+    phone: string;
+    profile_picture_url: string;
+    specialties: Specialty[];
+    user_id: string;
+};
+type InstructorDataList = {
+    biography: string;
+    birth_date: string;
+    email: string;
+    first_name: string;
+    gender: string;
+    identity_document: string;
+    instructor_id: string;
+    last_name: string;
+    phone: string;
+    profile_picture_url: string;
+    user_id: string;
+};
+type Instructor = {
+    biography?: string;
+    birth_date?: string;
+    email?: string;
+    first_name?: string;
+    gender?: UserGender | null;
+    identity_document?: string;
+    last_name?: string;
+    phone?: string;
+    profile_picture_url?: string;
+};
+type PaginatedInstructor = PaginationRequest & {
+    identity_doc?: string;
+};
+type BranchInstructorInfo = {
+    email: string;
+    instructorName: string;
+    phone: string;
+    instructorID: string;
+};
+type InstructorsSummary = {
+    total: number;
+    actives: number;
+    blocked: number;
+};
+
+interface Permission {
+    created_at?: string;
+    description?: string;
+    name?: string;
+    permission_id: string;
+    updated_at?: string;
+}
+interface RoleResponse {
+    created_at: string;
+    description: string;
+    name: string;
+    permissions: Permission[];
+    role_id: string;
+    updated_at: string;
+}
+type CreateRole = {
+    description: string;
+    name: string;
+    permissions: string[];
+};
+
+type Banner = {
+    banner_id?: string;
+    image_url?: string;
+    is_active?: boolean;
+    link_url?: string;
+    name?: string;
+};
+type Promotion = {
+    code: string;
+    created_at: string;
+    discount_type: string;
+    discount_value: number;
+    end_date: string;
+    is_active: boolean;
+    name: string;
+    promotion_id: string;
+    start_date: string;
+    updated_at: string;
+};
+type CreatePromotion = Omit<Promotion, 'promotion_id' | 'created_at' | 'updated_at'>;
+type CreateBanner = Omit<Banner, 'banner_id'>;
+type UpdateBanner = {
+    image_url?: string;
+    is_active?: boolean;
+    link_url?: string;
+    name?: string;
+};
+
+type MembershipType = {
+    description: string;
+    duration_days: number;
+    is_active: boolean;
+    membership_type_id: string;
+    name: string;
+    price: number;
+};
+type CreateMembershipType = {
+    description: string;
+    duration_days: number;
+    is_active: boolean;
+    name: string;
+    price: number;
+};
+type UpdateMembershipType = {
+    description?: string;
+    duration_days?: number;
+    is_active?: boolean;
+    name?: string;
+    price?: number;
+};
+type MembershipsSummary = {
+    total: number;
+    actives: number;
+    inactives: number;
+};
+type PublicMembershipResponse = {
+    membership_type_id: string;
+    name: string;
+    description: string;
+    duration_days: number;
+    price: number;
+    base_currency: string;
+    ref_price: string;
+    ref_currency: string;
+    is_active: boolean;
+};
+type ClientMembershipUser = {
+    user_id: string;
+    first_name: string;
+    last_name: string;
+    email: string;
+};
+type MembershipTypeDetail = MembershipType & {
+    created_at: string;
+    updated_at: string;
+};
+type ClientMembershipItem = {
+    client_membership_id: string;
+    user_id: string;
+    membership_type_id: string;
+    start_date: string;
+    end_date: string;
+    status: string;
+    invoice_id: string;
+    cancellation_reason_id?: string;
+    cancellation_notes?: string;
+    user: ClientMembershipUser;
+    membership_type: MembershipTypeDetail;
+};
+type CancellationReason = {
+    reason_id: string;
+    description: string;
+    is_active: boolean;
+};
+type CreateCancellationReason = {
+    description: string;
+    is_active: boolean;
+};
+type ClientMembershipDetail = ClientMembershipItem & {
+    cancellation_reason?: CancellationReason;
+};
+type UpdateClientMembershipRequest = {
+    status?: string;
+    cancel_notes?: string;
+    cancel_reason_id?: string;
+};
+
+type BranchInfo = {
+    address: string;
+    branch_id: string;
+    latitude: number;
+    longitude: number;
+    name: string;
+    phone: string;
+};
+
+interface ServiceCategoryInfo {
+    category_id: string;
+    name: string;
+}
+interface ServiceImageResponse {
+    image_id: string;
+    image_url: string;
+    alt_text: string;
+    display_order: number;
+    is_primary: boolean;
+}
+interface BannerResponse {
+    banner_id: string;
+    name: string;
+    image_url: string;
+    link_url: string;
+    is_active: boolean;
+}
+interface ServiceFullDetail {
+    service_id: string;
+    category_id: string;
+    name: string;
+    description: string;
+    duration_minutes: number;
+    priority_score: number;
+    is_featured: boolean;
+    created_at: string;
+    updated_at: string;
+    service_category: ServiceCategoryInfo;
+    images: ServiceImageResponse[];
+    banners: BannerResponse[];
+}
+type CreateServiceImage = {
+    alt_text: string;
+    display_order: number;
+    image_url: string;
+    is_primary: boolean;
+};
+type CreateService = {
+    banner_id: string;
+    category_id: string;
+    description: string;
+    duration: number;
+    is_featured: boolean;
+    name: string;
+    priority: number;
+    service_images: CreateServiceImage[];
+};
+type UpdateServiceImageManual = {
+    alt_text?: string;
+    display_order?: number;
+    image_url?: string;
+    is_primary?: boolean;
+};
+type UpdateServiceManual = {
+    banner_id?: string;
+    category_id?: string;
+    description?: string;
+    duration?: number;
+    is_featured?: boolean;
+    name?: string;
+    priority?: number;
+    service_images?: UpdateServiceImageManual[];
+};
+type BranchServicePrice = {
+    branch_id: string;
+    service_id: string;
+    service_name: string;
+    is_visible: boolean;
+    max_capacity: number;
+    price_for_member: number;
+    price_for_non_member: number;
+};
+type CreateBranchServicePriceItem = {
+    service_id: string;
+    is_visible: boolean;
+    max_capacity: number;
+    price_for_member: number;
+    price_for_non_member: number;
+};
+type UpdateBranchServicePrice = {
+    is_visible?: boolean;
+    max_capacity?: number;
+    price_for_member?: number;
+    price_for_non_member?: number;
+};
+type PaginatedServiceRequest = PaginationRequest & {
+    category?: string;
+};
+type ServicesSummary = {
+    total: number;
+    actives: number;
+    featured: number;
+};
+type ServicePublicItem = ServiceFullDetail & {
+    lowest_price_member: number;
+    lowest_price_no_member: number;
+    base_currency: string;
+    ref_lowest_price_member: string;
+    ref_lowest_price_no_member: string;
+    ref_base_currency: string;
+};
+type PublicPaginationService = PaginationRequest & {
+    currency: string;
+    category: string;
+    price: number;
+    sortby: string;
+};
+
+type EquipmentCategory = 'Cardio' | 'Strength' | 'FreeWeight' | 'Functional' | 'Accessory';
+type Equipment = {
+    equipment_id: string;
+    name: string;
+    brand: string;
+    model: string;
+    category: EquipmentCategory;
+    description: string;
+    created_at: string;
+    updated_at: string;
+    deleted_at: string | null;
+};
+type CreateEquipment = Omit<Equipment, 'equipment_id' | 'created_at' | 'updated_at' | 'deleted_at'>;
+type UpdateEquipment = Partial<CreateEquipment>;
+type EquipmentStatus = 'Available' | 'InMaintenance' | 'OutOfService';
+type CreateBranchEquipment = {
+    acquisition_date: string;
+    equipment_id: string;
+    last_maintenance_date: string;
+    notes: string;
+    serial_number: string;
+    status: EquipmentStatus;
+};
+type UpdateBranchEquipmentDetails = {
+    last_maintenance_date?: string;
+    notes?: string;
+    status?: EquipmentStatus;
+};
+type EquipmentInfo = {
+    equipment_id: string;
+    name: string;
+    category: EquipmentCategory;
+    model: string;
+    description: string;
+};
+type BranchEquipmentInventory = {
+    acquisition_date: string;
+    equipment_id: string;
+    name: string;
+    inventory_id: string;
+    last_maintenance_date: string;
+    notes: string;
+    serial_number: string;
+    status: EquipmentStatus;
+};
+type PaginatedEquipmentRequest = PaginationRequest & {
+    category?: EquipmentCategory;
+};
+
+type BranchClassInfo = {
+    branch_id: string;
+    class_id: string;
+    ends_at: string;
+    instructor_id: string;
+    is_visible: boolean;
+    max_capacity: number;
+    notes: string;
+    service_id: string;
+    starts_at: string;
+};
+type CreateClassPayload = {
+    ends_at: string;
+    instructor_id: string;
+    is_visible: boolean;
+    max_capacity: number;
+    notes: string;
+    service_id: string;
+    starts_at: string;
+};
+type UpdateClassPayload = {
+    ends_at: string;
+    instructor_id: string;
+    is_visible: boolean;
+    max_capacity: number;
+    notes: string;
+    service_id: string;
+    starts_at: string;
+};
+
+type PackageItemInput = {
+    serviceId: string;
+    sessionsIncluded: number;
+};
+type PackageItemDetail = {
+    name: string;
+    serviceId: string;
+    sessionsIncluded: number;
+};
+type PackageListItem = {
+    createdAt: string;
+    description: string;
+    endAt: string;
+    isActive: boolean;
+    name: string;
+    packageId: string;
+    price: number;
+    startAt: string;
+    updatedAt: string;
+};
+type PackageDetail = {
+    createdAt: string;
+    description: string;
+    endAt: string;
+    isActive: boolean;
+    name: string;
+    packageId: string;
+    packageItems: PackageItemDetail[];
+    price: number;
+    startAt: string;
+    updatedAt: string;
+};
+type CreatePackagePayload = {
+    description: string;
+    endAt: string;
+    name: string;
+    packageItems: PackageItemInput[];
+    price: number;
+    startAt: string;
+};
+type UpdatePackagePayload = {
+    description: string;
+    endAt: string;
+    name: string;
+    packageItems: PackageItemInput[];
+    price: number;
+    startAt: string;
+};
+type PackagePublicItem = Omit<PackageListItem, 'createdAt' | 'updatedAt'> & {
+    base_currency: string;
+    ref_price: string;
+    ref_currency: string;
+};
+type PublicPaginatedPackage = PaginationRequest & {
+    currency: string;
+};
+
+declare const mainCurrencies: {
+    code: string;
+    name: string;
+    symbol: string;
+}[];
+type ClientInvoice = {
+    invoice_id: string;
+    branch_id: string;
+    issue_date: string;
+    total_amount: string;
+    status: string;
+};
+type InvoiceList = {
+    client_name: string;
+    invoice_id: string;
+    invoice_number: string;
+    issue_date: string;
+    status: string;
+    total_amount: number;
+};
+type TaxRate = {
+    tax_rate: number;
+};
+interface ExchangeRateResponse {
+    currency: number;
+}
+
+type ClientBookingResponse = {
+    booking_id: string;
+    branch_name: string;
+    class_id: string;
+    ends_at: string;
+    instructor: string;
+    service_name: string;
+    starts_at: string;
+};
+type BranchScheduleResponse = {
+    branch_id: string;
+    class_id: string;
+    created_at: string;
+    ends_at: string;
+    instructor_id: string;
+    is_visible: boolean;
+    max_capacity: number;
+    notes: string;
+    service_id: string;
+    starts_at: string;
+    updated_at: string;
+};
+type BookClassRequest = {
+    user_id: string;
+};
+type ClassBookingCount = {
+    count: number;
+};
+type BookingParticipant = {
+    booking_id: string;
+    created_at: string;
+    email: string;
+    first_name: string;
+    last_name: string;
+    phone: string;
+    status: string;
+    user_id: string;
+};
+
+type CreateInvoiceItem = {
+    item_id: string;
+    item_type: 'membership' | 'service' | 'package' | string;
+    quantity: number;
+};
+type CreateInvoicePayload = {
+    branch_id: string;
+    items: CreateInvoiceItem[];
+    user_id: string | null;
+};
+type CreateInvoiceResponse = {
+    invoice_id: string;
+    message: string;
+};
+type AddPaymentToInvoicePayload = {
+    amount_paid: number;
+    currency_paid: string;
+    invoice_id: string;
+    payment_method_id: string;
+    receipt_url: string;
+    transaction_id: string;
+};
+type AddPaymentToInvoiceResponse = {
+    message: string;
+    payment_id: string;
+};
+type InvoiceItemDetail = {
+    invoice_item_id: string;
+    quantity: number;
+    unit_price: string;
+    discount_applied: string;
+    tax_rate: string;
+    tax_amount: string;
+    subtotal: string;
+    total_line: string;
+    membership_type_id?: string;
+    service_id?: string;
+    package_id?: string;
+};
+type InvoicePaymentDetail = {
+    payment_id: string;
+    payment_date: string;
+    amount_paid: string;
+    currency_paid: string;
+    amount_base: string;
+    exchange_rate: string;
+    payment_method_id: string;
+    transaction_id: string;
+    status: string;
+    receipt_url: string;
+};
+type InvoiceDetail = {
+    invoice_id: string;
+    user_id: string;
+    branch_id: string;
+    invoice_number: string;
+    issue_date: string;
+    due_date: string;
+    sub_total: string;
+    tax: string;
+    total_amount: string;
+    status: string;
+    created_at: string;
+    invoice_items: InvoiceItemDetail[];
+    payments: InvoicePaymentDetail[];
+};
+type PaymentDetail = {
+    payment_id: string;
+    payment_date: string;
+    amount_paid: string;
+    currency_paid: string;
+    amount_base: string;
+    exchange_rate: string;
+    payment_method_id: string;
+    transaction_id: string;
+    status: string;
+    receipt_url: string;
+};
+
+type CheckIn = {
+    branch_id: string;
+    qr_jwt: string;
+};
+type CheckInResponse = {
+    access_type: string;
+    check_in_time: string;
+    message: string;
+    service_name: string;
+};
+
+type ChartData = {
+    hour?: number;
+    label: string;
+    value: number;
+};
+type TopBranch = {
+    label: string;
+    value: string;
+    percent_change: number;
+    status: string;
+    trend: 'up' | 'down' | string;
+};
+type GlobalStat = {
+    percentage_change: number;
+    total_current_month: number;
+    total_last_month: number;
+    trend: string;
+};
+type GlobalSalesStats = {
+    total_current_month: number;
+    total_last_month: number;
+    percentage_change: number;
+    trend: string;
+};
+type TotalSalesStats = {
+    total_sales: number;
+    percentage_change: number;
+    trend: string;
+};
+type BranchPerformance = {
+    label: string;
+    value: number;
+    percent_change: number;
+    status: string;
+    trend: string;
+};
+type KPICard = {
+    title: string;
+    value: number;
+    trend_percent: number;
+    trend_label: string;
+    is_positive: boolean;
+    target?: number;
+};
+type HeatmapPoint = {
+    day_of_week: number;
+    hour: number;
+    value: number;
+};
+type FinancialSummaryItem = {
+    category: string;
+    amount: number;
+};
+type FinancialSummary = {
+    items: FinancialSummaryItem[];
+    total: number;
+};
+type ClassCapacityStats = {
+    class_name: string;
+    current_count: number;
+    max_capacity: number;
+    ratio: string;
+};
+type ClassScheduleItem = {
+    class_id: string;
+    class_name: string;
+    instructor_name: string;
+    start_time: string;
+    end_time: string;
+    max_capacity: number;
+};
+type RecentAttendanceItem = {
+    user_name: string;
+    check_in_time: string;
+    service_name: string;
+};
+type BillingMatrixRow = {
+    concept: string;
+    values: Record<string, number>;
+    total: number;
+};
+type BillingMatrix = {
+    branches: string[];
+    rows: BillingMatrixRow[];
+    totals: Record<string, number>;
+    grand_total: number;
+};
+type StackedChartData = {
+    label: string;
+    new: number;
+    recurring: number;
+};
+type CohortRetention = {
+    cohort_month: string;
+    cohort_size: number;
+    retention: number[];
+};
+
+type BranchStaff = {
+    id: string;
+    name: string;
+};
+type Staff = {
+    email: string;
+    first_name: string;
+    last_name: string;
+    phone: string;
+    role: string;
+    user_id: string;
+};
+
+type AddToWishlistRequest = {
+    service_id: string;
+};
+type WishlistItemResponse = {
+    wishlist_id: string;
+    service_id: string;
+    service_name: string;
+    description: string;
+    created_at: string;
+};
+
+declare class AuthService {
+    private client;
+    constructor(client: Client);
+    login({ email, password, context, }: LoginRequest): Promise<LoginResponse>;
+    logout(): void;
+    saveJWT(jwt: string): void;
+    signUp(signUpData: SignUpRequest): Promise<void>;
+    signUpStaff(signUpData: SignUpRequest, jwt: string): Promise<void>;
+    forgotPassword(email: string): Promise<void>;
+    resetPassword(otp: string, password: string, repeatPassword: string): Promise<void>;
+    validateResetToken(token: string): Promise<void>;
+    verifyEmail(otp: string): Promise<void>;
+    verifyStaff(token: string, password: string, repeatPassword: string): Promise<void>;
+    oAuthLogin(data: Oauth): Promise<LoginResponse>;
+}
+
+declare class UserService {
+    client: Client;
+    constructor(client: Client);
+    getStaffUsers({ search, role }: UserPaginationOptions, jwt: string): Promise<DataResponse<User[]>>;
+    WhoAmI(jwt: string): Promise<UserApiResponse>;
+    getBranchAdmins(jwt: string): Promise<DataResponse<User[]>>;
+    getClientUsers(jwt: string, options?: UserPaginationOptions): Promise<PaginatedTotal<User[]>>;
+    GetUserByID(userId: string, jwt: string): Promise<DataResponse<GetUserResponse>>;
+    updateUserClient(userId: string, data: UpdateUserRequest, jwt: string): Promise<void>;
+    updateUserStaff(userId: string, data: UpdateUserStaffRequest, jwt: string): Promise<void>;
+    deleteUser(userId: string, jwt: string): Promise<void>;
+    getUserByEmail(email: string, jwt: string): Promise<DataResponse<User>>;
+    QrToken(jwt: string): Promise<QrToken>;
+    resendActivateOtp(email: string): Promise<void>;
+    UpgradePassword(jwt: string, currentPassword: string, newPassword: string, confirmPassword: string): Promise<void>;
+}
+
+declare class BranchService {
+    private client;
+    constructor(client: any);
+    updateBranch(branchId: string, branchData: UpdateBranchRequest, jwt: string): Promise<void>;
+    getBranchById(branchId: string, jwt: string): Promise<BranchDetails>;
+    getBranches({ page, limit, search, status, location }: PaginationBranchRequest, jwt: string): Promise<Pagination<PaginatedBranch[]>>;
+    delete(branchId: string, jwt: string): Promise<void>;
+    getBranchStatusCount(jwt: string): Promise<DataResponse<BranchStatusCount>>;
+    createBranch(branchData: CreateBranchRequest, jwt: string): Promise<void>;
+}
+
+declare class PaymentMethodService {
+    private client;
+    constructor(client: Client);
+    getPaymentMethods(jwt: string): Promise<DataResponse<PaymentMethod[]>>;
+    createPaymentMethod(paymentMethodData: CreatePaymentMethod, jwt: string): Promise<void>;
+    getPaymentMethodByID(paymentMethodId: string, jwt: string): Promise<DataResponse<PaymentMethod>>;
+    updatePaymentMethod(paymentMethodId: string, data: CreatePaymentMethod, jwt: string): Promise<void>;
+    deletePaymentMethod(paymentMethodId: string, jwt: string): Promise<void>;
+    addBranchPaymentMethod(branchId: string, paymentMethodID: string[], jwt: string): Promise<void>;
+    getBranchPaymentMethods(branchId: string, jwt: string): Promise<DataResponse<BranchPaymentMethodInfo[]>>;
+    getBranchPaymentMethodByID(branchId: string, paymentMethodId: string, jwt: string): Promise<DataResponse<BranchPaymentMethodInfo>>;
+    removeBranchPaymentMethod(branchId: string, paymentMethodId: string, jwt: string): Promise<void>;
+    updateBranchPaymentMethod(branchId: string, paymentMethodId: string, data: UpdateBranchPaymentMethod, jwt: string): Promise<void>;
+}
+
+declare class InstructorService {
+    private client;
+    constructor(client: Client);
+    getInstructors({ page, limit, search, identity_doc }: PaginatedInstructor, jwt: string): Promise<PaginatedTotal<InstructorDataList[]>>;
+    getSummary(jwt: string): Promise<DataResponse<InstructorsSummary>>;
+    createInstructor(instructorData: Instructor, jwt: string): Promise<void>;
+    getInstructorById(instructorId: string, jwt: string): Promise<DataResponse<InstructorData>>;
+    updateInstructor(instructorId: string, instructorData: Instructor, jwt: string): Promise<void>;
+    deleteInstructor(instructorId: string, jwt: string): Promise<void>;
+    addSpecialty(instructorId: string, specialty: Specialty[], jwt: string): Promise<void>;
+    removeSpecialty(instructorId: string, specialtyId: string, jwt: string): Promise<void>;
+    addBranchInstructor(branchId: string, instructorIDs: string[], jwt: string): Promise<void>;
+    removeBranchInstructor(branchId: string, instructorId: string, jwt: string): Promise<void>;
+    getBranchInstructors(branchId: string, { search, identity_doc }: PaginatedInstructor, jwt: string): Promise<DataResponse<BranchInstructorInfo[]>>;
+}
+
+declare class RBACService {
+    private client;
+    constructor(client: Client);
+    getPermissions(jwt: string): Promise<DataResponse<Permission[]>>;
+    getRoles({ page, limit, search, sort }: PaginationRequest, jwt: string): Promise<PaginatedTotal<RoleResponse[]>>;
+    createRole(roleData: CreateRole, jwt: string): Promise<void>;
+    updateRole(roleId: string, roleData: CreateRole, jwt: string): Promise<void>;
+    getRoleByID(roleId: string, jwt: string): Promise<DataResponse<RoleResponse>>;
+    deleteRole(roleId: string, jwt: string): Promise<void>;
+    addPermission(roleId: string, permissionData: string[], jwt: string): Promise<void>;
+    removePermission(roleId: string, permissionData: Permission[], jwt: string): Promise<void>;
+}
+
+declare class MarketingService {
+    private client;
+    constructor(client: Client);
+    createBanners(BannerData: CreateBanner, jwt: string): Promise<void>;
+    getBanner(jwt: string): Promise<DataResponse<Banner[]>>;
+    getBannerByID(BannerId: string, jwt: string): Promise<DataResponse<Banner>>;
+    updateBanner(BannerId: string, BannerData: UpdateBanner, jwt: string): Promise<void>;
+    deleteBanner(BannerId: string, jwt: string): Promise<void>;
+    createPromotion(promotionData: CreatePromotion, jwt: string): Promise<void>;
+    getPromotion(jwt: string, { page, limit, sort, search }: PaginationRequest): Promise<PaginatedTotal<Promotion[]>>;
+    getPromotionByID(promotionId: string, jwt: string): Promise<DataResponse<Promotion>>;
+    updatePromotion(promotionId: string, promotionData: CreatePromotion, jwt: string): Promise<void>;
+    deletePromotion(promotionId: string, jwt: string): Promise<void>;
+}
+
+declare class MembershipService {
+    private client;
+    constructor(client: Client);
+    createMembershipType(data: CreateMembershipType, jwt: string): Promise<void>;
+    getMembershipTypes(jwt: string, { page, limit, sort, search }: PaginationRequest): Promise<PaginatedTotal<MembershipType[]>>;
+    getSummary(jwt: string): Promise<DataResponse<MembershipsSummary>>;
+    getMembershipTypeByID(membershipTypeId: string, jwt: string): Promise<DataResponse<MembershipType>>;
+    updateMembershipType(membershipTypeId: string, data: UpdateMembershipType, jwt: string): Promise<void>;
+    deleteMembershipType(membershipTypeId: string, jwt: string): Promise<void>;
+    publicGetMemberships(jwt: string, { page, limit, sort, search }: PaginationRequest, currency: string): Promise<PaginatedTotal<PublicMembershipResponse[]>>;
+    getClientMemberships(jwt: string, { page, limit, sort, search }: PaginationRequest): Promise<PaginatedTotal<ClientMembershipItem[]>>;
+    getClientMembershipByID(membershipId: string, jwt: string): Promise<DataResponse<ClientMembershipDetail>>;
+    updateClientMembership(membershipId: string, data: UpdateClientMembershipRequest, jwt: string): Promise<void>;
+    createCancelReason(data: CreateCancellationReason, jwt: string): Promise<void>;
+    getCancelReasons(jwt: string, { page, limit, sort, search }: PaginationRequest): Promise<PaginatedTotal<CancellationReason[]>>;
+    updateCancelReason(reasonId: string, data: CreateCancellationReason, jwt: string): Promise<void>;
+    deleteCancelReason(reasonId: string, jwt: string): Promise<void>;
+}
+
+declare class PublicService {
+    private client;
+    constructor(client: Client);
+    getBranchMap(jwt: string): Promise<DataResponse<BranchInfo[]>>;
+    getServices({ page, limit, currency, category, price, sortby, search, sort, }: PublicPaginationService): Promise<PaginatedTotal<ServicePublicItem[]>>;
+    getPackages({ page, limit, currency, }: PublicPaginatedPackage): Promise<PaginatedTotal<PackagePublicItem[]>>;
+    getBranchServices({ page, limit, currency, category, price, sortby, search, sort, }: PublicPaginationService, branchId: string): Promise<PaginatedTotal<ServicePublicItem[]>>;
+}
+
+declare class ProductsService {
+    private client;
+    constructor(client: Client);
+    createService(data: CreateService, jwt: string): Promise<void>;
+    getServices(jwt: string, { page, limit, sort, search, category, }: PaginatedServiceRequest): Promise<PaginatedTotal<ServiceFullDetail[]>>;
+    getSummary(jwt: string): Promise<DataResponse<ServicesSummary>>;
+    getServiceByID(serviceId: string, jwt: string): Promise<DataResponse<ServiceFullDetail>>;
+    updateService(serviceId: string, data: UpdateServiceManual, jwt: string): Promise<void>;
+    deleteService(serviceId: string, jwt: string): Promise<void>;
+    getCategories(jwt: string): Promise<DataResponse<ServiceCategoryInfo[]>>;
+    addBranchService(BranchServiceData: CreateBranchServicePriceItem[], branchId: string, jwt: string): Promise<void>;
+    getBranchServices(branchId: string, jwt: string): Promise<DataResponse<BranchServicePrice[]>>;
+    getBranchServiceByID(branchId: string, jwt: string, serviceId: string): Promise<DataResponse<BranchServicePrice>>;
+    updateBranchService(branchId: string, serviceId: string, BranchServiceData: UpdateBranchServicePrice, jwt: string): Promise<void>;
+    removeBranchService(branchId: string, serviceId: string, jwt: string): Promise<void>;
+}
+
+declare class EquipmentService {
+    private client;
+    constructor(client: Client);
+    getEquipment(jwt: string, { page, limit, sort, search, category, }: PaginatedEquipmentRequest): Promise<PaginatedTotal<Equipment[]>>;
+    getEquipmentByID(equipmentId: string, jwt: string): Promise<DataResponse<EquipmentInfo>>;
+    getBranchEquipmentByID(branchId: string, equipmentID: string, jwt: string): Promise<DataResponse<BranchEquipmentInventory>>;
+    createEquipment(data: CreateEquipment, jwt: string): Promise<void>;
+    updateEquipment(equipmentId: string, data: UpdateEquipment, jwt: string): Promise<void>;
+    deleteEquipment(equipmentId: string, jwt: string): Promise<void>;
+    getBranchEquipment(branchId: string, jwt: string): Promise<DataResponse<BranchEquipmentInventory[]>>;
+    addBranchEquipment(branchId: string, equipmentData: CreateBranchEquipment, jwt: string): Promise<void>;
+    removeBranchEquipment(branchId: string, equipmentId: string, jwt: string): Promise<void>;
+    updateBranchEquipment(branchId: string, equipmentId: string, data: UpdateBranchEquipmentDetails, jwt: string): Promise<void>;
+}
+
+declare class ScheduleService {
+    private client;
+    constructor(client: Client);
+    ListBranchesClass(branchID: string, jwt: string): Promise<DataResponse<BranchClassInfo[]>>;
+    CreateClass(branchID: string, data: CreateClassPayload, jwt: string): Promise<void>;
+    GetClassByID(classID: string, jwt: string): Promise<DataResponse<BranchClassInfo>>;
+    UpdateClass(classID: string, data: UpdateClassPayload, jwt: string): Promise<void>;
+    DeleteClass(classID: string, jwt: string): Promise<void>;
+}
+
+declare class PackagesService {
+    private client;
+    constructor(client: Client);
+    createPackage(data: CreatePackagePayload, jwt: string): Promise<void>;
+    getPackages(jwt: string, { page, limit, sort, search }: PaginationRequest): Promise<PaginatedTotal<PackageListItem[]>>;
+    getPackageByID(packageId: string, jwt: string): Promise<DataResponse<PackageDetail>>;
+    updatePackage(packageId: string, data: UpdatePackagePayload, jwt: string): Promise<void>;
+    deletePackage(packageId: string, jwt: string): Promise<void>;
+}
+
+declare class BillingService {
+    private client;
+    constructor(client: Client);
+    getTaxRateByBranch(jwt: string, branchId: string): Promise<TaxRate>;
+    getExchangeRate(jwt: string, currency: string): Promise<ExchangeRateResponse>;
+    createInvoice(data: CreateInvoicePayload, jwt: string): Promise<CreateInvoiceResponse>;
+    getInvoiceByID(invoiceId: string, jwt: string): Promise<DataResponse<InvoiceDetail>>;
+    AddPaymentToInvoice(data: AddPaymentToInvoicePayload, jwt: string): Promise<AddPaymentToInvoiceResponse>;
+    getPaymentByID(paymentId: string, jwt: string): Promise<DataResponse<PaymentDetail>>;
+    updatePaymentStatus(paymentId: string, status: string, jwt: string): Promise<void>;
+    getClientInvoices(jwt: string, { page, limit, sort, search }: PaginationRequest, userID?: string): Promise<PaginatedTotal<ClientInvoice[]>>;
+    getInvoices(jwt: string, { page, limit, sort, search, status, }: PaginationWithStatus, branchID?: string): Promise<PaginatedTotal<InvoiceList[]>>;
+}
+
+declare class BookingService {
+    private client;
+    constructor(client: Client);
+    bookClass(data: BookClassRequest, classID: string, jwt: string): Promise<void>;
+    cancelBooking(bookingId: string, jwt: string): Promise<void>;
+    getClientBooking(userID: string, jwt: string): Promise<DataResponse<ClientBookingResponse[]>>;
+    getClientBranchBooking(branchID: string, userID: string, jwt: string): Promise<DataResponse<BranchScheduleResponse[]>>;
+    getClassBookingCount(classID: string, jwt: string): Promise<ClassBookingCount>;
+    getBookingClass(classID: string, jwt: string, { page, limit, sort }: PaginationRequest): Promise<PaginatedTotal<BookingParticipant>>;
+}
+
+declare class AccessService {
+    private client;
+    constructor(client: Client);
+    checkIn(jwt: string, data: CheckIn): Promise<CheckInResponse>;
+}
+
+declare class ReportService {
+    client: Client;
+    constructor(client: Client);
+    mostUsedServices(jwt: string, start: string, end: string): Promise<DataResponse<ChartData[]>>;
+    salesByCategory(jwt: string, start: string, end: string, branchId?: string): Promise<DataResponse<ChartData[]>>;
+    salesByHour(jwt: string, start: string, end: string): Promise<DataResponse<ChartData[]>>;
+    salesByPaymentMethod(jwt: string, start: string, end: string): Promise<DataResponse<ChartData[]>>;
+    topInstructors(jwt: string, start: string, end: string): Promise<DataResponse<ChartData[]>>;
+    topBranches(jwt: string): Promise<DataResponse<TopBranch[]>>;
+    globalStats(jwt: string): Promise<DataResponse<TopBranch[]>>;
+    totalActiveBranches(jwt: string): Promise<DataResponse<number>>;
+    totalClients(jwt: string): Promise<DataResponse<number>>;
+    totalSales(jwt: string): Promise<DataResponse<TotalSalesStats>>;
+    todayCheckIns(jwt: string, branchId?: string): Promise<DataResponse<number>>;
+    currentOccupancy(jwt: string, branchId?: string): Promise<DataResponse<number>>;
+    classCapacityRatio(jwt: string, classId: string): Promise<DataResponse<ClassCapacityStats>>;
+    upcomingClassesToday(jwt: string, branchId?: string): Promise<DataResponse<ClassScheduleItem[]>>;
+    recentCheckIns(jwt: string, branchId?: string): Promise<DataResponse<RecentAttendanceItem[]>>;
+    newClientsKPI(jwt: string, branchId?: string): Promise<DataResponse<KPICard>>;
+    retentionRateKPI(jwt: string, branchId?: string): Promise<DataResponse<KPICard>>;
+    cohortAnalysis(jwt: string, branchId?: string): Promise<DataResponse<CohortRetention[]>>;
+    newVsRecurringChart(jwt: string, branchId?: string): Promise<DataResponse<StackedChartData[]>>;
+    instructorNextClass(jwt: string): Promise<DataResponse<string>>;
+    instructorStudentCountKPI(jwt: string): Promise<DataResponse<KPICard>>;
+    instructorMonthlyClassesCount(jwt: string): Promise<DataResponse<KPICard>>;
+    instructorClassesToday(jwt: string): Promise<DataResponse<ClassScheduleItem[]>>;
+    weeklyRevenueKPI(jwt: string, branchId?: string): Promise<DataResponse<KPICard>>;
+    monthlyRecurringRevenueKPI(jwt: string, branchId?: string): Promise<DataResponse<KPICard>>;
+    accountsReceivableKPI(jwt: string, branchId?: string): Promise<DataResponse<KPICard>>;
+    averageTicketKPI(jwt: string, branchId?: string): Promise<DataResponse<KPICard>>;
+    monthlyRevenueChart(jwt: string, branchId?: string): Promise<DataResponse<ChartData[]>>;
+    billingByBranchMatrix(jwt: string, start?: string, end?: string): Promise<DataResponse<BillingMatrix>>;
+    totalTransactionsKPI(jwt: string, branchId?: string): Promise<DataResponse<KPICard>>;
+    monthlyCashFlowChart(jwt: string, branchId?: string): Promise<DataResponse<ChartData[]>>;
+    averageCLVKPI(jwt: string, branchId?: string): Promise<DataResponse<KPICard>>;
+    monthlySalesKPI(jwt: string, branchId?: string): Promise<DataResponse<KPICard>>;
+    activeMembersKPI(jwt: string, branchId?: string): Promise<DataResponse<KPICard>>;
+    occupancyKPI(jwt: string, branchId?: string): Promise<DataResponse<KPICard>>;
+    weeklySalesChart(jwt: string, branchId?: string): Promise<DataResponse<ChartData[]>>;
+    activityHeatmap(jwt: string, branchId?: string): Promise<DataResponse<HeatmapPoint[]>>;
+    classOccupancyChart(jwt: string, branchId?: string): Promise<DataResponse<ChartData[]>>;
+    financialSummary(jwt: string, branchId?: string): Promise<DataResponse<FinancialSummary>>;
+}
+
+declare class StaffService {
+    private client;
+    constructor(client: Client);
+    getStaffBranches(jwt: string): Promise<DataResponse<BranchStaff[]>>;
+    getInstructorBranches(jwt: string): Promise<DataResponse<BranchStaff[]>>;
+    getManagedBranches(jwt: string): Promise<DataResponse<BranchStaff[]>>;
+    getBranchstaff(branchId: string, jwt: string, { page, limit, sort, search, role, }: UserPaginationOptions): Promise<PaginatedTotal<Staff[]>>;
+    AssignBranchStaff(branchId: string, staffIds: string[], jwt: string): Promise<void>;
+    RemoveBranchStaff(branchId: string, staffId: string, jwt: string): Promise<void>;
+}
+
+declare class WishListService {
+    private client;
+    constructor(client: Client);
+    addToWishList(data: AddToWishlistRequest, jwt: string): Promise<void>;
+    removeFromWishList(wishlistId: string, jwt: string): Promise<void>;
+    getWishList(jwt: string, { page, limit, sort, search }: PaginationRequest): Promise<PaginatedTotal<WishlistItemResponse>>;
+}
+
+declare class APIError extends Error {
+    status: number;
+    messages: string[];
+    constructor(messages: string[], status: number);
+}
+declare const isAPIError: (error: unknown) => error is APIError;
+
+declare class VitalFit {
+    private static instance;
+    client: Client;
+    auth: AuthService;
+    user: UserService;
+    branch: BranchService;
+    paymentMethod: PaymentMethodService;
+    instructor: InstructorService;
+    RBAC: RBACService;
+    marketing: MarketingService;
+    membership: MembershipService;
+    public: PublicService;
+    products: ProductsService;
+    equipment: EquipmentService;
+    schedule: ScheduleService;
+    packages: PackagesService;
+    billing: BillingService;
+    booking: BookingService;
+    access: AccessService;
+    report: ReportService;
+    staff: StaffService;
+    wishList: WishListService;
+    constructor(isDevMode: boolean, origin?: string);
+    static getInstance(isDevMode?: boolean): VitalFit;
+    version(): string;
+}
+
+export { APIError, type AddPaymentToInvoicePayload, type AddPaymentToInvoiceResponse, type AddToWishlistRequest, type BankTransferConfig, type Banner, type BannerResponse, type BaseModel, type BillingMatrix, type BillingMatrixRow, type BookClassRequest, type BookingParticipant, type BranchClassInfo, type BranchDetails, type BranchEquipmentInventory, type BranchInfo, type BranchInstructorInfo, type BranchPaymentMethod, type BranchPaymentMethodInfo, type BranchPaymentVisibility, type BranchPerformance, type BranchScheduleResponse, type BranchServicePrice, type BranchStaff, type BranchStatusCount, type CancellationReason, type ChartData, type CheckIn, type CheckInResponse, type ClassBookingCount, type ClassCapacityStats, type ClassScheduleItem, type ClientBookingResponse, type ClientInvoice, type ClientMembership, type ClientMembershipDetail, type ClientMembershipItem, type ClientMembershipUser, type ClientProfile, type CohortRetention, type CreateBanner, type CreateBranchEquipment, type CreateBranchRequest, type CreateBranchServicePriceItem, type CreateCancellationReason, type CreateClassPayload, type CreateEquipment, type CreateInvoiceItem, type CreateInvoicePayload, type CreateInvoiceResponse, type CreateMembershipType, type CreatePackagePayload, type CreatePaymentMethod, type CreatePromotion, type CreateRole, type CreateService, type CreateServiceImage, type DataResponse, type Equipment, type EquipmentCategory, type EquipmentInfo, type EquipmentStatus, type ExchangeRateResponse, type FinancialSummary, type FinancialSummaryItem, type GetUserResponse, type GlobalSalesStats, type GlobalStat, type HeatmapPoint, type Instructor, type InstructorData, type InstructorDataList, type InstructorsSummary, type InvoiceDetail, type InvoiceItemDetail, type InvoiceList, type InvoicePaymentDetail, type KPICard, type LoginRequest, type LoginResponse, type MembershipType, type MembershipTypeDetail, type MembershipsSummary, type Oauth, type OperatingHour, type PackageDetail, type PackageItemDetail, type PackageItemInput, type PackageListItem, type PackagePublicItem, type PaginatedBranch, type PaginatedEquipmentRequest, type PaginatedInstructor, type PaginatedServiceRequest, type PaginatedTotal, type Pagination, type PaginationBranchRequest, type PaginationRequest, type PaginationWithStatus, type PagoMovilConfig, type PaymentConfiguration, type PaymentDetail, type PaymentMethod, type PaymentMethodTypes, type Permission, type Promotion, type PublicMembershipResponse, type PublicPaginatedPackage, type PublicPaginationService, type QrToken, type RecentAttendanceItem, type Role, type RoleResponse, type ServiceCategoryInfo, type ServiceFullDetail, type ServiceImageResponse, type ServicePublicItem, type ServicesSummary, type SignUpRequest, type Specialty, type StackedChartData, type Staff, type TaxRate, type TopBranch, type TotalSalesStats, type UUIDModel, type UpdateBanner, type UpdateBranchEquipmentDetails, type UpdateBranchPaymentMethod, type UpdateBranchRequest, type UpdateBranchServicePrice, type UpdateClassPayload, type UpdateClientMembershipRequest, type UpdateEquipment, type UpdateMembershipType, type UpdateOperatingHour, type UpdatePackagePayload, type UpdateServiceImageManual, type UpdateServiceManual, type UpdateUserRequest, type UpdateUserStaffRequest, type User, type UserApiResponse, UserGender, type UserPaginationOptions, VitalFit, type WishlistItemResponse, type ZelleConfig, isAPIError, mainCurrencies };
