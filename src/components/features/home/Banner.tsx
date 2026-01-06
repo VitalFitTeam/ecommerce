@@ -1,4 +1,6 @@
 import React from "react";
+import Image from "next/image";
+import { cn } from "@/lib/utils";
 
 interface BannerProps {
   imageUrl: string;
@@ -13,80 +15,72 @@ const Banner: React.FC<BannerProps> = ({
   imageUrl,
   title,
   subtitle,
-  height = "h-96",
+  height = "h-[500px]",
   overlay = true,
   className = "",
 }) => {
   return (
     <div
-      className={`relative w-full ${height} bg-cover bg-center ${className}`}
-      style={{ backgroundImage: `url(${imageUrl})` }}
+      className={cn(
+        "relative w-full overflow-hidden bg-slate-950",
+        height,
+        className,
+      )}
     >
-      {overlay && <div className="absolute inset-0 bg-black/30"></div>}
-      <div className="relative h-full flex items-center">
-        <div className="w-full z-10 px-2 sm:px-3 lg:px-4">
-          <div className="text-left max-w-[50%]">
-            <h1 className="text-6xl tracking-wider md:text-6xl font-medium text-white mb-4">
-              {title}
-            </h1>
+      <Image
+        src={imageUrl}
+        alt="Banner Background"
+        fill
+        priority
+        className="object-cover object-center"
+      />
 
-            {subtitle && (
+      {/* Overlay: gradiente para mejorar contraste */}
+      {overlay && (
+        <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/50 to-transparent z-10" />
+      )}
+
+      <div className="relative z-20 h-full container mx-auto px-6">
+        <div className="flex flex-col justify-center h-full max-w-4xl">
+          {/* CORRECCIÓN: Agregamos !text-white para anular el global.css */}
+          <h1 className="text-5xl md:text-7xl lg:text-8xl leading-[0.85] text-white drop-shadow-2xl">
+            {title}
+          </h1>
+
+          {subtitle && (
+            <div className="mt-8 flex items-center gap-4 animate-fade-in-up">
+              <div className="h-1 w-12 bg-primary rounded-full shrink-0" />
               <p
-                className="text-xl md:text-1.5xl text-white/90"
+                className="text-lg md:text-2xl text-white/90 font-body font-medium leading-tight italic"
                 dangerouslySetInnerHTML={{ __html: subtitle }}
               />
-            )}
-          </div>
+            </div>
+          )}
         </div>
       </div>
-      <ul className="absolute top-0 left-0 w-full h-full z-0 overflow-hidden">
-        <li className="absolute list-none block w-10 h-10 bg-white/15  left-[10%] animate-square" />
-        <li
-          className="absolute list-none block w-20 h-20 bg-white/15  left-[20%] animate-square"
-          style={{
-            animationDelay: "2s",
-            animationDuration: "17s",
-          }}
-        />
 
-        <li
-          className="absolute list-none block w-10 h-10 bg-white/15  left-[25%] animate-square"
-          style={{ animationDelay: "4s" }}
-        />
-
-        <li
-          className="absolute list-none block w-16 h-16 bg-white/25  left-[40%] animate-square"
-          style={{ animationDuration: "22s" }}
-        />
-
-        <li className="absolute list-none block w-10 h-10 bg-white/15 left-[70%] animate-square" />
-        <li
-          className="absolute list-none block w-32 h-32 bg-white/20  left-[80%] animate-square"
-          style={{ animationDelay: "3s" }}
-        />
-        <li
-          className="absolute list-none block w-40 h-40 bg-white/15  left-[32%] animate-square"
-          style={{ animationDelay: "7s" }}
-        />
-        <li
-          className="absolute list-none block w-5 h-5 bg-white/15 left-[55%] animate-square"
-          style={{
-            animationDelay: "15s",
-            animationDuration: "40s",
-          }}
-        />
-        <li
-          className="absolute list-none block w-2.5 h-2.5 bg-white/30  left-[25%] animate-square"
-          style={{
-            animationDelay: "2s",
-            animationDuration: "40s",
-          }}
-        />
-
-        <li
-          className="absolute list-none block w-40 h-40 bg-white/15  left-[85%] animate-square"
-          style={{ animationDelay: "11s" }}
-        />
+      {/* Partículas Animadas */}
+      <ul className="absolute inset-0 z-10 pointer-events-none">
+        {[
+          { left: "10%", size: "w-10 h-10", delay: "0s", duration: "20s" },
+          { left: "20%", size: "w-20 h-20", delay: "2s", duration: "17s" },
+          { left: "32%", size: "w-40 h-40", delay: "7s", duration: "25s" },
+          { left: "70%", size: "w-10 h-10", delay: "0s", duration: "15s" },
+          { left: "85%", size: "w-32 h-32", delay: "11s", duration: "22s" },
+        ].map((item, index) => (
+          <li
+            key={index}
+            className={cn(
+              "absolute list-none bg-white/10 animate-square bottom-[-150px]",
+              item.size,
+            )}
+            style={{
+              left: item.left,
+              animationDelay: item.delay,
+              animationDuration: item.duration,
+            }}
+          />
+        ))}
       </ul>
     </div>
   );

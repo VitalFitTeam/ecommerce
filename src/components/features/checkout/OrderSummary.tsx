@@ -60,7 +60,9 @@ export const OrderSummary = ({
 }: Props) => {
   const t = useTranslations("Checkout.OrderSummary");
 
-  if (!membership) {return null;}
+  if (!membership) {
+    return null;
+  }
 
   const formatPrice = (price: number = 0) =>
     price.toLocaleString(undefined, {

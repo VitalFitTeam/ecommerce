@@ -1,14 +1,18 @@
+"use client";
+
 import {
   MapPinIcon,
-  PhoneIcon,
   BuildingStorefrontIcon,
   ChevronRightIcon,
+  PhoneIcon,
 } from "@heroicons/react/24/outline";
+import { cn } from "@/lib/utils";
 
 export interface BranchCardInfoProps {
   title: string;
   location: string;
   phone: string;
+  isActive?: boolean;
   onClick?: () => void;
 }
 
@@ -16,39 +20,109 @@ export function BranchCardInfo({
   title,
   location,
   phone,
+  isActive = false,
   onClick,
 }: BranchCardInfoProps) {
   return (
     <div
       onClick={onClick}
-      className="group flex items-center justify-between bg-white p-5 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md hover:border-orange-200 transition-all duration-200 cursor-pointer w-full"
+      className={cn(
+        "group relative flex items-center justify-between p-4 md:p-5 rounded-[1.25rem] border transition-all duration-500 cursor-pointer w-full overflow-hidden",
+        "bg-white border-slate-100 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] hover:shadow-[0_8px_30px_-4px_rgba(0,0,0,0.12)] hover:border-orange-200",
+        isActive &&
+          "border-orange-500 bg-gradient-to-r from-orange-50/50 to-white shadow-[0_10px_40px_-10px_rgba(242,127,42,0.2)] ring-1 ring-orange-500/20",
+      )}
     >
-      <div className="shrink-0 mr-4">
-        <div className="h-12 w-12 rounded-xl bg-orange-50 text-orange-400 flex items-center justify-center group-hover:bg-orange-400 group-hover:text-white transition-colors duration-200">
-          <BuildingStorefrontIcon className="h-6 w-6" />
+      <div
+        className={cn(
+          "absolute left-0 top-1/2 -translate-y-1/2 w-1 h-0 bg-orange-500 transition-all duration-300 rounded-r-full",
+          isActive && "h-10",
+        )}
+      />
+
+      <div className="flex items-center flex-1 min-w-0">
+        <div className="shrink-0">
+          <div
+            className={cn(
+              "h-12 w-12 md:h-14 md:w-14 rounded-2xl flex items-center justify-center transition-all duration-300 shadow-inner",
+              isActive
+                ? "bg-orange-500 text-white shadow-orange-200"
+                : "bg-slate-50 text-slate-400 group-hover:bg-orange-100 group-hover:text-orange-500 group-hover:rotate-3",
+            )}
+          >
+            <BuildingStorefrontIcon className="h-6 w-6 md:h-7 md:w-7" />
+          </div>
+        </div>
+
+        <div className="flex-1 min-w-0 ml-4 md:ml-5">
+          <h4
+            className={cn(
+              "font-heading text-xl md:text-2xl uppercase leading-none mb-1.5 tracking-tight transition-colors duration-300",
+              isActive
+                ? "text-orange-600"
+                : "text-slate-900 group-hover:text-orange-500",
+            )}
+          >
+            {title}
+          </h4>
+
+          <div className="space-y-1.5">
+            <div className="flex items-start gap-2 text-slate-500">
+              <MapPinIcon
+                className={cn(
+                  "h-4 w-4 shrink-0 mt-0.5 transition-colors",
+                  isActive
+                    ? "text-orange-400"
+                    : "text-slate-400 group-hover:text-orange-400",
+                )}
+              />
+              <p className="text-xs md:text-sm leading-tight line-clamp-1 font-medium font-body opacity-80">
+                {location}
+              </p>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <PhoneIcon
+                className={cn(
+                  "h-3.5 w-3.5 shrink-0 transition-all",
+                  isActive
+                    ? "text-orange-500 animate-pulse"
+                    : "text-slate-400 group-hover:text-orange-400",
+                )}
+              />
+              <p
+                className={cn(
+                  "text-[10px] md:text-xs font-black tracking-widest uppercase font-body",
+                  isActive
+                    ? "text-slate-900"
+                    : "text-slate-400 group-hover:text-slate-600",
+                )}
+              >
+                {phone}
+              </p>
+            </div>
+          </div>
         </div>
       </div>
 
-      <div className="flex-1 min-w-0">
-        <h3 className="text-2xl md:text-xl font-extrabold uppercase text-gray-950 leading-tight mb-2 group-hover:text-orange-500 transition-colors tracking-tight">
-          {title}
-        </h3>
-
-        <div className="space-y-1.5">
-          <div className="flex items-start gap-2 text-gray-500">
-            <MapPinIcon className="h-4 w-4 shrink-0 mt-0.5 text-gray-400 group-hover:text-orange-400 transition-colors" />
-            <p className="text-sm leading-snug line-clamp-2">{location}</p>
-          </div>
-
-          <div className="flex items-center gap-2 text-gray-500">
-            <PhoneIcon className="h-4 w-4 shrink-0 text-gray-400 group-hover:text-orange-400 transition-colors" />
-            <p className="text-sm font-medium">{phone}</p>
-          </div>
+      <div className="shrink-0 ml-4">
+        <div
+          className={cn(
+            "h-8 w-8 rounded-full flex items-center justify-center transition-all duration-300",
+            isActive
+              ? "bg-orange-100 text-orange-600"
+              : "bg-slate-50 text-slate-300 group-hover:bg-orange-50 group-hover:text-orange-400",
+          )}
+        >
+          <ChevronRightIcon
+            className={cn(
+              "h-5 w-5 transition-transform duration-300",
+              isActive
+                ? "translate-x-0.5 scale-110"
+                : "group-hover:translate-x-0.5",
+            )}
+          />
         </div>
-      </div>
-
-      <div className="shrink-0 pl-4">
-        <ChevronRightIcon className="h-6 w-6 text-gray-300 group-hover:text-orange-400 transform group-hover:translate-x-1 transition-all duration-200" />
       </div>
     </div>
   );

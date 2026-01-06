@@ -1,11 +1,13 @@
 "use client";
 
-import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { UserNav } from "@/components/layout/UserNav";
 import { useRouter } from "@/i18n/routing";
 import { useAuth } from "@/context/AuthContext";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+import { Bars3Icon } from "@heroicons/react/24/outline";
+import Logo from "../Logo";
 
 interface NavbarProps {
   onSignOut?: () => void;
@@ -28,88 +30,48 @@ const NavbarDashboard = ({
 
   return (
     <nav
-      className={`
-        fixed top-0 left-0 z-50 w-full h-16
-        flex items-center
-        border-b backdrop-blur-md
-        transition-colors duration-300 ease-out
-        ${
-          transparent
-            ? "bg-transparent border-transparent"
-            : "bg-[#0a0a0a]/85 border-white/10 shadow-[0_0_30px_rgba(0,0,0,0.25)]"
-        }
-      `}
+      className={cn(
+        "fixed top-0 left-0 right-0 z-[999] w-full px-6 lg:px-10 py-4 flex items-center justify-between transition-all duration-300",
+        transparent
+          ? "bg-transparent border-transparent"
+          : "bg-slate-950/80 backdrop-blur-xl border-b border-white/5 shadow-2xl",
+      )}
     >
-      <div className="w-full max-w-7xl mx-auto px-6 flex items-center justify-between">
-        {/* Mobile toggle button */}
-        {onToggleSidebar && (
-          <button
-            className="md:hidden p-2 rounded-md hover:bg-gray-200"
-            onClick={onToggleSidebar}
-            aria-label="Open sidebar"
-          >
-            <svg
-              className="h-6 w-6 text-white"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M4 6h16M4 12h16M4 18h16"
-              />
-            </svg>
-          </button>
-        )}
-        <button
-          onClick={handleLogoClick}
-          className="relative flex items-center group select-none"
-        >
-          <div
-            className="
-            absolute -inset-2 
-            rounded-xl blur-xl 
-            bg-primary/20 
-            opacity-0 
-            group-hover:opacity-100 
-            transition-opacity duration-500
-          "
-          />
-          <Image
-            src="/logo/logo-vitalfit.svg"
-            alt="VitalFit Logo"
-            width={130}
-            height={40}
-            priority
-            className="
-              relative
-              transition duration-300
-              group-hover:scale-[1.03]
-              group-hover:brightness-110
-              drop-shadow-[0_4px_12px_rgba(0,0,0,0.35)]
-              cursor-pointer
-            "
-          />
-        </button>
-
+      <div className="w-full max-w-screen-2xl mx-auto flex items-center justify-between">
         <div className="flex items-center gap-4">
+          {onToggleSidebar && (
+            <button
+              className="md:hidden p-2 rounded-xl bg-white/5 border border-white/10 text-white active:scale-90 transition-transform"
+              onClick={onToggleSidebar}
+              aria-label="Open sidebar"
+            >
+              <Bars3Icon className="h-6 w-6" />
+            </button>
+          )}
+
+          <button
+            onClick={handleLogoClick}
+            className="relative flex items-center group select-none transition-transform hover:scale-105"
+          >
+            <Logo slogan={true} theme="light" />
+          </button>
+        </div>
+
+        <div className="flex items-center gap-6">
           {user ? (
             <div className="flex items-center gap-4">
-              <div className="hidden sm:flex flex-col items-end mr-1">
-                <div className="flex items-center gap-1.5">
-                  <span className="text-emerald-400 font-bold text-sm leading-none">
-                    {user.ClientProfile.scoring} pts
-                  </span>
-                </div>
-
-                <span className="text-gray-400 text-[10px] font-medium uppercase tracking-wider mt-0.5">
-                  {user.ClientProfile.category || "Sin categoria"}
+              <div className="hidden sm:flex flex-col items-end bg-white/5 px-4 py-1.5 rounded-2xl border border-white/5">
+                <span className="text-emerald-400 font-black text-xs uppercase italic tracking-tighter leading-none">
+                  {user.ClientProfile.scoring}{" "}
+                  <span className="text-[10px]">pts</span>
+                </span>
+                <span className="text-white/40 text-[9px] font-bold uppercase tracking-[0.1em] mt-1">
+                  {user.ClientProfile.category || "Standard"}
                 </span>
               </div>
+
               <div className="h-8 w-px bg-white/10 hidden sm:block"></div>
+
               <UserNav
                 user={user}
                 onSignOut={onSignOut || logout}
@@ -118,7 +80,12 @@ const NavbarDashboard = ({
               />
             </div>
           ) : (
-            <Button onClick={() => router.push("/login")}>{t("login")}</Button>
+            <Button
+              onClick={() => router.push("/login")}
+              className="bg-primary hover:bg-orange-600 text-white font-black uppercase italic tracking-wider rounded-xl px-6"
+            >
+              {t("login")}
+            </Button>
           )}
         </div>
       </div>

@@ -86,120 +86,121 @@ export default function Memberships() {
   };
 
   return (
-    <main className="min-h-screen bg-white">
+    <>
       <Navbar transparent={false} />
-
-      {/* HERO */}
-      <section className="bg-gray-50 py-12 px-6">
-        <div className="max-w-6xl mx-auto">
-          <h1 className="text-4xl md:text-5xl font-bold text-center mb-4">
-            <span className="text-orange-500">{t("hero.titlePart1")}</span>{" "}
-            <span className="text-gray-900">{t("hero.titlePart2")}</span>
-          </h1>
-          <p className="text-center text-gray-600 w-full mx-auto">
-            {t("hero.subtitle")}
-          </p>
-        </div>
-      </section>
-
-      {/* MEMBERSHIP CARDS */}
-      <section className="py-16 px-6">
-        <div className="max-w-6xl mx-auto">
-          {isLoading ? (
-            <p className="text-center text-gray-600">Cargando planes...</p>
-          ) : (
-            <div className="flex flex-col md:flex-row justify-center items-stretch gap-6">
-              {cardsForDisplay().map((m) => (
-                <div
-                  key={m.membership_type_id}
-                  className={`flex-1 transform ${m.featured ? "scale-105 z-10" : ""}`}
-                >
-                  <MembershipCard
-                    title={m.name}
-                    price={m.price}
-                    billingPeriod={`${m.duration_days} días`}
-                    description={m.description}
-                    services={[
-                      "Acceso a máquinas",
-                      "Ingreso al gimnasio",
-                      "Entrenamiento básico",
-                    ]}
-                    featured={m.featured}
-                    buttonText="Comprar"
-                    onButtonClick={() => handleBuyMembership(m)}
-                  />
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-      </section>
-
-      {/* INCLUDES */}
-      <section className="py-16 px-6 bg-gray-100">
-        <div className="max-w-6xl mx-auto">
-          <h1 className="text-4xl md:text-5xl font-bold text-center mb-4">
-            {t("includes.title")}
-          </h1>
-
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 flex-1 mx-4 my-8">
-            <Card className="text-center p-5">
-              <BuildingStorefrontIcon className="w-6 h-6 text-gray-800 inline-block mr-2" />
-              <CardTitle className="my-4">
-                {t("includes.item1.title")}
-              </CardTitle>
-              <CardContent>
-                <p className="text-sm">{t("includes.item1.content")}</p>
-              </CardContent>
-            </Card>
-            <Card className="text-center p-5">
-              <UserIcon className="w-6 h-6 text-gray-800 inline-block mr-2" />
-              <CardTitle className="my-4">
-                {t("includes.item2.title")}
-              </CardTitle>
-              <CardContent>
-                <p className="text-sm">{t("includes.item2.content")}</p>
-              </CardContent>
-            </Card>
-            <Card className="text-center p-5">
-              <UserGroupIcon className="w-6 h-6 text-gray-800 inline-block mr-2" />
-              <CardTitle className="my-4">
-                {t("includes.item3.title")}
-              </CardTitle>
-              <CardContent>
-                <p className="text-sm">{t("includes.item3.content")}</p>
-              </CardContent>
-            </Card>
-            <Card className="text-center p-5">
-              <DevicePhoneMobileIcon className="w-6 h-6 text-gray-800 inline-block mr-2" />
-              <CardTitle className="my-4">
-                {t("includes.item4.title")}
-              </CardTitle>
-              <CardContent>
-                <p className="text-sm">{t("includes.item4.content")}</p>
-              </CardContent>
-            </Card>
+      <main className="pt-28 pb-20 px-4 md:px-8 bg-gray-50 min-h-screen font-sans">
+        {/* HERO */}
+        <section className="bg-gray-50 py-12 px-6">
+          <div className="max-w-6xl mx-auto">
+            <h1 className="text-4xl md:text-5xl font-bold text-center mb-4">
+              <span className="text-orange-500">{t("hero.titlePart1")}</span>{" "}
+              <span className="text-gray-900">{t("hero.titlePart2")}</span>
+            </h1>
+            <p className="text-center text-gray-600 w-full mx-auto">
+              {t("hero.subtitle")}
+            </p>
           </div>
+        </section>
 
-          {/* CTA */}
-          <div className="max-w-4xl mx-auto bg-primary rounded-2xl md:rounded-3xl p-4 md:p-8 text-center mt-12">
-            <span className="text-3xl md:text-4xl font-bold text-white mb-4 block">
-              {t("cta.heading")}
-            </span>
-            <p className="text-white mt-2">{t("cta.subheading")}</p>
-            <div className="flex items-center justify-center gap-4 my-4">
-              <Button className="bg-black text-white px-4 py-2 text-sm rounded-md w-50">
-                {t("cta.advisorButton")}
-              </Button>
-              <Button className="bg-white text-black px-4 py-2 text-sm rounded-md w-70">
-                {t("cta.faqButton")}
-              </Button>
+        {/* MEMBERSHIP CARDS */}
+        <section className="py-16 px-6">
+          <div className="max-w-6xl mx-auto">
+            {isLoading ? (
+              <p className="text-center text-gray-600">Cargando planes...</p>
+            ) : (
+              <div className="flex flex-col md:flex-row justify-center items-stretch gap-6">
+                {cardsForDisplay().map((m) => (
+                  <div
+                    key={m.membership_type_id}
+                    className={`flex-1 transform ${m.featured ? "scale-105 z-10" : ""}`}
+                  >
+                    <MembershipCard
+                      title={m.name}
+                      price={m.price}
+                      billingPeriod={`${m.duration_days} días`}
+                      description={m.description}
+                      services={[
+                        "Acceso a máquinas",
+                        "Ingreso al gimnasio",
+                        "Entrenamiento básico",
+                      ]}
+                      featured={m.featured}
+                      buttonText="Comprar"
+                      onButtonClick={() => handleBuyMembership(m)}
+                    />
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </section>
+
+        {/* INCLUDES */}
+        <section className="py-16 px-6 bg-gray-100">
+          <div className="max-w-6xl mx-auto">
+            <h1 className="text-4xl md:text-5xl font-bold text-center mb-4">
+              {t("includes.title")}
+            </h1>
+
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-6 flex-1 mx-4 my-8">
+              <Card className="text-center p-5">
+                <BuildingStorefrontIcon className="w-6 h-6 text-gray-800 inline-block mr-2" />
+                <CardTitle className="my-4">
+                  {t("includes.item1.title")}
+                </CardTitle>
+                <CardContent>
+                  <p className="text-sm">{t("includes.item1.content")}</p>
+                </CardContent>
+              </Card>
+              <Card className="text-center p-5">
+                <UserIcon className="w-6 h-6 text-gray-800 inline-block mr-2" />
+                <CardTitle className="my-4">
+                  {t("includes.item2.title")}
+                </CardTitle>
+                <CardContent>
+                  <p className="text-sm">{t("includes.item2.content")}</p>
+                </CardContent>
+              </Card>
+              <Card className="text-center p-5">
+                <UserGroupIcon className="w-6 h-6 text-gray-800 inline-block mr-2" />
+                <CardTitle className="my-4">
+                  {t("includes.item3.title")}
+                </CardTitle>
+                <CardContent>
+                  <p className="text-sm">{t("includes.item3.content")}</p>
+                </CardContent>
+              </Card>
+              <Card className="text-center p-5">
+                <DevicePhoneMobileIcon className="w-6 h-6 text-gray-800 inline-block mr-2" />
+                <CardTitle className="my-4">
+                  {t("includes.item4.title")}
+                </CardTitle>
+                <CardContent>
+                  <p className="text-sm">{t("includes.item4.content")}</p>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* CTA */}
+            <div className="max-w-4xl mx-auto bg-primary rounded-2xl md:rounded-3xl p-4 md:p-8 text-center mt-12">
+              <span className="text-3xl md:text-4xl font-bold text-white mb-4 block">
+                {t("cta.heading")}
+              </span>
+              <p className="text-white mt-2">{t("cta.subheading")}</p>
+              <div className="flex items-center justify-center gap-4 my-4">
+                <Button className="bg-black text-white px-4 py-2 text-sm rounded-md w-50">
+                  {t("cta.advisorButton")}
+                </Button>
+                <Button className="bg-white text-black px-4 py-2 text-sm rounded-md w-70">
+                  {t("cta.faqButton")}
+                </Button>
+              </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      <Footer />
-    </main>
+        <Footer />
+      </main>
+    </>
   );
 }

@@ -8,7 +8,9 @@ interface LogoProps {
 }
 
 const Logo: React.FC<LogoProps> = ({ slogan, width, theme }) => {
-  let imgPATH = slogan ? "/images/logo-vitalfit.png" : "/images/isotipo.png";
+  let imgPATH = slogan
+    ? "/images/logo-vitalfit-white.png"
+    : "/images/isotipo.png";
   imgPATH = theme === "dark" ? "/images/logo-vitalfit-white.png" : imgPATH;
   return (
     <div className="flex justify-center">

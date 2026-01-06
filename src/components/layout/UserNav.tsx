@@ -1,7 +1,6 @@
 "use client";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,15 +10,16 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-
 import { Button } from "@/components/ui/button";
 import {
   HomeIcon,
   UserIcon,
   ArrowRightStartOnRectangleIcon,
+  ChevronDownIcon,
 } from "@heroicons/react/24/outline";
 import { useTranslations } from "next-intl";
 import { User } from "@vitalfit/sdk";
+import { cn } from "@/lib/utils";
 
 interface UserNavProps {
   user: User;
@@ -44,115 +44,90 @@ export function UserNav({
       <DropdownMenuTrigger asChild>
         <Button
           variant="ghost"
-          className="
-            relative 
-            h-10 w-10 
-            rounded-full 
-            p-0 
-            focus-visible:ring-2 
-            focus-visible:ring-primary/50 
-            hover:bg-white/10 
-            transition
-          "
+          className="relative h-12 w-auto flex items-center gap-2 rounded-2xl px-2 hover:bg-white/5 transition-all duration-300 group outline-none focus-visible:ring-0"
         >
-          <Avatar className="h-10 w-10 border border-white/20 shadow-sm">
-            <AvatarImage
-              src={user.profile_picture_url || ""}
-              alt={`${user.first_name} ${user.last_name}`}
-              className="object-cover"
-            />
+          <div className="relative">
+            <Avatar className="h-9 w-9 border-2 border-white/10 shadow-xl transition-transform duration-300 group-hover:scale-105">
+              <AvatarImage
+                src={user.profile_picture_url || ""}
+                alt={`${user.first_name}`}
+                className="object-cover"
+              />
+              <AvatarFallback className="bg-primary text-white font-black italic text-xs">
+                {initials.toUpperCase()}
+              </AvatarFallback>
+            </Avatar>
+            {/* Indicador de estado online/activo sutil */}
+            <span className="absolute bottom-0 right-0 block h-2.5 w-2.5 rounded-full bg-emerald-500 ring-2 ring-[#1c1c1c]" />
+          </div>
 
-            <AvatarFallback
-              className="
-                bg-gradient-to-br 
-                from-primary 
-                to-orange-400 
-                text-white 
-                font-semibold
-              "
-            >
-              {initials}
-            </AvatarFallback>
-          </Avatar>
+          <ChevronDownIcon className="w-4 h-4 text-white/40 group-data-[state=open]:rotate-180 transition-transform duration-300" />
         </Button>
       </DropdownMenuTrigger>
 
       <DropdownMenuContent
-        className="
-          w-60 
-          p-2 
-          rounded-xl 
-          shadow-xl 
-          border border-slate-200/50 
-          backdrop-blur-sm 
-          bg-white/95 
-          animate-in 
-          fade-in-0 zoom-in-95
-        "
+        className={cn(
+          "w-64 mt-2 p-2 rounded-[1.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.5)]",
+          "border border-white/10 backdrop-blur-2xl bg-slate-950/95",
+          "animate-in fade-in-0 zoom-in-95 duration-300",
+        )}
         align="end"
-        forceMount
+        sideOffset={8}
       >
-        <DropdownMenuLabel className="font-normal px-2 pb-2">
-          <div className="flex items-center gap-3">
-            <div className="flex flex-col space-y-0.5">
-              <p className="text-sm font-semibold leading-none">
-                {user.first_name} {user.last_name}
-              </p>
-              <p className="text-xs text-muted-foreground">{user.email}</p>
-            </div>
+        <DropdownMenuLabel className="font-normal p-4">
+          <div className="flex flex-col gap-1">
+            <p className="text-sm font-black uppercase italic tracking-tighter text-white leading-none">
+              {user.first_name} {user.last_name}
+            </p>
+            <p className="text-[11px] font-medium text-white/40 truncate">
+              {user.email}
+            </p>
           </div>
         </DropdownMenuLabel>
 
-        <DropdownMenuSeparator className="my-2" />
+        <DropdownMenuSeparator className="bg-white/5 mx-2" />
 
-        <DropdownMenuGroup>
+        <DropdownMenuGroup className="p-1">
           <DropdownMenuItem
             onClick={onHomeClick}
-            className="
-              cursor-pointer 
-              rounded-md 
-              px-3 py-2 
-              hover:bg-primary/10 
-              hover:text-primary 
-              transition
-            "
+            className="flex items-center gap-3 cursor-pointer rounded-xl px-3 py-3 text-white/70 focus:bg-white/5 focus:text-primary transition-all duration-200"
           >
-            <HomeIcon className="mr-2 h-4 w-4" />
-            <span>{t("home")}</span>
+            <div className="bg-white/5 p-2 rounded-lg">
+              <HomeIcon className="h-4 w-4" />
+            </div>
+            <span className="text-xs font-bold uppercase tracking-wider">
+              {t("home")}
+            </span>
           </DropdownMenuItem>
 
           <DropdownMenuItem
             onClick={onProfileClick}
-            className="
-              cursor-pointer 
-              rounded-md 
-              px-3 py-2 
-              hover:bg-primary/10 
-              hover:text-primary 
-              transition
-            "
+            className="flex items-center gap-3 cursor-pointer rounded-xl px-3 py-3 text-white/70 focus:bg-white/5 focus:text-primary transition-all duration-200"
           >
-            <UserIcon className="mr-2 h-4 w-4" />
-            <span>{t("profile")}</span>
+            <div className="bg-white/5 p-2 rounded-lg">
+              <UserIcon className="h-4 w-4" />
+            </div>
+            <span className="text-xs font-bold uppercase tracking-wider">
+              {t("profile")}
+            </span>
           </DropdownMenuItem>
         </DropdownMenuGroup>
 
-        <DropdownMenuSeparator className="my-2" />
+        <DropdownMenuSeparator className="bg-white/5 mx-2" />
 
-        <DropdownMenuItem
-          onClick={onSignOut}
-          className="
-            cursor-pointer 
-            text-red-600 
-            rounded-md 
-            px-3 py-2 
-            hover:bg-red-100 
-            transition
-          "
-        >
-          <ArrowRightStartOnRectangleIcon className="mr-2 h-4 w-4" />
-          <span>{t("logout")}</span>
-        </DropdownMenuItem>
+        <div className="p-1">
+          <DropdownMenuItem
+            onClick={onSignOut}
+            className="flex items-center gap-3 cursor-pointer rounded-xl px-3 py-3 text-red-400 focus:bg-red-500/10 focus:text-red-400 transition-all duration-200"
+          >
+            <div className="bg-red-500/10 p-2 rounded-lg">
+              <ArrowRightStartOnRectangleIcon className="h-4 w-4" />
+            </div>
+            <span className="text-xs font-bold uppercase tracking-wider">
+              {t("logout")}
+            </span>
+          </DropdownMenuItem>
+        </div>
       </DropdownMenuContent>
     </DropdownMenu>
   );

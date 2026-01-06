@@ -7,15 +7,14 @@ import { Button } from "@/components/ui/button";
 import {
   Bars3Icon,
   XMarkIcon,
-  UserCircleIcon,
   ShoppingCartIcon,
-  ArrowRightStartOnRectangleIcon,
 } from "@heroicons/react/24/outline";
 import Logo from "@/components/features/Logo";
 import LocaleSwitcher from "../ui/LocaleSwitcher";
 import { useTranslations } from "next-intl";
 import { useAuth } from "@/context/AuthContext";
 import { UserNav } from "./UserNav";
+import { cn } from "@/lib/utils";
 
 interface NavbarProps {
   transparent?: boolean;
@@ -31,11 +30,7 @@ export function Navbar({
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   useEffect(() => {
-    if (isMenuOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "unset";
-    }
+    document.body.style.overflow = isMenuOpen ? "hidden" : "unset";
   }, [isMenuOpen]);
 
   const { user, token, logout } = useAuth();
@@ -52,30 +47,17 @@ export function Navbar({
     { key: "contact", href: "/contact" },
   ];
 
-  const handleCartClick = () => {
-    router.push("/checkout");
-    setIsMenuOpen(false);
-  };
-
   return (
     <nav
-      className={`
-        fixed top-0 left-0 right-0 z-[999] 
-        w-full 
-        px-6 lg:px-10 
-        py-4 
-        flex items-center justify-between
-        transition-all duration-300
-        border-b border-white/5
-        ${
-          transparent && !isMenuOpen
-            ? "bg-transparent backdrop-blur-sm"
-            : "bg-[#1c1c1c]/95 backdrop-blur-xl shadow-lg"
-        }
-      `}
+      className={cn(
+        "fixed top-0 left-0 right-0 z-[999] w-full px-6 lg:px-10 py-4 flex items-center justify-between transition-all duration-300",
+        transparent && !isMenuOpen
+          ? "bg-transparent"
+          : "bg-[#1c1c1c]/90 backdrop-blur-md shadow-sm border-b border-white/5",
+      )}
     >
       <button
-        className="md:hidden p-2 text-gray-300 hover:text-white hover:bg-white/10 rounded-full transition active:scale-95"
+        className="md:hidden p-2 text-gray-300 hover:text-white transition-colors"
         onClick={() => setIsMenuOpen(!isMenuOpen)}
       >
         {isMenuOpen ? (
@@ -85,62 +67,55 @@ export function Navbar({
         )}
       </button>
 
-      <div className="flex items-center gap-3">
+      <div className="flex items-center">
         <Logo slogan={true} theme="light" />
       </div>
 
-      <div className="hidden md:flex items-center gap-6 xl:gap-8">
+      <div className="hidden md:flex items-center gap-1 xl:gap-2">
         {navItemsConfig.map((item) => (
           <Link
             key={item.href}
             href={item.href}
-            className={`
-              text-sm font-bold tracking-wide transition-all px-4 py-2 rounded-full
-              ${
-                isActive(item.href)
-                  ? "text-white bg-primary shadow-[0_0_15px_rgba(234,88,12,0.4)]"
-                  : "text-white/80 hover:text-white hover:bg-white/10"
-              }
-            `}
+            className={cn(
+              "text-xs xl:text-sm font-bold tracking-wide transition-all px-4 py-2 rounded-full uppercase italic",
+              isActive(item.href)
+                ? "text-white bg-primary shadow-sm"
+                : "text-gray-400 hover:text-white hover:bg-white/5",
+            )}
           >
             {t(`navItems.${item.key}`)}
           </Link>
         ))}
       </div>
+      <div className="flex items-center gap-3 md:gap-5">
+        <div className="hidden md:block">
+          <LocaleSwitcher />
+        </div>
 
-      <div className="hidden md:flex items-center gap-5">
-        <LocaleSwitcher />
-
-        {/* Carrito Desktop */}
-        <div
-          className="relative cursor-pointer group"
-          onClick={handleCartClick}
+        <button
+          onClick={() => router.push("/checkout")}
+          className="relative p-2 text-gray-400 hover:text-primary transition-colors"
         >
-          <div className="p-2 rounded-full hover:bg-white/10 transition-colors">
-            <ShoppingCartIcon className="w-6 h-6 text-white group-hover:text-primary transition" />
-          </div>
+          <ShoppingCartIcon className="w-6 h-6" />
           {cartItemCount > 0 && (
-            <span className="absolute top-0 right-0 inline-flex items-center justify-center h-5 w-5 text-[10px] font-bold leading-none text-white bg-red-600 rounded-full border-2 border-[#1c1c1c]">
+            <span className="absolute top-1 right-0 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[9px] font-bold text-white">
               {cartItemCount}
             </span>
           )}
-        </div>
+        </button>
 
-        {/* Separador Vertical */}
-        <div className="hidden lg:block h-8 w-px bg-white/10 mx-1"></div>
+        <div className="hidden lg:block h-6 w-px bg-white/10 mx-1"></div>
 
         {user && token ? (
-          <div className="flex items-center gap-3 animate-in fade-in duration-300">
-            {/* ESTILO PLATZI (Puntos) */}
-            <div className="flex flex-col items-end">
-              <span className="text-emerald-400 font-bold text-sm leading-none drop-shadow-sm">
+          <div className="flex items-center gap-3">
+            <div className="hidden sm:flex flex-col items-end leading-tight">
+              <span className="text-emerald-400 font-bold text-[11px] uppercase">
                 {user.ClientProfile.scoring} pts
               </span>
-              <span className="text-gray-500 text-[10px] font-semibold uppercase tracking-widest">
+              <span className="text-gray-500 text-[9px] font-semibold uppercase tracking-tighter">
                 {user.ClientProfile.category}
               </span>
             </div>
-
             <UserNav
               user={user}
               onHomeClick={() => router.push("/dashboard")}
@@ -149,17 +124,17 @@ export function Navbar({
             />
           </div>
         ) : (
-          <div className="flex items-center gap-3">
+          <div className="hidden md:flex items-center gap-2">
             <Link href="/login">
               <Button
                 variant="ghost"
-                className="text-primary border border-primary/50 hover:bg-primary hover:text-white transition rounded-full"
+                className="text-primary hover:text-white hover:bg-primary transition-all text-xs font-bold uppercase italic rounded-full h-9 px-4"
               >
                 {t("loginButton")}
               </Button>
             </Link>
             <Link href="/register">
-              <Button className="bg-primary hover:bg-orange-600 text-white shadow-lg shadow-orange-900/20 rounded-full px-6">
+              <Button className="bg-primary hover:bg-orange-600 text-white shadow-md text-xs font-bold uppercase italic rounded-full h-9 px-5">
                 {t("registerButton")}
               </Button>
             </Link>
@@ -168,17 +143,16 @@ export function Navbar({
       </div>
 
       {isMenuOpen && (
-        <div className="fixed inset-0 top-[72px] z-[998] bg-[#1c1c1c] md:hidden animate-in slide-in-from-top-5 duration-300 flex flex-col h-[calc(100vh-72px)] overflow-y-auto">
-          <div className="flex flex-col p-6 gap-2 pb-20">
-            {/* TARJETA DE USUARIO MÓVIL (Gamificación) */}
+        <div className="fixed inset-0 top-[68px] z-[998] bg-[#1c1c1c] md:hidden animate-in fade-in duration-300 overflow-y-auto">
+          <div className="flex flex-col p-6 gap-2">
             {user && token && (
-              <div className="mb-6 p-4 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="h-10 w-10 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold border border-primary/30">
+              <div className="mb-6 p-5 rounded-2xl bg-white/5 border border-white/5 flex items-center justify-between">
+                <div className="flex items-center gap-4">
+                  <div className="h-10 w-10 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold">
                     {user.first_name?.charAt(0)}
                   </div>
                   <div>
-                    <p className="text-white font-medium text-sm">
+                    <p className="text-white font-bold text-sm uppercase italic">
                       {user.first_name}
                     </p>
                     <p className="text-emerald-400 text-xs font-bold">
@@ -189,8 +163,8 @@ export function Navbar({
               </div>
             )}
 
-            <span className="text-xs font-semibold text-gray-500 uppercase tracking-widest px-4 mb-2">
-              Menú Principal
+            <span className="text-[10px] font-bold text-gray-600 uppercase tracking-[0.2em] px-4 mb-2">
+              Explora VitalFit
             </span>
 
             {navItemsConfig.map((item) => (
@@ -198,71 +172,31 @@ export function Navbar({
                 key={item.href}
                 href={item.href}
                 onClick={() => setIsMenuOpen(false)}
-                className={`
-                  py-4 px-4 rounded-xl text-base font-medium flex items-center justify-between group transition-colors
-                  ${
-                    isActive(item.href)
-                      ? "text-white bg-primary/10 border border-primary/20"
-                      : "text-gray-400 hover:bg-white/5 hover:text-white border border-transparent"
-                  }
-                `}
+                className={cn(
+                  "py-4 px-4 rounded-xl text-sm font-bold uppercase italic transition-all flex justify-between items-center",
+                  isActive(item.href)
+                    ? "bg-primary/10 text-primary"
+                    : "text-gray-400 hover:text-white",
+                )}
               >
                 {t(`navItems.${item.key}`)}
                 {isActive(item.href) && (
-                  <div className="h-2 w-2 rounded-full bg-primary shadow-glow"></div>
+                  <div className="h-1.5 w-1.5 rounded-full bg-primary" />
                 )}
               </Link>
             ))}
 
-            {/* SECCIÓN INFERIOR MÓVIL */}
-            <div className="mt-8 pt-6 border-t border-white/10 flex flex-col gap-4">
-              <div className="px-2">
-                <LocaleSwitcher />
-              </div>
-
-              {user && token ? (
-                <div className="grid grid-cols-2 gap-3">
-                  <Button
-                    onClick={handleCartClick}
-                    className="bg-slate-800 hover:bg-slate-700 text-white border border-white/5 h-12 rounded-xl"
-                  >
-                    <ShoppingCartIcon className="w-5 h-5 mr-2" />
-                    {"Carrito"} ({cartItemCount})
-                  </Button>
-                  <Button
-                    onClick={() => {
-                      router.push("/dashboard");
-                      setIsMenuOpen(false);
-                    }}
-                    className="bg-primary hover:bg-orange-600 text-white h-12 rounded-xl"
-                  >
-                    <UserCircleIcon className="w-5 h-5 mr-2" />
-                    Dashboard
-                  </Button>
-                  <Button
-                    onClick={() => {
-                      logout();
-                      setIsMenuOpen(false);
-                    }}
-                    className="col-span-2 bg-red-600/10 hover:bg-red-600 text-red-500 hover:text-white border border-red-600/20 h-12 rounded-xl transition-all duration-300"
-                  >
-                    <ArrowRightStartOnRectangleIcon className="w-5 h-5 mr-2" />
-                    {t("logoutButton")}
-                  </Button>
-                </div>
-              ) : (
-                <div className="flex flex-col gap-3">
+            <div className="mt-8 pt-8 border-t border-white/5 space-y-4">
+              <LocaleSwitcher />
+              {!user && (
+                <div className="grid gap-3">
                   <Link href="/login" onClick={() => setIsMenuOpen(false)}>
-                    <Button
-                      variant="outline"
-                      className="w-full h-12 border-primary/50 text-primary hover:bg-primary/10 hover:text-white rounded-xl"
-                    >
+                    <Button className="w-full h-12 bg-transparent border border-primary/40 text-primary rounded-xl font-bold uppercase italic">
                       {t("loginButton")}
                     </Button>
                   </Link>
-
                   <Link href="/register" onClick={() => setIsMenuOpen(false)}>
-                    <Button className="w-full h-12 bg-primary hover:bg-orange-600 text-white font-bold rounded-xl shadow-lg">
+                    <Button className="w-full h-12 bg-primary text-white rounded-xl font-bold uppercase italic">
                       {t("registerButton")}
                     </Button>
                   </Link>

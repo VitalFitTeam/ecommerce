@@ -8,7 +8,9 @@ export function useBranches(token: string | null | undefined) {
   const [error, setError] = useState<string | null>(null);
 
   const loadBranches = useCallback(async () => {
-    if (!token) {return;}
+    if (!token) {
+      return;
+    }
 
     try {
       setLoading(true);

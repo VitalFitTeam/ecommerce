@@ -5,7 +5,6 @@ import {
   PhoneIcon,
   CalendarDaysIcon,
 } from "@heroicons/react/24/solid";
-import Image from "next/image";
 
 export interface BranchCardProps {
   branch: {
@@ -14,9 +13,6 @@ export interface BranchCardProps {
     address: string;
     phone: string;
     schedule?: string;
-    imageUrl?: string;
-    latitude?: number;
-    longitude?: number;
   };
   index?: number;
 }
@@ -24,77 +20,93 @@ export interface BranchCardProps {
 export function BranchCard({ branch, index = 0 }: BranchCardProps) {
   const isFeatured = index % 2 === 1;
 
-  const DEFAULT_IMAGES = [
-    "/images/gym-training-spain.png",
-    "/images/gym-training-venezuela.png",
-    "/images/gym-training-chile.png",
-  ];
-
-  const imageSrc =
-    branch.imageUrl && branch.imageUrl.trim() !== ""
-      ? branch.imageUrl
-      : DEFAULT_IMAGES[index % DEFAULT_IMAGES.length];
-
   return (
     <div
       className={`
-        relative flex flex-col h-full min-h-[600px] rounded-2xl overflow-hidden border transition-transform duration-300
-        hover:scale-105 ${
+        relative flex flex-col h-full min-h-[550px] rounded-[2rem] overflow-hidden border transition-all duration-500 group
+        hover:-translate-y-3 hover:shadow-2xl ${
           isFeatured
-            ? "bg-gradient-to-r from-orange-500 to-orange-600 border-transparent shadow-lg text-white"
-            : "bg-white border-gray-300 shadow-md text-gray-700"
+            ? "bg-gradient-to-br from-orange-500 to-orange-700 border-transparent text-white shadow-orange-200/50 shadow-2xl"
+            : "bg-white border-slate-100 text-slate-600 shadow-slate-200/60 shadow-xl"
         }
       `}
     >
-      <div className="relative w-full h-64 md:h-72 overflow-hidden">
-        {imageSrc ? (
-          <Image
-            src={imageSrc}
-            alt={branch.name}
-            fill
-            className="object-cover object-center"
-          />
-        ) : (
-          <div className="w-full h-full bg-gray-200 flex items-center justify-center text-gray-400">
-            Sin imagen
-          </div>
-        )}
-      </div>
+      {isFeatured && (
+        <div className="absolute -top-20 -right-20 w-64 h-64 bg-white/10 rounded-full blur-3xl pointer-events-none group-hover:bg-white/20 transition-colors duration-500" />
+      )}
 
-      <div className="p-6 flex flex-col flex-grow">
+      <div className="p-10 flex flex-col h-full relative z-10">
+        <div className="flex items-center gap-2 mb-4">
+          <div
+            className={`h-1 w-8 rounded-full ${isFeatured ? "bg-orange-200" : "bg-orange-500"}`}
+          />
+          <span
+            className={`text-[11px] uppercase tracking-[0.2em] font-black ${
+              isFeatured ? "text-orange-100" : "text-orange-600"
+            }`}
+          >
+            Sede Oficial
+          </span>
+        </div>
+
         <h3
-          className={`text-2xl md:text-3xl font-bold text-center mb-6 ${isFeatured ? "text-white" : "text-orange-500"}`}
+          className={`text-3xl md:text-4xl font-black  uppercase tracking-tighter mb-8 leading-[0.9] ${
+            isFeatured ? "text-white" : "text-slate-900"
+          }`}
         >
           {branch.name}
         </h3>
 
-        <div className="flex flex-col gap-4 flex-grow">
-          <div className="flex items-start gap-3">
-            <MapPinIcon
-              className={`w-6 h-6 flex-shrink-0 mt-0.5 ${isFeatured ? "text-white" : "text-orange-500"}`}
-            />
-            <p className="text-sm md:text-base font-medium leading-relaxed">
+        <div className="flex flex-col gap-7 flex-grow">
+          <div className="flex items-start gap-5">
+            <div
+              className={`p-3 rounded-2xl shrink-0 shadow-sm ${isFeatured ? "bg-white/15" : "bg-orange-50"}`}
+            >
+              <MapPinIcon
+                className={`w-6 h-6 ${isFeatured ? "text-white" : "text-orange-600"}`}
+              />
+            </div>
+            <p className="text-sm md:text-base font-bold leading-snug pt-1 opacity-90">
               {branch.address}
             </p>
           </div>
 
-          <div className="flex items-start gap-3">
-            <PhoneIcon
-              className={`w-6 h-6 flex-shrink-0 mt-0.5 ${isFeatured ? "text-white" : "text-orange-500"}`}
-            />
-            <p className="text-sm md:text-base font-medium leading-relaxed">
+          <div className="flex items-start gap-5">
+            <div
+              className={`p-3 rounded-2xl shrink-0 shadow-sm ${isFeatured ? "bg-white/15" : "bg-orange-50"}`}
+            >
+              <PhoneIcon
+                className={`w-5 h-5 ${isFeatured ? "text-white" : "text-orange-600"}`}
+              />
+            </div>
+            <p className="text-sm md:text-base font-bold pt-1.5 opacity-90">
               {branch.phone}
             </p>
           </div>
 
-          <div className="flex items-start gap-3">
-            <CalendarDaysIcon
-              className={`w-6 h-6 flex-shrink-0 mt-0.5 ${isFeatured ? "text-white" : "text-orange-500"}`}
-            />
-            <p className="text-sm md:text-base font-medium leading-relaxed">
-              {branch.schedule ||
-                "Lunes - Viernes: 6:00 am - 9:00 pm\nSábado: 7:00 am - 5:00 pm"}
-            </p>
+          <div className="flex items-start gap-5">
+            <div
+              className={`p-3 rounded-2xl shrink-0 shadow-sm ${isFeatured ? "bg-white/15" : "bg-orange-50"}`}
+            >
+              <CalendarDaysIcon
+                className={`w-5 h-5 ${isFeatured ? "text-white" : "text-orange-600"}`}
+              />
+            </div>
+            <div className="text-sm md:text-base font-bold leading-relaxed pt-1">
+              <p className={isFeatured ? "text-orange-100" : "text-slate-400"}>
+                Horario de Entrenamiento
+              </p>
+              {branch.schedule || (
+                <div className="mt-1">
+                  <span className="block font-black uppercase text-lg">
+                    L-V: 06:00 - 21:00
+                  </span>
+                  <span className="block font-black uppercase text-lg">
+                    Sáb: 07:00 - 17:00
+                  </span>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>

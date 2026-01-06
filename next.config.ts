@@ -7,10 +7,15 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "**",
+        hostname: "images.unsplash.com",
       },
       {
-        protocol: "http",
+        protocol: "https",
+        hostname: "tu-api-o-sdk-url.com",
+      },
+
+      {
+        protocol: "https",
         hostname: "**",
       },
     ],
