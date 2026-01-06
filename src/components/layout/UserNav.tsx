@@ -46,21 +46,22 @@ export function UserNav({
           variant="ghost"
           className="relative h-12 w-auto flex items-center gap-2 rounded-2xl px-2 hover:bg-white/5 transition-all duration-300 group outline-none focus-visible:ring-0"
         >
-          <div className="relative">
-            <Avatar className="h-9 w-9 border-2 border-white/10 shadow-xl transition-transform duration-300 group-hover:scale-105">
+          <div className="relative group">
+            <Avatar className="h-10 w-10 border-none ring-2 ring-white/10 shadow-2xl transition-all duration-300 group-hover:ring-emerald-500/50">
               <AvatarImage
                 src={user.profile_picture_url || ""}
                 alt={`${user.first_name}`}
-                className="object-cover"
+                className="aspect-square object-cover object-center transition-opacity duration-500"
               />
-              <AvatarFallback className="bg-primary text-white font-black italic text-xs">
+              <AvatarFallback className="bg-gradient-to-br from-primary to-primary/80 text-white font-bold italic text-[10px] animate-in fade-in duration-300">
                 {initials.toUpperCase()}
               </AvatarFallback>
             </Avatar>
-            {/* Indicador de estado online/activo sutil */}
-            <span className="absolute bottom-0 right-0 block h-2.5 w-2.5 rounded-full bg-emerald-500 ring-2 ring-[#1c1c1c]" />
-          </div>
 
+            <span className="absolute bottom-0 right-0 block h-3 w-3 rounded-full bg-emerald-500 ring-2 ring-[#1c1c1c]">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75"></span>
+            </span>
+          </div>
           <ChevronDownIcon className="w-4 h-4 text-white/40 group-data-[state=open]:rotate-180 transition-transform duration-300" />
         </Button>
       </DropdownMenuTrigger>
