@@ -642,113 +642,139 @@
       "downloadReceipt": "Download Receipt"
     }
   },
-  "MembershipPurchase": {
-    "title": "PURCHASE MEMBERSHIP",
-    "step1": {
-      "selectedPlans": "SELECTED TRAINING PLANS",
-      "complementPlan": "COMPLEMENT YOUR PLAN (OPTIONAL)",
-      "price": "Price:",
-      "startDate": "Start date",
-      "fee": "Fee {startDate} - {endDate}",
-      "removePlan": "Remove plan"
-    },
-    "step2": {
-      "title": "Payment Information",
-      "description": "All transactions are processed securely. Select a saved card or enter a new one.",
-      "selectBranch": "Select Branch",
-      "selectBranchPlaceholder": "Select a branch",
-      "paymentOptions": "Purchase Options",
-      "mobilePayment": "Mobile Payment",
-      "bankTransfer": "Bank Transfer",
-      "holder": "Cardholder",
-      "fiscalDocument": "Tax ID / ID Number",
-      "important": "Important",
-      "includeExactAmount": "Make sure to include the exact amount",
-      "saveReceipt": "Save the transaction receipt",
-      "associatedBank": "Associated Bank",
-      "accountNumber": "Account Number",
-      "phoneNumber": "Mobile Phone"
-    },
-    "step3": {
-      "purchaseConfirmation": {
-        "purchaseRegistered": "Purchase Registered!",
-        "purchaseInVerification": "Your purchase has been registered and is in verification process",
-        "advancedSubscription": "Advanced Subscription",
-        "moreBenefits": "More benefits for fitness life",
-        "perMonth": "/MONTH",
-        "valid": "Valid",
-        "days": "days",
-        "access": "Access",
-        "unlimited": "unlimited",
-        "benefits": "Benefits",
-        "attachReceipt": "Attach payment receipt",
-        "dragDrop": "Drag & Drop or",
-        "chooseFile": "Choose file",
-        "toUpload": "to upload",
-        "fileTypes": "Ex: jpg, pdf, png, img",
-        "uploaded": "uploaded",
-        "helpCenter": "Help Center",
-        "cancel": "Cancel",
-        "confirm": "Confirm",
-        "paymentVerification": "Payment in Verification",
-        "verificationText": "Your payment is being verified by our team. You will receive a confirmation email when it is approved (1-24 total hours)",
-        "supportText": "Do you have questions? Contact us: soporteq@vitatfit.com or (555) 123-4567",
-        "goHome": "Go to Home"
+  "Checkout": {
+    "Page": {
+      "initialLoading": "Synchronizing system...",
+      "title": "Complete purchase",
+      "StepPlan": {
+        "title": "Select Plan"
+      },
+      "StepPayment": {
+        "title": "Payment"
+      },
+      "StepSuccess": {
+        "title": "Confirmation"
       }
     },
-    "navigation": {
-      "cancel": "Cancel",
-      "continue": "Continue",
-      "back": "Back"
+    "StepPlan": {
+      "branchLabel": "Training Location",
+      "branchPlaceholder": "Which branch will you attend?",
+      "confirmed": "Branch Confirmed",
+      "basePlanLabel": "Selected base plan",
+      "extraServicesTitle": "Want to complement your plan?",
+      "extraServicesTitleLocked": "Complementary services",
+      "extraServicesDesc": "Add extra services and boost your training.",
+      "extraServicesDescLocked": "Selected services have already been confirmed.",
+      "explorePlaceholder": "Explore extra services",
+      "onlyBasePlan": "Base plan only",
+      "viewExtraServices": "View extra services ({count})"
     },
-    "addOns": {
-      "personal-4": {
-        "title": "Entertainment",
-        "subtitle": "Personal - 4 Sessions",
-        "description": "Package of 4 personalized entertainment sessions with certified instructor"
-      },
-      "personal-8": {
-        "title": "Entertainment",
-        "subtitle": "Personal - 8 Sessions",
-        "description": "Package of 8 personalized entertainment sessions with certified instructor"
-      },
-      "yoga-10": {
-        "title": "Yoga Package",
-        "subtitle": "10 Classes",
-        "description": "Access to 10 specialized yoga classes"
+    "BranchSelector": {
+      "label": "Select your Branch",
+      "placeholder": "Where will you train today?",
+      "requiredNote": "* Required to calculate taxes and activate your access",
+      "confirmed": "Branch Confirmed"
+    },
+    "PackageCarousel": {
+      "title": "Additional services",
+      "subtitle": "Select one or more to complement your plan",
+      "accessDays": "{days} days of access"
+    },
+    "MembershipSummary": {
+      "defaultDescription": "Selected membership plan.",
+      "totalPrice": "Plan Price",
+      "duration": "Duration",
+      "days": "days"
+    },
+    "StepPayment": {
+      "cardTitle": "Payment Registration",
+      "stepMethod": "1. Payment method",
+      "methodPlaceholder": "Select method",
+      "stepAmount": "2. Currency and Amount to Report",
+      "calculatedTotal": "Calculated total",
+      "referenceLabel": "Bank Reference",
+      "referencePlaceholder": "Confirmation number...",
+      "receiptLabel": "Receipt",
+      "attachReceipt": "Attach Receipt",
+      "uploading": "Uploading...",
+      "submitBtn": "Report Payment Now"
+    },
+    "OrderSummary": {
+      "title": "Summary",
+      "baseMembership": "Base membership",
+      "subtotal": "Subtotal",
+      "taxLabel": "Taxes ({percent}%)",
+      "totalLabel": "Total",
+      "equivalent": "Equivalent to",
+      "requiredBranchTitle": "Branch required",
+      "requiredBranchDesc": "Please select a branch to continue.",
+      "btnSelectBranch": "Select a branch",
+      "btnConfirmOrder": "Confirm order",
+      "btnMakePayment": "Make payment"
+    },
+    "Success": {
+      "errorTitle": "Could not load receipt",
+      "errorSubtitle": "Your payment was processed, but there is a display error.",
+      "backToDashboard": "Go to Dashboard",
+      "pendingTitle": "PURCHASE REGISTERED!",
+      "confirmedTitle": "PAYMENT CONFIRMED!",
+      "pendingDescription": "Your purchase has been registered and is under review by our team.",
+      "confirmedDescription": "Your subscription is now active and ready to use.",
+      "orderSummary": "Order Details",
+      "quantity": "QTY",
+      "totalAmount": "Total Amount",
+      "membership": "VitalFit Membership",
+      "additionalService": "Additional Service",
+      "paymentInfo": "Reported Payment",
+      "amountPaid": "Amount Paid",
+      "reference": "Reference",
+      "appliedRate": "Applied rate",
+      "pendingBannerTitle": "Payment Under Verification",
+      "pendingBannerText": "We have received your receipt. Our administrative team will validate the transaction in the next few hours (2-24 business hours).",
+      "goHome": "GO TO HOME",
+      "viewReceipt": "VIEW SUBMITTED RECEIPT",
+      "helpCenter": "Help center"
+    },
+    "NoMembership": {
+      "title": "Empty Cart",
+      "description": "We haven't detected a selected membership. Return to the catalog to choose the plan that best suits you.",
+      "backButton": "Back to Plans"
+    },
+    "Notifications": {
+      "uploadSuccess": "File ready",
+      "uploadSuccessDetail": "The receipt has been successfully linked.",
+      "paymentSuccess": "Report submitted",
+      "paymentSuccessDetail": "Your payment has been registered for administrative review.",
+      "validationAmount": "Amount must be greater than 0.",
+      "validationReference": "Reference is required.",
+      "validationReceipt": "You must attach a receipt.",
+      "validationMethod": "Please select a payment method.",
+      "fileTooLarge": "File is too large (max 5MB)",
+      "missingSelection": "Incomplete selection",
+      "missingSelectionDetail": "Please select a branch and a plan to continue.",
+      "invoiceError": "Billing error",
+      "invoiceErrorDetail": "We couldn't generate your invoice. Please try again.",
+      "invoiceSuccess": "Invoice generated",
+      "invoiceSuccessDetail": "Processing payment options...",
+      "methodsError": "Connection error",
+      "methodsErrorDetail": "We couldn't load the payment methods for this branch."
+    },
+    "PaymentMethodDetails": {
+      "loading": "Loading instructions...",
+      "transferTitle": "Transfer details",
+      "transferSubtitle": "Use these details to complete your payment securely.",
+      "copied": "Copied",
+      "footerTitle": "Have you already made the payment?",
+      "footerDesc": "Take a clear screenshot and upload it in the Receipt section to validate your activation.",
+      "labels": {
+        "bank_id": "Bank",
+        "tax_id": "Tax ID / National ID",
+        "phone": "Phone Number",
+        "email": "Email",
+        "account_number": "Account Number",
+        "account_holder": "Account Holder"
       }
     }
-  },
-  "AddOnCard": {
-    "select": "Select",
-    "deselect": "Deselect",
-    "perSession": "per session",
-    "add": "Add",
-    "added": "✓ Added"
-  },
-  "OrderSummary": {
-    "title": "Order Summary",
-    "subtotal": "Subtotal",
-    "taxes": "Taxes",
-    "total": "Total",
-    "noItems": "No items selected",
-    "calculatedAtCheckout": "Calculated at checkout",
-    "items": "items",
-    "item": "item",
-    "addons": "ADD-ONS",
-    "discounts": "Discounts",
-    "tax": "Tax",
-    "makePayment": "Make Payment",
-    "promoPlaceholder": "Promo code",
-    "apply": "Apply"
-  },
-  "PlanCard": {
-    "price": "${price}"
-  },
-  "StepIndicator": {
-    "step1": "Product\nOptions",
-    "step2": "Payment\nMethods",
-    "step3": "Purchase\nConfirmation"
   },
   "MembershipDetails": {
     "title": "Membership Details",

@@ -1,5 +1,7 @@
 "use client";
 
+import { useTranslations } from "next-intl";
+import { ReceiptText, ChevronRight, Loader2, Info } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -8,143 +10,229 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import type { PublicMembershipResponse } from "@vitalfit/sdk";
-import type { PackageOption } from "./PackageCarousel";
-import { mainCurrencies } from "@vitalfit/sdk";
-import { WalletCards, ReceiptText } from "lucide-react";
+import { mainCurrencies, PublicMembershipResponse } from "@vitalfit/sdk";
+import { cn } from "@/lib/utils";
+import { PackageOption } from "./PackageCarousel";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/Card";
 
-interface OrderSummaryProps {
-  membership: PublicMembershipResponse;
-  selectedPackage?: PackageOption | null;
-  onCheckout?: () => void;
-  isProcessing?: boolean;
-  onBack?: () => void;
-  isStep1?: boolean;
-  currency?: string;
-  setCurrency?: (currency: string) => void;
-  conversionRate: number;
+interface Props {
+  membership?: PublicMembershipResponse;
+  selectedPackages: PackageOption[];
+  prices: {
+    subtotalBase: number;
+    taxAmountBase: number;
+    taxPercentage: number;
+    baseTotal: number;
+    displayTotal: number;
+    displaySymbol: string;
+  };
+  step: number;
+  currency: string;
+  setCurrency: (value: string) => void;
+  onNext: () => void;
+  onProcess: () => void;
+  isProcessing: boolean;
+  hasInvoice: boolean;
+  validation: {
+    hasBranch: boolean;
+    missingBranch: boolean;
+  };
 }
 
 export const OrderSummary = ({
   membership,
-  selectedPackage,
-  onCheckout,
-  onBack,
-  isStep1,
-  isProcessing,
+  selectedPackages = [],
+  prices,
   currency,
   setCurrency,
-  conversionRate,
-}: OrderSummaryProps) => {
-  const totalUSD =
-    Number(membership.price || 0) +
-    (selectedPackage ? Number(selectedPackage.price || 0) : 0);
+  onNext,
+  onProcess,
+  step,
+  isProcessing,
+  hasInvoice,
+  validation,
+}: Props) => {
+  const t = useTranslations("Checkout.OrderSummary");
 
-  const totalConverted = totalUSD * conversionRate;
-  const selectedCurrency = mainCurrencies.find((c) => c.code === currency);
-  const symbol = selectedCurrency?.symbol || "$";
+  if (!membership) {return null;}
 
-  const formatPrice = (price: number) =>
-    price.toLocaleString("en-US", {
+  const formatPrice = (price: number = 0) =>
+    price.toLocaleString(undefined, {
       minimumFractionDigits: 2,
       maximumFractionDigits: 2,
     });
 
+  const isStepOne = step === 1;
+
+  const handleMainAction = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (isStepOne && !hasInvoice) {
+      if (!validation.hasBranch) {
+        return;
+      }
+      onProcess();
+    } else {
+      onNext();
+    }
+  };
+
   return (
-    <div className="bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden sticky top-6">
-      <div className="bg-orange-400 px-6 py-4 flex justify-between items-center rounded-t-2xl text-white">
-        <div className="flex items-center gap-2">
-          <ReceiptText className="w-5 h-5" />
-          <h3 className="text-lg font-bold tracking-tight">
-            Resumen de tu pedido
-          </h3>
+    <Card className="sticky top-6 overflow-hidden border-none shadow-2xl rounded-[2.5rem] bg-white">
+      <CardHeader className="py-6 px-8 bg-slate-900 border-b border-slate-800 flex-row items-center justify-between space-y-0">
+        <div className="flex items-center gap-3">
+          <div className="p-2 bg-white/10 rounded-xl text-white">
+            <ReceiptText size={18} />
+          </div>
+          <CardTitle className="text-sm font-black uppercase tracking-widest text-white italic">
+            {t("title")}
+          </CardTitle>
         </div>
 
-        <Select value={currency} onValueChange={setCurrency}>
-          <SelectTrigger className="w-[140px] h-9 text-sm bg-white text-gray-900 rounded-lg border border-gray-200">
-            <SelectValue placeholder="Moneda" />
+        <Select
+          value={currency}
+          onValueChange={setCurrency}
+          disabled={hasInvoice || isProcessing}
+        >
+          <SelectTrigger className="w-[90px] h-9 text-xs font-black bg-white/10 border-none text-white rounded-xl focus:ring-0">
+            <SelectValue />
           </SelectTrigger>
-          <SelectContent>
+          <SelectContent align="end" className="rounded-xl font-bold">
             {mainCurrencies.map((c) => (
-              <SelectItem key={c.code} value={c.code} className="text-sm">
-                {c.code} ({c.symbol})
+              <SelectItem key={c.code} value={c.code} className="text-xs">
+                {c.code}
               </SelectItem>
             ))}
           </SelectContent>
         </Select>
-      </div>
-      <div className="p-6 space-y-4">
-        <div className="flex justify-between items-center p-4 bg-gray-50 rounded-lg shadow-sm">
-          <div>
-            <p className="font-semibold text-gray-900 text-sm">
-              {membership.name}
-            </p>
-            <p className="text-xs text-gray-500 mt-1">Membresía principal</p>
-          </div>
-          <span className="font-bold text-gray-900 text-sm tabular-nums">
-            ${formatPrice(Number(membership.price))}
-          </span>
-        </div>
-        {selectedPackage && (
-          <div className="flex justify-between items-center p-4 bg-gray-50 rounded-lg shadow-sm">
-            <div>
-              <p className="font-semibold text-gray-900 text-sm">
-                {selectedPackage.name}
+      </CardHeader>
+
+      <CardContent className="p-8 space-y-6">
+        <div className="space-y-4">
+          <div className="flex justify-between items-start">
+            <div className="space-y-1">
+              <p className="text-base font-black text-slate-900 tracking-tight">
+                {membership.name}
               </p>
-              <p className="text-xs text-gray-500 mt-1">Paquete adicional</p>
+              <p className="text-[10px] uppercase font-black tracking-widest text-orange-500">
+                {t("baseMembership")}
+              </p>
             </div>
-            <span className="font-bold text-gray-900 text-sm tabular-nums">
-              ${formatPrice(Number(selectedPackage.price))}
+            <span className="text-base font-black text-slate-900 tabular-nums tracking-tighter">
+              ${formatPrice(Number(membership.price))}
             </span>
           </div>
-        )}
 
-        <div className="pt-4 border-t border-gray-200">
-          <div className="flex justify-between items-end">
-            <span className="text-gray-500 text-sm font-medium">
-              Total estimado
+          {selectedPackages.length > 0 && (
+            <div className="space-y-4 pt-4 border-t border-slate-100">
+              {selectedPackages.map((pkg) => (
+                <div
+                  key={pkg.packageId}
+                  className="flex justify-between items-center animate-in fade-in slide-in-from-right-2"
+                >
+                  <span className="text-sm font-bold text-slate-600 flex items-center gap-2">
+                    <div className="w-1.5 h-1.5 bg-orange-400 rounded-full" />
+                    {pkg.name}
+                  </span>
+                  <span className="text-sm font-black text-slate-900 tabular-nums">
+                    ${formatPrice(Number(pkg.price))}
+                  </span>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+        <div className="pt-6 border-t border-slate-100 space-y-3">
+          <div className="flex justify-between items-center text-xs font-bold uppercase tracking-tighter text-slate-400">
+            <span>{t("subtotal")}</span>
+            <span className="tabular-nums font-black text-slate-600">
+              ${formatPrice(prices.subtotalBase)}
+            </span>
+          </div>
+          <div className="flex justify-between items-center text-xs font-bold uppercase tracking-tighter text-slate-400">
+            <span>{t("taxLabel", { percent: prices.taxPercentage })}</span>
+            <span className="tabular-nums font-black text-slate-600">
+              ${formatPrice(prices.taxAmountBase)}
+            </span>
+          </div>
+        </div>
+
+        <div className="pt-6 border-t-2 border-slate-900/5">
+          <div className="flex justify-between items-baseline">
+            <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">
+              {t("totalLabel")}
             </span>
             <div className="text-right">
-              <div className="text-2xl font-extrabold text-gray-900 tabular-nums">
-                {currency === "USD" ? "$" : symbol}
-                {formatPrice(currency === "USD" ? totalUSD : totalConverted)}
+              <div className="text-4xl font-black text-orange-600 tracking-tighter tabular-nums leading-none">
+                <span className="text-sm font-bold text-slate-400 mr-2 align-top">
+                  {prices.displaySymbol}
+                </span>
+                {formatPrice(prices.displayTotal)}
               </div>
               {currency !== "USD" && (
-                <div className="text-xs text-gray-400 mt-1 font-medium">
-                  Ref: ${formatPrice(totalUSD)} USD
-                </div>
+                <p className="text-[11px] font-bold text-slate-400 mt-2 uppercase tracking-tight">
+                  {t("equivalent")}{" "}
+                  <span className="text-slate-900">
+                    ${formatPrice(prices.baseTotal)} USD
+                  </span>
+                </p>
               )}
             </div>
           </div>
         </div>
 
-        <div className="flex flex-col gap-3 pt-4">
-          <Button
-            onClick={onCheckout}
-            disabled={isProcessing}
-            className="w-full h-12 text-base font-semibold"
-          >
-            {isProcessing
-              ? "Procesando..."
-              : isStep1
-                ? "Continuar al pago"
-                : "Confirmar y Pagar"}
-            {!isProcessing && (
-              <WalletCards className="w-4 h-4 ml-2 inline-block" />
-            )}
-          </Button>
+        {validation.missingBranch && (
+          <div className="bg-orange-50 border border-orange-100 p-4 rounded-2xl flex items-start gap-4 animate-in zoom-in-95 shadow-sm shadow-orange-200/50">
+            <div className="bg-orange-500 rounded-full p-1 text-white mt-0.5">
+              <Info size={14} />
+            </div>
+            <div className="space-y-1">
+              <p className="text-xs font-black text-orange-900 uppercase tracking-tight leading-none">
+                {t("requiredBranchTitle")}
+              </p>
+              <p className="text-[11px] font-medium text-orange-800/70 leading-snug">
+                {t("requiredBranchDesc")}
+              </p>
+            </div>
+          </div>
+        )}
+      </CardContent>
 
-          {onBack && (
-            <Button
-              onClick={onBack}
-              variant="outline"
-              className="w-full h-10 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition"
-            >
-              Volver
-            </Button>
+      <CardFooter className="p-8 pt-0">
+        <Button
+          size="lg"
+          onClick={handleMainAction}
+          disabled={
+            isProcessing || (isStepOne && !validation.hasBranch && !hasInvoice)
+          }
+          className={cn(
+            "w-full h-16 rounded-2xl font-black text-sm uppercase tracking-widest transition-all active:scale-95 border-none",
+            !(isStepOne && !validation.hasBranch && !hasInvoice)
+              ? "bg-orange-600 hover:bg-orange-700 text-white shadow-xl shadow-orange-600/20"
+              : "bg-slate-100 text-slate-300",
           )}
-        </div>
-      </div>
-    </div>
+        >
+          {isProcessing ? (
+            <Loader2 className="animate-spin h-5 w-5" />
+          ) : (
+            <div className="flex items-center gap-2">
+              {!validation.hasBranch && isStepOne && !hasInvoice
+                ? t("btnSelectBranch")
+                : isStepOne && !hasInvoice
+                  ? t("btnConfirmOrder")
+                  : t("btnMakePayment")}
+              <ChevronRight size={20} />
+            </div>
+          )}
+        </Button>
+      </CardFooter>
+    </Card>
   );
 };
