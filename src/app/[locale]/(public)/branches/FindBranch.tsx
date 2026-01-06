@@ -33,6 +33,7 @@ type FindBranchProps = {
 export default function FindBranch({ initialBranches }: FindBranchProps) {
   const t = useTranslations("FindBranchPage");
 
+  // Asegura que la página inicie arriba al cargar
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -46,6 +47,8 @@ export default function FindBranch({ initialBranches }: FindBranchProps) {
     services,
     isLoading: isLoadingServices,
     fetchServices,
+    resetServices,
+    hasMore, // Importante para el scroll infinito
   } = useBranchServices();
 
   const cardsPerPage = 4;
@@ -76,7 +79,8 @@ export default function FindBranch({ initialBranches }: FindBranchProps) {
 
   const handleSelectBranch = (branch: BranchInfo) => {
     setSelectedBranch(branch);
-    fetchServices(branch.branch_id);
+    resetServices(); // Limpia servicios de la sede anterior
+    fetchServices(branch.branch_id); // Carga la primera página de la nueva sede
   };
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -152,7 +156,11 @@ export default function FindBranch({ initialBranches }: FindBranchProps) {
                     {Array.from({ length: totalPages }).map((_, i) => (
                       <div
                         key={i}
-                        className={`h-1.5 transition-all duration-300 rounded-full ${i === currentPage ? "w-8 bg-primary" : "w-2 bg-slate-200"}`}
+                        className={`h-1.5 transition-all duration-300 rounded-full ${
+                          i === currentPage
+                            ? "w-8 bg-primary"
+                            : "w-2 bg-slate-200"
+                        }`}
                       />
                     ))}
                   </div>
@@ -190,11 +198,13 @@ export default function FindBranch({ initialBranches }: FindBranchProps) {
         </div>
 
         {selectedBranch && (
-          <div className="mt-24 animate-in fade-in slide-in-from-bottom-10 duration-700">
+          <div className="mt-24">
             <BranchServicesSection
               services={services}
               isLoading={isLoadingServices}
               branchName={selectedBranch.name}
+              hasMore={hasMore} // Pasamos el estado al componente de UI
+              onLoadMore={() => fetchServices(selectedBranch.branch_id, true)} // Gatillo de scroll infinito
             />
           </div>
         )}

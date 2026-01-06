@@ -954,7 +954,9 @@
   },
   "BranchServices": {
     "exclusiveOffer": "Oferta Exclusiva: {name}",
-    "title": "Servicios <span>/</span> Disponibles"
+    "title": "Servicios <span>/</span> Disponibles",
+    "loadingMore": "Cargando más potencia...",
+    "endOfCatalog": "Fin del catálogo"
   },
   "ServiceBranchCard": {
     "brandPlaceholder": "VitalFit Training",
