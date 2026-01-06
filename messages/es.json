@@ -27,6 +27,7 @@
       "subtitle": "Descubre el poder del fitness inteligente y personalizado."
     },
     "aboutUs": {
+      "mainTitle": "ADN VITALFIT",
       "mission": {
         "title": "Misión",
         "content": "<p>Ser la red de fitness líder que empodera a las personas para alcanzar sus metas de bienestar mediante servicio de calidad y tecnología avanzada, garantizando una experiencia fluida y accesible en todas nuestras franquicias.</p>",
@@ -950,5 +951,14 @@
       "resendSuccess": "Código de Confirmación Reenviado",
       "resendError": "No se pudo reenviar el código"
     }
+  },
+  "BranchServices": {
+    "exclusiveOffer": "Oferta Exclusiva: {name}",
+    "title": "Servicios <span>/</span> Disponibles"
+  },
+  "ServiceBranchCard": {
+    "brandPlaceholder": "VitalFit Training",
+    "duration": "{minutes} MIN",
+    "membershipLabel": "Socio VitalFit"
   }
 }

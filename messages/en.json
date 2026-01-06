@@ -27,6 +27,7 @@
       "subtitle": "Discover the power of smart, personalized fitness."
     },
     "aboutUs": {
+      "mainTitle": "ADN VITALFIT",
       "mission": {
         "title": "Mission",
         "content": "<p>Provide a comprehensive physical and mental wellness service that combines technology, quality, and personalized attention, allowing users to access all VitalFit branches quickly and consistently, enhancing their experience through innovative digital tools.</p>",
@@ -951,5 +952,14 @@
       "resendSuccess": "Confirmation Code Resent",
       "resendError": "Could not resend the code"
     }
+  },
+  "BranchServices": {
+    "exclusiveOffer": "Exclusive Offer: {name}",
+    "title": "Available <span>/</span> Services"
+  },
+  "ServiceBranchCard": {
+    "brandPlaceholder": "VitalFit Training",
+    "duration": "{minutes} MIN",
+    "membershipLabel": "VitalFit Member"
   }
 }
