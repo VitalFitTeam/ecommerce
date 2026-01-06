@@ -21,17 +21,6 @@ export function BranchServicesSection({
   const sectionRef = React.useRef<HTMLDivElement>(null);
   const [isFirstRender, setIsFirstRender] = React.useState(true);
 
-  React.useEffect(() => {
-    if (!isLoading && services.length > 0) {
-      if (isFirstRender) {
-        setIsFirstRender(false);
-        return;
-      }
-
-      sectionRef.current?.scrollIntoView({ behavior: "smooth" });
-    }
-  }, [isLoading, services, isFirstRender]);
-
   if (!isLoading && services.length === 0) {
     return null;
   }

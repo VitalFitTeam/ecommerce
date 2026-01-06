@@ -3,12 +3,12 @@
 import { useEffect, useRef } from "react";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
-import type { BranchMapData } from "@/app/[locale]/(public)/branches/FindBranch";
+import { BranchInfo } from "@vitalfit/sdk";
 
 export type MapboxPickerProps = {
-  branches: BranchMapData[];
+  branches: BranchInfo[];
   isLoading?: boolean;
-  selectedBranch?: BranchMapData | null;
+  selectedBranch?: BranchInfo | null;
 };
 
 mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN as string;
