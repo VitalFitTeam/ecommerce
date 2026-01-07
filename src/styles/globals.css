@@ -172,6 +172,7 @@ h6 {
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
   }
@@ -180,13 +181,26 @@ h6 {
 .text-gradient-orange {
   background: linear-gradient(to right, var(--primary), #f97316);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
+  display: inline-block;
+  padding: 0.1em 0.15em;
+  margin: -0.1em -0.15em;
+  vertical-align: baseline;
 }
+
+.prevent-clip {
+  display: inline-block;
+  padding: 0.1em 0;
+  vertical-align: baseline;
+}
+
 /* Animación de burbujas */
 @keyframes square {
   0% {
     transform: translateY(0);
   }
+
   100% {
     transform: translateY(-700px) rotate(600deg);
   }
@@ -207,7 +221,8 @@ html {
     0 10px 15px -3px rgba(0, 0, 0, 0.1),
     0 4px 6px -2px rgba(0, 0, 0, 0.05) !important;
   border: 1px solid #f3f4f6;
-  font-family: var(--font-body), sans-serif; /* Usamos la fuente global */
+  font-family: var(--font-body), sans-serif;
+  /* Usamos la fuente global */
 }
 
 .mapboxgl-popup-tip {

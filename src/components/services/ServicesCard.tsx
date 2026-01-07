@@ -33,9 +33,9 @@ const ServiceCardContent = ({
   <div className="p-5 flex flex-col justify-between ">
     <div className="mb-4">
       <div className="flex items-center justify-between mb-2">
-        <h2 className="text-[#F27F2A] font-bold text-xl line-clamp-2">
+        <h3 className="text-[#F27F2A] font-bold text-lg line-clamp-2 leading-normal flex-1 mr-2 py-0.5">
           {title}
-        </h2>
+        </h3>
 
         <div className="flex items-center text-sm text-gray-700 gap-1">
           <FaStar className="text-yellow-400" />

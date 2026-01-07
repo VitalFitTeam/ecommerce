@@ -54,8 +54,8 @@ export default function BannerOffer() {
         />
 
         <div className="flex-grow max-w-2xl text-start flex flex-col justify-center">
-          <h3 className="text-2xl font-bold text-primary mb-2">
-            {current.title}
+          <h3 className="text-2xl font-bold text-primary mb-2 leading-normal">
+            <span className="prevent-clip">{current.title}</span>
           </h3>
           <p className="text-gray-300 mb-4">{current.description}</p>
           <p className="text-sm text-gray-400 mb-4">{current.validity}</p>

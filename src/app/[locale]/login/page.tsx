@@ -16,7 +16,7 @@ import { api } from "@/lib/sdk-config";
 import { Checkbox } from "@/components/ui/Checkbox";
 import { toast } from "sonner";
 import { useSignIn, useAuth as useClerkAuth } from "@clerk/nextjs";
-import { useSearchParams } from "next/navigation"; // NUEVO IMPORT
+import { useSearchParams } from "next/navigation";
 
 export default function Login() {
   const t = useTranslations("LoginPage");
@@ -85,7 +85,6 @@ export default function Login() {
             router.replace("/dashboard");
           }
         } catch (error: any) {
-          // Análisis del error
           let errorMsg = "";
           if (typeof error === "string") {
             errorMsg = error;
@@ -125,7 +124,6 @@ export default function Login() {
     checkSession();
   }, [isSignedIn, getToken, login, router, t, signOut, searchParams]);
 
-  // Login normal (Email/Pass)
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
@@ -165,8 +163,10 @@ export default function Login() {
     >
       <div className="w-full max-w-sm sm:max-w-md lg:max-w-lg">
         <AuthCard>
-          <Logo slogan={false} width={80} />
-          <h2 className="text-3xl font-bebas">{t("title")}</h2>
+          <Logo slogan={false} width={50} />
+          <h3 className="text-xl font-bebas leading-tight text-center w-full">
+            <span className="prevent-clip">{t("title")}</span>
+          </h3>
 
           {isValidating ? (
             <div className="py-12 flex flex-col items-center justify-center text-gray-500">
@@ -175,7 +175,6 @@ export default function Login() {
             </div>
           ) : (
             <>
-              {/* Botón de Google */}
               <div
                 onClick={handleGoogleLogin}
                 className="w-full cursor-pointer"

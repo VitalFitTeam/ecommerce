@@ -75,10 +75,14 @@ export default function Branches() {
                 <h1 className="text-4xl md:text-5xl font-bold text-center mb-4">
                   {t.rich("title", {
                     highlight: (chunks) => (
-                      <span className="text-orange-400">{chunks}</span>
+                      <span className="text-orange-400 prevent-clip">
+                        {chunks}
+                      </span>
                     ),
                     "highlight-dark": (chunks) => (
-                      <span className="text-gray-900">{chunks}</span>
+                      <span className="text-gray-900 prevent-clip">
+                        {chunks}
+                      </span>
                     ),
                   })}
                 </h1>
