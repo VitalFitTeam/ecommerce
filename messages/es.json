@@ -916,7 +916,12 @@
     "nonMember": "No miembro",
     "minutes": "minutos",
     "learnMore": "Saber más",
-    "categoryDefault": "General"
+    "categoryDefault": "General",
+    "wishListSuccess": "¡Agregado a favoritos!",
+    "wishListError": "Error al procesar favoritos",
+    "loginRequired": "Debes iniciar sesión para gestionar tus favoritos",
+    "wishlistRemove": "Quitar de favoritos",
+    "wishlistRemoveSuccess": "Eliminado de favoritos"
   },
   "invoiceDetails": {
     "backToHistory": "Volver al historial",
@@ -1018,5 +1023,23 @@
       "success": "Código enviado correctamente",
       "error": "No se pudo enviar el código. Verifica tu correo."
     }
+  },
+  "Wishlist": {
+    "loading": "Cargando tus favoritos...",
+    "title": "MI WISHLIST",
+    "description": "Gestiona tus servicios favoritos y reserva cuando estés listo.",
+    "filterPlaceholder": "Filtrar servicios...",
+    "clearFilters": "Limpiar filtros",
+    "noResults": "NO SE ENCONTRARON RESULTADOS",
+    "empty": "AÚN NO TIENES SERVICIOS EN TU LISTA DE DESEOS",
+    "searchSuggestion": "Prueba con otros términos de búsqueda.",
+    "emptySuggestion": "Explora nuestro catálogo y guarda los servicios que más te gusten.",
+    "viewServices": "Ver Servicios",
+    "featured": "Destacado",
+    "available": "Disponible",
+    "notAvailable": "No disponible",
+    "viewDetail": "Ver Detalle",
+    "remove": "Eliminar",
+    "reserve": "Reservar"
   }
 }
