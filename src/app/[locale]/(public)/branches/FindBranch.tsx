@@ -92,8 +92,8 @@ export default function FindBranch({ initialBranches }: FindBranchProps) {
     <div className="pt-4 pb-20 px-4 md:px-8 bg-gray-50 min-h-screen font-sans">
       <header className="pt-4 pb-8 px-4">
         <div className="max-w-7xl mx-auto flex flex-col items-center md:items-start">
-          <h1 className="text-4xl md:text-5xl font-heading italic uppercase tracking-tighter text-slate-900 mb-3">
-            {t("title")}
+          <h1 className="text-4xl md:text-5xl font-heading italic uppercase tracking-tighter text-slate-900 mb-3 leading-tight">
+            <span className="prevent-clip">{t("title")}</span>
           </h1>
           <div className="h-1 w-20 bg-primary mb-4" />
           <p className="text-slate-500 max-w-xl text-center md:text-left font-medium leading-relaxed">

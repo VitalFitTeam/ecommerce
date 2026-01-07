@@ -93,8 +93,12 @@ export default function Memberships() {
         <section className="bg-gray-50 py-12 px-6">
           <div className="max-w-6xl mx-auto">
             <h1 className="text-4xl md:text-5xl font-bold text-center mb-4">
-              <span className="text-orange-500">{t("hero.titlePart1")}</span>{" "}
-              <span className="text-gray-900">{t("hero.titlePart2")}</span>
+              <span className="text-orange-500 prevent-clip">
+                {t("hero.titlePart1")}
+              </span>{" "}
+              <span className="text-gray-900 prevent-clip">
+                {t("hero.titlePart2")}
+              </span>
             </h1>
             <p className="text-center text-gray-600 w-full mx-auto">
               {t("hero.subtitle")}

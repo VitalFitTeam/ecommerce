@@ -74,19 +74,13 @@ export default function RegisterPage() {
     }
   };
 
-  // Pre-llenar datos (Mantenemos esto por si el usuario ya tenía sesión activa de otra forma,
-  // aunque sin botón de Google es menos probable que se active).
   const initialized = useRef(false);
 
-  // Pre-llenar datos desde Clerk
   useEffect(() => {
     const loadUserData = async () => {
-      // Verifica que haya sesión de Clerk
       if (isSignedIn && user) {
-        // Genera contraseña segura
         const phantomPass = generateSecurePassword();
 
-        // Actualiza el estado
         setFormData((prev) => ({
           ...prev,
           nombre: user.firstName || prev.nombre,
@@ -109,7 +103,7 @@ export default function RegisterPage() {
     };
 
     loadUserData();
-  }, [isSignedIn, user]); // Solo dependencias necesarias
+  }, [isSignedIn, user]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -139,7 +133,6 @@ export default function RegisterPage() {
       setError(fieldErrors);
       const errorCount = Object.keys(fieldErrors).length;
 
-      // Mantenemos tu cambio de toast.error para color rojo
       toast.error(t("notifications.error.incompleteForm"), {
         description: t("notifications.error.incompleteFormDescription", {
           count: errorCount,
@@ -235,12 +228,14 @@ export default function RegisterPage() {
           <AuthCard>
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 space-y-4 sm:space-y-0 w-full">
               <div className="text-center lg:text-left">
-                <h3 className={`${typography.h3} text-xl sm:text-2xl`}>
-                  {t("title")}
+                <h3
+                  className={`${typography.h3} text-xl sm:text-2xl leading-normal`}
+                >
+                  <span className="prevent-clip">{t("title")}</span>
                 </h3>
               </div>
               <div className="flex justify-center sm:justify-end text-right">
-                <Logo slogan={true} />
+                <Logo theme="dark" slogan={true} />
               </div>
             </div>
 

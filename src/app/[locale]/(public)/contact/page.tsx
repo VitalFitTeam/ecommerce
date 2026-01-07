@@ -18,33 +18,31 @@ import {
 } from "@/components/ui/select";
 
 export default function Contact() {
-  // Inicializamos la función de traducción para la clave "ContactPage"
   const t = useTranslations("ContactPage");
 
   const [motivoContacto, setMotivoContacto] = useState("");
   const [preferenciaContacto, setPreferenciaContacto] = useState("");
 
   return (
-    <main className="min-h-screen bg-white">
+    <main className="pt-28 pb-20 px-4 md:px-8 bg-white min-h-screen font-sans">
       <Navbar transparent={false} />
 
-      <section className="bg-gray-50 py-12 px-6">
+      <section className="bg-gray-50 py-12 px-6 rounded-3xl">
         <div className="max-w-4xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-6 items-center">
             <div>
-              <h1 className="text-4xl md:text-5xl text-left font-bold mb-4">
-                {t("hero.title")}
+              <h1 className="text-4xl md:text-6xl text-left font-heading italic uppercase leading-tight mb-4 text-slate-900">
+                <span className="prevent-clip">{t("hero.title")}</span>
               </h1>
-              <p className="text-gray-600">{t("hero.subtitle")}</p>
+              <p className="text-gray-600 text-lg">{t("hero.subtitle")}</p>
             </div>
             <div>
-              <Logo slogan={true} />
+              <Logo theme="dark" slogan={true} />
             </div>
           </div>
 
           <form className="p-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-              {/* Campo Nombre */}
               <div>
                 <label
                   htmlFor="nombre"
@@ -62,7 +60,6 @@ export default function Contact() {
                 />
               </div>
 
-              {/* Campo Apellido */}
               <div>
                 <label
                   htmlFor="apellido"
@@ -81,7 +78,6 @@ export default function Contact() {
               </div>
             </div>
 
-            {/* Campo Correo electrónico */}
             <div className="mb-6">
               <label
                 htmlFor="correo"
@@ -100,7 +96,6 @@ export default function Contact() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-              {/* Select Motivo de contacto */}
               <div>
                 <Select
                   value={motivoContacto}
@@ -129,7 +124,6 @@ export default function Contact() {
                 </Select>
               </div>
 
-              {/* Select Preferencia de contacto */}
               <div>
                 <Select
                   value={preferenciaContacto}
@@ -155,7 +149,6 @@ export default function Contact() {
               </div>
             </div>
 
-            {/* Área de Mensaje */}
             <div className="mb-5">
               <Textarea
                 id="mensaje"

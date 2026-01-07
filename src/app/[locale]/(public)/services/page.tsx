@@ -148,7 +148,7 @@ export default function ServicesPage() {
           <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900">
             {t.rich("title", {
               highlight: (chunk) => (
-                <span className="text-[#F27F2A]">{chunk}</span>
+                <span className="text-[#F27F2A] prevent-clip">{chunk}</span>
               ),
             })}
           </h1>

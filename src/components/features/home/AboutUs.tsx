@@ -17,9 +17,9 @@ interface SectionAboutUsProps {
 const SectionAboutUs: React.FC<SectionAboutUsProps> = ({ sections }) => {
   return (
     <div className="w-full mb-30">
-      <h2 className="text-center text-7xl md:text-7xl font-bold mb-20 mt-20">
-        <span className="text-[#F27F2A]">Sobre</span>{" "}
-        <span className="text-gray-900">Nosotros</span>
+      <h2 className="text-center text-5xl md:text-7xl font-bold mb-20 mt-20">
+        <span className="text-[#F27F2A] prevent-clip">Sobre</span>{" "}
+        <span className="text-gray-900 prevent-clip">Nosotros</span>
       </h2>
       {sections.map((section, index) => {
         const isEven = index % 2 === 0;
@@ -37,7 +37,7 @@ const SectionAboutUs: React.FC<SectionAboutUsProps> = ({ sections }) => {
                   className={`w-full lg:w-1/2 p-8 lg:p-12 ${isEven ? "lg:pr-12" : "lg:pl-12"}`}
                 >
                   <h2 className="font-bold text-4xl md:text-6xl text-center py-5">
-                    {section.title}
+                    <span className="prevent-clip">{section.title}</span>
                   </h2>
                   <div className="text-lg leading-relaxed space-y-4">
                     {section.content}

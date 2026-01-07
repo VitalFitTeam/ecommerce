@@ -66,7 +66,7 @@ export function BranchServicesSection({
         <h2 className="text-4xl md:text-5xl font-heading italic uppercase tracking-tighter text-slate-900 leading-none">
           {t.rich("title", {
             span: (chunks) => (
-              <span className="text-slate-400 font-light not-italic text-3xl md:text-4xl">
+              <span className="text-slate-400 font-light not-italic text-3xl md:text-4xl prevent-clip">
                 {chunks}
               </span>
             ),
