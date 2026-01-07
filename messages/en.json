@@ -917,7 +917,12 @@
     "nonMember": "Non-member",
     "minutes": "minutes",
     "learnMore": "Learn more",
-    "categoryDefault": "General"
+    "categoryDefault": "General",
+    "wishListSuccess": "Added to favorites!",
+    "wishListError": "Error processing favorites",
+    "loginRequired": "You must log in to manage favorites",
+    "wishlistRemove": "Remove from favorites",
+    "wishlistRemoveSuccess": "Removed from favorites"
   },
   "invoiceDetails": {
     "backToHistory": "Back to history",
@@ -1019,5 +1024,23 @@
       "success": "Code sent successfully",
       "error": "Could not send the code. Please check your email."
     }
+  },
+  "Wishlist": {
+    "loading": "Loading your favorites...",
+    "title": "MY WISHLIST",
+    "description": "Manage your favorite services and book when you're ready.",
+    "filterPlaceholder": "Filter services...",
+    "clearFilters": "Clear filters",
+    "noResults": "NO RESULTS FOUND",
+    "empty": "YOU DON'T HAVE ANY SERVICES IN YOUR WISHLIST YET",
+    "searchSuggestion": "Try other search terms.",
+    "emptySuggestion": "Explore our catalog and save the services you like the most.",
+    "viewServices": "View Services",
+    "featured": "Featured",
+    "available": "Available",
+    "notAvailable": "Not available",
+    "viewDetail": "View Detail",
+    "remove": "Remove",
+    "reserve": "Book Now"
   }
 }

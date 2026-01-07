@@ -18,6 +18,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/Input";
 import { cn } from "@/lib/utils";
 import { RecentServicesCarousel } from "@/components/services/RecentServicesCarousel";
+import { useWishlist } from "@/hooks/useWishlist";
+import { useAuth } from "@/context/AuthContext";
 
 const ServiceSkeleton = ({ view }: { view: "grid" | "list" }) => (
   <div
@@ -138,6 +140,13 @@ export default function ServicesPage() {
     setSort("desc");
     setPage(1);
   };
+
+  const { token } = useAuth();
+  const {
+    wishlistItems,
+    toggleFavorite,
+    loading: wishlistLoading,
+  } = useWishlist();
 
   return (
     <>
@@ -280,6 +289,8 @@ export default function ServicesPage() {
 
               <RecentServicesCarousel
                 services={recentServices}
+                wishlistItems={wishlistItems}
+                onToggleFavorite={toggleFavorite}
                 onOpen={handleOpenModal}
               />
             </div>
@@ -319,14 +330,22 @@ export default function ServicesPage() {
                   : "flex flex-col gap-6",
               )}
             >
-              {services.map((service) => (
-                <ServiceCard
-                  key={service.service_id}
-                  service={service}
-                  view={view}
-                  onLearnMore={() => handleOpenModal(service)}
-                />
-              ))}
+              {services.map((service) => {
+                const wishlistItem = wishlistItems.find(
+                  (item) => item.service_id === service.service_id,
+                );
+                return (
+                  <ServiceCard
+                    key={service.service_id}
+                    service={service}
+                    view={view}
+                    isFavorite={!!wishlistItem}
+                    wishlistId={wishlistItem?.wishlist_id}
+                    onToggleFavorite={toggleFavorite}
+                    onLearnMore={() => handleOpenModal(service)}
+                  />
+                );
+              })}
             </div>
           )}
 

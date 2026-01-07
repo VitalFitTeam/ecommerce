@@ -6,6 +6,10 @@ import logoVitalFit from "../../../public/images/gym-training-chile.png";
 import { Button } from "../ui/button";
 import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
+import { useEffect, useState } from "react";
+import { useAuth } from "@/context/AuthContext";
+import { api } from "@/lib/sdk-config";
+import { toast } from "sonner";
 
 interface CardContentProps {
   title: string;
@@ -16,7 +20,9 @@ interface CardContentProps {
   priceMember: string;
   priceNonMember: string;
   t: any;
+  isFavorite?: boolean;
   onLearnMore?: () => void;
+  onWishList?: (e: React.MouseEvent) => void;
 }
 
 const ServiceCardContent = ({
@@ -28,7 +34,9 @@ const ServiceCardContent = ({
   priceMember,
   priceNonMember,
   t,
+  isFavorite,
   onLearnMore,
+  onWishList,
 }: CardContentProps) => (
   <div className="p-5 flex flex-col justify-between ">
     <div className="mb-4">
@@ -37,8 +45,14 @@ const ServiceCardContent = ({
           {title}
         </h3>
 
-        <div className="flex items-center text-sm text-gray-700 gap-1">
-          <FaStar className="text-yellow-400" />
+        <div
+          className="flex items-center text-sm text-gray-700 gap-1 cursor-pointer hover:scale-110 transition-transform active:scale-95 px-2 py-1 rounded-full hover:bg-yellow-50"
+          onClick={onWishList}
+          title={isFavorite ? t("wishlistRemove") : t("wishListSuccess")}
+        >
+          <FaStar
+            className={isFavorite ? "text-yellow-400" : "text-gray-300"}
+          />
           {rating}
         </div>
       </div>
@@ -70,9 +84,45 @@ const ServiceCardContent = ({
   </div>
 );
 
+interface Service {
+  service_id: string;
+  name: string;
+  description: string;
+  duration_minutes: number;
+  priority_score: number;
+  service_category?: {
+    category_id: string;
+    name: string;
+  };
+  images?: {
+    image_id: string;
+    image_url: string;
+    alt_text: string;
+    display_order: number;
+    is_primary: boolean;
+  }[];
+  banners?: {
+    banner_id: string;
+    name: string;
+    image_url: string;
+    link_url: string;
+    is_active: boolean;
+  }[];
+  lowest_price_member: number;
+  lowest_price_no_member: number;
+  base_currency: string;
+}
+
 interface ServiceCardProps {
-  service: any;
+  service: Service;
   view?: "grid" | "list";
+  isFavorite?: boolean;
+  wishlistId?: string;
+  onToggleFavorite?: (
+    serviceId: string,
+    isFavorite: boolean,
+    wishlistId?: string,
+  ) => Promise<void>;
   onLearnMore?: () => void;
   className?: string;
 }
@@ -80,30 +130,42 @@ interface ServiceCardProps {
 export default function ServiceCard({
   service,
   view = "grid",
+  isFavorite = false,
+  wishlistId,
+  onToggleFavorite,
   onLearnMore,
   className,
 }: ServiceCardProps) {
   const t = useTranslations("ServiceCard");
+  const { token } = useAuth();
+  const [localRating, setLocalRating] = useState<number>(
+    service?.priority_score ?? 0,
+  );
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [optimisticFavorite, setOptimisticFavorite] = useState(isFavorite);
+
+  // Sync with prop changes
+  useEffect(() => {
+    setOptimisticFavorite(isFavorite);
+  }, [isFavorite]);
 
   const {
     name,
     description,
     duration_minutes,
-    priority_score,
     service_category,
     images,
     banners,
     lowest_price_member,
     lowest_price_no_member,
     base_currency,
-  } = service ?? {};
+  } = service;
 
   const title = name ?? t("noTitle");
   const category = service_category?.name ?? t("categoryDefault");
   const desc = description ?? t("noDescription");
   const duration = duration_minutes ?? 0;
-  const rating = priority_score ?? 0;
-  const activeBanner = banners?.find((b: any) => b.is_active);
+  const activeBanner = banners?.find((b) => b.is_active);
   const imgSrc =
     activeBanner?.image_url || images?.[0]?.image_url || logoVitalFit;
 
@@ -112,6 +174,42 @@ export default function ServiceCard({
 
   const priceMemberFormatted = formatPrice(lowest_price_member);
   const priceNonMemberFormatted = formatPrice(lowest_price_no_member);
+
+  const handleWishList = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+
+    if (!token) {
+      toast.error(t("loginRequired"));
+      return;
+    }
+
+    if (isProcessing) {
+      return;
+    }
+
+    // If no external handler, we don't do anything (or we could keep old logic, but refactoring here)
+    if (!onToggleFavorite) {
+      return;
+    }
+
+    setIsProcessing(true);
+    const wasFavorite = optimisticFavorite;
+
+    // Optimistic update
+    setOptimisticFavorite(!wasFavorite);
+    setLocalRating((prev) => (wasFavorite ? prev - 1 : prev + 1));
+
+    try {
+      await onToggleFavorite(service.service_id, wasFavorite, wishlistId);
+    } catch (error) {
+      console.error("Error toggling wishlist:", error);
+      // Rollback
+      setOptimisticFavorite(wasFavorite);
+      setLocalRating((prev) => (wasFavorite ? prev + 1 : prev - 1));
+    } finally {
+      setIsProcessing(false);
+    }
+  };
 
   if (view === "grid") {
     return (
@@ -131,14 +229,16 @@ export default function ServiceCard({
         />
         <ServiceCardContent
           title={title}
-          rating={rating}
+          rating={localRating}
           category={category}
           desc={desc}
           duration={duration}
           priceMember={priceMemberFormatted}
           priceNonMember={priceNonMemberFormatted}
           t={t}
+          isFavorite={optimisticFavorite}
           onLearnMore={onLearnMore}
+          onWishList={handleWishList}
         />
       </div>
     );
@@ -161,14 +261,16 @@ export default function ServiceCard({
       />
       <ServiceCardContent
         title={title}
-        rating={rating}
+        rating={localRating}
         category={category}
         desc={desc}
         duration={duration}
         priceMember={priceMemberFormatted}
         priceNonMember={priceNonMemberFormatted}
         t={t}
+        isFavorite={optimisticFavorite}
         onLearnMore={onLearnMore}
+        onWishList={handleWishList}
       />
     </div>
   );
