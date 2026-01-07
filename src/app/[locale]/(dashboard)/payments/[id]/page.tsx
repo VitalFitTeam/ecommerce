@@ -34,21 +34,26 @@ const formatMoney = (amount: string | number | undefined) => {
   }).format(value);
 };
 
-const formatDate = (dateString?: string) => {
+const formatDate = (dateString: string) => {
   if (!dateString) {
     return "-";
   }
+
   try {
-    return new Date(dateString).toLocaleDateString("es-VE", {
+    const date = new Date(dateString);
+
+    if (isNaN(date.getTime())) {
+      return "-";
+    }
+
+    return date.toLocaleDateString("es-ES", {
+      timeZone: "UTC",
       day: "2-digit",
-      month: "short",
+      month: "2-digit",
       year: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-      hour12: true,
     });
-  } catch {
-    return dateString;
+  } catch (error) {
+    return "-";
   }
 };
 
@@ -56,8 +61,15 @@ const formatShortDate = (dateString?: string) => {
   if (!dateString) {
     return "-";
   }
+
   try {
-    return new Date(dateString).toLocaleDateString("es-VE", {
+    const date = new Date(dateString);
+    if (isNaN(date.getTime())) {
+      return "-";
+    }
+
+    return date.toLocaleDateString("es-VE", {
+      timeZone: "UTC",
       day: "2-digit",
       month: "long",
       year: "numeric",

@@ -35,7 +35,23 @@ export default function PaymentHistoryTable({
     if (!dateString) {
       return "-";
     }
-    return new Date(dateString).toLocaleDateString();
+
+    try {
+      const date = new Date(dateString);
+
+      if (isNaN(date.getTime())) {
+        return "-";
+      }
+
+      return date.toLocaleDateString("es-ES", {
+        timeZone: "UTC",
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+      });
+    } catch (error) {
+      return "-";
+    }
   };
 
   const getStatusStyle = (status: string) => {
@@ -56,7 +72,6 @@ export default function PaymentHistoryTable({
   };
 
   const handleViewDetails = (invoiceId: string) => {
-    console.log("Navegando al detalle:", invoiceId);
     router.push(`/payments/${invoiceId}`);
   };
 

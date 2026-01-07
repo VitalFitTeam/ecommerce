@@ -56,6 +56,8 @@ export default function HistoryPaymentPage() {
     );
   }, [invoices, statusFilter]);
 
+  console.log(filteredInvoices);
+
   return (
     <div className="min-h-screen">
       <main className="p-8">
@@ -80,7 +82,6 @@ export default function HistoryPaymentPage() {
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">{t("filters.status")}</SelectItem>{" "}
-                {/* Opción "Todos" */}
                 <SelectItem value="Paid">{t("status.paid")}</SelectItem>
                 <SelectItem value="Unpaid">{t("status.unpaid")}</SelectItem>
                 <SelectItem value="Overdue">{t("status.overdue")}</SelectItem>
