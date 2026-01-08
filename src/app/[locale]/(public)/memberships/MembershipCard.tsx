@@ -15,6 +15,9 @@ interface MembershipCardProps {
   buttonText?: string;
   onButtonClick?: () => void;
   accentColor?: string;
+  currency?: string;
+  refPrice?: string | number;
+  showReferencePrice?: boolean;
 }
 
 export function MembershipCard({
@@ -28,6 +31,9 @@ export function MembershipCard({
   buttonText = "Empezar Ahora",
   onButtonClick,
   accentColor = "#f97316",
+  currency = "USD",
+  refPrice,
+  showReferencePrice,
 }: MembershipCardProps) {
   const isFeatured = featured;
 
@@ -86,11 +92,18 @@ export function MembershipCard({
               )}
             </div>
 
-            <div className="flex items-baseline gap-1">
-              <span className="text-2xl font-bold">${price}</span>
-              <span className={clsx("text-xs font-medium opacity-80")}>
-                /{billingPeriod}
-              </span>
+            <div className="flex flex-col items-start">
+              <div className="flex items-baseline gap-1">
+                <span className="text-xl font-bold">${price}</span>
+                <span className={clsx("text-xs font-medium opacity-80")}>
+                  /{billingPeriod}
+                </span>
+              </div>
+              {showReferencePrice && refPrice && (
+                <span className="text-[10px] font-bold uppercase tracking-tight opacity-70">
+                  {currency === "VES" ? "Bs." : currency} {refPrice}
+                </span>
+              )}
             </div>
           </div>
 
@@ -125,18 +138,30 @@ export function MembershipCard({
             {isFeatured && <Sparkles className="w-5 h-5 text-orange-200" />}
           </div>
 
-          <div className="flex items-baseline gap-1 mb-3">
-            <span
-              className={clsx(
-                "text-6xl font-extrabold tracking-tighter",
-                priceColor,
-              )}
-            >
-              ${price}
-            </span>
-            <span className={clsx("text-lg font-medium", periodColor)}>
-              /{billingPeriod}
-            </span>
+          <div className="flex flex-col mb-3">
+            <div className="flex items-baseline gap-1">
+              <span
+                className={clsx(
+                  "text-4xl font-extrabold tracking-tighter",
+                  priceColor,
+                )}
+              >
+                ${price}
+              </span>
+              <span className={clsx("text-lg font-medium", periodColor)}>
+                /{billingPeriod}
+              </span>
+            </div>
+            {showReferencePrice && refPrice && (
+              <span
+                className={clsx(
+                  "text-xs font-bold uppercase tracking-tight mt-1",
+                  periodColor,
+                )}
+              >
+                Monto ref: {currency === "VES" ? "Bs." : currency} {refPrice}
+              </span>
+            )}
           </div>
 
           {description && (

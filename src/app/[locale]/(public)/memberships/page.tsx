@@ -13,8 +13,8 @@ import {
 } from "@heroicons/react/24/outline";
 import { Card, CardContent, CardTitle } from "@/components/ui/Card";
 import { api } from "@/lib/sdk-config";
-import { useEffect, useState } from "react";
-import { PublicMembershipResponse } from "@vitalfit/sdk";
+import { useEffect, useState, useCallback } from "react";
+import { PublicMembershipResponse, mainCurrencies } from "@vitalfit/sdk";
 import { useRouter } from "@/i18n/routing";
 
 type MembershipWithFeatured = PublicMembershipResponse & {
@@ -29,36 +29,40 @@ export default function Memberships() {
     MembershipWithFeatured[]
   >([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [currency, setCurrency] = useState("USD");
+
+  const fetchMemberships = useCallback(async () => {
+    try {
+      setIsLoading(true);
+      const response = await api.membership.publicGetMemberships(
+        "",
+        { page: 1, limit: 12 },
+        currency,
+      );
+
+      const data = response?.data ?? [];
+
+      // Ordenar por precio (barato → caro)
+      const sorted = [...data].sort((a, b) => a.price - b.price);
+
+      // Destacar el más caro
+      const withFeatured = sorted.map((item, idx) => ({
+        ...item,
+        featured: idx === sorted.length - 1,
+      }));
+
+      setMembershipPlans(withFeatured);
+    } catch (error) {
+      console.error("Error fetching memberships:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [currency]);
 
   // Fetch memberships
   useEffect(() => {
-    (async () => {
-      try {
-        const response = await api.membership.publicGetMemberships(
-          "",
-          { page: 1, limit: 4 },
-          "USD",
-        );
-
-        const data = response?.data ?? [];
-
-        // Ordenar por precio (barato → caro)
-        const sorted = [...data].sort((a, b) => a.price - b.price);
-
-        // Destacar el más caro
-        const withFeatured = sorted.map((item, idx) => ({
-          ...item,
-          featured: idx === sorted.length - 1,
-        }));
-
-        setMembershipPlans(withFeatured);
-      } catch (error) {
-        console.error("Error fetching memberships:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    })();
-  }, []);
+    fetchMemberships();
+  }, [fetchMemberships]);
 
   const cardsForDisplay = (): MembershipWithFeatured[] => {
     if (membershipPlans.length === 0) {
@@ -103,6 +107,20 @@ export default function Memberships() {
             <p className="text-center text-gray-600 w-full mx-auto">
               {t("hero.subtitle")}
             </p>
+
+            <div className="flex justify-center mt-8">
+              <select
+                value={currency}
+                onChange={(e) => setCurrency(e.target.value)}
+                className="w-full md:w-32 px-3 py-2 bg-white border border-gray-200 rounded-xl text-sm font-bold shadow-sm focus:ring-2 focus:ring-orange-500 outline-none transition-all"
+              >
+                {mainCurrencies.map((c) => (
+                  <option key={c.code} value={c.code}>
+                    {c.code}
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
         </section>
 
@@ -129,6 +147,9 @@ export default function Memberships() {
                         "Entrenamiento básico",
                       ]}
                       featured={m.featured}
+                      currency={currency}
+                      refPrice={m.ref_price}
+                      showReferencePrice={currency !== "USD"}
                       buttonText="Comprar"
                       onButtonClick={() => handleBuyMembership(m)}
                     />

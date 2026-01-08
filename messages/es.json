@@ -909,7 +909,8 @@
     "description": "Descripción",
     "availableSchedules": "Horarios disponibles",
     "bookNow": "Reservar ahora",
-    "moreInfo": "Más información"
+    "moreInfo": "Más información",
+    "refPrice": "Monto referencial"
   },
   "ServiceCard": {
     "member": "Miembro",
@@ -921,7 +922,8 @@
     "wishListError": "Error al procesar favoritos",
     "loginRequired": "Debes iniciar sesión para gestionar tus favoritos",
     "wishlistRemove": "Quitar de favoritos",
-    "wishlistRemoveSuccess": "Eliminado de favoritos"
+    "wishlistRemoveSuccess": "Eliminado de favoritos",
+    "refPrice": "Monto referencial"
   },
   "invoiceDetails": {
     "backToHistory": "Volver al historial",

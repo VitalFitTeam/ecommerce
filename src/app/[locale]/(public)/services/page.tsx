@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { Navbar } from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import ServiceCard from "@/components/services/ServicesCard";
@@ -20,6 +20,7 @@ import { cn } from "@/lib/utils";
 import { RecentServicesCarousel } from "@/components/services/RecentServicesCarousel";
 import { useWishlist } from "@/hooks/useWishlist";
 import { useAuth } from "@/context/AuthContext";
+import { mainCurrencies } from "@vitalfit/sdk";
 
 const ServiceSkeleton = ({ view }: { view: "grid" | "list" }) => (
   <div
@@ -53,6 +54,7 @@ export default function ServicesPage() {
     category: "",
   });
 
+  const { wishlistItems, toggleFavorite } = useWishlist();
   const [maxPrice, setMaxPrice] = useState<number | "">("");
   const [sort, setSort] = useState<"asc" | "desc">("desc");
   const [services, setServices] = useState<any[]>([]);
@@ -61,15 +63,20 @@ export default function ServicesPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const [page, setPage] = useState(1);
-  const limit = 10;
+  const limit = 12;
   const [totalPages, setTotalPages] = useState(1);
-
+  const [loadingMore, setLoadingMore] = useState(false);
   const [recentServices, setRecentServices] = useState<any[]>([]);
-
-  const currency = "USD";
+  const [currency, setCurrency] = useState("USD");
+  const observerTarget = useRef<HTMLDivElement>(null);
 
   const fetchServices = useCallback(async () => {
-    setLoading(true);
+    if (page === 1) {
+      setLoading(true);
+    } else {
+      setLoadingMore(true);
+    }
+
     try {
       const params: any = {
         page,
@@ -86,17 +93,47 @@ export default function ServicesPage() {
       }
 
       const response = await api.public.getServices(params);
+      const newData = response.data || [];
 
-      setServices(response.data || []);
+      setServices((prev) => (page === 1 ? newData : [...prev, ...newData]));
       setTotalPages(
         Math.ceil((response.total || response.data.length || 0) / limit),
       );
     } catch (error) {
       console.error("Error fetching services:", error);
     } finally {
-      setTimeout(() => setLoading(false), 300);
+      setTimeout(() => {
+        setLoading(false);
+        setLoadingMore(false);
+      }, 300);
     }
-  }, [page, filters, sort, maxPrice]);
+  }, [page, filters, sort, maxPrice, currency]);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (
+          entries[0].isIntersecting &&
+          !loading &&
+          !loadingMore &&
+          page < totalPages
+        ) {
+          setPage((p) => p + 1);
+        }
+      },
+      { threshold: 1.0 },
+    );
+
+    if (observerTarget.current) {
+      observer.observe(observerTarget.current);
+    }
+
+    return () => observer.disconnect();
+  }, [loading, loadingMore, page, totalPages]);
+
+  useEffect(() => {
+    setPage(1);
+  }, [filters, sort, maxPrice, currency]);
 
   useEffect(() => {
     fetchServices();
@@ -111,6 +148,66 @@ export default function ServicesPage() {
       console.error(e);
     }
   }, []);
+
+  useEffect(() => {
+    if (services.length > 0 && recentServices.length > 0) {
+      let changed = false;
+      const updatedRecent = recentServices.map((rs) => {
+        const fresh = services.find((s) => s.service_id === rs.service_id);
+        if (fresh && JSON.stringify(fresh) !== JSON.stringify(rs)) {
+          changed = true;
+          return fresh;
+        }
+        return rs;
+      });
+
+      if (changed) {
+        setRecentServices(updatedRecent);
+        localStorage.setItem("recent_services", JSON.stringify(updatedRecent));
+      }
+    }
+  }, [services, recentServices]);
+
+  useEffect(() => {
+    if (currency === "USD" || recentServices.length === 0) {
+      return;
+    }
+
+    const refreshRecentPricing = async () => {
+      try {
+        const response = await api.public.getServices({
+          currency,
+          limit: 100,
+          page: 1,
+        } as any);
+
+        if (response.data) {
+          setRecentServices((prev) => {
+            let changed = false;
+            const updated = prev.map((rs) => {
+              const fresh = response.data.find(
+                (s: any) => s.service_id === rs.service_id,
+              );
+              if (fresh && JSON.stringify(fresh) !== JSON.stringify(rs)) {
+                changed = true;
+                return fresh;
+              }
+              return rs;
+            });
+            if (changed) {
+              localStorage.setItem("recent_services", JSON.stringify(updated));
+              return updated;
+            }
+            return prev;
+          });
+        }
+      } catch (e) {
+        console.error("Error refreshing recent services pricing:", e);
+      }
+    };
+
+    refreshRecentPricing();
+  }, [currency]);
 
   const saveRecentService = (service: any) => {
     try {
@@ -138,15 +235,9 @@ export default function ServicesPage() {
     setFilters({ search: "", category: "" });
     setMaxPrice("");
     setSort("desc");
+    setCurrency("USD");
     setPage(1);
   };
-
-  const { token } = useAuth();
-  const {
-    wishlistItems,
-    toggleFavorite,
-    loading: wishlistLoading,
-  } = useWishlist();
 
   return (
     <>
@@ -265,6 +356,18 @@ export default function ServicesPage() {
                 <option value="asc">{t("filters.sortAsc")}</option>
               </select>
 
+              <select
+                value={currency}
+                onChange={(e) => setCurrency(e.target.value)}
+                className="w-full md:w-32 px-3 py-2 bg-white border border-gray-200 rounded-lg text-sm font-bold"
+              >
+                {mainCurrencies.map((c) => (
+                  <option key={c.code} value={c.code}>
+                    {c.code}
+                  </option>
+                ))}
+              </select>
+
               <Button
                 onClick={handleClearFilters}
                 variant="ghost"
@@ -292,6 +395,7 @@ export default function ServicesPage() {
                 wishlistItems={wishlistItems}
                 onToggleFavorite={toggleFavorite}
                 onOpen={handleOpenModal}
+                showReferencePrice={currency !== "USD"}
               />
             </div>
           )}
@@ -343,34 +447,19 @@ export default function ServicesPage() {
                     wishlistId={wishlistItem?.wishlist_id}
                     onToggleFavorite={toggleFavorite}
                     onLearnMore={() => handleOpenModal(service)}
+                    showReferencePrice={currency !== "USD"}
                   />
                 );
               })}
             </div>
           )}
 
-          {!loading && services.length > 0 && (
-            <div className="flex items-center justify-center mt-16 gap-2">
-              <Button
-                variant="outline"
-                disabled={page <= 1}
-                onClick={() => setPage((p) => p - 1)}
-                className="px-6"
-              >
-                {t("pagination.previous")}
-              </Button>
+          {/* Observer Target */}
+          <div ref={observerTarget} className="h-10 w-full" />
 
-              <span className="text-sm text-gray-600 px-4">
-                {t("pagination.pageOf", { page, totalPages })}
-              </span>
-              <Button
-                variant="outline"
-                disabled={page >= totalPages}
-                onClick={() => setPage((p) => p + 1)}
-                className="px-6"
-              >
-                {t("pagination.next")}
-              </Button>
+          {loadingMore && (
+            <div className="flex justify-center py-8">
+              <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin" />
             </div>
           )}
         </div>
@@ -379,6 +468,7 @@ export default function ServicesPage() {
       <ServiceModal
         service={selectedService}
         isOpen={isModalOpen}
+        showReferencePrice={currency !== "USD"}
         onClose={() => {
           setIsModalOpen(false);
           setSelectedService(null);
