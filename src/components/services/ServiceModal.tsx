@@ -42,15 +42,20 @@ interface ServiceModalProps {
     lowest_price_member: number;
     lowest_price_no_member: number;
     base_currency: string;
+    ref_lowest_price_member?: string | number;
+    ref_lowest_price_no_member?: string | number;
+    ref_base_currency?: string;
   } | null;
   isOpen: boolean;
   onClose: () => void;
+  showReferencePrice?: boolean;
 }
 
 export default function ServiceModal({
   service,
   isOpen,
   onClose,
+  showReferencePrice,
 }: ServiceModalProps) {
   const t = useTranslations("ServiceModal");
 
@@ -117,15 +122,55 @@ export default function ServiceModal({
               </div>
             </div>
 
-            <div className="flex gap-4 mb-5 text-xl sm:text-2xl font-bold">
-              <span className="text-black">
-                {t("nonMember")}: ${service.lowest_price_no_member}{" "}
-                {service.base_currency}
-              </span>
-              <span className="text-green-600">
-                {t("member")}: ${service.lowest_price_member}{" "}
-                {service.base_currency}
-              </span>
+            <div className="flex flex-col gap-2 mb-5">
+              <div className="flex gap-4 text-xl sm:text-2xl font-bold">
+                <div className="flex flex-col">
+                  <span className="text-black">
+                    {t("nonMember")}: ${service.lowest_price_no_member}{" "}
+                    {service.base_currency}
+                  </span>
+                  {showReferencePrice && service.ref_lowest_price_no_member && (
+                    <span className="text-xs text-gray-400 font-bold uppercase tracking-tight">
+                      {t("refPrice")}:{" "}
+                      {service.ref_base_currency === "VES"
+                        ? "Bs."
+                        : service.ref_base_currency}{" "}
+                      {typeof service.ref_lowest_price_no_member === "number"
+                        ? service.ref_lowest_price_no_member.toLocaleString(
+                            undefined,
+                            {
+                              minimumFractionDigits: 2,
+                              maximumFractionDigits: 2,
+                            },
+                          )
+                        : service.ref_lowest_price_no_member}
+                    </span>
+                  )}
+                </div>
+                <div className="flex flex-col">
+                  <span className="text-green-600">
+                    {t("member")}: ${service.lowest_price_member}{" "}
+                    {service.base_currency}
+                  </span>
+                  {showReferencePrice && service.ref_lowest_price_member && (
+                    <span className="text-xs text-gray-400 font-bold uppercase tracking-tight">
+                      {t("refPrice")}:{" "}
+                      {service.ref_base_currency === "VES"
+                        ? "Bs."
+                        : service.ref_base_currency}{" "}
+                      {typeof service.ref_lowest_price_member === "number"
+                        ? service.ref_lowest_price_member.toLocaleString(
+                            undefined,
+                            {
+                              minimumFractionDigits: 2,
+                              maximumFractionDigits: 2,
+                            },
+                          )
+                        : service.ref_lowest_price_member}
+                    </span>
+                  )}
+                </div>
+              </div>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6 text-sm sm:text-base text-gray-700">

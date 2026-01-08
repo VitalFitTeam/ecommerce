@@ -19,6 +19,10 @@ interface CardContentProps {
   duration: number;
   priceMember: string;
   priceNonMember: string;
+  refPriceMember?: string | number;
+  refPriceNonMember?: string | number;
+  refCurrency?: string;
+  showReferencePrice?: boolean;
   t: any;
   isFavorite?: boolean;
   onLearnMore?: () => void;
@@ -33,6 +37,10 @@ const ServiceCardContent = ({
   duration,
   priceMember,
   priceNonMember,
+  refPriceMember,
+  refPriceNonMember,
+  refCurrency,
+  showReferencePrice,
   t,
   isFavorite,
   onLearnMore,
@@ -70,13 +78,29 @@ const ServiceCardContent = ({
       </div>
 
       <div className="flex flex-col sm:flex-row sm:items-center gap-2">
-        <span className="text-lg font-bold text-black">
-          {t("member")}: {priceMember}
-        </span>
+        <div className="flex flex-col">
+          <span className="text-lg font-bold text-black">
+            {t("member")}: {priceMember}
+          </span>
+          {showReferencePrice && refPriceMember && (
+            <span className="text-[10px] text-gray-400 font-bold uppercase tracking-tight">
+              {t("refPrice")}: {refCurrency === "VES" ? "Bs." : refCurrency}{" "}
+              {refPriceMember}
+            </span>
+          )}
+        </div>
 
-        <span className="text-lg font-semibold text-gray-500 line-through">
-          {t("nonMember")}: {priceNonMember}
-        </span>
+        <div className="flex flex-col">
+          <span className="text-lg font-semibold text-gray-500 line-through">
+            {t("nonMember")}: {priceNonMember}
+          </span>
+          {showReferencePrice && refPriceNonMember && (
+            <span className="text-[10px] text-gray-400 font-bold uppercase tracking-tight">
+              {t("refPrice")}: {refCurrency === "VES" ? "Bs." : refCurrency}{" "}
+              {refPriceNonMember}
+            </span>
+          )}
+        </div>
       </div>
 
       <Button onClick={onLearnMore}>{t("learnMore")}</Button>
@@ -111,6 +135,9 @@ interface Service {
   lowest_price_member: number;
   lowest_price_no_member: number;
   base_currency: string;
+  ref_lowest_price_member?: string | number;
+  ref_lowest_price_no_member?: string | number;
+  ref_base_currency?: string;
 }
 
 interface ServiceCardProps {
@@ -125,6 +152,7 @@ interface ServiceCardProps {
   ) => Promise<void>;
   onLearnMore?: () => void;
   className?: string;
+  showReferencePrice?: boolean;
 }
 
 export default function ServiceCard({
@@ -135,6 +163,7 @@ export default function ServiceCard({
   onToggleFavorite,
   onLearnMore,
   className,
+  showReferencePrice,
 }: ServiceCardProps) {
   const t = useTranslations("ServiceCard");
   const { token } = useAuth();
@@ -159,6 +188,9 @@ export default function ServiceCard({
     lowest_price_member,
     lowest_price_no_member,
     base_currency,
+    ref_lowest_price_member,
+    ref_lowest_price_no_member,
+    ref_base_currency,
   } = service;
 
   const title = name ?? t("noTitle");
@@ -169,11 +201,30 @@ export default function ServiceCard({
   const imgSrc =
     activeBanner?.image_url || images?.[0]?.image_url || logoVitalFit;
 
-  const formatPrice = (price: number) =>
-    `${base_currency ?? "USD"} ${price ?? 0}`;
+  const formatPrice = (price: number, currency?: string) => {
+    const curr = currency ?? base_currency ?? "USD";
+    const symbol = curr === "USD" ? "$" : curr === "VES" ? "Bs." : curr;
+    return `${symbol} ${price?.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) ?? "0.00"}`;
+  };
 
   const priceMemberFormatted = formatPrice(lowest_price_member);
   const priceNonMemberFormatted = formatPrice(lowest_price_no_member);
+
+  const refPriceMemberFormatted =
+    typeof ref_lowest_price_member === "number"
+      ? ref_lowest_price_member.toLocaleString(undefined, {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2,
+        })
+      : ref_lowest_price_member;
+
+  const refPriceNonMemberFormatted =
+    typeof ref_lowest_price_no_member === "number"
+      ? ref_lowest_price_no_member.toLocaleString(undefined, {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2,
+        })
+      : ref_lowest_price_no_member;
 
   const handleWishList = async (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -235,6 +286,10 @@ export default function ServiceCard({
           duration={duration}
           priceMember={priceMemberFormatted}
           priceNonMember={priceNonMemberFormatted}
+          refPriceMember={refPriceMemberFormatted}
+          refPriceNonMember={refPriceNonMemberFormatted}
+          refCurrency={ref_base_currency}
+          showReferencePrice={showReferencePrice}
           t={t}
           isFavorite={optimisticFavorite}
           onLearnMore={onLearnMore}
@@ -267,6 +322,10 @@ export default function ServiceCard({
         duration={duration}
         priceMember={priceMemberFormatted}
         priceNonMember={priceNonMemberFormatted}
+        refPriceMember={refPriceMemberFormatted}
+        refPriceNonMember={refPriceNonMemberFormatted}
+        refCurrency={ref_base_currency}
+        showReferencePrice={showReferencePrice}
         t={t}
         isFavorite={optimisticFavorite}
         onLearnMore={onLearnMore}

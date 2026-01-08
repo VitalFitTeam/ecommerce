@@ -14,6 +14,7 @@ export function RecentServicesCarousel({
   wishlistItems = [],
   onToggleFavorite,
   onOpen,
+  showReferencePrice,
 }: {
   services: any[];
   wishlistItems?: any[];
@@ -23,6 +24,7 @@ export function RecentServicesCarousel({
     wishId?: string,
   ) => Promise<void>;
   onOpen: (service: any) => void;
+  showReferencePrice?: boolean;
 }) {
   if (!services || services.length === 0) {
     return null;
@@ -48,6 +50,7 @@ export function RecentServicesCarousel({
                   wishlistId={wishlistItem?.wishlist_id}
                   onToggleFavorite={onToggleFavorite}
                   onLearnMore={() => onOpen(service)}
+                  showReferencePrice={showReferencePrice}
                   className="w-full h-auto"
                 />
               </CarouselItem>

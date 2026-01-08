@@ -910,7 +910,8 @@
     "description": "Description",
     "availableSchedules": "Available Schedules",
     "bookNow": "Book Now",
-    "moreInfo": "More Info"
+    "moreInfo": "More Info",
+    "refPrice": "Reference price"
   },
   "ServiceCard": {
     "member": "Member",
@@ -922,7 +923,8 @@
     "wishListError": "Error processing favorites",
     "loginRequired": "You must log in to manage favorites",
     "wishlistRemove": "Remove from favorites",
-    "wishlistRemoveSuccess": "Removed from favorites"
+    "wishlistRemoveSuccess": "Removed from favorites",
+    "refPrice": "Reference price"
   },
   "invoiceDetails": {
     "backToHistory": "Back to history",

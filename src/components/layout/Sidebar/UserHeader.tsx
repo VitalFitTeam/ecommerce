@@ -145,9 +145,6 @@ export default function UserHeader({ user }: any) {
           >
             Generar
           </Button>
-          <Button className="bg-white text-black border border-gray-300 hover:bg-gray-100 h-8 text-xs font-semibold px-4">
-            Compartir
-          </Button>
         </div>
 
         <p className="text-xs text-black font-bold mb-4 mt-1">

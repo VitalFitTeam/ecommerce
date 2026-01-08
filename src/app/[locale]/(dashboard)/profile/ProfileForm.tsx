@@ -42,9 +42,7 @@ export default function ProfileForm({ user, mode }: ProfileFormProps) {
       setBirthDate(user.birth_date ? user.birth_date.split("T")[0] : "");
       setEmail(user.email || "");
       setPhone(user.phone || "");
-
       setDocumentNumber(user.identity_document || "");
-
       setGender(user.gender || "");
 
       setProfileImage(user.profile_picture_url || null);
