@@ -4,6 +4,7 @@ import Banner from "@/components/features/home/Banner";
 import { Navbar } from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import { useTranslations } from "next-intl";
+import Image from "next/image";
 import SectionAboutUs from "@/components/features/home/AboutUs";
 
 const aboutUsConfig = [
@@ -82,6 +83,19 @@ export default function Home() {
           <SectionAboutUs sections={aboutUs} />
         </section>
       </main>
+
+      <section className="w-full px-0 md:px-4 lg:px-8">
+        <div className="w-full h-[400px] md:h-[600px] lg:h-[700px] relative rounded-xl md:rounded-2xl overflow-hidden shadow-2xl">
+          <Image
+            src="/images/bannerfooter.jpeg"
+            alt="Descarga la app"
+            fill
+            className="object-cover"
+            sizes="100vw"
+            priority={false}
+          />
+        </div>
+      </section>
 
       <Footer />
     </div>
