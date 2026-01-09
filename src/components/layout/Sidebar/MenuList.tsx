@@ -25,7 +25,6 @@ export default function MenuList({ pathname }: MenuListProps) {
       icon: ShieldCheckIcon,
       label: "Seguridad",
     },
-    { href: "/history", icon: CreditCardIcon, label: "Mi membresía" },
     {
       href: "/payments",
       icon: CurrencyDollarIcon,
