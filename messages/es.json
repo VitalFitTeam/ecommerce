@@ -101,7 +101,7 @@
   "LoginPage": {
     "title": "INICIAR SESIÓN",
     "googleLogin": "Iniciar sesión con Google",
-    "credentialsPrompt": "Ingresa tus credenciales para iniciar sesión",
+    "credentialsPrompt": "Ingresa tus credenciales para acceder",
     "email": {
       "label": "Correo electrónico",
       "placeholder": "Correo electrónico"
@@ -116,17 +116,20 @@
       "link": "Recuperar"
     },
     "submitButton": {
-      "default": "Iniciar sesión",
-      "loading": "Cargando..."
+      "default": "Ingresar",
+      "loading": "Iniciando sesión..."
+    },
+    "messages": {
+      "success": "¡Bienvenido de nuevo!"
     },
     "noAccount": {
       "text": "¿No tienes una cuenta?",
       "link": "Regístrate"
     },
     "errors": {
-      "incorrectCredentials": "Credenciales incorrectas",
+      "incorrectCredentials": "Credenciales inválidas",
       "loginError": "Error al iniciar sesión",
-      "connectionError": "No se pudo conectar al servidor"
+      "connectionError": "No se pudo conectar con el servidor"
     },
     "validation": {
       "email": {
@@ -136,7 +139,7 @@
       "password": {
         "required": "La contraseña es obligatoria",
         "min": "Debe tener al menos 8 caracteres",
-        "max": "No puede exceder 20 caracteres"
+        "max": "No puede exceder los 20 caracteres"
       }
     },
     "activateAccount": {
@@ -144,38 +147,7 @@
       "link": "Activar"
     }
   },
-  "RecoverPassword": {
-    "title": "RECUPERA TU CONTRASEÑA",
-    "subtitle": "Ingrese el correo electrónico asociado a la cuenta para recuperar la contraseña",
-    "form": {
-      "emailLabel": "Correo Electrónico*",
-      "emailPlaceholder": "usuario@ejemplo.com",
-      "submitButton": "Continuar",
-      "processing": "Procesando..."
-    },
-    "footer": {
-      "text": "¿Recuerdas tu Contraseña?",
-      "linkText": "Iniciar Sesión"
-    },
-    "validation": {
-      "usuario": {
-        "required": "El correo electrónico es obligatorio",
-        "invalid": "Debe ser un correo electrónico válido"
-      }
-    },
-    "successNotification": {
-      "title": "Revisa tu correo",
-      "description": "Hemos enviado instrucciones para restablecer tu contraseña a tu correo electrónico. Por favor revisa tu bandeja de entrada y sigue el enlace para restablecer tu contraseña."
-    },
-    "connectionError": {
-      "title": "Error de Conexión",
-      "description": "No se pudo conectar con el servidor. Por favor, inténtalo de nuevo más tarde."
-    },
-    "serverErrorNotification": {
-      "title": "Error de Verificación"
-    },
-    "serverError": "Error al verificar el correo electrónico o la solicitud."
-  },
+
   "dashboard": {
     "navbar": {
       "logo_alt": "VitalFit Logo",
@@ -615,7 +587,13 @@
     "canceleditbutton": "Cancelar",
     "uploadPhoto": "Subir foto",
     "changePhoto": "Cambiar foto",
-    "removePhoto": "Quitar foto"
+    "removePhoto": "Quitar foto",
+    "messages": {
+      "updateSuccess": "¡Datos actualizados correctamente!"
+    },
+    "errors": {
+      "updateError": "Hubo un error al actualizar el perfil"
+    }
   },
   "MembershipHistory": {
     "title": "HISTORIAL DE MEMBRESÍAS",
@@ -864,36 +842,49 @@
       }
     },
     "forgotPassword": {
-      "title": "Recuperar Contraseña",
-      "subtitle": "Ingresa el código de verificación enviado a tu correo para restablecer tu contraseña",
-      "emailSentTo": "Se ha enviado un código de 6 dígitos a {email}",
-      "enterCodeText": "Ingresa el código de 6 dígitos",
-      "verifyButton": "Verificar Código",
-      "resendButton": "Reenviar Código",
-      "newPasswordTitle": "Crea una Nueva Contraseña",
+      "newPasswordTitle": "Nueva Contraseña",
+      "subtitle": "Crea una contraseña segura que no hayas utilizado anteriormente.",
       "newPasswordLabel": "Contraseña Nueva",
-      "newPasswordPlaceholder": "Ingresa tu nueva contraseña",
-      "confirmPasswordLabel": "Confirmar contraseña",
-      "confirmPasswordPlaceholder": "Confirma tu nueva contraseña",
-      "resetButton": "Restablecer Contraseña",
-      "success": "¡Contraseña restablecida exitosamente!",
-      "errors": {
-        "incompleteCode": "Por favor, ingresa el código completo de 6 caracteres",
-        "invalidCode": "Código inválido o expirado",
-        "passwordsMismatch": "Las contraseñas no coinciden",
-        "fillFields": "Por favor completa todos los campos"
+      "confirmPasswordLabel": "Confirmar Contraseña",
+      "resetButton": "Actualizar Contraseña",
+      "success": "¡Contraseña actualizada con éxito!",
+      "footer": {
+        "text": "¿Ya recordaste tu contraseña?",
+        "linkText": "Iniciar sesión"
       },
-      "notifications": {
-        "successResetTitle": "Contraseña Actualizada",
-        "successResetDescription": "Tu contraseña se ha actualizado correctamente",
-        "resendSuccessTitle": "Código Enviado",
-        "resendSuccessDescription": "Se ha enviado un nuevo código de verificación a tu correo",
-        "connectionErrorTitle": "Error de Conexión",
-        "connectionErrorDescription": "No se pudo conectar con el servidor. Por favor inténtalo más tarde."
+      "placeholders": {
+        "newPassword": "Ingresa tu nueva contraseña",
+        "confirmPassword": "Repite tu nueva contraseña"
+      },
+      "errors": {
+        "tokenNotFound": "Código no encontrado",
+        "tokenDescription": "No se encontró un código de verificación válido. Por favor, solicita uno nuevo.",
+        "resetError": "Error al actualizar",
+        "default": "Ocurrió un error inesperado al cambiar la contraseña."
+      }
+    },
+    "RecoverPassword": {
+      "title": "RECUPERAR CONTRASEÑA",
+      "subtitle": "Ingresa tu correo electrónico para recibir un código de verificación",
+      "form": {
+        "emailLabel": "Correo electrónico",
+        "emailPlaceholder": "Ingresa tu correo",
+        "submitButton": "Enviar Código",
+        "processing": "Procesando..."
+      },
+      "validation": {
+        "usuario": {
+          "required": "El correo electrónico es obligatorio",
+          "invalid": "Ingresa un correo electrónico válido"
+        }
+      },
+      "successNotification": {
+        "title": "Código enviado",
+        "description": "Si el correo existe en nuestro sistema, recibirás un código en breve."
       },
       "footer": {
-        "text": "¿Recuerdas tu Contraseña?",
-        "linkText": "Iniciar Sesión"
+        "text": "¿Ya recordaste tu contraseña?",
+        "linkText": "Iniciar sesión"
       }
     }
   },

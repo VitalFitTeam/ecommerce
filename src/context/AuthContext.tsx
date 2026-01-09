@@ -8,16 +8,13 @@ import {
   useEffect,
   useState,
 } from "react";
-import { jwtDecode } from "jwt-decode";
 import { api } from "@/lib/sdk-config";
 import { useRouter } from "@/i18n/routing";
 import { User } from "@vitalfit/sdk";
+import { authService } from "@/lib/auth-service";
 
-interface JwtPayload {
-  exp?: number;
-  sub: string;
-  role?: string | string[];
-  roles?: string[];
+export interface ClientSession {
+  user: User;
 }
 
 type SetUserType = (
@@ -26,184 +23,154 @@ type SetUserType = (
 
 interface AuthContextType {
   token: string | null;
+  refreshToken: string | null;
   user: User | null;
   loading: boolean;
   isAuthenticated: boolean;
-  login: (token: string, remember?: boolean) => Promise<void>;
-  logout: () => Promise<void>;
-  setUser: SetUserType;
+
+  login: (token: string, refresh: string) => Promise<void>;
+  logout: () => void;
+  reloadUser: () => Promise<void>;
 }
 
-const AuthContext = createContext<AuthContextType>({
-  token: null,
-  user: null,
-  loading: true,
-  isAuthenticated: false,
-  login: async () => {},
-  logout: async () => {},
-  setUser: () => {},
-});
-
-const decodeToken = (token: string): JwtPayload | null => {
-  try {
-    const decoded = jwtDecode<JwtPayload>(token);
-    if (decoded.exp && decoded.exp * 1000 < Date.now()) {
-      return null;
-    }
-    return decoded;
-  } catch {
-    return null;
-  }
-};
+const AuthContext = createContext<AuthContextType>({} as AuthContextType);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [token, setToken] = useState<string | null>(null);
-  const [user, setUserState] = useState<User | null>(null);
+  const [accessToken, setAccessToken] = useState<string | null>(null);
+  const [refreshToken, setRefreshToken] = useState<string | null>(null);
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
 
-  const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
-  const setUser: SetUserType = (value) => {
-    setUserState((prev) => {
-      if (typeof value === "function") {
-        return value(prev);
-      }
-      return value;
-    });
-  };
+
+  const setTokens = useCallback((token: string, refresh: string) => {
+    authService.setTokens(token, refresh);
+    setAccessToken(token);
+    setRefreshToken(refresh);
+    api.client.setTokens(token, refresh);
+  }, []);
+
+  const clearSession = useCallback(() => {
+    authService.clearSession();
+    setAccessToken(null);
+    setRefreshToken(null);
+    setUser(null);
+    api.client.removeTokens();
+  }, []);
+
+  const logout = useCallback(() => {
+    clearSession();
+    router.push("/login");
+  }, [clearSession, router]);
 
   const getUserProfile = useCallback(
     async (token: string): Promise<User | null> => {
-      const decoded = decodeToken(token);
-      if (!decoded) {
-        return null;
-      }
-
       try {
         const profileResponse = await api.user.WhoAmI(token);
-        if (!profileResponse?.user) {
-          console.error("Respuesta de WhoAmI inválida");
+        const sdkUser: User | null = profileResponse.user;
+
+        if (!sdkUser) {
           return null;
         }
 
-        const userData = profileResponse.user;
-        console.log("Usuario", userData);
-
-        return {
-          // --- Identidad y Contacto ---
-          user_id: userData.user_id,
-          first_name: userData.first_name,
-          last_name: userData.last_name,
-          email: userData.email,
-          phone: userData.phone,
-          identity_document: userData.identity_document,
-          birth_date: userData.birth_date,
-          gender: userData.gender ?? "",
-          profile_picture_url: userData.profile_picture_url ?? "",
-
-          // --- Estatus y Seguridad ---
-          status: userData.status,
-          is_validated: userData.is_validated ?? false,
-          block_justification: userData.block_justification ?? "", // Fallback a string vacío si viene null
-
-          // --- Roles y Relaciones ---
-          role_id: userData.role_id,
-          role: userData.role,
-          ClientProfile: userData.ClientProfile,
-
-          // Opcional (puede ser undefined)
-          client_membership: userData.client_membership,
-
-          // --- Timestamps ---
-          created_at: userData.created_at,
-          updated_at: userData.updated_at,
-          deleted_at: userData.deleted_at ?? null,
-        };
-      } catch (error) {
-        console.error("Error al obtener perfil del usuario:", error);
+        return sdkUser;
+      } catch (err) {
+        console.error("Error al obtener perfil del cliente:", err);
         return null;
       }
     },
     [],
   );
 
+  const reloadUser = useCallback(async () => {
+    if (!accessToken) {
+      return;
+    }
+    try {
+      const profile = await getUserProfile(accessToken);
+      if (!profile) {
+        logout();
+      } else {
+        setUser(profile);
+      }
+    } catch {
+      logout();
+    }
+  }, [accessToken, getUserProfile, logout]);
+
+  const login = useCallback(
+    async (token: string, refresh: string) => {
+      setLoading(true);
+      try {
+        const profile = await getUserProfile(token);
+        if (!profile) {
+          throw new Error("Error al cargar perfil");
+        }
+
+        setTokens(token, refresh);
+        setUser(profile);
+      } finally {
+        setLoading(false);
+      }
+    },
+    [getUserProfile, setTokens],
+  );
+
+  useEffect(() => {
+    api.client.setCallbacks(
+      (access, refresh) => {
+        authService.setTokens(access, refresh);
+        setAccessToken(access);
+        setRefreshToken(refresh);
+      },
+      () => logout(),
+    );
+  }, [logout]);
+
   useEffect(() => {
     const initAuth = async () => {
-      setIsLoading(true);
-      try {
-        const storedToken = localStorage.getItem("access_token");
-        if (storedToken) {
-          const userProfile = await getUserProfile(storedToken);
-          if (userProfile) {
-            setToken(storedToken);
-            setUser(userProfile);
-          } else {
-            localStorage.removeItem("access_token");
-            setToken(null);
-            setUser(null);
-          }
-        }
-      } catch (error) {
-        console.error("AuthContext: init error:", error);
-        localStorage.removeItem("access_token");
-        setToken(null);
-        setUser(null);
-      } finally {
-        setIsLoading(false);
+      setLoading(true);
+      const storedAccess = authService.getAccessToken();
+      const storedRefresh = authService.getRefreshToken();
+
+      if (!storedAccess || !storedRefresh) {
+        clearSession();
+        setLoading(false);
+        return;
       }
+
+      api.client.setTokens(storedAccess, storedRefresh);
+      setAccessToken(storedAccess);
+      setRefreshToken(storedRefresh);
+
+      const profile = await getUserProfile(storedAccess);
+      if (!profile) {
+        clearSession();
+      } else {
+        setUser(profile);
+      }
+
+      setLoading(false);
     };
 
     initAuth();
-  }, [getUserProfile]);
-
-  const login = useCallback(
-    async (newToken: string) => {
-      setIsLoading(true);
-      try {
-        const userProfile = await getUserProfile(newToken);
-
-        if (userProfile) {
-          localStorage.setItem("access_token", newToken);
-          setToken(newToken);
-          setUser(userProfile);
-        } else {
-          localStorage.removeItem("access_token");
-          setToken(null);
-          setUser(null);
-          throw new Error("Credenciales inválidas o sin permisos");
-        }
-      } catch (err) {
-        console.error("Login error:", err);
-        throw err;
-      } finally {
-        setIsLoading(false);
-      }
-    },
-    [getUserProfile],
-  );
-
-  const logout = useCallback(async () => {
-    try {
-      localStorage.removeItem("access_token");
-      setToken(null);
-      setUser(null);
-      router.push("/login");
-    } catch (err) {
-      console.error("Logout error:", err);
-    }
-  }, [router]);
-
-  const contextValue: AuthContextType = {
-    token,
-    user,
-    loading: isLoading,
-    isAuthenticated: !!token && !!user,
-    login,
-    logout,
-    setUser,
-  };
+  }, [getUserProfile, clearSession]);
 
   return (
-    <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>
+    <AuthContext.Provider
+      value={{
+        token: accessToken,
+        refreshToken,
+        user,
+        loading,
+        isAuthenticated: !!accessToken && !!user,
+        login,
+        logout,
+        reloadUser,
+      }}
+    >
+      {children}
+    </AuthContext.Provider>
   );
 };
 

@@ -1,12 +1,14 @@
 import { Link } from "@/i18n/routing";
 import { colors } from "@/styles/styles";
 import React from "react";
+import { cn } from "@/lib/utils";
 
 interface AuthFooterProps {
   text: string;
   linkText: string;
   href: string;
   replace?: boolean;
+  className?: string;
 }
 
 const AuthFooter: React.FC<AuthFooterProps> = ({
@@ -14,19 +16,25 @@ const AuthFooter: React.FC<AuthFooterProps> = ({
   linkText,
   href,
   replace,
+  className,
 }) => {
   return (
-    <span className="text-xs font-medium flex-inline">
-      {text}{" "}
+    <div
+      className={cn(
+        "text-sm font-medium text-muted-foreground flex items-center gap-1.5 transition-all",
+        className,
+      )}
+    >
+      <span>{text}</span>
       <Link
         href={href}
         replace={replace}
         style={{ color: colors.primary }}
-        className="hover:text-primary transition-colors"
+        className="font-bold hover:underline underline-offset-4 decoration-2 transition-all active:opacity-70"
       >
         {linkText}
       </Link>
-    </span>
+    </div>
   );
 };
 
