@@ -9,19 +9,22 @@ import Image from "next/image";
 import { Upload } from "lucide-react";
 import { Checkbox } from "@/components/ui/Checkbox";
 import { PhoneInput } from "@/components/ui/phone-input";
-import { useAuth } from "@/context/AuthContext";
+import { useAuth } from "@/context/AuthContext"; // Tu nuevo contexto
 import { api } from "@/lib/sdk-config";
 import { toast } from "sonner";
 import { useRouter } from "@/i18n/routing";
+import { User } from "@vitalfit/sdk";
 
 interface ProfileFormProps {
-  user: any;
+  user: User;
   mode: "view" | "edit";
 }
 
 export default function ProfileForm({ user, mode }: ProfileFormProps) {
   const t = useTranslations("Profile");
-  const { token, setUser } = useAuth();
+
+  // EXTRAEMOS reloadUser EN LUGAR DE setUser
+  const { token, reloadUser } = useAuth();
 
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -44,7 +47,6 @@ export default function ProfileForm({ user, mode }: ProfileFormProps) {
       setPhone(user.phone || "");
       setDocumentNumber(user.identity_document || "");
       setGender(user.gender || "");
-
       setProfileImage(user.profile_picture_url || null);
     }
   }, [user]);
@@ -60,10 +62,8 @@ export default function ProfileForm({ user, mode }: ProfileFormProps) {
   const handleGenderChange = (selectedGender: string, isChecked: boolean) => {
     if (isChecked) {
       setGender(selectedGender);
-    } else {
-      if (gender === selectedGender) {
-        setGender("");
-      }
+    } else if (gender === selectedGender) {
+      setGender("");
     }
   };
 
@@ -71,27 +71,24 @@ export default function ProfileForm({ user, mode }: ProfileFormProps) {
     if (!user || !token) {
       return;
     }
+    if (!gender) {
+      toast.error("Por favor selecciona un género");
+      return;
+    }
 
     setSaving(true);
     try {
       let imageUrl = profileImage || undefined;
+
       if (selectedFile) {
         const formData = new FormData();
         formData.append("image", selectedFile);
-
         const res = await fetch(
           `https://api.imgbb.com/1/upload?key=${process.env.NEXT_PUBLIC_IMGBB}`,
           { method: "POST", body: formData },
         );
-
         const data = await res.json();
         imageUrl = data.data.url;
-      }
-
-      if (!gender) {
-        alert("Por favor selecciona un género");
-        setSaving(false);
-        return;
       }
 
       await api.user.updateUserClient(
@@ -108,28 +105,20 @@ export default function ProfileForm({ user, mode }: ProfileFormProps) {
         },
         token,
       );
-      toast.success("Datos actualizados correctamente");
+
+      toast.success(t("messages.updateSuccess") || "Datos actualizados");
+
+      await reloadUser();
+
       setSelectedFile(null);
       router.replace("/profile");
-      setUser((prev: any) => ({
-        ...prev,
-        first_name: firstName,
-        last_name: lastName,
-        birth_date: birthDate,
-        gender,
-        email,
-        phone,
-        identity_document: documentNumber,
-        profile_picture_url: imageUrl,
-      }));
     } catch (err) {
       console.error(err);
-      alert("Error al actualizar los datos");
+      toast.error("Error al actualizar los datos");
     } finally {
       setSaving(false);
     }
   };
-
   return (
     <div className="max-w-4xl mx-auto p-6 space-y-8 bg-white min-h-screen">
       <div className="flex flex-col items-center -mt-4 mb-8">

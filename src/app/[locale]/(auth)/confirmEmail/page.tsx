@@ -38,11 +38,10 @@ function ConfirmEmailContent() {
     }
 
     try {
-      const response = await api.user.resendActivateOtp(email);
-      console.warn(response);
+      await api.user.resendActivateOtp(email);
       toast.success(t("notifications.resendSuccess"));
     } catch (error) {
-      console.error("Error al conectar con la API:", error);
+      console.error("Error al reenviar código:", error);
       toast.error(t("notifications.resendError"));
     }
   }, [t]);
@@ -65,11 +64,7 @@ function ConfirmEmailContent() {
     newCode[index] = char;
     setCode(newCode);
 
-    if (char !== "") {
-      toast.dismiss();
-    }
-
-    if (index < code.length - 1 && char !== "") {
+    if (char !== "" && index < code.length - 1) {
       inputRefs.current[index + 1]?.focus();
     }
   };
@@ -112,7 +107,6 @@ function ConfirmEmailContent() {
     const verificationCode = code.join("").trim();
     if (verificationCode.length !== 6) {
       toast.error(t("errors.incompleteCode"));
-      setLoading(false);
       return;
     }
 
@@ -141,12 +135,15 @@ function ConfirmEmailContent() {
             if (loginResponse.token) {
               toast.success(t("success.register"));
 
-              setTimeout(() => {
-                login(loginResponse.token);
-                sessionStorage.removeItem("temp_email");
-                sessionStorage.removeItem("temp_password");
-                router.replace("/dashboard");
-              }, 2000);
+              await login(
+                loginResponse.token,
+                loginResponse.refresh_token || "",
+              );
+
+              sessionStorage.removeItem("temp_email");
+              sessionStorage.removeItem("temp_password");
+
+              router.replace("/dashboard");
               return;
             }
           } catch (error) {
@@ -157,7 +154,6 @@ function ConfirmEmailContent() {
 
       const mensajeExito =
         flow === "recover" ? t("success.recover") : t("success.register");
-
       toast.success(mensajeExito);
 
       setTimeout(() => {
@@ -179,52 +175,75 @@ function ConfirmEmailContent() {
   const isCodeComplete = code.every((char) => char !== "");
 
   return (
-    <div className="flex items-center justify-center min-h-screen px-5 py-4">
-      <div className="flex justify-center w-full">
-        <div className="max-w-sm w-full">
-          <AuthCard>
-            <Logo slogan={false} width={80} />
-            <h2 className={typography.h3}>{t("title")}</h2>
-            <p className="text-left mb-4">{t("description")}</p>
+    <div className="min-h-screen bg-gray-50/50 flex items-center justify-center px-4 sm:px-6 py-10">
+      <div className="w-full max-w-sm sm:max-w-md">
+        {" "}
+        {/* Contenedor controlado */}
+        <AuthCard>
+          <div className="flex flex-col items-center space-y-4 mb-8">
+            <Logo slogan={false} width={70} />
+            <div className="space-y-2 text-center">
+              <h2 className={`${typography.h3} uppercase tracking-tight`}>
+                {t("title")}
+              </h2>
+              <p className="text-sm text-muted-foreground px-4">
+                {t("description")}
+              </p>
+            </div>
+          </div>
 
-            <form className="w-full" onSubmit={handleSubmit} noValidate>
-              <div className="flex justify-between gap-2 mb-6">
-                {code.map((char, index) => (
-                  <input
-                    key={index}
-                    ref={(el) => {
-                      inputRefs.current[index] = el;
-                    }}
-                    type="text"
-                    maxLength={1}
-                    value={char}
-                    autoComplete="one-time-code"
-                    onChange={(e) => handleInputChange(index, e.target.value)}
-                    onKeyDown={(e) => handleKeyDown(index, e)}
-                    onPaste={handlePaste}
-                    className="w-8 h-8 text-center border border-gray-300 rounded-lg focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 text-lg font-semibold uppercase"
-                    placeholder="-"
-                  />
-                ))}
-              </div>
+          <form className="w-full space-y-8" onSubmit={handleSubmit} noValidate>
+            <div className="grid grid-cols-6 gap-2 sm:gap-3 w-full max-w-full px-1">
+              {code.map((char, index) => (
+                <input
+                  key={index}
+                  ref={(el) => {
+                    inputRefs.current[index] = el;
+                  }}
+                  type="text"
+                  maxLength={1}
+                  value={char}
+                  autoComplete="one-time-code"
+                  inputMode="text"
+                  onChange={(e) => handleInputChange(index, e.target.value)}
+                  onKeyDown={(e) => handleKeyDown(index, e)}
+                  onPaste={handlePaste}
+                  className={`
+                  w-full aspect-square text-center text-xl font-bold 
+                  border-2 rounded-lg transition-all duration-200 uppercase
+                  focus:outline-none focus:ring-4
+                  ${
+                    char
+                      ? "border-primary bg-primary/5 ring-primary/10"
+                      : "border-gray-200 bg-gray-50/50 focus:border-primary focus:ring-primary/10"
+                  }
+                `}
+                  placeholder="•"
+                />
+              ))}
+            </div>
 
-              <Button type="submit" disabled={!isCodeComplete || loading}>
+            <div className="space-y-4">
+              <Button
+                type="submit"
+                className="w-full h-12 text-base font-bold uppercase"
+                disabled={!isCodeComplete || loading}
+              >
                 {loading ? t("verifying") : t("verifyButton")}
               </Button>
 
-              <div className="mt-4 w-full text-right">
-                <a
-                  onClick={() => {
-                    resendCode();
-                  }}
-                  className="text-green-500 hover:underline cursor-pointer"
+              <div className="text-center">
+                <button
+                  type="button"
+                  onClick={resendCode}
+                  className="text-primary font-bold hover:underline text-sm"
                 >
-                  <h2>{t("resendCode")}</h2>
-                </a>
+                  {t("resendCode")}
+                </button>
               </div>
-            </form>
-          </AuthCard>
-        </div>
+            </div>
+          </form>
+        </AuthCard>
       </div>
     </div>
   );
@@ -232,7 +251,13 @@ function ConfirmEmailContent() {
 
 export default function ConfirmEmail() {
   return (
-    <Suspense fallback={<div>Loading...</div>}>
+    <Suspense
+      fallback={
+        <div className="flex justify-center items-center min-h-screen">
+          Loading...
+        </div>
+      }
+    >
       <ConfirmEmailContent />
     </Suspense>
   );

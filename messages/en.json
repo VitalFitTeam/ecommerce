@@ -101,32 +101,35 @@
   "LoginPage": {
     "title": "LOGIN",
     "googleLogin": "Sign in with Google",
-    "credentialsPrompt": "Enter your credentials to login",
+    "credentialsPrompt": "Enter your credentials to log in",
     "email": {
-      "label": "Email",
-      "placeholder": "Email"
+      "label": "Email address",
+      "placeholder": "Email address"
     },
     "password": {
       "label": "Password",
       "placeholder": "Enter your password"
     },
-    "rememberMe": "Remember Me",
+    "rememberMe": "Remember me",
     "forgotPassword": {
-      "text": "Forgot your Password?",
+      "text": "Forgot your password?",
       "link": "Recover"
     },
     "submitButton": {
-      "default": "Sign in",
-      "loading": "Loading..."
+      "default": "Sign In",
+      "loading": "Signing in..."
+    },
+    "messages": {
+      "success": "Welcome back!"
     },
     "noAccount": {
-      "text": "Don't have an Account?",
+      "text": "Don't have an account?",
       "link": "Sign up"
     },
     "errors": {
-      "incorrectCredentials": "Incorrect Credentials",
-      "loginError": "Login Error",
-      "connectionError": "Could not connect to server"
+      "incorrectCredentials": "Invalid credentials",
+      "loginError": "Error logging in",
+      "connectionError": "Could not connect to the server"
     },
     "validation": {
       "email": {
@@ -143,71 +146,6 @@
       "text": "Inactive account?",
       "link": "Activate"
     }
-  },
-  "RecoverPassword": {
-    "title": "RECOVER YOUR PASSWORD",
-    "subtitle": "Enter the email associated with the account to recover the password",
-    "form": {
-      "emailLabel": "Email*",
-      "emailPlaceholder": "user@example.com",
-      "submitButton": "Continue",
-      "processing": "Processing..."
-    },
-    "footer": {
-      "text": "Remember your Password?",
-      "linkText": "Sign in"
-    },
-    "validation": {
-      "usuario": {
-        "required": "Email is required",
-        "invalid": "Must be a valid email address"
-      }
-    },
-    "Footer": {
-      "tagline": "Your health, our passion.",
-      "quickLinks": {
-        "title": "Quick Links",
-        "links": {
-          "services": "Services",
-          "membership": "Membership",
-          "branches": "Branches",
-          "contact": "Contact"
-        }
-      },
-      "services": {
-        "title": "Our Services",
-        "list": {
-          "yoga": "Yoga",
-          "crossfit": "CrossFit",
-          "spinning": "Spinning",
-          "pilates": "Pilates"
-        }
-      },
-      "contact": {
-        "title": "Contact Us",
-        "phone": "+1 234 567 890",
-        "email": "info@example.com",
-        "address": "123 Wellness St, City, Country"
-      },
-      "social": {
-        "instagram": "https://www.instagram.com/vitalfit.68?igsh=eGQ2b3EycmsyZGZk",
-        "twitter": "https://x.com/VITALFIT68?t=1RTd9CVa29nfzK9RtHvw5w&s=08",
-        "facebook": "https://www.facebook.com/profile.php?id=61584110738046&mibextid=rS40aB7S9Ucbxw6v"
-      },
-      "copyright": "© {year} VitalFit. All rights reserved."
-    },
-    "successNotification": {
-      "title": "Check your email",
-      "description": "We have sent instructions to reset your password to your email. Please check your inbox and follow the link to reset your password."
-    },
-    "connectionError": {
-      "title": "Connection Error",
-      "description": "Could not connect to the server. Please try again later."
-    },
-    "serverErrorNotification": {
-      "title": "Verification Error"
-    },
-    "serverError": "Error verifying the email or the request."
   },
   "dashboard": {
     "navbar": {
@@ -615,7 +553,13 @@
     "canceleditbutton": "Cancel",
     "uploadPhoto": "Upload Photo",
     "changePhoto": "Change Photo",
-    "removePhoto": "Remove Photo"
+    "removePhoto": "Remove Photo",
+    "messages": {
+      "updateSuccess": "Profile updated successfully!"
+    },
+    "errors": {
+      "updateError": "There was an error updating your profile"
+    }
   },
   "MembershipHistory": {
     "title": "MEMBERSHIP HISTORY",
@@ -865,36 +809,49 @@
       }
     },
     "forgotPassword": {
-      "title": "Recover Password",
-      "subtitle": "Enter the verification code sent to your email to reset your password",
-      "emailSentTo": "A 6-digit code was sent to {email}",
-      "enterCodeText": "Enter the 6-digit code",
-      "verifyButton": "Verify Code",
-      "resendButton": "Resend Code",
-      "newPasswordTitle": "Create a New Password",
+      "newPasswordTitle": "New Password",
+      "subtitle": "Create a secure password that you haven't used before.",
       "newPasswordLabel": "New Password",
-      "newPasswordPlaceholder": "Enter your new password",
       "confirmPasswordLabel": "Confirm Password",
-      "confirmPasswordPlaceholder": "Confirm your new password",
-      "resetButton": "Reset Password",
-      "success": "Password reset successfully!",
-      "errors": {
-        "incompleteCode": "Please enter the full 6-character code",
-        "invalidCode": "Invalid or expired code",
-        "passwordsMismatch": "Passwords do not match",
-        "fillFields": "Please complete all fields"
+      "resetButton": "Update Password",
+      "success": "Password updated successfully!",
+      "footer": {
+        "text": "Remembered your password?",
+        "linkText": "Log In"
       },
-      "notifications": {
-        "successResetTitle": "Password Updated",
-        "successResetDescription": "Your password has been updated successfully",
-        "resendSuccessTitle": "Code Sent",
-        "resendSuccessDescription": "A new verification code has been sent to your email",
-        "connectionErrorTitle": "Connection Error",
-        "connectionErrorDescription": "Could not connect to the server. Please try again later."
+      "placeholders": {
+        "newPassword": "Enter your new password",
+        "confirmPassword": "Repeat your new password"
+      },
+      "errors": {
+        "tokenNotFound": "Code not found",
+        "tokenDescription": "No valid verification code found. Please request a new one.",
+        "resetError": "Update failed",
+        "default": "An unexpected error occurred while changing your password."
+      }
+    },
+    "RecoverPassword": {
+      "title": "RECOVER PASSWORD",
+      "subtitle": "Enter your email address to receive a verification code",
+      "form": {
+        "emailLabel": "Email address",
+        "emailPlaceholder": "Enter your email",
+        "submitButton": "Send Code",
+        "processing": "Processing..."
+      },
+      "validation": {
+        "usuario": {
+          "required": "Email address is required",
+          "invalid": "Please enter a valid email address"
+        }
+      },
+      "successNotification": {
+        "title": "Code sent",
+        "description": "If the email exists in our system, you will receive a code shortly."
       },
       "footer": {
-        "text": "Remember your Password?",
-        "linkText": "Log In"
+        "text": "Already remembered your password?",
+        "linkText": "Sign in"
       }
     }
   },
