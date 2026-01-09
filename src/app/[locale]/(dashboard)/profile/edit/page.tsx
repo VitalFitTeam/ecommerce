@@ -1,13 +1,10 @@
 "use client";
 import React from "react";
 import { useAuth } from "@/context/AuthContext";
-import { useRouter } from "@/i18n/routing";
 import ProfileForm from "../ProfileForm";
 
 export default function ProfileEditPage() {
   const { user } = useAuth();
-  const router = useRouter();
-
   if (!user) {
     return (
       <div className="max-w-4xl mx-auto p-6 text-center text-gray-500">

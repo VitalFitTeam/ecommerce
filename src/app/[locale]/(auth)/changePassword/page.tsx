@@ -1,18 +1,16 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import AuthFooter from "@/components/features/AuthFooter";
 import { typography } from "@/styles/styles";
 import AuthCard from "@/components/features/AuthCard";
 import Logo from "@/components/features/Logo";
 import PasswordInput from "@/components/ui/PasswordInput";
 import { getPasswordSchema } from "@/lib/validation/passwordSchema";
-import { useTranslations } from "next-intl";
-// Eliminamos: import { Notification } from "@/components/ui/Notification";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "@/i18n/routing";
 import { api } from "@/lib/sdk-config";
-// 1. Importamos toast
 import { toast } from "sonner";
 
 export default function PasswordReset() {
@@ -20,7 +18,6 @@ export default function PasswordReset() {
   const t = useTranslations("security.forgotPassword");
   const tValidation = useTranslations("RegisterPage");
   const [isLoading, setIsLoading] = useState(false);
-  // Eliminamos estados manuales de notificación
 
   const [formData, setFormData] = useState({
     password: "",
@@ -35,20 +32,14 @@ export default function PasswordReset() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    toast.dismiss(); // Limpiamos notificaciones previas
+    setErrors({});
+    toast.dismiss();
 
     const passwordSchema = getPasswordSchema(tValidation);
-    const result = passwordSchema.safeParse({
-      password: formData.password,
-      confirmPassword: formData.confirmPassword,
-    });
+    const result = passwordSchema.safeParse(formData);
 
     if (!result.success) {
-      const fieldErrors: {
-        password?: string;
-        confirmPassword?: string;
-      } = {};
-
+      const fieldErrors: { password?: string; confirmPassword?: string } = {};
       result.error.issues.forEach((err) => {
         if (err.path[0] === "password") {
           fieldErrors.password = err.message;
@@ -57,9 +48,8 @@ export default function PasswordReset() {
           fieldErrors.confirmPassword = err.message;
         }
       });
-
-      setIsLoading(false);
       setErrors(fieldErrors);
+      setIsLoading(false);
       return;
     }
 
@@ -67,9 +57,8 @@ export default function PasswordReset() {
       const tokenCode = localStorage.getItem("code");
 
       if (!tokenCode) {
-        toast.error("Error de Token", {
-          description:
-            "No se encontró el código de confirmación. Solicítalo de nuevo.",
+        toast.error(t("errors.tokenNotFound"), {
+          description: t("errors.tokenDescription"),
         });
         return;
       }
@@ -80,126 +69,123 @@ export default function PasswordReset() {
         formData.confirmPassword,
       );
 
-      setErrors({});
-      setFormData({
-        password: "",
-        confirmPassword: "",
-      });
-
-      // ✅ ÉXITO: Mensaje y redirección con espera
       toast.success(t("success"));
+      localStorage.removeItem("code");
 
       setTimeout(() => {
         router.replace("/login");
       }, 2000);
     } catch (error: any) {
-      console.error("Error al cambiar contraseña:", error);
-
-      if (
-        error.name === "NetworkError" ||
-        error.message?.includes("network") ||
-        error.message?.includes("conectar")
-      ) {
-        toast.error("Error de Conexión", {
-          description:
-            "No se pudo conectar con el servidor. Inténtalo más tarde.",
-        });
-      } else {
-        toast.error("Error al Restablecer Contraseña", {
-          description: error.message || "Ocurrió un error inesperado.",
-        });
-      }
+      console.error("Reset password error:", error);
+      toast.error(t("errors.resetError"), {
+        description: error.message || t("errors.default"),
+      });
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <div className="flex flex-col items-center justify-center px-5 py-4">
-      {/* Eliminamos los componentes <Notification /> */}
+    <div className="min-h-screen flex items-center justify-center bg-gray-50/50 px-4 sm:px-6 py-12 transition-all duration-500">
+      <div className="w-full max-w-[440px] animate-in fade-in slide-in-from-bottom-4 duration-500">
+        <AuthCard className="shadow-2xl shadow-black/5 border border-white/20">
+          <div className="flex flex-col items-center w-full mb-8">
+            <div className="p-3 bg-primary/5 rounded-2xl mb-4">
+              <Logo slogan={false} width={70} />
+            </div>
+            <h2
+              className={`${typography.h3} text-2xl font-bebas uppercase tracking-wider text-gray-900`}
+            >
+              {t("newPasswordTitle")}
+            </h2>
+            <p className="text-center text-muted-foreground mt-2 text-sm leading-relaxed max-w-[320px]">
+              {t("subtitle")}
+            </p>
+          </div>
 
-      <div className="flex justify-center w-full">
-        <div className="max-w-sm w-full">
-          <AuthCard>
-            <Logo slogan={false} width={80} />
-            <h2 className={typography.h3}>{t("newPasswordTitle")}</h2>
-            <div className="text-left mb-4">
-              <span>{t("subtitle")}</span>
+          <form className="w-full space-y-5" onSubmit={handleSubmit} noValidate>
+            <div className="space-y-1.5 group">
+              <label
+                htmlFor="password"
+                className="text-xs font-bold uppercase tracking-widest text-gray-500 ml-1 transition-colors group-focus-within:text-primary"
+              >
+                {t("newPasswordLabel")}
+              </label>
+              <PasswordInput
+                id="password"
+                name="password"
+                placeholder={t("placeholders.newPassword")}
+                value={formData.password}
+                onChange={(e) => {
+                  setFormData({ ...formData, password: e.target.value });
+                  if (errors.password) {
+                    setErrors((prev) => ({ ...prev, password: undefined }));
+                  }
+                }}
+                className="h-12 bg-gray-50/50 border-gray-200 focus:bg-white focus:ring-4 focus:ring-primary/10 transition-all rounded-xl"
+              />
+              {errors.password && (
+                <p className="text-destructive text-xs font-semibold ml-1 animate-in fade-in slide-in-from-top-1">
+                  {errors.password}
+                </p>
+              )}
             </div>
 
-            <form className="w-full" onSubmit={handleSubmit} noValidate>
-              <div className="space-y-3 w-full">
-                <div className="flex flex-col">
-                  <label
-                    htmlFor="password"
-                    className="text-left font-medium mb-1"
-                  >
-                    {t("newPasswordLabel")}
-                  </label>
-                  <PasswordInput
-                    id="password"
-                    name="password"
-                    ariaLabel="Campo de contraseña"
-                    placeholder="Nueva contraseña"
-                    value={formData.password}
-                    onChange={(e) =>
-                      setFormData({ ...formData, password: e.target.value })
-                    }
-                    className="bg-white"
-                  />
-                  {errors.password && (
-                    <span className="text-red-500 text-sm mt-1">
-                      {errors.password}
-                    </span>
-                  )}
+            <div className="space-y-1.5 group">
+              <label
+                htmlFor="confirmPassword"
+                className="text-xs font-bold uppercase tracking-widest text-gray-500 ml-1 transition-colors group-focus-within:text-primary"
+              >
+                {t("confirmPasswordLabel")}
+              </label>
+              <PasswordInput
+                id="confirmPassword"
+                name="confirmPassword"
+                placeholder={t("placeholders.confirmPassword")}
+                value={formData.confirmPassword}
+                onChange={(e) => {
+                  setFormData({ ...formData, confirmPassword: e.target.value });
+                  if (errors.confirmPassword) {
+                    setErrors((prev) => ({
+                      ...prev,
+                      confirmPassword: undefined,
+                    }));
+                  }
+                }}
+                className="h-12 bg-gray-50/50 border-gray-200 focus:bg-white focus:ring-4 focus:ring-primary/10 transition-all rounded-xl"
+              />
+              {errors.confirmPassword && (
+                <p className="text-destructive text-xs font-semibold ml-1 animate-in fade-in slide-in-from-top-1">
+                  {errors.confirmPassword}
+                </p>
+              )}
+            </div>
+
+            <Button
+              type="submit"
+              className="w-full h-12 text-base font-bold uppercase tracking-wide rounded-xl shadow-lg shadow-primary/20 hover:shadow-primary/30 active:scale-[0.98] transition-all mt-4"
+              disabled={isLoading}
+            >
+              {isLoading ? (
+                <div className="flex items-center gap-2">
+                  <div className="h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white" />
+                  <span>{tValidation("notifications.loading.submitting")}</span>
                 </div>
-
-                <div className="flex flex-col">
-                  <label
-                    htmlFor="confirmPassword"
-                    className="text-left font-medium mb-1"
-                  >
-                    {t("confirmPasswordLabel")}
-                  </label>
-                  <PasswordInput
-                    id="confirmPassword"
-                    name="confirmPassword"
-                    ariaLabel="Confirmar contraseña"
-                    placeholder="Confirmar contraseña"
-                    value={formData.confirmPassword}
-                    onChange={(e) =>
-                      setFormData({
-                        ...formData,
-                        confirmPassword: e.target.value,
-                      })
-                    }
-                    className="bg-white"
-                  />
-                  {errors.confirmPassword && (
-                    <span className="text-red-500 text-sm mt-1">
-                      {errors.confirmPassword}
-                    </span>
-                  )}
-                </div>
-              </div>
-
-              <div className="mt-4 w-full">
-                <Button type="submit" disabled={isLoading}>
-                  {isLoading
-                    ? tValidation("notifications.loading.submitting")
-                    : t("resetButton")}
-                </Button>
-              </div>
-            </form>
-
+              ) : (
+                t("resetButton")
+              )}
+            </Button>
+          </form>
+          <div className="mt-8 pt-6 border-t border-gray-100 w-full">
             <AuthFooter
               text={t("footer.text")}
               linkText={t("footer.linkText")}
               href="/login"
               replace={true}
+              className="justify-center"
             />
-          </AuthCard>
-        </div>
+          </div>
+        </AuthCard>
       </div>
     </div>
   );
