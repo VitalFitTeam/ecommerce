@@ -5,21 +5,14 @@ import { Navbar } from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import ServiceCard from "@/components/services/ServicesCard";
 import ServiceModal from "@/components/services/ServiceModal";
-import SearchInput from "@/components/ui/SearchInput";
-import {
-  Squares2X2Icon,
-  ListBulletIcon,
-  FunnelIcon,
-  XMarkIcon,
-} from "@heroicons/react/24/solid";
+import { FunnelIcon } from "@heroicons/react/24/solid";
 import { useTranslations } from "next-intl";
 import { api } from "@/lib/sdk-config";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/Input";
 import { cn } from "@/lib/utils";
 import { RecentServicesCarousel } from "@/components/services/RecentServicesCarousel";
 import { useWishlist } from "@/hooks/useWishlist";
-import { mainCurrencies } from "@vitalfit/sdk";
+import { ServiceFilters } from "@/components/services/ServiceFilters";
 
 const ServiceSkeleton = ({ view }: { view: "grid" | "list" }) => (
   <div
@@ -48,6 +41,28 @@ export default function ServicesPage() {
   const [view, setView] = useState<"grid" | "list">("grid");
   const [showFiltersMobile, setShowFiltersMobile] = useState(false);
 
+  const [filters, setFilters] = useState({
+    search: "",
+    category: "",
+    rating: 0,
+  });
+  const [maxPrice, setMaxPrice] = useState<number | "">("");
+  const [sort, setSort] = useState<"asc" | "desc">("desc");
+  const [currency, setCurrency] = useState("USD");
+
+  const { wishlistItems, toggleFavorite } = useWishlist();
+  const [services, setServices] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [selectedService, setSelectedService] = useState<any | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [recentServices, setRecentServices] = useState<any[]>([]);
+
+  const [page, setPage] = useState(1);
+  const limit = 100;
+  const [totalPages, setTotalPages] = useState(1);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const observerTarget = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     const storedView = localStorage.getItem("services_view_mode");
     if (storedView === "grid" || storedView === "list") {
@@ -59,27 +74,6 @@ export default function ServicesPage() {
     setView(newView);
     localStorage.setItem("services_view_mode", newView);
   };
-
-  const [filters, setFilters] = useState({
-    search: "",
-    category: "",
-  });
-
-  const { wishlistItems, toggleFavorite } = useWishlist();
-  const [maxPrice, setMaxPrice] = useState<number | "">("");
-  const [sort, setSort] = useState<"asc" | "desc">("desc");
-  const [services, setServices] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [selectedService, setSelectedService] = useState<any | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const [page, setPage] = useState(1);
-  const limit = 12;
-  const [totalPages, setTotalPages] = useState(1);
-  const [loadingMore, setLoadingMore] = useState(false);
-  const [recentServices, setRecentServices] = useState<any[]>([]);
-  const [currency, setCurrency] = useState("USD");
-  const observerTarget = useRef<HTMLDivElement>(null);
 
   const fetchServices = useCallback(async () => {
     if (page === 1) {
@@ -99,16 +93,50 @@ export default function ServicesPage() {
         sort,
       };
 
+      if (filters.rating > 0) {
+        params.min_priority_score = (filters.rating - 1) * 20;
+        params.max_priority_score = filters.rating * 20;
+      }
+
       if (maxPrice !== "") {
         params.price = Number(maxPrice);
       }
 
       const response = await api.public.getServices(params);
-      const newData = response.data || [];
 
-      setServices((prev) => (page === 1 ? newData : [...prev, ...newData]));
+      const rawData = response.data || [];
+
+      const transformedData = rawData
+        .map((service: any) => ({
+          ...service,
+          calculatedRating: Math.max(1, Math.ceil(service.priority_score / 20)),
+        }))
+        .filter((service: any) => {
+          if (filters.rating > 0) {
+            return service.calculatedRating === filters.rating;
+          }
+          return true;
+        })
+        .map((service) => ({
+          ...service,
+          rating: service.calculatedRating,
+        }));
+
+      setServices((prev) => {
+        if (page === 1) {
+          return transformedData;
+        }
+
+        const combined = [...prev, ...transformedData];
+        return combined.filter(
+          (service, index, self) =>
+            index ===
+            self.findIndex((s) => s.service_id === service.service_id),
+        );
+      });
+
       setTotalPages(
-        Math.ceil((response.total || response.data.length || 0) / limit),
+        Math.ceil((response.total || response.data?.length || 0) / limit),
       );
     } catch (error) {
       console.error("Error fetching services:", error);
@@ -118,7 +146,7 @@ export default function ServicesPage() {
         setLoadingMore(false);
       }, 300);
     }
-  }, [page, filters, sort, maxPrice, currency]);
+  }, [page, filters, sort, maxPrice, currency, limit]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -132,13 +160,12 @@ export default function ServicesPage() {
           setPage((p) => p + 1);
         }
       },
-      { threshold: 1.0 },
+      { threshold: 0.5 },
     );
 
     if (observerTarget.current) {
       observer.observe(observerTarget.current);
     }
-
     return () => observer.disconnect();
   }, [loading, loadingMore, page, totalPages]);
 
@@ -149,6 +176,7 @@ export default function ServicesPage() {
   useEffect(() => {
     fetchServices();
   }, [fetchServices]);
+
   useEffect(() => {
     try {
       const stored = JSON.parse(
@@ -160,80 +188,13 @@ export default function ServicesPage() {
     }
   }, []);
 
-  useEffect(() => {
-    if (services.length > 0 && recentServices.length > 0) {
-      let changed = false;
-      const updatedRecent = recentServices.map((rs) => {
-        const fresh = services.find((s) => s.service_id === rs.service_id);
-        if (fresh && JSON.stringify(fresh) !== JSON.stringify(rs)) {
-          changed = true;
-          return fresh;
-        }
-        return rs;
-      });
-
-      if (changed) {
-        setRecentServices(updatedRecent);
-        localStorage.setItem("recent_services", JSON.stringify(updatedRecent));
-      }
-    }
-  }, [services, recentServices]);
-
-  useEffect(() => {
-    if (currency === "USD" || recentServices.length === 0) {
-      return;
-    }
-
-    const refreshRecentPricing = async () => {
-      try {
-        const response = await api.public.getServices({
-          currency,
-          limit: 100,
-          page: 1,
-        } as any);
-
-        if (response.data) {
-          setRecentServices((prev) => {
-            let changed = false;
-            const updated = prev.map((rs) => {
-              const fresh = response.data.find(
-                (s: any) => s.service_id === rs.service_id,
-              );
-              if (fresh && JSON.stringify(fresh) !== JSON.stringify(rs)) {
-                changed = true;
-                return fresh;
-              }
-              return rs;
-            });
-            if (changed) {
-              localStorage.setItem("recent_services", JSON.stringify(updated));
-              return updated;
-            }
-            return prev;
-          });
-        }
-      } catch (e) {
-        console.error("Error refreshing recent services pricing:", e);
-      }
-    };
-
-    refreshRecentPricing();
-  }, [currency]);
-
   const saveRecentService = (service: any) => {
-    try {
-      const stored = JSON.parse(
-        localStorage.getItem("recent_services") || "[]",
-      );
-      const filtered = stored.filter(
-        (s: any) => s.service_id !== service.service_id,
-      );
-      const updated = [service, ...filtered].slice(0, 10);
-      localStorage.setItem("recent_services", JSON.stringify(updated));
-      setRecentServices(updated);
-    } catch (e) {
-      console.error(e);
-    }
+    const filtered = recentServices.filter(
+      (s: any) => s.service_id !== service.service_id,
+    );
+    const updated = [service, ...filtered].slice(0, 10);
+    localStorage.setItem("recent_services", JSON.stringify(updated));
+    setRecentServices(updated);
   };
 
   const handleOpenModal = (service: any) => {
@@ -243,12 +204,21 @@ export default function ServicesPage() {
   };
 
   const handleClearFilters = () => {
-    setFilters({ search: "", category: "" });
+    setFilters({ search: "", category: "", rating: 0 });
     setMaxPrice("");
     setSort("desc");
     setCurrency("USD");
     setPage(1);
   };
+
+  const uniqueCategories = [
+    ...new Map(
+      services.map((s) => [
+        s.service_category?.category_id,
+        s.service_category,
+      ]),
+    ).values(),
+  ];
 
   return (
     <>
@@ -268,128 +238,23 @@ export default function ServicesPage() {
           </p>
         </div>
 
-        <div className="sticky top-24 z-30 max-w-7xl mx-auto">
-          <div className="bg-white/90 backdrop-blur-md border border-gray-200 rounded-2xl shadow-sm p-4">
-            <div className="flex flex-wrap items-center justify-between gap-4">
-              <SearchInput
-                placeholder={t("filters.searchPlaceholder")}
-                value={filters.search}
-                onChange={(e) =>
-                  setFilters((prev) => ({ ...prev, search: e.target.value }))
-                }
-              />
-
-              <div className="hidden md:flex bg-gray-100 p-1 rounded-lg">
-                <button
-                  onClick={() => changeView("grid")}
-                  className={cn(
-                    "p-2 rounded-md transition-all",
-                    view === "grid"
-                      ? "bg-white shadow text-[#F27F2A]"
-                      : "text-gray-500",
-                  )}
-                >
-                  <Squares2X2Icon className="w-5 h-5" />
-                </button>
-                <button
-                  onClick={() => changeView("list")}
-                  className={cn(
-                    "p-2 rounded-md transition-all",
-                    view === "list"
-                      ? "bg-white shadow text-[#F27F2A]"
-                      : "text-gray-500",
-                  )}
-                >
-                  <ListBulletIcon className="w-5 h-5" />
-                </button>
-              </div>
-
-              <Button
-                variant="outline"
-                className="md:hidden"
-                onClick={() => setShowFiltersMobile(!showFiltersMobile)}
-              >
-                <FunnelIcon className="w-4 h-4 mr-2" />
-                {t("filters.label")}
-              </Button>
-            </div>
-
-            <div
-              className={cn(
-                "mt-4 md:flex flex-wrap items-center gap-4",
-                showFiltersMobile ? "block" : "hidden md:flex",
-              )}
-            >
-              <select
-                value={filters.category}
-                onChange={(e) =>
-                  setFilters((prev) => ({
-                    ...prev,
-                    category: e.target.value,
-                  }))
-                }
-                className="w-full md:w-48 px-3 py-2 bg-white border border-gray-200 rounded-lg text-sm"
-              >
-                <option value="">{t("filters.categoryDefault")}</option>
-                {[
-                  ...new Map(
-                    services.map((s) => [
-                      s.service_category?.category_id,
-                      s.service_category,
-                    ]),
-                  ).values(),
-                ].map(
-                  (cat: any) =>
-                    cat && (
-                      <option key={cat.category_id} value={cat.category_id}>
-                        {cat.name}
-                      </option>
-                    ),
-                )}
-              </select>
-
-              <Input
-                type="number"
-                placeholder={t("filters.maxPrice")}
-                value={maxPrice}
-                onChange={(e) =>
-                  setMaxPrice(e.target.value ? Number(e.target.value) : "")
-                }
-                className="w-full md:w-40"
-              />
-
-              <select
-                value={sort}
-                onChange={(e) => setSort(e.target.value as "asc" | "desc")}
-                className="w-full md:w-40 px-3 py-2 bg-white border border-gray-200 rounded-lg text-sm"
-              >
-                <option value="desc">{t("filters.sortDesc")}</option>
-                <option value="asc">{t("filters.sortAsc")}</option>
-              </select>
-
-              <select
-                value={currency}
-                onChange={(e) => setCurrency(e.target.value)}
-                className="w-full md:w-32 px-3 py-2 bg-white border border-gray-200 rounded-lg text-sm font-bold"
-              >
-                {mainCurrencies.map((c) => (
-                  <option key={c.code} value={c.code}>
-                    {c.code}
-                  </option>
-                ))}
-              </select>
-
-              <Button
-                onClick={handleClearFilters}
-                variant="ghost"
-                className="text-red-500 w-full md:w-auto"
-              >
-                <XMarkIcon className="w-4 h-4 mr-2" />
-                {t("filters.clear")}
-              </Button>
-            </div>
-          </div>
-        </div>
+        <ServiceFilters
+          t={t}
+          view={view}
+          setView={changeView}
+          filters={filters}
+          setFilters={setFilters}
+          maxPrice={maxPrice}
+          setMaxPrice={setMaxPrice}
+          sort={sort}
+          setSort={setSort}
+          currency={currency}
+          setCurrency={setCurrency}
+          categories={uniqueCategories}
+          onClear={handleClearFilters}
+          showFiltersMobile={showFiltersMobile}
+          setShowFiltersMobile={setShowFiltersMobile}
+        />
 
         <div className="max-w-7xl mx-auto mt-12">
           {recentServices.length > 0 && !loading && (
@@ -400,7 +265,6 @@ export default function ServicesPage() {
                   {t("recentlyViewed")}
                 </h2>
               </div>
-
               <RecentServicesCarousel
                 services={recentServices}
                 wishlistItems={wishlistItems}
@@ -445,13 +309,13 @@ export default function ServicesPage() {
                   : "flex flex-col gap-6",
               )}
             >
-              {services.map((service) => {
+              {services.map((service, index) => {
                 const wishlistItem = wishlistItems.find(
                   (item) => item.service_id === service.service_id,
                 );
                 return (
                   <ServiceCard
-                    key={service.service_id}
+                    key={`${service.service_id}-${index}`}
                     service={service}
                     view={view}
                     isFavorite={!!wishlistItem}
@@ -465,11 +329,11 @@ export default function ServicesPage() {
             </div>
           )}
 
-          <div ref={observerTarget} className="h-10 w-full" />
+          <div ref={observerTarget} className="h-20 w-full" />
 
           {loadingMore && (
             <div className="flex justify-center py-8">
-              <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin" />
+              <div className="w-8 h-8 border-4 border-[#F27F2A] border-t-transparent rounded-full animate-spin" />
             </div>
           )}
         </div>
@@ -482,13 +346,13 @@ export default function ServicesPage() {
         isFavorite={
           selectedService &&
           !!wishlistItems.find(
-            (item) => item.service_id === selectedService.service_id,
+            (i) => i.service_id === selectedService.service_id,
           )
         }
         wishlistId={
           selectedService
             ? wishlistItems.find(
-                (item) => item.service_id === selectedService.service_id,
+                (i) => i.service_id === selectedService.service_id,
               )?.wishlist_id
             : undefined
         }
@@ -498,7 +362,6 @@ export default function ServicesPage() {
           setSelectedService(null);
         }}
       />
-
       <Footer />
     </>
   );

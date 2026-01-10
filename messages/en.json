@@ -55,21 +55,43 @@
     "subtitle": "Explore everything we offer for your well-being.",
     "recentlyViewed": "Recently viewed",
     "filters": {
-      "searchPlaceholder": "Search services...",
+      "categoryLabel": "Category",
       "categoryDefault": "All categories",
-      "maxPrice": "Maximum price",
+      "categories": {
+        "sgt": "Small Group Training (SGT)",
+        "nutrition": "Nutrition & Dietetics",
+        "crossfit": "CrossFit / Performance Training",
+        "yoga": "Yoga",
+        "pilates": "Pilates (Reformer & Mat)",
+        "boxing": "Boxing & Kickboxing",
+        "dance": "Dance Fitness (Zumba, Cardio Dance)",
+        "aquatics": "Aquatics (Swimming Lessons, AquaFit)",
+        "assessments": "Fitness Assessments",
+        "martialArts": "Martial Arts (BJJ, Karate, MMA)",
+        "mindfulness": "Mindfulness & Meditation",
+        "physiotherapy": "Physiotherapy & Rehabilitation",
+        "spa": "Spa Services (Sauna, Massage)",
+        "kids": "Kids & Youth Programs",
+        "wellness": "Wellness & Recovery",
+        "functional": "Functional Training",
+        "personalTraining": "Personal Training",
+        "hiit": "HIIT & Circuit Training"
+      },
+      "label": "Filters",
+      "searchPlaceholder": "Search services...",
+      "maxPrice": "Max price",
+      "maxPriceLabel": "Max Price",
+      "ratingLabel": "Minimum Rating",
+      "sortLabel": "Sort by",
       "sortDesc": "Highest price",
       "sortAsc": "Lowest price",
-      "viewLabel": "View",
-      "viewGrid": "Grid",
-      "viewList": "List",
-      "clear": "Clear filters",
-      "label": "Filters"
+      "currencyLabel": "Currency",
+      "clear": "Clear filters"
     },
     "empty": {
-      "noResults": "We couldn't find any services",
-      "adjustFilters": "Adjust your filters to see more results.",
-      "showAll": "Show all services"
+      "noResults": "No services found",
+      "adjustFilters": "Try adjusting your filters to find what you're looking for.",
+      "showAll": "Show all"
     },
     "pagination": {
       "previous": "Previous",
@@ -861,17 +883,12 @@
     "logout": "Sign out"
   },
   "ServiceModal": {
-    "nonMember": "Non-member",
-    "member": "Member",
-    "minutes": "minutes",
+    "memberBadge": "MEMBER",
+    "nonMember": "Non-Member",
+    "inStudio": "In-Studio",
     "description": "Description",
-    "availableSchedules": "Available Schedules",
     "bookNow": "Book Now",
-    "moreInfo": "More Info",
-    "refPrice": "Reference price",
-    "wishlistRemove": "Remove from favorites",
-    "wishListSuccess": "Added to favorites!",
-    "loginRequired": "You must log in to manage favorites"
+    "loginRequired": "Please log in to continue"
   },
   "ServiceCard": {
     "member": "Member",
