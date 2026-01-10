@@ -1,8 +1,12 @@
 "use client";
 
 import Image from "next/image";
-import { FaStar, FaClock } from "react-icons/fa";
-import logoVitalFit from "../../../public/images/gym-training-chile.png";
+import { HeartIcon as HeartIconSolid } from "@heroicons/react/24/solid";
+import {
+  HeartIcon as HeartIconOutline,
+  ClockIcon,
+} from "@heroicons/react/24/outline";
+const logoVitalFit = "/images/gym-training-chile.png";
 import { Button } from "../ui/button";
 import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
@@ -54,13 +58,15 @@ const ServiceCardContent = ({
         </h3>
 
         <div
-          className="flex items-center text-sm text-gray-700 gap-1 cursor-pointer hover:scale-110 transition-transform active:scale-95 px-2 py-1 rounded-full hover:bg-yellow-50"
+          className="flex items-center text-sm text-gray-700 gap-1 cursor-pointer hover:scale-110 transition-transform active:scale-95 px-2 py-1 rounded-full hover:bg-red-50"
           onClick={onWishList}
           title={isFavorite ? t("wishlistRemove") : t("wishListSuccess")}
         >
-          <FaStar
-            className={isFavorite ? "text-yellow-400" : "text-gray-300"}
-          />
+          {isFavorite ? (
+            <HeartIconSolid className="text-red-500 w-5 h-5" />
+          ) : (
+            <HeartIconOutline className="text-gray-300 w-5 h-5" />
+          )}
           {rating}
         </div>
       </div>
@@ -74,7 +80,7 @@ const ServiceCardContent = ({
 
     <div className="flex flex-col sm:flex-row sm:items-center justify-between mt-4 gap-3">
       <div className="flex items-center gap-1 text-gray-700 text-sm">
-        <FaClock /> {duration} {t("minutes")}
+        <ClockIcon className="w-4 h-4" /> {duration} {t("minutes")}
       </div>
 
       <div className="flex flex-col sm:flex-row sm:items-center gap-2">
@@ -173,7 +179,6 @@ export default function ServiceCard({
   const [isProcessing, setIsProcessing] = useState(false);
   const [optimisticFavorite, setOptimisticFavorite] = useState(isFavorite);
 
-  // Sync with prop changes
   useEffect(() => {
     setOptimisticFavorite(isFavorite);
   }, [isFavorite]);
@@ -238,7 +243,6 @@ export default function ServiceCard({
       return;
     }
 
-    // If no external handler, we don't do anything (or we could keep old logic, but refactoring here)
     if (!onToggleFavorite) {
       return;
     }
@@ -246,7 +250,6 @@ export default function ServiceCard({
     setIsProcessing(true);
     const wasFavorite = optimisticFavorite;
 
-    // Optimistic update
     setOptimisticFavorite(!wasFavorite);
     setLocalRating((prev) => (wasFavorite ? prev - 1 : prev + 1));
 
@@ -254,7 +257,6 @@ export default function ServiceCard({
       await onToggleFavorite(service.service_id, wasFavorite, wishlistId);
     } catch (error) {
       console.error("Error toggling wishlist:", error);
-      // Rollback
       setOptimisticFavorite(wasFavorite);
       setLocalRating((prev) => (wasFavorite ? prev + 1 : prev - 1));
     } finally {

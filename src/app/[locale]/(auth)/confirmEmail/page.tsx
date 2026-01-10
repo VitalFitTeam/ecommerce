@@ -29,8 +29,11 @@ function ConfirmEmailContent() {
   }, []);
 
   const resendCode = useCallback(async () => {
+    // Busca email en sessionStorage (registro/activar) o localStorage (recuperar)
     const email =
-      localStorage.getItem("email") || sessionStorage.getItem("temp_email");
+      flow === "recover"
+        ? localStorage.getItem("email")
+        : sessionStorage.getItem("temp_email");
 
     if (!email) {
       toast.error(t("errors.noEmail"));
@@ -38,17 +41,23 @@ function ConfirmEmailContent() {
     }
 
     try {
-      await api.user.resendActivateOtp(email);
+      if (flow === "recover") {
+        await api.auth.forgotPassword(email);
+      } else {
+        await api.user.resendActivateOtp(email);
+      }
       toast.success(t("notifications.resendSuccess"));
     } catch (error) {
       console.error("Error al reenviar código:", error);
       toast.error(t("notifications.resendError"));
     }
-  }, [t]);
+  }, [t, flow]);
 
+  // CORRECCIÓN: Se elimina la ejecución automática de resendCode() para el flujo activate.
+  // Solo se envía manualmente si el usuario presiona "Reenviar Código".
   useEffect(() => {
     if (flow === "activate") {
-      resendCode();
+      // resendCode(); <--- LÍNEA ELIMINADA PARA EVITAR DUPLICADOS
     }
   }, [flow, resendCode]);
 
@@ -56,9 +65,7 @@ function ConfirmEmailContent() {
 
   const handleInputChange = (index: number, value: string) => {
     const char = value.slice(-1).toUpperCase();
-    if (!isValidChar(char) && char !== "") {
-      return;
-    }
+    if (!isValidChar(char) && char !== "") {return;}
 
     const newCode = [...code];
     newCode[index] = char;
@@ -134,15 +141,12 @@ function ConfirmEmailContent() {
 
             if (loginResponse.token) {
               toast.success(t("success.register"));
-
               await login(
                 loginResponse.token,
                 loginResponse.refresh_token || "",
               );
-
               sessionStorage.removeItem("temp_email");
               sessionStorage.removeItem("temp_password");
-
               router.replace("/dashboard");
               return;
             }
@@ -177,8 +181,6 @@ function ConfirmEmailContent() {
   return (
     <div className="min-h-screen bg-gray-50/50 flex items-center justify-center px-4 sm:px-6 py-10">
       <div className="w-full max-w-sm sm:max-w-md">
-        {" "}
-        {/* Contenedor controlado */}
         <AuthCard>
           <div className="flex flex-col items-center space-y-4 mb-8">
             <Logo slogan={false} width={70} />
@@ -203,21 +205,10 @@ function ConfirmEmailContent() {
                   type="text"
                   maxLength={1}
                   value={char}
-                  autoComplete="one-time-code"
-                  inputMode="text"
                   onChange={(e) => handleInputChange(index, e.target.value)}
                   onKeyDown={(e) => handleKeyDown(index, e)}
                   onPaste={handlePaste}
-                  className={`
-                  w-full aspect-square text-center text-xl font-bold 
-                  border-2 rounded-lg transition-all duration-200 uppercase
-                  focus:outline-none focus:ring-4
-                  ${
-                    char
-                      ? "border-primary bg-primary/5 ring-primary/10"
-                      : "border-gray-200 bg-gray-50/50 focus:border-primary focus:ring-primary/10"
-                  }
-                `}
+                  className={`w-full aspect-square text-center text-xl font-bold border-2 rounded-lg transition-all duration-200 uppercase focus:outline-none focus:ring-4 ${char ? "border-primary bg-primary/5 ring-primary/10" : "border-gray-200 bg-gray-50/50 focus:border-primary focus:ring-primary/10"}`}
                   placeholder="•"
                 />
               ))}
@@ -231,7 +222,6 @@ function ConfirmEmailContent() {
               >
                 {loading ? t("verifying") : t("verifyButton")}
               </Button>
-
               <div className="text-center">
                 <button
                   type="button"
