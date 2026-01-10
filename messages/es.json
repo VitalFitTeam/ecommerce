@@ -533,6 +533,10 @@
   "classes": {
     "title": "PRÓXIMAS CLASES",
     "viewAll": "Ver todas mis clases",
+    "loading": "Cargando tus clases...",
+    "noClasses": "No tienes clases próximas",
+    "reservePrompt": "Reserva una clase en nuestra sección de servicios",
+    "error": "Error al cargar las clases reservadas",
     "availability": {
       "available": "Disponible",
       "limited": "Cupos limitados",
@@ -825,7 +829,8 @@
       "planName": "Nombre de la membresía",
       "status": "Estado",
       "reason": "Motivo de cancelación",
-      "description": "Descripción"
+      "description": "Descripción",
+      "additionalNotes": "Notas adicionales (Opcional)"
     },
     "status": {
       "active": "Activa"
@@ -842,7 +847,15 @@
     },
     "actions": {
       "cancel": "Cancelar",
-      "confirm": "Confirmar cancelación"
+      "confirm": "Confirmar cancelación",
+      "cancelling": "Cancelando..."
+    },
+    "notifications": {
+      "loadError": "Error al cargar los motivos de cancelación",
+      "selectReason": "Por favor selecciona un motivo",
+      "provideDescription": "Por favor proporciona una descripción",
+      "success": "Membresía cancelada con éxito",
+      "cancelError": "Error al cancelar la membresía"
     }
   },
   "security": {
