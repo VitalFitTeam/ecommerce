@@ -18,7 +18,8 @@ export const useCheckoutLogic = () => {
   const searchParams = useSearchParams();
   const { token, user } = useAuth();
   const { selection, actions } = useCheckout();
-  const membershipId = searchParams.get("membershipId")?.trim();
+  const urlMembershipId = searchParams.get("membershipId")?.trim();
+  const activeMembershipId = urlMembershipId || selection.membershipId;
 
   const [isCreatingInvoice, setIsCreatingInvoice] = useState(false);
   const lastFetchedBranchId = useRef<string | null>(null);
@@ -52,12 +53,20 @@ export const useCheckoutLogic = () => {
     }));
   }, [rawPackages]);
 
+  // Sync URL membershipId with selection state
+  useEffect(() => {
+    if (urlMembershipId && urlMembershipId !== selection.membershipId) {
+      actions.reset();
+      actions.setMembershipId(urlMembershipId);
+    }
+  }, [urlMembershipId, selection.membershipId, actions]);
+
   const currentMembership = useMemo(
     () =>
       memberships?.find(
-        (m) => String(m.membership_type_id) === String(membershipId),
+        (m) => String(m.membership_type_id) === String(activeMembershipId),
       ),
-    [memberships, membershipId],
+    [memberships, activeMembershipId],
   );
 
   const prices = useMemo(() => {
