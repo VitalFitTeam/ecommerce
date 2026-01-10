@@ -147,7 +147,6 @@
       "link": "Activar"
     }
   },
-
   "dashboard": {
     "navbar": {
       "logo_alt": "VitalFit Logo",
@@ -901,7 +900,10 @@
     "availableSchedules": "Horarios disponibles",
     "bookNow": "Reservar ahora",
     "moreInfo": "Más información",
-    "refPrice": "Monto referencial"
+    "refPrice": "Monto referencial",
+    "wishlistRemove": "Quitar de favoritos",
+    "wishListSuccess": "¡Agregado a favoritos!",
+    "loginRequired": "Debes iniciar sesión para gestionar tus favoritos"
   },
   "ServiceCard": {
     "member": "Miembro",
@@ -914,7 +916,9 @@
     "loginRequired": "Debes iniciar sesión para gestionar tus favoritos",
     "wishlistRemove": "Quitar de favoritos",
     "wishlistRemoveSuccess": "Eliminado de favoritos",
-    "refPrice": "Monto referencial"
+    "refPrice": "Monto referencial",
+    "noTitle": "Servicio sin título",
+    "noDescription": "Descripción no disponible."
   },
   "invoiceDetails": {
     "backToHistory": "Volver al historial",
@@ -1019,12 +1023,12 @@
   },
   "Wishlist": {
     "loading": "Cargando tus favoritos...",
-    "title": "MI WISHLIST",
+    "title": "Mi Wishlist",
     "description": "Gestiona tus servicios favoritos y reserva cuando estés listo.",
     "filterPlaceholder": "Filtrar servicios...",
     "clearFilters": "Limpiar filtros",
-    "noResults": "NO SE ENCONTRARON RESULTADOS",
-    "empty": "AÚN NO TIENES SERVICIOS EN TU LISTA DE DESEOS",
+    "noResults": "No se encontraron resultados",
+    "empty": "Aún no tienes servicios en tu lista de deseos",
     "searchSuggestion": "Prueba con otros términos de búsqueda.",
     "emptySuggestion": "Explora nuestro catálogo y guarda los servicios que más te gusten.",
     "viewServices": "Ver Servicios",

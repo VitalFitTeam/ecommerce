@@ -158,13 +158,6 @@ export default function WishlistPage() {
 
                       <div className="grid grid-cols-2 gap-3 mb-3">
                         <Button
-                          onClick={() => router.push(`/services`)}
-                          variant="default"
-                          className="rounded-xl font-bold h-11"
-                        >
-                          {t("viewDetail")}
-                        </Button>
-                        <Button
                           onClick={() => handleRemoveService(item.wishlist_id)}
                           variant="outline"
                           className="rounded-xl font-bold h-11 border-red-100 text-red-500 hover:bg-red-50 hover:text-red-600"
@@ -172,14 +165,6 @@ export default function WishlistPage() {
                           {t("remove")}
                         </Button>
                       </div>
-
-                      <Button
-                        onClick={() => router.push(`/services`)}
-                        variant="default"
-                        className="w-full h-12 rounded-xl font-bold shadow-lg"
-                      >
-                        {t("reserve")}
-                      </Button>
                     </div>
                   </CardContent>
                 </Card>

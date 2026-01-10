@@ -9,6 +9,7 @@ import TextInput from "@/components/ui/TextInput";
 import { getActivateSchema } from "@/lib/validation/activateSchema";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "@/i18n/routing";
+import { api } from "@/lib/sdk-config"; // Importación necesaria
 import { toast } from "sonner";
 
 export default function ActivateAccount() {
@@ -20,6 +21,10 @@ export default function ActivateAccount() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Evita múltiples envíos si ya está cargando
+    if (isLoading) {return;}
+
     setIsLoading(true);
     toast.dismiss();
 
@@ -34,16 +39,19 @@ export default function ActivateAccount() {
     }
 
     try {
-      sessionStorage.setItem("temp_email", formData.email);
+      // ENVIAR CÓDIGO: Se dispara aquí una única vez
+      await api.user.resendActivateOtp(formData.email);
 
+      // Guardar email para el reenvío en la siguiente pantalla
+      sessionStorage.setItem("temp_email", formData.email);
       toast.success(t("notifications.success"));
 
+      // Redirigir al flujo de activación
       router.replace("/confirmEmail?flow=activate");
     } catch (error) {
       console.error("Error activation:", error);
       toast.error(t("notifications.error"));
-    } finally {
-      setIsLoading(false);
+      setIsLoading(false); // Solo liberamos si hay error para reintentar
     }
   };
 
@@ -69,7 +77,6 @@ export default function ActivateAccount() {
                 <TextInput
                   id="email"
                   name="email"
-                  ariaLabel="email"
                   placeholder={t("email.placeholder")}
                   value={formData.email}
                   onChange={(e) => {
@@ -87,7 +94,7 @@ export default function ActivateAccount() {
             </div>
 
             <div className="mt-4 w-full">
-              <Button type="submit" disabled={isLoading}>
+              <Button type="submit" disabled={isLoading} className="w-full">
                 {isLoading
                   ? t("submitButton.loading")
                   : t("submitButton.default")}

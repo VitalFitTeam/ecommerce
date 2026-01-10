@@ -19,7 +19,6 @@ import { Input } from "@/components/ui/Input";
 import { cn } from "@/lib/utils";
 import { RecentServicesCarousel } from "@/components/services/RecentServicesCarousel";
 import { useWishlist } from "@/hooks/useWishlist";
-import { useAuth } from "@/context/AuthContext";
 import { mainCurrencies } from "@vitalfit/sdk";
 
 const ServiceSkeleton = ({ view }: { view: "grid" | "list" }) => (
@@ -48,6 +47,18 @@ export default function ServicesPage() {
 
   const [view, setView] = useState<"grid" | "list">("grid");
   const [showFiltersMobile, setShowFiltersMobile] = useState(false);
+
+  useEffect(() => {
+    const storedView = localStorage.getItem("services_view_mode");
+    if (storedView === "grid" || storedView === "list") {
+      setView(storedView);
+    }
+  }, []);
+
+  const changeView = (newView: "grid" | "list") => {
+    setView(newView);
+    localStorage.setItem("services_view_mode", newView);
+  };
 
   const [filters, setFilters] = useState({
     search: "",
@@ -270,7 +281,7 @@ export default function ServicesPage() {
 
               <div className="hidden md:flex bg-gray-100 p-1 rounded-lg">
                 <button
-                  onClick={() => setView("grid")}
+                  onClick={() => changeView("grid")}
                   className={cn(
                     "p-2 rounded-md transition-all",
                     view === "grid"
@@ -281,7 +292,7 @@ export default function ServicesPage() {
                   <Squares2X2Icon className="w-5 h-5" />
                 </button>
                 <button
-                  onClick={() => setView("list")}
+                  onClick={() => changeView("list")}
                   className={cn(
                     "p-2 rounded-md transition-all",
                     view === "list"
@@ -454,7 +465,6 @@ export default function ServicesPage() {
             </div>
           )}
 
-          {/* Observer Target */}
           <div ref={observerTarget} className="h-10 w-full" />
 
           {loadingMore && (
@@ -469,6 +479,20 @@ export default function ServicesPage() {
         service={selectedService}
         isOpen={isModalOpen}
         showReferencePrice={currency !== "USD"}
+        isFavorite={
+          selectedService &&
+          !!wishlistItems.find(
+            (item) => item.service_id === selectedService.service_id,
+          )
+        }
+        wishlistId={
+          selectedService
+            ? wishlistItems.find(
+                (item) => item.service_id === selectedService.service_id,
+              )?.wishlist_id
+            : undefined
+        }
+        onToggleFavorite={toggleFavorite}
         onClose={() => {
           setIsModalOpen(false);
           setSelectedService(null);

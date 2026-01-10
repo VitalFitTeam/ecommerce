@@ -85,13 +85,13 @@ export default function Home() {
       </main>
 
       <section className="w-full px-0 md:px-4 lg:px-8">
-        <div className="w-full h-[400px] md:h-[600px] lg:h-[700px] relative rounded-xl md:rounded-2xl overflow-hidden shadow-2xl">
+        <div className="w-full flex justify-center rounded-xl md:rounded-2xl overflow-hidden shadow-2xl">
           <Image
             src="/images/bannerfooter.jpeg"
             alt="Descarga la app"
-            fill
-            className="object-cover"
-            sizes="100vw"
+            width={1920} // Ajusta al ancho real de tu imagen
+            height={700} // Ajusta al alto real de tu imagen
+            className="w-full h-auto object-none"
             priority={false}
           />
         </div>

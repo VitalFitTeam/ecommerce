@@ -1,15 +1,22 @@
 "use client";
 
 import Image from "next/image";
-import {
-  XMarkIcon,
-  StarIcon,
-  ClockIcon,
-  MapPinIcon,
-} from "@heroicons/react/24/solid";
+import { XMarkIcon, ClockIcon, MapPinIcon } from "@heroicons/react/24/solid";
+import { HeartIcon as HeartIconSolid } from "@heroicons/react/24/solid";
+import { HeartIcon as HeartIconOutline } from "@heroicons/react/24/outline";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
 import { useTranslations } from "next-intl";
+import { useState, useEffect } from "react";
+import { toast } from "sonner";
+import { useAuth } from "@/context/AuthContext";
 
 interface ServiceModalProps {
   service: {
@@ -24,6 +31,7 @@ interface ServiceModalProps {
     service_category: {
       category_id: string;
       name: string;
+      image_main?: string;
     };
     images: {
       image_id: string;
@@ -49,19 +57,93 @@ interface ServiceModalProps {
   isOpen: boolean;
   onClose: () => void;
   showReferencePrice?: boolean;
+  isFavorite?: boolean;
+  wishlistId?: string;
+  onToggleFavorite?: (
+    serviceId: string,
+    isFavorite: boolean,
+    wishlistId?: string,
+  ) => Promise<void>;
 }
+
+import Logo from "@/components/features/Logo";
+
+const ServiceImage = ({ url, alt }: { url: string; alt: string }) => {
+  const [hasError, setHasError] = useState(false);
+
+  if (hasError) {
+    return (
+      <div className="w-full h-full flex items-center justify-center bg-gray-100">
+        <Logo slogan={true} theme="dark" width={200} />
+      </div>
+    );
+  }
+
+  return (
+    <Image
+      src={url}
+      alt={alt}
+      fill
+      className="object-cover"
+      onError={() => setHasError(true)}
+    />
+  );
+};
 
 export default function ServiceModal({
   service,
   isOpen,
   onClose,
   showReferencePrice,
+  isFavorite = false,
+  wishlistId,
+  onToggleFavorite,
 }: ServiceModalProps) {
   const t = useTranslations("ServiceModal");
+  const { token } = useAuth();
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [optimisticFavorite, setOptimisticFavorite] = useState(isFavorite);
+  const [localRating, setLocalRating] = useState(0);
+
+  useEffect(() => {
+    setOptimisticFavorite(isFavorite);
+    if (service) {
+      setLocalRating(service.priority_score);
+    }
+  }, [isFavorite, service]);
 
   if (!isOpen || !service) {
     return null;
   }
+
+  const handleWishList = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+
+    if (!token) {
+      toast.error(t("loginRequired"));
+      return;
+    }
+
+    if (isProcessing || !onToggleFavorite) {
+      return;
+    }
+
+    setIsProcessing(true);
+    const wasFavorite = optimisticFavorite;
+
+    setOptimisticFavorite(!wasFavorite);
+    setLocalRating((prev) => (wasFavorite ? prev - 1 : prev + 1));
+
+    try {
+      await onToggleFavorite(service.service_id, wasFavorite, wishlistId);
+    } catch (error) {
+      console.error("Error toggling wishlist:", error);
+      setOptimisticFavorite(wasFavorite);
+      setLocalRating((prev) => (wasFavorite ? prev + 1 : prev - 1));
+    } finally {
+      setIsProcessing(false);
+    }
+  };
 
   const schedule = [
     "6:00 AM",
@@ -71,11 +153,38 @@ export default function ServiceModal({
     "5:00 PM",
     "8:00 PM",
   ];
+
   const activeBanner = service.banners?.find((b) => b.is_active);
-  const imgSrc =
-    activeBanner?.image_url ??
-    service.images?.[0]?.image_url ??
-    "/images/gym-training-chile.png";
+  const displayImages = [];
+
+  if (activeBanner) {
+    displayImages.push({
+      id: activeBanner.banner_id,
+      url: activeBanner.image_url,
+      alt: activeBanner.name,
+    });
+  }
+
+  if (service.images && service.images.length > 0) {
+    const sortedImages = [...service.images].sort(
+      (a, b) => a.display_order - b.display_order,
+    );
+    sortedImages.forEach((img) => {
+      displayImages.push({
+        id: img.image_id,
+        url: img.image_url,
+        alt: img.alt_text,
+      });
+    });
+  }
+
+  if (displayImages.length === 0) {
+    displayImages.push({
+      id: "default",
+      url: "/images/gym-training-chile.png",
+      alt: service.name,
+    });
+  }
 
   return (
     <AnimatePresence>
@@ -83,7 +192,7 @@ export default function ServiceModal({
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="fixed inset-0 bg-black/50 flex justify-center items-center z-50 p-4 sm:p-6"
+        className="fixed inset-0 bg-black/50 mt-20 flex justify-center items-center z-50 p-4 sm:p-6"
         onClick={onClose}
       >
         <motion.div
@@ -93,18 +202,34 @@ export default function ServiceModal({
           onClick={(e) => e.stopPropagation()}
           className="bg-white rounded-2xl shadow-lg w-full max-w-md sm:max-w-lg md:max-w-xl overflow-y-auto max-h-[90vh] flex flex-col"
         >
-          <div className="relative">
-            <Image
-              src={imgSrc}
-              alt={service.name}
-              width={600}
-              height={300}
-              className="w-full h-48 sm:h-56 md:h-64 object-cover"
-            />
+          <div className="relative group">
+            {displayImages.length > 1 ? (
+              <Carousel className="w-full">
+                <CarouselContent>
+                  {displayImages.map((img) => (
+                    <CarouselItem key={img.id}>
+                      <div className="relative w-full h-48 sm:h-56 md:h-64">
+                        <ServiceImage url={img.url} alt={img.alt} />
+                      </div>
+                    </CarouselItem>
+                  ))}
+                </CarouselContent>
+                <CarouselPrevious className="left-2 bg-primary hover:bg-primary/80 text-primary border-none" />
+                <CarouselNext className="right-2 bg-primary hover:bg-primary/80 text-primary border-none" />
+              </Carousel>
+            ) : (
+              <div className="relative w-full h-48 sm:h-56 md:h-64">
+                <ServiceImage
+                  url={displayImages[0].url}
+                  alt={displayImages[0].alt}
+                />
+              </div>
+            )}
+
             <Button
               variant="ghost"
               size="icon"
-              className="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-1"
+              className="absolute top-3 right-3 bg-white/80 hover:bg-white rounded-full p-1 z-10"
               onClick={onClose}
             >
               <XMarkIcon className="w-5 h-5 sm:w-6 sm:h-6" />
@@ -116,9 +241,21 @@ export default function ServiceModal({
               <h2 className="text-[#F27F2A] font-semibold text-2xl sm:text-3xl uppercase mb-2 sm:mb-0">
                 {service.name}
               </h2>
-              <div className="flex items-center text-gray-700 text-sm sm:text-base">
-                <StarIcon className="w-4 h-4 text-yellow-400 mr-1" />
-                {service.priority_score}
+              <div
+                className="flex items-center text-sm gap-1 cursor-pointer hover:scale-110 transition-transform active:scale-95 px-2 py-1 rounded-full hover:bg-red-50"
+                onClick={handleWishList}
+                title={
+                  optimisticFavorite
+                    ? t("wishlistRemove")
+                    : t("wishListSuccess")
+                }
+              >
+                {optimisticFavorite ? (
+                  <HeartIconSolid className="w-5 h-5 text-red-500" />
+                ) : (
+                  <HeartIconOutline className="w-5 h-5 text-gray-300" />
+                )}
+                {localRating}
               </div>
             </div>
 
@@ -207,11 +344,6 @@ export default function ServiceModal({
                   {hour}
                 </Button>
               ))}
-            </div>
-
-            <div className="flex flex-col sm:flex-row gap-3">
-              <Button>{t("bookNow")}</Button>
-              <Button variant="outline">{t("moreInfo")}</Button>
             </div>
           </div>
         </motion.div>

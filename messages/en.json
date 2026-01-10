@@ -868,7 +868,10 @@
     "availableSchedules": "Available Schedules",
     "bookNow": "Book Now",
     "moreInfo": "More Info",
-    "refPrice": "Reference price"
+    "refPrice": "Reference price",
+    "wishlistRemove": "Remove from favorites",
+    "wishListSuccess": "Added to favorites!",
+    "loginRequired": "You must log in to manage favorites"
   },
   "ServiceCard": {
     "member": "Member",
@@ -881,7 +884,9 @@
     "loginRequired": "You must log in to manage favorites",
     "wishlistRemove": "Remove from favorites",
     "wishlistRemoveSuccess": "Removed from favorites",
-    "refPrice": "Reference price"
+    "refPrice": "Reference price",
+    "noTitle": "Untitled Service",
+    "noDescription": "No description available."
   },
   "invoiceDetails": {
     "backToHistory": "Back to history",
@@ -986,12 +991,12 @@
   },
   "Wishlist": {
     "loading": "Loading your favorites...",
-    "title": "MY WISHLIST",
+    "title": "My Wishlist",
     "description": "Manage your favorite services and book when you're ready.",
     "filterPlaceholder": "Filter services...",
     "clearFilters": "Clear filters",
-    "noResults": "NO RESULTS FOUND",
-    "empty": "YOU DON'T HAVE ANY SERVICES IN YOUR WISHLIST YET",
+    "noResults": "No results found",
+    "empty": "You don't have any services in your wishlist yet",
     "searchSuggestion": "Try other search terms.",
     "emptySuggestion": "Explore our catalog and save the services you like the most.",
     "viewServices": "View Services",
