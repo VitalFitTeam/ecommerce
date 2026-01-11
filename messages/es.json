@@ -664,6 +664,7 @@
       "branchPlaceholder": "¿A qué sede asistirás?",
       "confirmed": "Sede Confirmada",
       "basePlanLabel": "Plan base seleccionado",
+      "baseServiceLabel": "Servicio seleccionado",
       "extraServicesTitle": "¿Quieres complementar tu plan?",
       "extraServicesTitleLocked": "Servicios complementarios",
       "extraServicesDesc": "Añade servicios extra y potencia tu entrenamiento.",
@@ -685,7 +686,9 @@
     },
     "MembershipSummary": {
       "defaultDescription": "Plan de membresía seleccionado.",
+      "defaultServiceDescription": "Servicio seleccionado.",
       "totalPrice": "Precio del Plan",
+      "totalServicePrice": "Precio del Servicio",
       "duration": "Duración",
       "days": "días"
     },
@@ -705,6 +708,7 @@
     "OrderSummary": {
       "title": "Resumen",
       "baseMembership": "Membresía base",
+      "baseService": "Servicio base",
       "subtotal": "Subtotal",
       "taxLabel": "Impuestos ({percent}%)",
       "totalLabel": "Total",

@@ -19,6 +19,7 @@ export default function CheckoutPage() {
     branches,
     normalizedPackages,
     currentMembership,
+    currentService,
     prices,
     loading,
     handlers,
@@ -70,6 +71,7 @@ export default function CheckoutPage() {
             {selection.step === 1 && (
               <StepSelectPlan
                 data={currentMembership}
+                service={currentService}
                 packages={normalizedPackages}
                 selectedPackages={selection.packages}
                 togglePackage={actions.togglePackage}
@@ -104,6 +106,7 @@ export default function CheckoutPage() {
             <div className="lg:col-span-4 animate-in fade-in slide-in-from-right-4 duration-500">
               <OrderSummary
                 membership={currentMembership}
+                service={currentService}
                 selectedPackages={selection.packages}
                 prices={prices}
                 step={selection.step}

@@ -16,10 +16,13 @@ export const useCheckoutLogic = () => {
   const t = useTranslations("Checkout.Notifications");
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { token, user } = useAuth();
+  const { token, user, loading: authLoading } = useAuth();
   const { selection, actions } = useCheckout();
   const urlMembershipId = searchParams.get("membershipId")?.trim();
   const activeMembershipId = urlMembershipId || selection.membershipId;
+  const urlServiceId = searchParams.get("serviceId")?.trim();
+  const [currentService, setCurrentService] = useState<any | null>(null);
+  const [loadingS, setLoadingS] = useState(false);
 
   const [isCreatingInvoice, setIsCreatingInvoice] = useState(false);
   const lastFetchedBranchId = useRef<string | null>(null);
@@ -53,13 +56,73 @@ export const useCheckoutLogic = () => {
     }));
   }, [rawPackages]);
 
-  // Sync URL membershipId with selection state
+  useEffect(() => {
+    if (authLoading) {
+      return;
+    }
+
+    if (!user) {
+      if (
+        !urlMembershipId &&
+        !urlServiceId &&
+        (selection.membershipId ||
+          selection.packages.length > 0 ||
+          selection.branchId)
+      ) {
+        actions.reset();
+      }
+    } else {
+      if (selection.userId && selection.userId !== user.user_id) {
+        actions.reset();
+        actions.setUserId(user.user_id);
+      } else if (!selection.userId) {
+        if (
+          selection.membershipId ||
+          selection.packages.length > 0 ||
+          selection.branchId
+        ) {
+          actions.reset();
+        }
+        actions.setUserId(user.user_id);
+      }
+    }
+  }, [
+    user,
+    authLoading,
+    selection.userId,
+    selection.membershipId,
+    selection.packages.length,
+    selection.branchId,
+    actions,
+    urlMembershipId,
+    urlServiceId,
+  ]);
   useEffect(() => {
     if (urlMembershipId && urlMembershipId !== selection.membershipId) {
       actions.reset();
       actions.setMembershipId(urlMembershipId);
     }
   }, [urlMembershipId, selection.membershipId, actions]);
+
+  useEffect(() => {
+    if (urlServiceId) {
+      const fetchService = async () => {
+        setLoadingS(true);
+        try {
+          const res = await api.public.getServices({ limit: 100 } as any);
+          const found = res.data?.find(
+            (s: any) => s.service_id === urlServiceId,
+          );
+          setCurrentService(found || null);
+        } catch (e) {
+          console.error(e);
+        } finally {
+          setLoadingS(false);
+        }
+      };
+      fetchService();
+    }
+  }, [urlServiceId]);
 
   const currentMembership = useMemo(
     () =>
@@ -74,15 +137,19 @@ export const useCheckoutLogic = () => {
     const currentTax = taxRate || 0;
 
     const baseUSD = parsePrice(currentMembership?.price);
+    const serviceUSD = parsePrice(currentService?.lowest_price_member); // Assuming member price preference
     const extrasUSD = selection.packages.reduce(
       (acc, p) => acc + parsePrice(p.price),
       0,
     );
-    const subtotalUSD = baseUSD + extrasUSD;
+    const subtotalUSD = baseUSD + serviceUSD + extrasUSD;
 
     const baseDisplay = isRef
       ? parsePrice(currentMembership?.ref_price)
       : baseUSD;
+    const serviceDisplay = isRef
+      ? parsePrice(currentService?.ref_lowest_price_member)
+      : serviceUSD;
     const extrasDisplay = selection.packages.reduce((acc, cartPkg) => {
       const freshPkg = normalizedPackages.find(
         (p) => p.packageId === cartPkg.packageId,
@@ -95,7 +162,7 @@ export const useCheckoutLogic = () => {
       );
     }, 0);
 
-    const subtotalDisplay = baseDisplay + extrasDisplay;
+    const subtotalDisplay = baseDisplay + serviceDisplay + extrasDisplay;
 
     return {
       subtotalBase: subtotalUSD,
@@ -111,6 +178,7 @@ export const useCheckoutLogic = () => {
     };
   }, [
     currentMembership,
+    currentService,
     selection.packages,
     normalizedPackages,
     taxRate,
@@ -148,7 +216,11 @@ export const useCheckoutLogic = () => {
   }, [selection.branchId, token, selection.step, actions, t]);
 
   const handleProcessCheckout = useCallback(async () => {
-    if (!selection.branchId || !currentMembership || !user) {
+    if (
+      !selection.branchId ||
+      (!currentMembership && !currentService) ||
+      !user
+    ) {
       toast.warning(t("missingSelection"), {
         description: t("missingSelectionDetail"),
       });
@@ -158,21 +230,36 @@ export const useCheckoutLogic = () => {
     try {
       setIsCreatingInvoice(true);
 
+      const items: any[] = [
+        ...(currentMembership
+          ? [
+              {
+                item_id: currentMembership.membership_type_id,
+                item_type: "membership",
+                quantity: 1,
+              },
+            ]
+          : []),
+        ...(currentService
+          ? [
+              {
+                item_id: currentService.service_id,
+                item_type: "service",
+                quantity: 1,
+              },
+            ]
+          : []),
+        ...selection.packages.map((p) => ({
+          item_id: p.packageId,
+          item_type: "package",
+          quantity: 1,
+        })),
+      ];
+
       const payload = {
         branch_id: selection.branchId,
         user_id: undefined as any,
-        items: [
-          {
-            item_id: currentMembership.membership_type_id,
-            item_type: "membership",
-            quantity: 1,
-          },
-          ...selection.packages.map((p) => ({
-            item_id: p.packageId,
-            item_type: "package",
-            quantity: 1,
-          })),
-        ],
+        items,
       };
 
       const res = await api.billing.createInvoice(payload, token || "");
@@ -214,9 +301,10 @@ export const useCheckoutLogic = () => {
     branches,
     normalizedPackages,
     currentMembership,
+    currentService,
     prices,
     isCreatingInvoice,
-    loading: { loadingM, loadingP, loadingB, isInitialLoading },
+    loading: { loadingM, loadingP, loadingB, loadingS, isInitialLoading },
     handlers: { handleProcessCheckout, router },
   };
 };
