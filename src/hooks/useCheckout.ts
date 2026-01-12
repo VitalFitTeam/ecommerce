@@ -40,10 +40,14 @@ export const useCheckout = () => {
 
   useEffect(() => {
     if (typeof window !== "undefined") {
-      localStorage.setItem(
-        "vitalfit_checkout_state",
-        JSON.stringify(selection),
-      );
+      if (selection.step === 3) {
+        localStorage.removeItem("vitalfit_checkout_state");
+      } else {
+        localStorage.setItem(
+          "vitalfit_checkout_state",
+          JSON.stringify(selection),
+        );
+      }
     }
   }, [selection]);
 

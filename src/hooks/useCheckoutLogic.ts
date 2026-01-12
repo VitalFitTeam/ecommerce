@@ -160,7 +160,8 @@ export const useCheckoutLogic = () => {
 
       const payload = {
         branch_id: selection.branchId,
-        user_id: undefined as any,
+        user_id:
+          user?.role?.name !== "client" ? user?.user_id : (undefined as any),
         items: [
           {
             item_id: currentMembership.membership_type_id,
