@@ -80,7 +80,6 @@ export default function ChangePasswordPage() {
 
     setIsSubmitting(true);
     try {
-      // Conexión con el SDK de VitalFit
       await api.user.UpgradePassword(
         token,
         formData.currentPassword,
@@ -93,16 +92,13 @@ export default function ChangePasswordPage() {
     } catch (err: any) {
       const errorMsg = err.message?.toLowerCase() || "";
 
-      // Manejo de contraseña actual incorrecta (Unauthorized)
       if (errorMsg.includes("unauthorized") || err.status === 401) {
         toast.error(t("validation.currentPasswordIncorrect"));
         setError((prev) => ({
           ...prev,
           currentPassword: [t("validation.currentPasswordIncorrect")],
         }));
-      }
-      // Manejo del error de confirmación del backend (eqfield)
-      else if (
+      } else if (
         errorMsg.includes("confirmpassword") ||
         errorMsg.includes("eqfield")
       ) {
@@ -123,7 +119,9 @@ export default function ChangePasswordPage() {
     <main className="min-h-screen bg-white">
       <div className="p-4 md:p-16 pt-6">
         <div className="max-w-xl mx-auto mb-8 text-center">
-          <p className="text-2xl font-semibold text-gray-900">{t("ptitle")}</p>
+          <h2 className="text-2xl font-semibold text-gray-900">
+            {t("ptitle")}
+          </h2>
           <p className="mt-2 text-sm text-gray-500">{t("pdescription")}</p>
         </div>
 
@@ -132,7 +130,6 @@ export default function ChangePasswordPage() {
           className="max-w-xl mx-auto p-6 md:p-8 space-y-6"
           noValidate
         >
-          {/* Contraseña Actual */}
           <div className="space-y-2 text-left">
             <label className="block text-sm font-medium text-gray-700">
               {t("currentPasswordLabel")}
@@ -152,7 +149,6 @@ export default function ChangePasswordPage() {
             )}
           </div>
 
-          {/* Nueva Contraseña - Mismas validaciones que Registro */}
           <div className="space-y-2 text-left">
             <label className="block text-sm font-medium text-gray-700">
               {t("newPasswordLabel")}
@@ -168,7 +164,6 @@ export default function ChangePasswordPage() {
             )}
           </div>
 
-          {/* Confirmar Contraseña - Mismas validaciones que Registro */}
           <div className="space-y-2 text-left">
             <label className="block text-sm font-medium text-gray-700">
               {t("confirmPasswordLabel")}

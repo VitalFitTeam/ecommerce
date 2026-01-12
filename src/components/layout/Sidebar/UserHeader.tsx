@@ -5,6 +5,7 @@ import { api } from "@/lib/sdk-config";
 import { useAuth } from "@/context/AuthContext";
 import { useCallback, useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
+import { useClientBookings } from "@/hooks/useClientBookings";
 
 export default function UserHeader({ user }: any) {
   const fullName = `${user.first_name} ${user.last_name}`;
@@ -14,6 +15,7 @@ export default function UserHeader({ user }: any) {
   const category = user.ClientProfile?.category || "Sin categoría";
   const scoring = user.ClientProfile?.scoring ?? 0;
 
+  const { bookings } = useClientBookings();
   const { token } = useAuth();
   const [qrToken, setQrToken] = useState<string>("");
   const [countDown, setCountDown] = useState<number>(30);
@@ -175,18 +177,19 @@ export default function UserHeader({ user }: any) {
 
       <div className="w-full mt-2 border-t pt-2">
         <div className="grid grid-cols-2 text-sm">
-          <span className="flex-col text-left">Id Miembro: </span>
-          <span className="flex-col text-xs text-end">
-            {user.client_membership?.client_membership_id || ""}
-          </span>
-        </div>
-        <div className="grid grid-cols-2 text-sm">
           <span className="flex-col text-left">Clases este mes: </span>
-          <span className="flex-col text-end">12</span>
-        </div>
-        <div className="grid grid-cols-2 text-sm">
-          <span className="flex-col text-left">Visitas Totales </span>
-          <span className="flex-col text-end">89</span>
+          <span className="flex-col text-end">
+            {
+              bookings.filter((booking) => {
+                const bookingDate = new Date(booking.starts_at);
+                const now = new Date();
+                return (
+                  bookingDate.getMonth() === now.getMonth() &&
+                  bookingDate.getFullYear() === now.getFullYear()
+                );
+              }).length
+            }
+          </span>
         </div>
       </div>
     </div>

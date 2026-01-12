@@ -22,6 +22,7 @@ export default function Login() {
   const t = useTranslations("LoginPage");
   const locale = useLocale();
   const router = useRouter();
+  const { user } = useAuth();
   const searchParams = useSearchParams();
   const { login } = useAuth();
 
