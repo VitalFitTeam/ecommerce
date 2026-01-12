@@ -12,7 +12,6 @@ interface CheckoutSelection {
   packages: PackageOption[];
   methods: BranchPaymentMethodInfo[];
   invoice: InvoiceDetail | null;
-  userId: string | null;
 }
 
 export const useCheckout = () => {
@@ -36,7 +35,6 @@ export const useCheckout = () => {
       packages: [],
       methods: [],
       invoice: null,
-      userId: null,
     };
   });
 
@@ -116,11 +114,6 @@ export const useCheckout = () => {
     [],
   );
 
-  const setUserId = useCallback(
-    (id: string | null) => setSelection((s) => ({ ...s, userId: id })),
-    [],
-  );
-
   const reset = useCallback(() => {
     if (typeof window !== "undefined") {
       localStorage.removeItem("vitalfit_checkout_state");
@@ -134,7 +127,6 @@ export const useCheckout = () => {
       packages: [],
       methods: [],
       invoice: null,
-      userId: null,
     });
   }, []);
 
@@ -150,7 +142,6 @@ export const useCheckout = () => {
       setInvoice,
       togglePackage,
       setMembershipId,
-      setUserId,
       reset,
     }),
     [
@@ -164,7 +155,6 @@ export const useCheckout = () => {
       setInvoice,
       togglePackage,
       setMembershipId,
-      setUserId,
       reset,
     ],
   );
