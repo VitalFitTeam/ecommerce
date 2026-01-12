@@ -12,12 +12,12 @@ import {
   CheckCircle,
   Clock,
   XCircle,
-  Calendar,
-  Store,
   CreditCard,
   Hash,
   AlertCircle,
   Ban,
+  ExternalLink,
+  RefreshCcw,
 } from "lucide-react";
 import { Link } from "@/i18n/routing";
 import InvoiceItemsTable from "@/components/features/invoice/InvoiceItemsTable";
@@ -26,33 +26,82 @@ import { useBranches } from "@/hooks/useBranches";
 import { Button } from "@/components/ui/button";
 import { usePaymentMethod } from "@/hooks/usePaymentMethods";
 
-const formatMoney = (amount: string | number | undefined) => {
+const STATUS_CONFIGS: Record<
+  string,
+  {
+    color: string;
+    icon: any;
+    bgColor: string;
+    borderColor: string;
+    textColor: string;
+  }
+> = {
+  paid: {
+    color: "bg-emerald-50 text-emerald-700 border-emerald-100",
+    icon: CheckCircle,
+    bgColor: "bg-emerald-50/30",
+    borderColor: "border-emerald-100/50",
+    textColor: "text-emerald-700",
+  },
+  completed: {
+    color: "bg-emerald-50 text-emerald-700 border-emerald-100",
+    icon: CheckCircle,
+    bgColor: "bg-emerald-50/30",
+    borderColor: "border-emerald-100/50",
+    textColor: "text-emerald-700",
+  },
+  pending: {
+    color: "bg-amber-50 text-amber-700 border-amber-100",
+    icon: Clock,
+    bgColor: "bg-amber-50/30",
+    borderColor: "border-amber-100/50",
+    textColor: "text-amber-700",
+  },
+  failed: {
+    color: "bg-red-50 text-red-700 border-red-100",
+    icon: XCircle,
+    bgColor: "bg-red-50/30",
+    borderColor: "border-red-100/50",
+    textColor: "text-red-700",
+  },
+  refunded: {
+    color: "bg-blue-50 text-blue-700 border-blue-100",
+    icon: RefreshCcw,
+    bgColor: "bg-blue-50/30",
+    borderColor: "border-blue-100/50",
+    textColor: "text-blue-700",
+  },
+  void: {
+    color: "bg-gray-100 text-gray-600 border-gray-200",
+    icon: Ban,
+    bgColor: "bg-gray-50/50",
+    borderColor: "border-gray-200/50",
+    textColor: "text-gray-600",
+  },
+};
+
+const formatMoney = (amount: string | number | undefined, currency = "USD") => {
   const value = Number(amount) || 0;
-  return new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "USD",
-  }).format(value);
+  return new Intl.NumberFormat("en-US", { style: "currency", currency }).format(
+    value,
+  );
 };
 
 const formatDate = (dateString: string) => {
   if (!dateString) {
     return "-";
   }
-
   try {
     const date = new Date(dateString);
-
-    if (isNaN(date.getTime())) {
-      return "-";
-    }
-
-    return date.toLocaleDateString("es-ES", {
-      timeZone: "UTC",
-      day: "2-digit",
-      month: "2-digit",
-      year: "numeric",
-    });
-  } catch (error) {
+    return isNaN(date.getTime())
+      ? "-"
+      : date.toLocaleDateString("es-ES", {
+          timeZone: "UTC",
+          day: "2-digit",
+          month: "2-digit",
+          year: "numeric",
+        });
+  } catch {
     return "-";
   }
 };
@@ -61,13 +110,8 @@ const formatShortDate = (dateString?: string) => {
   if (!dateString) {
     return "-";
   }
-
   try {
     const date = new Date(dateString);
-    if (isNaN(date.getTime())) {
-      return "-";
-    }
-
     return date.toLocaleDateString("es-VE", {
       timeZone: "UTC",
       day: "2-digit",
@@ -82,51 +126,17 @@ const formatShortDate = (dateString?: string) => {
 const StatusPill: React.FC<{ status?: string }> = ({ status }) => {
   const t = useTranslations("invoiceDetails.status");
   const s = String(status || "").toLowerCase();
-
-  const baseClasses =
-    "inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider border";
-
-  if (["paid", "completed", "confirmado"].includes(s)) {
-    return (
-      <span
-        className={`${baseClasses} bg-emerald-50 text-emerald-700 border-emerald-100`}
-      >
-        <CheckCircle size={12} strokeWidth={3} /> {t("paid")}
-      </span>
-    );
-  }
-
-  if (["pending", "processing", "unpaid"].includes(s)) {
-    return (
-      <span
-        className={`${baseClasses} bg-amber-50 text-amber-700 border-amber-100`}
-      >
-        <Clock size={12} strokeWidth={3} /> {t("pending")}
-      </span>
-    );
-  }
-
-  if (s === "overdue") {
-    return (
-      <span className={`${baseClasses} bg-red-50 text-red-700 border-red-100`}>
-        <AlertCircle size={12} strokeWidth={3} /> {t("overdue")}
-      </span>
-    );
-  }
-
-  if (s === "void") {
-    return (
-      <span
-        className={`${baseClasses} bg-gray-100 text-gray-600 border-gray-200`}
-      >
-        <Ban size={12} strokeWidth={3} /> {t("void")}
-      </span>
-    );
-  }
+  const config = STATUS_CONFIGS[s] || {
+    color: "bg-gray-50 text-gray-600 border-gray-200",
+    icon: AlertCircle,
+  };
+  const Icon = config.icon;
 
   return (
-    <span className={`${baseClasses} bg-red-50 text-red-700 border-red-100`}>
-      <XCircle size={12} strokeWidth={3} /> {status}
+    <span
+      className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider border ${config.color}`}
+    >
+      <Icon size={12} strokeWidth={3} /> {t(s) || status}
     </span>
   );
 };
@@ -138,13 +148,11 @@ export default function InvoiceDetailsPage({
 }) {
   const { id } = use(params);
   const t = useTranslations("invoiceDetails");
-
-  const { invoice, loading, error } = useInvoiceDetail(id);
   const { token } = useAuth();
+  const { invoice, loading, error } = useInvoiceDetail(id);
   const { branches, loading: branchesLoading } = useBranches(token || "");
 
   const mainPayment = invoice?.payments?.[0];
-
   const { paymentMethod, isLoading: loadingPaymentMethod } = usePaymentMethod(
     mainPayment?.payment_method_id,
     token || "",
@@ -159,19 +167,16 @@ export default function InvoiceDetailsPage({
       </div>
     );
   }
-
   if (error || !invoice) {
     return (
       <div className="flex h-[70vh] flex-col items-center justify-center gap-4 bg-gray-50/30">
-        <div className="bg-white p-4 rounded-full shadow-sm border border-red-100">
-          <XCircle size={40} className="text-red-400" />
-        </div>
+        <XCircle size={40} className="text-red-400" />
         <h2 className="text-lg font-semibold text-gray-900">
           {t("errors.notFound")}
         </h2>
         <Link
           href="/payments"
-          className="text-sm font-medium text-orange-600 hover:text-orange-700 transition-colors"
+          className="text-sm font-medium text-orange-600 hover:underline"
         >
           &larr; {t("backToHistory")}
         </Link>
@@ -181,24 +186,25 @@ export default function InvoiceDetailsPage({
 
   const displayRef =
     invoice.invoice_number || invoice.invoice_id?.substring(0, 8).toUpperCase();
+  const paymentStatusKey = String(mainPayment?.status || "").toLowerCase();
+  const paymentTheme =
+    STATUS_CONFIGS[paymentStatusKey] || STATUS_CONFIGS.pending;
 
   return (
     <div className="min-h-screen bg-gray-50/30 py-12 px-4 sm:px-6 font-sans text-gray-900">
       <div className="max-w-5xl mx-auto">
-        <div className="mb-8 pl-1">
+        <div className="mb-8">
           <Link
             href="/payments"
             className="inline-flex items-center text-sm font-medium text-gray-500 hover:text-gray-900 transition-all group"
           >
-            <ArrowLeft
-              size={16}
-              className="mr-2 group-hover:-translate-x-1 transition-transform"
-            />
+            <ArrowLeft size={16} className="mr-2 group-hover:-translate-x-1" />
             {t("backToHistory")}
           </Link>
         </div>
 
         <div className="bg-white rounded-2xl border border-gray-100 shadow-xl shadow-gray-200/40 overflow-hidden">
+          {/* Header */}
           <div className="px-8 pt-8 pb-6 border-b border-gray-50 flex justify-between items-center">
             <h1 className="text-xl font-bold text-gray-900 tracking-tight flex items-center gap-3">
               {t("title")}
@@ -218,7 +224,6 @@ export default function InvoiceDetailsPage({
                 <h2 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-6 flex items-center gap-2">
                   <Hash size={14} /> {t("summary.title")}
                 </h2>
-
                 <div className="grid grid-cols-[140px_1fr] sm:grid-cols-[180px_1fr] gap-y-5 text-sm">
                   <span className="text-gray-500 font-medium">
                     {t("summary.issueDate")}
@@ -235,32 +240,19 @@ export default function InvoiceDetailsPage({
                   <span className="text-gray-500 font-medium self-center">
                     {t("summary.paymentMethod")}
                   </span>
-                  <div className="flex items-center gap-3">
-                    {loadingPaymentMethod ? (
-                      <span className="text-gray-300 italic">
-                        {t("summary.loading")}
-                      </span>
-                    ) : (
-                      <span className="font-medium text-gray-900 capitalize">
-                        {paymentMethod?.name || t("summary.unspecified")}
-                      </span>
-                    )}
-                  </div>
-
+                  <span className="font-medium text-gray-900 capitalize">
+                    {loadingPaymentMethod
+                      ? t("summary.loading")
+                      : paymentMethod?.name || t("summary.unspecified")}
+                  </span>
                   <span className="text-gray-500 font-medium self-center">
                     {t("summary.branch")}
                   </span>
-                  <div className="flex items-center gap-3">
-                    {branchesLoading ? (
-                      <span className="text-gray-300 italic">
-                        {t("summary.loading")}
-                      </span>
-                    ) : (
-                      <span className="font-medium text-gray-900">
-                        {branch?.name || t("summary.mainBranch")}
-                      </span>
-                    )}
-                  </div>
+                  <span className="font-medium text-gray-900">
+                    {branchesLoading
+                      ? t("summary.loading")
+                      : branch?.name || t("summary.mainBranch")}
+                  </span>
                 </div>
               </div>
 
@@ -270,56 +262,79 @@ export default function InvoiceDetailsPage({
                 </h2>
                 <Button
                   variant="outline"
-                  className="justify-start h-11 border-gray-200 text-gray-600 hover:text-gray-900 hover:border-gray-300 hover:bg-gray-50 shadow-sm transition-all group"
+                  className="justify-start h-11 border-gray-200 text-gray-600 hover:bg-gray-50"
                 >
-                  <Download
-                    size={16}
-                    className="mr-3 text-gray-400 group-hover:text-gray-600"
-                  />{" "}
+                  <Download size={16} className="mr-3 text-gray-400" />{" "}
                   {t("actions.download")}
                 </Button>
                 <Button
                   variant="outline"
-                  className="justify-start h-11 border-gray-200 text-gray-600 hover:text-gray-900 hover:border-gray-300 hover:bg-gray-50 shadow-sm transition-all group"
+                  className="justify-start h-11 border-gray-200 text-gray-600 hover:bg-gray-50"
                 >
-                  <Mail
-                    size={16}
-                    className="mr-3 text-gray-400 group-hover:text-gray-600"
-                  />{" "}
+                  <Mail size={16} className="mr-3 text-gray-400" />{" "}
                   {t("actions.email")}
                 </Button>
               </div>
             </div>
 
-            <div className="mb-10 p-1">
-              <div className="border border-gray-100 rounded-xl p-6 bg-gray-50/50 flex flex-col sm:flex-row gap-8 sm:gap-16 items-start sm:items-center relative overflow-hidden">
-                <div className="absolute top-0 right-0 p-4 opacity-5 pointer-events-none">
-                  <Calendar size={120} />
-                </div>
-
-                <div>
-                  <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1 block">
-                    {t("planValidity.from")}
-                  </span>
-                  <div className="flex items-center gap-2 text-gray-900 text-lg font-semibold">
-                    <Calendar size={18} className="text-orange-400" />
-                    {formatShortDate(invoice.issue_date)}
+            {mainPayment && (
+              <div
+                className={`mb-10 p-6 rounded-xl border ${paymentTheme.bgColor} ${paymentTheme.borderColor}`}
+              >
+                <h2
+                  className={`text-xs font-bold uppercase tracking-widest mb-4 flex items-center gap-2 ${paymentTheme.textColor}`}
+                >
+                  <CreditCard size={14} /> {t("paymentDetails.title")}
+                </h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  <div>
+                    <p className="text-[10px] text-gray-400 uppercase font-bold mb-1">
+                      {t("paymentDetails.transactionId")}
+                    </p>
+                    <p className="text-sm font-mono font-medium text-gray-900">
+                      #{mainPayment.transaction_id || "---"}
+                    </p>
                   </div>
-                </div>
-
-                <div className="hidden sm:block h-8 w-px bg-gray-300/50"></div>
-
-                <div>
-                  <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1 block">
-                    {t("planValidity.to")}
-                  </span>
-                  <div className="flex items-center gap-2 text-gray-900 text-lg font-semibold">
-                    <Calendar size={18} className="text-orange-400" />
-                    {formatShortDate(invoice.due_date)}
+                  <div>
+                    <p className="text-[10px] text-gray-400 uppercase font-bold mb-1">
+                      {t("paymentDetails.amountPaid")}
+                    </p>
+                    <p className="text-sm font-bold text-gray-900">
+                      {mainPayment.amount_paid} {mainPayment.currency_paid}
+                      {mainPayment.currency_paid !== "USD" && (
+                        <span className="ml-2 text-[10px] text-gray-500 font-normal italic">
+                          (Rate: {mainPayment.exchange_rate})
+                        </span>
+                      )}
+                    </p>
                   </div>
+                  {mainPayment.receipt_url && (
+                    <div>
+                      <p className="text-[10px] text-gray-400 uppercase font-bold mb-1">
+                        {t("paymentDetails.receipt")}
+                      </p>
+                      <a
+                        href={mainPayment.receipt_url}
+                        target="_blank"
+                        className="text-sm font-bold text-orange-600 hover:underline flex items-center gap-1"
+                      >
+                        {t("paymentDetails.view")} <ExternalLink size={12} />
+                      </a>
+                    </div>
+                  )}
+                </div>
+                <div
+                  className={`mt-4 flex items-center gap-2 text-[11px] font-medium bg-white/60 w-fit px-3 py-1.5 rounded-lg border ${paymentTheme.borderColor} ${paymentTheme.textColor}`}
+                >
+                  {paymentTheme.icon === Clock ? (
+                    <Clock size={12} />
+                  ) : (
+                    <AlertCircle size={12} />
+                  )}
+                  {t(`paymentDetails.statusNotes.${paymentStatusKey}`)}
                 </div>
               </div>
-            </div>
+            )}
 
             <div className="mb-8">
               <h2 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4">
@@ -329,6 +344,7 @@ export default function InvoiceDetailsPage({
                 <InvoiceItemsTable data={invoice.invoice_items || []} />
               </div>
             </div>
+
             <div className="flex justify-end pt-2">
               <div className="w-full sm:w-1/2 lg:w-1/3 bg-gray-50/50 rounded-xl p-6 border border-gray-100 space-y-3">
                 <div className="flex justify-between text-sm">

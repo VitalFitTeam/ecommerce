@@ -56,8 +56,6 @@ export default function HistoryPaymentPage() {
     );
   }, [invoices, statusFilter]);
 
-  console.log(filteredInvoices);
-
   return (
     <div className="min-h-screen">
       <main className="p-8">
