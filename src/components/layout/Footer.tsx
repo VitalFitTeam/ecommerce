@@ -19,10 +19,10 @@ export default function Footer() {
   ];
 
   const quickLinksConfig = [
-    { key: "services", href: "#services" },
-    { key: "membership", href: "#membership" },
-    { key: "branches", href: "#branches" },
-    { key: "contact", href: "#contact" },
+    { key: "services", href: "/services" },
+    { key: "membership", href: "/memberships" },
+    { key: "branches", href: "/branches" },
+    { key: "contact", href: "/contact" },
   ];
 
   return (

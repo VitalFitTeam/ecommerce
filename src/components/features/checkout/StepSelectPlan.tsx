@@ -12,6 +12,7 @@ import {
 
 import { PackageCarousel, PackageOption } from "./PackageCarousel";
 import { MembershipSummary } from "./MembershipSummary";
+import { ServiceSummary } from "./ServiceSummary";
 import { BranchInfo, PublicMembershipResponse } from "@vitalfit/sdk";
 import { Label } from "@/components/ui/Label";
 import { NoMembershipPlaceholder } from "./NoMembershipPlaceholder";
@@ -20,6 +21,7 @@ import { useTranslations } from "next-intl";
 
 interface Props {
   data: PublicMembershipResponse | undefined;
+  service?: any;
   selectedPackages: PackageOption[];
   togglePackage: (pkg: PackageOption) => void;
   packages: PackageOption[];
@@ -32,6 +34,7 @@ interface Props {
 
 export const StepSelectPlan = ({
   data,
+  service,
   selectedPackages,
   togglePackage,
   packages,
@@ -53,7 +56,7 @@ export const StepSelectPlan = ({
     [packages],
   );
 
-  if (!data) {
+  if (!data && !service) {
     return <NoMembershipPlaceholder />;
   }
 
@@ -114,10 +117,16 @@ export const StepSelectPlan = ({
 
       <div className="space-y-3">
         <Label className="text-[11px] font-semibold uppercase tracking-wide text-slate-400 ml-1">
-          {t("basePlanLabel")}
+          {data ? t("basePlanLabel") : t("baseServiceLabel")}
         </Label>
 
-        <MembershipSummary plan={data} onRemove={onRemoveMembership} />
+        {data ? (
+          <MembershipSummary plan={data} onRemove={onRemoveMembership} />
+        ) : (
+          service && (
+            <ServiceSummary service={service} onRemove={onRemoveMembership} />
+          )
+        )}
       </div>
 
       {packages.length > 0 && (

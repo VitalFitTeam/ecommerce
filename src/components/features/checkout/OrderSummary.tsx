@@ -23,6 +23,7 @@ import {
 
 interface Props {
   membership?: PublicMembershipResponse;
+  service?: any;
   selectedPackages: PackageOption[];
   prices: {
     subtotalBase: number;
@@ -47,6 +48,7 @@ interface Props {
 
 export const OrderSummary = ({
   membership,
+  service,
   selectedPackages = [],
   prices,
   currency,
@@ -60,7 +62,7 @@ export const OrderSummary = ({
 }: Props) => {
   const t = useTranslations("Checkout.OrderSummary");
 
-  if (!membership) {
+  if (!membership && !service) {
     return null;
   }
 
@@ -118,19 +120,37 @@ export const OrderSummary = ({
 
       <CardContent className="p-8 space-y-6">
         <div className="space-y-4">
-          <div className="flex justify-between items-start">
-            <div className="space-y-1">
-              <p className="text-base font-black text-slate-900 tracking-tight">
-                {membership.name}
-              </p>
-              <p className="text-[10px] uppercase font-black tracking-widest text-orange-500">
-                {t("baseMembership")}
-              </p>
+          {membership && (
+            <div className="flex justify-between items-start">
+              <div className="space-y-1">
+                <p className="text-base font-black text-slate-900 tracking-tight">
+                  {membership.name}
+                </p>
+                <p className="text-[10px] uppercase font-black tracking-widest text-orange-500">
+                  {t("baseMembership")}
+                </p>
+              </div>
+              <span className="text-base font-black text-slate-900 tabular-nums tracking-tighter">
+                ${formatPrice(Number(membership.price))}
+              </span>
             </div>
-            <span className="text-base font-black text-slate-900 tabular-nums tracking-tighter">
-              ${formatPrice(Number(membership.price))}
-            </span>
-          </div>
+          )}
+
+          {service && (
+            <div className="flex justify-between items-start">
+              <div className="space-y-1">
+                <p className="text-base font-black text-slate-900 tracking-tight">
+                  {service.name}
+                </p>
+                <p className="text-[10px] uppercase font-black tracking-widest text-orange-500">
+                  {t("baseService") || "Service"}
+                </p>
+              </div>
+              <span className="text-base font-black text-slate-900 tabular-nums tracking-tighter">
+                ${formatPrice(Number(service.lowest_price_member))}
+              </span>
+            </div>
+          )}
 
           {selectedPackages.length > 0 && (
             <div className="space-y-4 pt-4 border-t border-slate-100">
