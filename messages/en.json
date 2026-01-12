@@ -632,6 +632,7 @@
       "branchPlaceholder": "Which branch will you attend?",
       "confirmed": "Branch Confirmed",
       "basePlanLabel": "Selected base plan",
+      "baseServiceLabel": "Selected service",
       "extraServicesTitle": "Want to complement your plan?",
       "extraServicesTitleLocked": "Complementary services",
       "extraServicesDesc": "Add extra services and boost your training.",
@@ -653,7 +654,9 @@
     },
     "MembershipSummary": {
       "defaultDescription": "Selected membership plan.",
+      "defaultServiceDescription": "Selected service.",
       "totalPrice": "Plan Price",
+      "totalServicePrice": "Service Price",
       "duration": "Duration",
       "days": "days"
     },
@@ -673,6 +676,7 @@
     "OrderSummary": {
       "title": "Summary",
       "baseMembership": "Base membership",
+      "baseService": "Base service",
       "subtotal": "Subtotal",
       "taxLabel": "Taxes ({percent}%)",
       "totalLabel": "Total",

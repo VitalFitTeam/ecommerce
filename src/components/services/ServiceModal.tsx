@@ -102,6 +102,7 @@ export default function ServiceModal({
       toast.error(t("loginRequired"));
       return;
     }
+    router.push(`/checkout?serviceId=${service.service_id}`);
   };
 
   const activeBanner = service.banners?.find((b: any) => b.is_active);
