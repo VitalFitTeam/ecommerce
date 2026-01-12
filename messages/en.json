@@ -906,6 +906,20 @@
     "noDescription": "No description available."
   },
   "invoiceDetails": {
+    "paymentDetails": {
+      "title": "Payment Details",
+      "transactionId": "Transaction ID",
+      "amountPaid": "Amount Paid",
+      "exchangeRate": "Exchange Rate",
+      "receipt": "Receipt",
+      "view": "View Document",
+      "statusNotes": {
+        "completed": "Pago procesado exitosamente.",
+        "pending": "Tu pago está siendo verificado.",
+        "failed": "El pago fue rechazado. Intenta de nuevo.",
+        "refunded": "Este pago ha sido reembolsado a tu cuenta."
+      }
+    },
     "backToHistory": "Back to history",
     "title": "Transaction Details",
     "status": {

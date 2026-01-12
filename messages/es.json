@@ -938,6 +938,20 @@
     "noDescription": "Descripción no disponible."
   },
   "invoiceDetails": {
+    "paymentDetails": {
+      "title": "Detalles del Pago",
+      "transactionId": "ID de Transacción",
+      "amountPaid": "Monto Pagado",
+      "exchangeRate": "Tasa de Cambio",
+      "receipt": "Comprobante",
+      "view": "Ver Comprobante",
+      "statusNotes": {
+        "completed": "Payment successfully processed.",
+        "pending": "Your payment is being verified.",
+        "failed": "The payment was rejected. Please try again.",
+        "refunded": "This payment has been refunded to your account."
+      }
+    },
     "backToHistory": "Volver al historial",
     "title": "Detalle de Transacción",
     "status": {
