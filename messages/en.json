@@ -500,6 +500,10 @@
   "classes": {
     "title": "UPCOMING CLASSES",
     "viewAll": "View all my classes",
+    "loading": "Loading your classes...",
+    "noClasses": "No upcoming classes",
+    "reservePrompt": "Book a class in our services section",
+    "error": "Error loading reserved classes",
     "availability": {
       "available": "Disponible",
       "limited": "Cupos limitados",
@@ -793,7 +797,8 @@
       "planName": "Membership Name",
       "status": "Status",
       "reason": "Cancellation Reason",
-      "description": "Description"
+      "description": "Description",
+      "additionalNotes": "Additional notes (Optional)"
     },
     "status": {
       "active": "Active"
@@ -810,7 +815,15 @@
     },
     "actions": {
       "cancel": "Cancel",
-      "confirm": "Confirm Cancellation"
+      "confirm": "Confirm Cancellation",
+      "cancelling": "Cancelling..."
+    },
+    "notifications": {
+      "loadError": "Error fetching cancellation reasons",
+      "selectReason": "Please select a reason",
+      "provideDescription": "Please provide a description",
+      "success": "Membership cancelled successfully",
+      "cancelError": "Error cancelling membership"
     }
   },
   "security": {
