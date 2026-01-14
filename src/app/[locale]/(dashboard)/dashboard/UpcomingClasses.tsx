@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
+import Logo from "@/components/features/Logo";
 import { useTranslations } from "next-intl";
 import {
   ChevronRight,
