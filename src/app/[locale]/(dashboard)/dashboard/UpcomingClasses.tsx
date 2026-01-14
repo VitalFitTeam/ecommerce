@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import { useState, useMemo } from "react";
 import Logo from "@/components/features/Logo";
 import { useTranslations } from "next-intl";
 import {
@@ -94,6 +94,22 @@ export default function UpcomingClasses() {
   const { bookings, loading, error } = useClientBookings();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  const upcomingBookings = useMemo(() => {
+    const now = new Date();
+    now.setHours(0, 0, 0, 0);
+
+    return bookings
+      .filter((booking) => {
+        const bookingDate = new Date(booking.starts_at);
+        return bookingDate >= now;
+      })
+      .sort((a, b) => {
+        return (
+          new Date(a.starts_at).getTime() - new Date(b.starts_at).getTime()
+        );
+      });
+  }, [bookings]);
+
   const formatDate = (dateString: string) => {
     try {
       const date = new Date(dateString);
@@ -138,7 +154,7 @@ export default function UpcomingClasses() {
         <h3 className="text-lg font-bold">{t("title")}</h3>
       </div>
 
-      {bookings.length === 0 ? (
+      {upcomingBookings.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-8 text-center">
           <Calendar className="text-gray-300 mb-3" size={48} />
           <p className="text-gray-500 font-medium">{t("noClasses")}</p>
@@ -147,7 +163,7 @@ export default function UpcomingClasses() {
       ) : (
         <>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-4">
-            {bookings.slice(0, 3).map((booking) => (
+            {upcomingBookings.slice(0, 3).map((booking, index) => (
               <div
                 key={booking.booking_id}
                 className="relative rounded-lg overflow-hidden h-40 group"
@@ -203,7 +219,7 @@ export default function UpcomingClasses() {
 
               <ScrollArea className="flex-1 p-6">
                 <div className="grid grid-cols-1 md:grid-cols-1 gap-4">
-                  {bookings.map((booking) => (
+                  {upcomingBookings.map((booking) => (
                     <Card
                       key={booking.booking_id}
                       className="overflow-hidden border-gray-100 hover:border-orange-200 transition-colors shadow-sm"
