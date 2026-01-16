@@ -12,6 +12,9 @@ import {
   Sparkles,
   X,
   Dumbbell,
+  Search,
+  Clock,
+  Tag,
 } from "lucide-react";
 import {
   Select,
@@ -20,7 +23,7 @@ import {
   SelectContent,
   SelectItem,
 } from "@/components/ui/select";
-
+import { Input } from "@/components/ui/Input";
 import { PackageCarousel, PackageOption } from "./PackageCarousel";
 import { MembershipSummary } from "./MembershipSummary";
 import {
@@ -77,6 +80,7 @@ export const StepSelectPlan = ({
   isMember = false,
 }: Props) => {
   const t = useTranslations("Checkout.StepPlan");
+  const [searchTerm, setSearchTerm] = useState("");
   const [showPackages, setShowPackages] = useState<boolean>(
     selectedPackages.length > 0,
   );
@@ -92,6 +96,12 @@ export const StepSelectPlan = ({
     [packages],
   );
 
+  const filteredServices = useMemo(() => {
+    return services.filter((s) =>
+      s.name.toLowerCase().includes(searchTerm.toLowerCase()),
+    );
+  }, [services, searchTerm]);
+
   const formatPrice = (price: number = 0) =>
     price.toLocaleString(undefined, {
       minimumFractionDigits: 2,
@@ -99,26 +109,25 @@ export const StepSelectPlan = ({
     });
 
   return (
-    <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-500">
+    <div className="max-w-6xl mx-auto space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-500">
       <div
         className={cn(
-          "bg-white p-8 rounded-[2rem] border border-slate-100 shadow-sm transition-all",
-          isLocked && "opacity-70",
+          "bg-white p-6 rounded-[2rem] border border-slate-100 shadow-xl shadow-slate-200/50 transition-all sticky top-4 z-20",
+          isLocked && "opacity-90",
         )}
       >
-        <div className="flex items-center justify-between mb-5">
+        <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2">
-            <MapPin
-              size={16}
-              className={isLocked ? "text-slate-400" : "text-orange-500"}
-            />
-            <Label className="text-[11px] font-semibold uppercase tracking-wide text-slate-400">
+            <div className="p-2 bg-orange-50 rounded-xl">
+              <MapPin size={18} className="text-orange-500" />
+            </div>
+            <Label className="text-[12px] font-black uppercase tracking-widest text-slate-400">
               {t("branchLabel")}
             </Label>
           </div>
           {isLocked && (
-            <span className="flex items-center gap-1.5 text-[10px] font-semibold uppercase text-slate-500 bg-slate-100 px-3 py-1.5 rounded-full">
-              <Lock size={11} /> {t("confirmed")}
+            <span className="flex items-center gap-1.5 text-[10px] font-black uppercase text-orange-600 bg-orange-50 px-4 py-2 rounded-full border border-orange-100">
+              <Lock size={12} /> {t("confirmed")}
             </span>
           )}
         </div>
@@ -128,12 +137,16 @@ export const StepSelectPlan = ({
           onValueChange={onSelectBranch}
           disabled={isLocked}
         >
-          <SelectTrigger className="h-14 rounded-2xl bg-slate-50 border border-slate-200 font-medium text-slate-700">
+          <SelectTrigger className="h-14 rounded-2xl bg-slate-50 border-none font-bold text-slate-700 focus:ring-2 ring-orange-100 transition-all">
             <SelectValue placeholder={t("branchPlaceholder")} />
           </SelectTrigger>
-          <SelectContent className="rounded-2xl">
+          <SelectContent className="rounded-2xl border-slate-100 shadow-2xl font-bold">
             {branches.map((b) => (
-              <SelectItem key={b.branch_id} value={b.branch_id}>
+              <SelectItem
+                key={b.branch_id}
+                value={b.branch_id}
+                className="rounded-xl my-1 focus:bg-orange-50 focus:text-orange-600"
+              >
                 {b.name}
               </SelectItem>
             ))}
@@ -143,60 +156,63 @@ export const StepSelectPlan = ({
 
       <div
         className={cn(
-          "transition-all duration-500",
-          !selectedBranch && "opacity-40 pointer-events-none",
+          "transition-all duration-700",
+          !selectedBranch && "opacity-20 grayscale pointer-events-none",
         )}
       >
         {!data ? (
           !skipMembership ? (
-            <section className="bg-slate-50/50 p-8 rounded-[2.5rem] border-2 border-dashed border-slate-200 animate-in zoom-in-95 duration-300">
-              <div className="flex flex-col sm:flex-row items-center justify-between mb-8 gap-4">
-                <div className="flex items-center gap-4 text-center sm:text-left">
-                  <div className="p-3 bg-white text-orange-600 rounded-2xl shadow-sm">
-                    <Sparkles size={24} />
+            <section className="bg-slate-900 p-10 rounded-[3rem] shadow-2xl shadow-slate-900/20 relative overflow-hidden group animate-in zoom-in-95">
+              <div className="absolute top-0 right-0 p-12 opacity-5 group-hover:opacity-10 transition-opacity">
+                <Dumbbell size={200} className="text-white rotate-12" />
+              </div>
+
+              <div className="relative z-10 flex flex-col md:flex-row items-center justify-between mb-10 gap-6">
+                <div className="flex items-center gap-5">
+                  <div className="p-4 bg-orange-500 rounded-3xl text-white shadow-lg shadow-orange-500/30">
+                    <Sparkles size={28} />
                   </div>
                   <div>
-                    <h3 className="text-lg font-bold text-slate-900 italic">
+                    <h3 className="text-2xl font-black text-white italic tracking-tight leading-none mb-2">
                       {t("membershipTitle")}
                     </h3>
-                    <p className="text-xs text-slate-500 font-medium">
+                    <p className="text-sm text-slate-400 font-bold max-w-xs leading-relaxed">
                       {t("membershipSubtitle")}
                     </p>
                   </div>
                 </div>
                 <Button
-                  variant="ghost"
+                  variant="outline"
                   size="sm"
                   onClick={() => setSkipMembership(true)}
-                  className="text-slate-400 hover:text-slate-600 font-bold text-[10px] uppercase tracking-wider"
+                  className="bg-transparent border-slate-700 text-slate-400 hover:text-white hover:bg-slate-800 rounded-2xl px-6 h-12 font-black uppercase text-[10px] tracking-[0.2em]"
                 >
-                  {t("onlyServices")} <X size={14} className="ml-1" />
+                  {t("onlyServices")} <X size={14} className="ml-2" />
                 </Button>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 {allMemberships.map((membership) => (
                   <button
                     key={membership.membership_type_id}
                     onClick={() =>
                       onSelectMembership(String(membership.membership_type_id))
                     }
-                    className="group flex flex-col p-6 rounded-3xl border border-white bg-white hover:border-orange-200 hover:shadow-xl transition-all text-left"
+                    className="group relative flex items-center justify-between p-8 rounded-[2.5rem] bg-white/5 border border-white/10 hover:bg-white hover:border-orange-500 transition-all duration-500 text-left"
                   >
-                    <div className="flex justify-between items-start mb-2">
-                      <h4 className="font-bold text-slate-900 group-hover:text-orange-600 transition-colors">
+                    <div className="space-y-1">
+                      <h4 className="text-lg font-black text-white group-hover:text-slate-900 transition-colors uppercase italic tracking-tight">
                         {membership.name}
                       </h4>
-                      <Dumbbell
-                        size={16}
-                        className="text-orange-100 group-hover:text-orange-500 transition-colors"
-                      />
+                      <p className="text-[10px] font-black text-orange-500 uppercase tracking-widest opacity-80">
+                        Vital Fit Premium
+                      </p>
                     </div>
-                    <div className="mt-auto flex items-baseline gap-1">
-                      <span className="text-[10px] font-bold text-slate-400 uppercase">
-                        $
+                    <div className="text-right">
+                      <span className="text-[12px] font-black text-slate-400 group-hover:text-slate-400 align-top mr-1">
+                        {currencySymbol}
                       </span>
-                      <span className="text-2xl font-black text-slate-900">
+                      <span className="text-4xl font-black text-white group-hover:text-slate-900 tracking-tighter">
                         {membership.price}
                       </span>
                     </div>
@@ -205,19 +221,19 @@ export const StepSelectPlan = ({
               </div>
             </section>
           ) : (
-            <div className="flex justify-center animate-in fade-in slide-in-from-top-2">
+            <div className="flex justify-center pt-4">
               <Button
                 variant="outline"
                 onClick={() => setSkipMembership(false)}
-                className="rounded-full h-10 text-[11px] font-bold uppercase border-slate-200 text-slate-500 hover:text-orange-600 hover:border-orange-200 transition-all shadow-sm"
+                className="rounded-full h-14 px-10 border-slate-200 text-slate-500 hover:text-orange-600 hover:border-orange-500 bg-white font-black uppercase text-[10px] tracking-[0.2em] shadow-xl shadow-slate-200/50 transition-all"
               >
-                <Plus size={14} className="mr-2" /> {t("addMembershipBack")}
+                <Plus size={16} className="mr-3" /> {t("addMembershipBack")}
               </Button>
             </div>
           )
         ) : (
-          <div className="space-y-3">
-            <Label className="text-[11px] font-semibold uppercase tracking-wide text-slate-400 ml-1">
+          <div className="space-y-4 max-w-2xl mx-auto">
+            <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 ml-6">
               {t("selectedPlanLabel")}
             </Label>
             <MembershipSummary plan={data} onRemove={onRemoveMembership} />
@@ -227,54 +243,54 @@ export const StepSelectPlan = ({
 
       <div
         className={cn(
-          "space-y-10 transition-all duration-700",
+          "space-y-12 transition-all duration-1000",
           !selectedBranch
-            ? "opacity-30 grayscale pointer-events-none scale-[0.98]"
+            ? "opacity-10 scale-[0.98] blur-sm pointer-events-none"
             : "opacity-100",
         )}
       >
         {packages.length > 0 && (
           <section
             className={cn(
-              "bg-white rounded-[2.5rem] border border-slate-100 shadow-sm overflow-hidden",
+              "bg-white rounded-[3rem] border border-slate-100 shadow-2xl shadow-slate-200/40 overflow-hidden",
               isLocked && "opacity-70",
             )}
           >
-            <div className="p-8">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
-                <div className="space-y-1">
-                  <h3 className="text-lg font-semibold text-slate-900 flex items-center gap-2 italic">
-                    <PackagePlus size={20} className="text-orange-600" />
+            <div className="p-10">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-8 mb-8">
+                <div className="space-y-2">
+                  <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-orange-50 rounded-full">
+                    <PackagePlus size={14} className="text-orange-500" />
+                    <span className="text-[10px] font-black uppercase tracking-widest text-orange-600">
+                      Upgrade Available
+                    </span>
+                  </div>
+                  <h3 className="text-2xl font-black text-slate-900 italic uppercase tracking-tighter">
                     {isLocked
                       ? t("extraServicesTitleLocked")
                       : t("extraServicesTitle")}
                   </h3>
-                  <p className="text-sm text-slate-500 max-w-md">
-                    {t("extraServicesDesc")}
-                  </p>
                 </div>
                 {!isLocked && (
-                  <div className="w-full sm:w-72">
-                    <Select
-                      value={showPackages ? "yes" : "no"}
-                      onValueChange={(val) => setShowPackages(val === "yes")}
-                    >
-                      <SelectTrigger className="w-full h-11 rounded-xl border border-slate-200 bg-white font-medium">
-                        <SelectValue placeholder={t("explorePlaceholder")} />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="no">{t("hidePackages")}</SelectItem>
-                        <SelectItem value="yes">
-                          {t("showPackages", { count: packages.length })}
-                        </SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
+                  <Select
+                    value={showPackages ? "yes" : "no"}
+                    onValueChange={(val) => setShowPackages(val === "yes")}
+                  >
+                    <SelectTrigger className="w-full sm:w-64 h-12 rounded-2xl border-none bg-slate-50 font-black text-[11px] uppercase tracking-wider px-6">
+                      <SelectValue placeholder={t("explorePlaceholder")} />
+                    </SelectTrigger>
+                    <SelectContent className="rounded-2xl border-none shadow-2xl font-bold">
+                      <SelectItem value="no">Ocultar Paquetes</SelectItem>
+                      <SelectItem value="yes">
+                        Ver Paquetes ({packages.length})
+                      </SelectItem>
+                    </SelectContent>
+                  </Select>
                 )}
               </div>
 
-              {(showPackages || isLocked) && (
-                <div className="mt-8 pt-8 border-t border-slate-100 animate-in fade-in slide-in-from-bottom-2">
+              {showPackages && (
+                <div className="mt-8 pt-10 border-t border-slate-50">
                   <PackageCarousel
                     packages={packages}
                     selectedPackageIds={selectedPackages.map(
@@ -290,47 +306,66 @@ export const StepSelectPlan = ({
           </section>
         )}
 
+        {showServices && services.length > 6 && (
+          <div className="mx-auto animate-in slide-in-from-top-4">
+            <div className="relative group">
+              <Search
+                className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-orange-500 transition-colors"
+                size={18}
+              />
+              <Input
+                placeholder="Busca servicios específicos..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="h-14 pl-14 pr-6 rounded-3xl border-none bg-white shadow-xl shadow-slate-200/50 font-bold focus:ring-2 ring-orange-100 transition-all"
+              />
+            </div>
+          </div>
+        )}
+
         {(services.length > 0 || isLoadingServices) && toggleService && (
           <section
             className={cn(
-              "bg-white rounded-[2.5rem] border border-slate-100 shadow-sm overflow-hidden",
+              "bg-white rounded-[3rem] border border-slate-100 shadow-2xl shadow-slate-200/40 overflow-hidden",
               isLocked && "opacity-70",
             )}
           >
-            <div className="p-8">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 mb-8">
-                <div className="space-y-1">
-                  <h3 className="text-lg font-semibold text-slate-900 flex items-center gap-2 italic">
-                    <Plus size={20} className="text-orange-600" />
+            <div className="p-10">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-8 mb-10">
+                <div className="space-y-2">
+                  <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-blue-50 rounded-full">
+                    <Plus size={14} className="text-blue-500" />
+                    <span className="text-[10px] font-black uppercase tracking-widest text-blue-600">
+                      A La Carte
+                    </span>
+                  </div>
+                  <h3 className="text-2xl font-black text-slate-900 italic uppercase tracking-tighter">
                     {t("additionalServicesLabel")}
                   </h3>
-                  <p className="text-sm text-slate-500 max-w-md font-medium">
-                    {t("additionalServicesDesc")}
-                  </p>
                 </div>
 
                 {!isLocked && (
-                  <div className="w-full sm:w-72">
-                    <Select
-                      value={showServices ? "yes" : "no"}
-                      onValueChange={(val) => setShowServices(val === "yes")}
-                    >
-                      <SelectTrigger className="w-full h-11 rounded-xl border border-slate-200 bg-white font-medium">
-                        <SelectValue placeholder={t("explorePlaceholder")} />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="no">{t("hideServices")}</SelectItem>
-                        <SelectItem value="yes">{t("showServices")}</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
+                  <Select
+                    value={showServices ? "yes" : "no"}
+                    onValueChange={(val) => setShowServices(val === "yes")}
+                  >
+                    <SelectTrigger className="w-full sm:w-64 h-12 rounded-2xl border-none bg-slate-50 font-black text-[11px] uppercase tracking-wider px-6">
+                      <SelectValue placeholder={t("explorePlaceholder")} />
+                    </SelectTrigger>
+                    <SelectContent className="rounded-2xl border-none shadow-2xl font-bold">
+                      <SelectItem value="no">Ocultar Servicios</SelectItem>
+                      <SelectItem value="yes">
+                        Mostrar Todos ({services.length})
+                      </SelectItem>
+                    </SelectContent>
+                  </Select>
                 )}
               </div>
 
-              {(showServices || isLocked) && (
-                <div className="space-y-6 animate-in fade-in slide-in-from-bottom-2">
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {services.map((service) => {
+              {showServices && (
+                <div className="space-y-8 animate-in fade-in duration-700">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-2 gap-6">
+                    {filteredServices.map((service) => {
                       const isSelected = selectedServices.some(
                         (s) => s.service_id === service.service_id,
                       );
@@ -343,81 +378,132 @@ export const StepSelectPlan = ({
                         <button
                           key={service.service_id}
                           disabled={isLocked}
-                          onClick={() => toggleService(service)}
+                          onClick={() => toggleService?.(service)}
                           className={cn(
-                            "relative text-left group p-5 rounded-3xl border transition-all duration-300",
+                            "group relative flex flex-col text-left rounded-[2.5rem] border-2 transition-all duration-500 h-full overflow-hidden",
                             isSelected
-                              ? "bg-orange-50 border-orange-200 shadow-md ring-1 ring-orange-200"
-                              : "bg-slate-50/50 border-slate-100 hover:border-slate-200 hover:bg-white hover:shadow-xl",
-                            isLocked && "cursor-default opacity-80",
+                              ? "bg-orange-50/40 border-orange-500 shadow-2xl shadow-orange-200/40 ring-4 ring-orange-500/5 -translate-y-2"
+                              : "bg-white border-slate-100 hover:border-orange-200 hover:shadow-xl hover:-translate-y-1",
+                            isLocked &&
+                              "opacity-80 grayscale-[0.3] cursor-not-allowed",
                           )}
                         >
-                          <div className="flex justify-between items-start mb-3">
+                          <div className="p-6 pb-0 flex justify-between items-start w-full">
                             <div
                               className={cn(
-                                "p-2.5 rounded-xl transition-all",
+                                "p-3 rounded-2xl transition-all duration-500 shadow-sm",
                                 isSelected
-                                  ? "bg-orange-100 text-orange-600"
-                                  : "bg-white text-slate-400 group-hover:text-orange-500 group-hover:scale-110",
+                                  ? "bg-orange-500 text-white scale-110 rotate-3"
+                                  : "bg-slate-50 text-slate-400 group-hover:bg-orange-100 group-hover:text-orange-500",
                               )}
                             >
-                              <Plus size={18} />
+                              {isSelected ? (
+                                <CheckCircle2 size={20} strokeWidth={3} />
+                              ) : (
+                                <Plus size={20} strokeWidth={3} />
+                              )}
                             </div>
-                            {isSelected && (
-                              <CheckCircle2
-                                size={20}
-                                className="text-orange-600 animate-in zoom-in"
-                              />
-                            )}
+                            {!userHasMembership &&
+                              Number(service.lowest_price_member) <
+                                Number(service.lowest_price_no_member) && (
+                                <div className="flex items-center gap-1.5 px-3 py-1 bg-orange-100 text-orange-600 text-[9px] font-black uppercase tracking-tighter rounded-full border border-orange-200">
+                                  <Sparkles size={10} />
+                                  Plan Price
+                                </div>
+                              )}
                           </div>
 
-                          <h4 className="font-bold text-slate-900 text-[13px] mb-1 leading-tight group-hover:text-orange-700 transition-colors">
-                            {service.name}
-                          </h4>
+                          <div className="p-6 flex-1 space-y-4">
+                            <div className="space-y-1.5">
+                              <h4
+                                className={cn(
+                                  "text-[15px] font-black uppercase italic tracking-tight leading-tight transition-colors line-clamp-2",
+                                  isSelected
+                                    ? "text-orange-700"
+                                    : "text-slate-900 group-hover:text-orange-600",
+                                )}
+                              >
+                                {service.name}
+                              </h4>
 
-                          <div className="flex items-baseline gap-1">
-                            <span className="text-[10px] font-bold text-slate-400 uppercase">
-                              $
-                            </span>
-                            <span className="text-lg font-black text-slate-900">
-                              {servicePrice === 0
-                                ? t("free")
-                                : formatPrice(servicePrice)}
-                            </span>
-                          </div>
+                              <div className="flex flex-wrap gap-2">
+                                {service.service_category?.name && (
+                                  <span className="flex items-center gap-1 text-[8px] font-black text-slate-500 bg-slate-100 px-2 py-1 rounded-lg uppercase tracking-widest">
+                                    <Tag size={8} />
+                                    {service.service_category.name}
+                                  </span>
+                                )}
+                                {service.duration_minutes && (
+                                  <span className="flex items-center gap-1 text-[8px] font-black text-orange-600 bg-orange-50 px-2 py-1 rounded-lg uppercase tracking-widest">
+                                    <Clock size={8} strokeWidth={3} />
+                                    {service.duration_minutes} MIN
+                                  </span>
+                                )}
+                              </div>
+                            </div>
 
-                          {!userHasMembership &&
-                            Number(service.lowest_price_member) <
-                              Number(service.lowest_price_no_member) && (
-                              <p className="text-[9px] font-bold text-orange-400 mt-2 uppercase tracking-tighter italic">
-                                {t("saveWithMembership")}
+                            {service.description && (
+                              <p className="text-[11px] font-medium text-slate-400 line-clamp-2 leading-relaxed normal-case italic">
+                                {service.description}
                               </p>
                             )}
+                          </div>
+
+                          <div
+                            className={cn(
+                              "p-6 pt-4 mt-auto border-t flex items-center justify-between w-full transition-colors",
+                              isSelected
+                                ? "border-orange-100 bg-orange-100/30"
+                                : "border-slate-50 bg-slate-50/30",
+                            )}
+                          >
+                            <div className="flex flex-col">
+                              <span className="text-[9px] font-black text-slate-400 uppercase tracking-[0.1em] mb-1">
+                                Costo Neto
+                              </span>
+                              <div className="flex items-baseline gap-1">
+                                <span className="text-[12px] font-black text-slate-400">
+                                  {currencySymbol}
+                                </span>
+                                <span
+                                  className={cn(
+                                    "text-2xl font-black tracking-tighter",
+                                    servicePrice === 0
+                                      ? "text-green-600"
+                                      : "text-slate-900",
+                                  )}
+                                >
+                                  {servicePrice === 0
+                                    ? "GRATIS"
+                                    : formatPrice(servicePrice)}
+                                </span>
+                              </div>
+                            </div>
+
+                            {isSelected ? (
+                              <div className="flex items-center gap-2 px-4 py-2 bg-orange-500 text-white rounded-2xl text-[10px] font-black uppercase tracking-tighter shadow-lg shadow-orange-500/20 animate-in slide-in-from-right-3">
+                                <div className="w-2 h-2 bg-white rounded-full animate-pulse shadow-sm" />
+                                Listo
+                              </div>
+                            ) : (
+                              <div className="text-slate-300 group-hover:text-orange-300 transition-colors">
+                                <ChevronDown size={20} className="-rotate-90" />
+                              </div>
+                            )}
+                          </div>
                         </button>
                       );
                     })}
                   </div>
 
-                  {hasMoreServices && !isLocked && (
-                    <div className="flex justify-center pt-6 border-t border-slate-50">
-                      <Button
-                        variant="outline"
-                        size="lg"
-                        onClick={onLoadMoreServices}
-                        disabled={isLoadingServices}
-                        className="rounded-2xl border-slate-200 text-slate-600 hover:text-orange-600 hover:border-orange-200 hover:bg-orange-50 font-bold gap-2 min-w-[220px] transition-all"
-                      >
-                        {isLoadingServices ? (
-                          <>
-                            <Loader2 size={16} className="animate-spin" />{" "}
-                            {t("loading")}
-                          </>
-                        ) : (
-                          <>
-                            {t("loadMoreServices")} <ChevronDown size={16} />
-                          </>
-                        )}
-                      </Button>
+                  {isLoadingServices && (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                      {[1, 2, 3, 4].map((i) => (
+                        <div
+                          key={i}
+                          className="h-64 bg-slate-50 animate-pulse rounded-[2.5rem] border border-slate-100"
+                        />
+                      ))}
                     </div>
                   )}
                 </div>
