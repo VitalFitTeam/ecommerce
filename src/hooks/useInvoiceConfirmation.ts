@@ -39,11 +39,9 @@ export const useInvoiceConfirmation = ({
     }
 
     if (file.size > 5 * 1024 * 1024) {
-      toast.error(t("fileTooLarge"));
-      return setStatus((s) => ({
-        ...s,
-        error: t("fileTooLarge"),
-      }));
+      const sizeError = t("fileTooLarge");
+      toast.error(sizeError);
+      return setStatus((s) => ({ ...s, error: sizeError }));
     }
 
     setUploadingFile(true);
@@ -54,7 +52,8 @@ export const useInvoiceConfirmation = ({
         .trim()
         .replace(/\s+/g, "-")
         .replace(/[^a-zA-Z0-9.-]/g, "");
-      const filePath = `receipts/${invoiceId}/${cleanName}`;
+
+      const filePath = `receipts/${invoiceId}/${Date.now()}-${cleanName}`;
 
       const { data: uploadData, error: uploadError } = await supabase.storage
         .from("vitalfit_file")
@@ -76,17 +75,10 @@ export const useInvoiceConfirmation = ({
       }
 
       setFormData((prev) => ({ ...prev, filePath: publicData.publicUrl }));
-
-      toast.success(t("uploadSuccess"), {
-        description: t("uploadSuccessDetail"),
-      });
+      toast.success(t("uploadSuccess"));
     } catch (err: any) {
       console.error("❌ Error subiendo archivo:", err);
-      const friendlyError =
-        err.message === "new row violates row-level security policy"
-          ? t("methodsErrorDetail")
-          : t("invoiceErrorDetail");
-
+      const friendlyError = t("invoiceErrorDetail");
       toast.error(friendlyError);
       setStatus((s) => ({ ...s, error: friendlyError }));
     } finally {
@@ -95,18 +87,16 @@ export const useInvoiceConfirmation = ({
   };
 
   const submitPayment = async () => {
-    if (!formData.amount || formData.amount <= 0) {
+    if (formData.amount < 0) {
       toast.warning(t("validationAmount"));
       return;
     }
+
     if (!formData.reference.trim()) {
       toast.warning(t("validationReference"));
       return;
     }
-    if (!formData.filePath) {
-      toast.warning(t("validationReceipt"));
-      return;
-    }
+
     if (!methodId) {
       toast.warning(t("validationMethod"));
       return;
@@ -120,14 +110,13 @@ export const useInvoiceConfirmation = ({
         currency_paid: currencyMode,
         invoice_id: invoiceId,
         payment_method_id: methodId,
-        receipt_url: formData.filePath,
+        receipt_url: formData.filePath || "",
         transaction_id: formData.reference.trim(),
       };
 
       const response = await api.billing.AddPaymentToInvoice(payload, token);
 
       if (response) {
-        // Toast de éxito final
         toast.success(t("paymentSuccess"), {
           description: t("paymentSuccessDetail"),
         });
@@ -136,7 +125,7 @@ export const useInvoiceConfirmation = ({
     } catch (err: any) {
       const errorMessage =
         err.response?.data?.message || err.message || t("invoiceError");
-      toast.error(errorMessage); //
+      toast.error(errorMessage);
       setStatus({ loading: false, error: errorMessage });
     } finally {
       setStatus((p) => ({ ...p, loading: false }));
@@ -151,7 +140,6 @@ export const useInvoiceConfirmation = ({
     status,
     setStatus,
     uploadingFile,
-    setUploadingFile,
     handleFileUpload,
     submitPayment,
   };
