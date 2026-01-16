@@ -5,6 +5,7 @@ import {
   CreditCardIcon,
   CurrencyDollarIcon,
   HeartIcon,
+  DocumentTextIcon,
 } from "@heroicons/react/24/outline";
 
 interface MenuItem {
@@ -20,6 +21,11 @@ interface MenuListProps {
 export default function MenuList({ pathname }: MenuListProps) {
   const menuItems: MenuItem[] = [
     { href: "/profile", icon: UserIcon, label: "Perfil" },
+    {
+      href: "/infomedical",
+      icon: DocumentTextIcon,
+      label: "Información Médica",
+    },
     {
       href: "/security/changePassword",
       icon: ShieldCheckIcon,
