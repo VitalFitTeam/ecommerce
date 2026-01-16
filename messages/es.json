@@ -675,7 +675,22 @@
       "extraServicesDescLocked": "Los servicios seleccionados ya fueron confirmados.",
       "explorePlaceholder": "Explorar servicios extra",
       "onlyBasePlan": "Solo el plan base",
-      "viewExtraServices": "Ver servicios extra ({count})"
+      "viewExtraServices": "Ver servicios extra ({count})",
+      "membershipTitle": "¿Deseas un Plan Base?",
+      "membershipSubtitle": "Obtén mejores precios en servicios adicionales",
+      "onlyServices": "Solo servicios",
+      "addMembershipBack": "Agregar membresía al carrito",
+      "selectedPlanLabel": "Plan Mensual Seleccionado",
+      "hidePackages": "Solo Plan Base",
+      "showPackages": "Ver Paquetes ({count})",
+      "additionalServicesLabel": "Servicios Adicionales",
+      "additionalServicesDesc": "Precios especiales para miembros activos.",
+      "hideServices": "Ocultar servicios",
+      "showServices": "Ver servicios disponibles",
+      "saveWithMembership": "Ahorra con membresía",
+      "free": "GRATIS",
+      "loading": "Cargando...",
+      "loadMoreServices": "Mostrar más servicios"
     },
     "BranchSelector": {
       "label": "Selecciona tu Sede",
@@ -721,7 +736,8 @@
       "requiredBranchDesc": "Selecciona una sucursal para continuar.",
       "btnSelectBranch": "Selecciona una sede",
       "btnConfirmOrder": "Confirmar orden",
-      "btnMakePayment": "Realizar pago"
+      "btnMakePayment": "Realizar pago",
+      "free": "FREE"
     },
     "Success": {
       "errorTitle": "No pudimos cargar el recibo",

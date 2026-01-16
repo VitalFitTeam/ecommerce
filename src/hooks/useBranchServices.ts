@@ -8,33 +8,30 @@ export function useBranchServices() {
   const [services, setServices] = useState<ServicePublicItem[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
-  const limit = 12; // Cantidad de items por carga
+
+  const loadingRef = useRef(false);
+  const LIMIT = 12;
 
   const fetchServices = useCallback(
-    async (branchId: string, isNextPage = false) => {
-      if (!branchId) {
+    async (branchId: string, isNextPage = false, currency = "USD") => {
+      if (!branchId || loadingRef.current || (isNextPage && !hasMore)) {
         return;
       }
 
-      if (isNextPage && (!hasMore || isLoading)) {
-        return;
-      }
+      const pageToFetch = isNextPage ? page + 1 : 1;
 
+      loadingRef.current = true;
       setIsLoading(true);
       setError(null);
-
-      // Si es la página 1 (isNextPage = false), reseteamos todo
-      const pageToFetch = isNextPage ? page + 1 : 1;
 
       try {
         const response = await api.public.getBranchServices(
           {
-            limit: limit,
+            limit: LIMIT,
             page: pageToFetch,
-            currency: "USD",
+            currency: currency,
             sort: "desc",
             sortby: "price",
             category: "",
@@ -45,30 +42,31 @@ export function useBranchServices() {
         );
 
         const newData = response.data || [];
+        const totalItems = response.total || 0;
 
-        setServices((prev) => (isNextPage ? [...prev, ...newData] : newData));
+        setServices((prev) => {
+          const updatedServices = isNextPage ? [...prev, ...newData] : newData;
+          setHasMore(updatedServices.length < totalItems);
+          return updatedServices;
+        });
 
         setPage(pageToFetch);
-
-        if (newData.length < limit) {
-          setHasMore(false);
-        } else {
-          setHasMore(true);
-        }
       } catch (err) {
         console.error("Error fetching services:", err);
         setError("No se pudieron cargar los servicios.");
       } finally {
         setIsLoading(false);
+        loadingRef.current = false;
       }
     },
-    [page, hasMore, isLoading],
+    [page, hasMore],
   );
 
   const resetServices = useCallback(() => {
     setServices([]);
     setPage(1);
     setHasMore(true);
+    loadingRef.current = false;
   }, []);
 
   return {

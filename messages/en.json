@@ -643,7 +643,22 @@
       "extraServicesDescLocked": "Selected services have already been confirmed.",
       "explorePlaceholder": "Explore extra services",
       "onlyBasePlan": "Base plan only",
-      "viewExtraServices": "View extra services ({count})"
+      "viewExtraServices": "View extra services ({count})",
+      "membershipTitle": "Would you like a Base Plan?",
+      "membershipSubtitle": "Get better prices on additional services",
+      "onlyServices": "Services only",
+      "addMembershipBack": "Add membership to cart",
+      "selectedPlanLabel": "Selected Monthly Plan",
+      "hidePackages": "Base Plan Only",
+      "showPackages": "View Packages ({count})",
+      "additionalServicesLabel": "Additional Services",
+      "additionalServicesDesc": "Special pricing for active members.",
+      "hideServices": "Hide services",
+      "showServices": "View available services",
+      "saveWithMembership": "Save with membership",
+      "free": "FREE",
+      "loading": "Loading...",
+      "loadMoreServices": "Show more services"
     },
     "BranchSelector": {
       "label": "Select your Branch",
@@ -689,7 +704,8 @@
       "requiredBranchDesc": "Please select a branch to continue.",
       "btnSelectBranch": "Select a branch",
       "btnConfirmOrder": "Confirm order",
-      "btnMakePayment": "Make payment"
+      "btnMakePayment": "Make payment",
+      "free": "GRATIS"
     },
     "Success": {
       "errorTitle": "Could not load receipt",
