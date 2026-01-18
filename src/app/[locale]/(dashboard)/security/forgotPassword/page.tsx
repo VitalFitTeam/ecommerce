@@ -9,7 +9,10 @@ import { useRouter } from "@/i18n/routing";
 import { api } from "@/lib/sdk-config";
 import { useAuth } from "@/context/AuthContext";
 
+import { useTranslations } from "next-intl";
+
 export default function ForgotPassword() {
+  const t = useTranslations("ForgotPasswordPage");
   const [code, setCode] = useState<string[]>(["", "", "", "", "", ""]);
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
   const [loading, setLoading] = useState(false);
@@ -88,7 +91,7 @@ export default function ForgotPassword() {
     const verificationCode = code.join("").trim();
     if (verificationCode.length !== 6) {
       setIncorrectCode(true);
-      setErrorMessage("Por favor, ingresa el código completo de 6 caracteres");
+      setErrorMessage(t("errors.incompleteCode"));
       return;
     }
 
@@ -102,7 +105,7 @@ export default function ForgotPassword() {
     } catch (error) {
       console.error("Error al validar token:", error);
       setIncorrectCode(true);
-      setErrorMessage("Código inválido o expirado");
+      setErrorMessage(t("errors.invalidCode"));
     } finally {
       setLoading(false);
     }
@@ -125,12 +128,12 @@ export default function ForgotPassword() {
       return;
     }
     if (!password || !confirmPassword) {
-      setErrorMessage("Por favor completa todos los campos");
+      setErrorMessage(t("errors.required"));
       setIncorrectCode(true);
       return;
     }
     if (password !== confirmPassword) {
-      setErrorMessage("Las contraseñas no coinciden");
+      setErrorMessage(t("errors.mismatch"));
       setIncorrectCode(true);
       return;
     }
@@ -157,12 +160,14 @@ export default function ForgotPassword() {
               <Notification
                 variant="success"
                 title={
-                  step === "reset" ? "Contraseña actualizada" : "Código válido"
+                  step === "reset"
+                    ? t("success.passwordUpdated")
+                    : t("success.codeValid")
                 }
                 description={
                   step === "reset"
-                    ? "Tu contraseña se ha actualizado correctamente."
-                    : "Código verificado. Ahora puedes crear una nueva contraseña."
+                    ? t("success.passwordDescription")
+                    : t("success.codeDescription")
                 }
                 onClose={() => setShowAlert(false)}
               />
@@ -171,8 +176,8 @@ export default function ForgotPassword() {
             {showAlertConfirmation && (
               <Notification
                 variant="success"
-                title={"Código reenviado"}
-                description={"Se ha enviado un nuevo código a tu correo."}
+                title={t("success.resentTitle")}
+                description={t("success.resentDescription")}
                 onClose={() => setShowAlertConfirmation(false)}
               />
             )}
@@ -180,24 +185,21 @@ export default function ForgotPassword() {
             {showConnectionError && (
               <Notification
                 variant="destructive"
-                title="Error de Conexión"
-                description="No se pudo conectar con el servidor. Inténtalo más tarde."
+                title={t("errors.connectionTitle")}
+                description={t("errors.connectionDescription")}
                 onClose={() => setShowConnectionError(false)}
               />
             )}
 
             <p className="text-2xl font-semibold mb-6 text-center">
-              Recuperación de Contraseña
+              {t("title")}
             </p>
 
             {step === "verify" ? (
               <>
-                <p className="w-full text-center">
-                  Hemos enviado un código de verificación a tu correo para
-                  restablecer tu contraseña. Ingrésalo aquí
-                </p>
+                <p className="w-full text-center">{t("description")}</p>
                 <p className="text-center my-6">
-                  Hemos enviado un código de 6 dígitos a {user?.email} ...
+                  {t("emailSent", { email: user?.email || "..." })}
                 </p>
 
                 <form
@@ -230,7 +232,7 @@ export default function ForgotPassword() {
                   {incorrectCode && (
                     <div className="text-center font-medium my-3">
                       <span className="text-red-500">
-                        {errorMessage ?? "Código incorrecto"}
+                        {errorMessage ?? t("errors.invalidCode")}
                       </span>
                     </div>
                   )}
@@ -240,26 +242,23 @@ export default function ForgotPassword() {
                     type="submit"
                     disabled={!isCodeComplete || loading}
                   >
-                    {loading ? "Verificando..." : "Continuar"}
+                    {loading ? t("verifying") : t("verifyButton")}
                   </Button>
 
                   <div className="mt-4 w-full max-w-md mx-auto text-right">
-                    <a
+                    <button
+                      type="button"
                       onClick={resendCode}
-                      className="text-green-500 hover:underline"
-                      href="#"
+                      className="text-green-500 hover:underline font-bold"
                     >
-                      <h2>Reenviar Código</h2>
-                    </a>
+                      {t("resendCode")}
+                    </button>
                   </div>
                 </form>
               </>
             ) : (
               <>
-                <p className="text-center mb-4">
-                  Actualiza tu contraseña para proteger la seguridad de tu
-                  cuenta
-                </p>
+                <p className="text-center mb-4">{t("resetSubtitle")}</p>
                 <form
                   className="w-full max-w-md mx-auto space-y-4"
                   onSubmit={handleResetSubmit}
@@ -270,13 +269,13 @@ export default function ForgotPassword() {
                       htmlFor="new-password"
                       className="block text-sm font-medium text-gray-700"
                     >
-                      Contraseña Nueva
+                      {t("newPasswordLabel")}
                     </label>
                     <div className="flex justify-center">
                       <PasswordInput
                         id="new-password"
-                        placeholder="Nueva contraseña"
-                        ariaLabel="Nueva contraseña"
+                        placeholder={t("newPasswordPlaceholder")}
+                        ariaLabel={t("newPasswordPlaceholder")}
                         className="w-full max-w-md py-2"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
@@ -289,13 +288,13 @@ export default function ForgotPassword() {
                       htmlFor="confirm-password"
                       className="block text-sm font-medium text-gray-700"
                     >
-                      Confirmar contraseña
+                      {t("confirmPasswordLabel")}
                     </label>
                     <div className="flex justify-center">
                       <PasswordInput
                         id="confirm-password"
-                        placeholder="Confirmar contraseña"
-                        ariaLabel="Confirmar contraseña"
+                        placeholder={t("confirmPasswordPlaceholder")}
+                        ariaLabel={t("confirmPasswordPlaceholder")}
                         className="w-full max-w-md py-2"
                         value={confirmPassword}
                         onChange={(e) => setConfirmPassword(e.target.value)}
@@ -311,7 +310,7 @@ export default function ForgotPassword() {
 
                   <div className="max-w-md mx-auto">
                     <Button className="w-full" type="submit" disabled={loading}>
-                      {loading ? "Guardando..." : "Restablecer Contraseña"}
+                      {loading ? t("submitting") : t("submitButton")}
                     </Button>
                   </div>
                 </form>

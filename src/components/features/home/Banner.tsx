@@ -9,6 +9,7 @@ interface BannerProps {
   height?: string;
   overlay?: boolean;
   className?: string;
+  actions?: React.ReactNode;
 }
 
 const Banner: React.FC<BannerProps> = ({
@@ -18,6 +19,7 @@ const Banner: React.FC<BannerProps> = ({
   height = "h-[500px]",
   overlay = true,
   className = "",
+  actions,
 }) => {
   return (
     <div
@@ -54,6 +56,12 @@ const Banner: React.FC<BannerProps> = ({
                 className="text-lg md:text-2xl text-white/90 font-body font-medium leading-tight italic"
                 dangerouslySetInnerHTML={{ __html: subtitle }}
               />
+            </div>
+          )}
+
+          {actions && (
+            <div className="mt-10 flex flex-col sm:flex-row items-start gap-4 animate-fade-in-up delay-300">
+              {actions}
             </div>
           )}
         </div>

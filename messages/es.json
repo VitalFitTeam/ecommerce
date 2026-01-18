@@ -24,7 +24,9 @@
   "HomePage": {
     "banner": {
       "title": "Transforma tu <highlight>cuerpo</highlight>, transforma tu <highlight>vida</highlight>",
-      "subtitle": "Descubre el poder del fitness inteligente y personalizado."
+      "subtitle": "Descubre el poder del fitness inteligente y personalizado.",
+      "startBtn": "Comenzar Ahora",
+      "branchesBtn": "Ver Sucursales"
     },
     "aboutUs": {
       "mainTitle": "ADN VITALFIT",
@@ -111,6 +113,7 @@
     "search_placeholder": "Buscar sucursal...",
     "find_nearest_button": "Encontrar la más cercana",
     "loading_branches": "Cargando sucursales...",
+    "loading_map": "Cargando mapa...",
     "error_loading_branches": "No pudimos cargar las ubicaciones del mapa. Por favor, inténtalo de nuevo más tarde.",
     "no_valid_branches_found": "No se encontraron sucursales con coordenadas válidas.",
     "branch_hours": {
@@ -568,12 +571,13 @@
       "downloadReceipt": "Descargar recibo"
     },
     "filters": {
-      "payname": "Nombre de pago",
+      "payname": "Buscar factura...",
       "status": "Estado",
       "startDate": "Fecha inicio",
       "endDate": "Fecha fin",
       "clear": "Limpiar filtros"
-    }
+    },
+    "loading": "Cargando historial..."
   },
   "Profile": {
     "ptitle": "MI PERFIL",
@@ -663,6 +667,11 @@
         "title": "Confirmación"
       }
     },
+    "Stepper": {
+      "step1": "Opciones",
+      "step2": "Pago",
+      "step3": "Confirmación"
+    },
     "StepPlan": {
       "branchLabel": "Sede de entrenamiento",
       "branchPlaceholder": "¿A qué sede asistirás?",
@@ -681,16 +690,22 @@
       "onlyServices": "Solo servicios",
       "addMembershipBack": "Agregar membresía al carrito",
       "selectedPlanLabel": "Plan Mensual Seleccionado",
-      "hidePackages": "Solo Plan Base",
+      "hidePackages": "Ocultar Paquetes",
       "showPackages": "Ver Paquetes ({count})",
       "additionalServicesLabel": "Servicios Adicionales",
       "additionalServicesDesc": "Precios especiales para miembros activos.",
       "hideServices": "Ocultar servicios",
-      "showServices": "Ver servicios disponibles",
+      "showServices": "Mostrar Todos ({count})",
       "saveWithMembership": "Ahorra con membresía",
       "free": "GRATIS",
       "loading": "Cargando...",
-      "loadMoreServices": "Mostrar más servicios"
+      "loadMoreServices": "Mostrar más servicios",
+      "searchPlaceholder": "Busca servicios específicos...",
+      "costNet": "Costo Neto",
+      "ready": "Listo",
+      "upgradeAvailable": "Upgrade Disponible",
+      "aLaCarte": "A La Carta",
+      "planPriceBadge": "Precio Plan"
     },
     "BranchSelector": {
       "label": "Selecciona tu Sede",
@@ -701,7 +716,8 @@
     "PackageCarousel": {
       "title": "Servicios adicionales",
       "subtitle": "Selecciona uno o varios para complementar tu plan",
-      "accessDays": "{days} días de acceso"
+      "accessDays": "{days} días de acceso",
+      "investmentLabel": "Inversión del servicio"
     },
     "MembershipSummary": {
       "defaultDescription": "Plan de membresía seleccionado.",
@@ -966,7 +982,8 @@
     "loginRequired": "Debes iniciar sesión para gestionar tus favoritos",
     "wishlistRemove": "Quitar de favoritos",
     "wishlistRemoveSuccess": "Eliminado de favoritos",
-    "refPrice": "Monto referencial",
+    "refPrice": "Ref",
+    "promoBadge": "PROMO",
     "noTitle": "Servicio sin título",
     "noDescription": "Descripción no disponible."
   },
@@ -979,10 +996,10 @@
       "receipt": "Comprobante",
       "view": "Ver Comprobante",
       "statusNotes": {
-        "completed": "Payment successfully processed.",
-        "pending": "Your payment is being verified.",
-        "failed": "The payment was rejected. Please try again.",
-        "refunded": "This payment has been refunded to your account."
+        "completed": "Pago procesado exitosamente.",
+        "pending": "Tu pago está siendo verificado.",
+        "failed": "El pago fue rechazado. Intenta de nuevo.",
+        "refunded": "Este pago ha sido reembolsado a tu cuenta."
       }
     },
     "backToHistory": "Volver al historial",
@@ -993,7 +1010,8 @@
       "pending": "Pendiente",
       "overdue": "Vencido",
       "void": "Anulado",
-      "unknown": "Desconocido"
+      "unknown": "Desconocido",
+      "unpaid": "No Pagado"
     },
     "summary": {
       "title": "Resumen",
@@ -1021,6 +1039,22 @@
       "subtotal": "Subtotal",
       "tax": "Impuestos",
       "total": "Total Pagado"
+    },
+    "itemsTable": {
+      "type": "TIPO",
+      "itemName": "NOMBRE DEL ÍTEM",
+      "quantity": "CANT",
+      "unitPrice": "PRECIO UNITARIO",
+      "discount": "DESCUENTO",
+      "subtotal": "SUB TOTAL",
+      "membership": "Membresía",
+      "package": "Paquete",
+      "service": "Servicio",
+      "item": "Ítem",
+      "defaultItemName": "Ítem de facturación",
+      "premiumSubscription": "Suscripción Premium",
+      "classPackage": "Paquete de Clases",
+      "generalService": "Servicio General"
     },
     "errors": {
       "notFound": "No se encontró la factura",
@@ -1102,5 +1136,95 @@
     "viewDetail": "Ver Detalle",
     "remove": "Eliminar",
     "reserve": "Reservar"
+  },
+  "MedicalInfo": {
+    "title": "Información Médica",
+    "editTitle": "Editar Información Médica",
+    "addTitle": "Agregar Información Médica",
+    "noInfo": "No se encontró información médica.",
+    "addBtn": "Agregar Información Médica",
+    "editBtn": "Editar",
+    "saveBtn": "Guardar Cambios",
+    "savingBtn": "Guardando...",
+    "cancelBtn": "Cancelar",
+    "criticalAlerts": "Alertas Críticas",
+    "allergies": {
+      "label": "Alergias",
+      "placeholder": "Describe las alergias conocidas...",
+      "noRegistered": "No se han registrado alergias",
+      "hint": "Incluye alergias a medicamentos, alimentos u otras sustancias"
+    },
+    "trainingWarnings": {
+      "label": "Advertencias de Entrenamiento",
+      "placeholder": "Describe las precauciones durante el entrenamiento...",
+      "noRegistered": "No se han registrado advertencias",
+      "hint": "Lesiones previas, limitaciones físicas o precauciones especiales"
+    },
+    "medicalRisks": {
+      "label": "Riesgos Médicos",
+      "placeholder": "Describe riesgos médicos relevantes...",
+      "noRegistered": "No se han registrado riesgos",
+      "hint": "Factores de riesgo médico importantes para el entrenamiento"
+    },
+    "athleteProfile": "Perfil Clínico del Atleta",
+    "bloodType": {
+      "label": "Grupo Sanguíneo",
+      "placeholder": "Selecciona tipo de sangre",
+      "notSpecified": "No especificado"
+    },
+    "emergencyContact": {
+      "label": "Contacto de Emergencia",
+      "name": "Nombre completo",
+      "relation": "Relación (ej: Madre, Padre, Esposo/a)",
+      "phone": "+58 412-555-6789"
+    },
+    "medicalConditions": {
+      "label": "Condiciones Médicas",
+      "placeholder": "Describe condiciones médicas crónicas o relevantes...",
+      "noRegistered": "No se han registrado condiciones médicas",
+      "hint": "Enfermedades crónicas, condiciones preexistentes, etc."
+    },
+    "currentMedication": {
+      "label": "Medicamentación Actual",
+      "placeholder": "Lista de medicamentos actuales con dosis y frecuencia...",
+      "noRegistered": "No se han registrado medicamentos",
+      "hint": "Incluye nombre, dosis y frecuencia de cada medicamento"
+    },
+    "messages": {
+      "success": "Información médica actualizada exitosamente",
+      "error": "Error al actualizar la información médica"
+    }
+  },
+  "ForgotPasswordPage": {
+    "title": "Recuperación de Contraseña",
+    "description": "Hemos enviado un código de verificación a tu correo para restablecer tu contraseña. Ingrésalo aquí.",
+    "emailSent": "Hemos enviado un código de 6 dígitos a {email} ...",
+    "resendCode": "Reenviar Código",
+    "verifyButton": "Continuar",
+    "verifying": "Verificando...",
+    "resetTitle": "Actualiza tu contraseña",
+    "resetSubtitle": "Actualiza tu contraseña para proteger la seguridad de tu cuenta",
+    "newPasswordLabel": "Contraseña Nueva",
+    "newPasswordPlaceholder": "Nueva contraseña",
+    "confirmPasswordLabel": "Confirmar contraseña",
+    "confirmPasswordPlaceholder": "Confirmar contraseña",
+    "submitButton": "Restablecer Contraseña",
+    "submitting": "Guardando...",
+    "success": {
+      "codeValid": "Código válido",
+      "passwordUpdated": "Contraseña actualizada",
+      "codeDescription": "Código verificado. Ahora puedes crear una nueva contraseña.",
+      "passwordDescription": "Tu contraseña se ha actualizado correctamente.",
+      "resentTitle": "Código reenviado",
+      "resentDescription": "Se ha enviado un nuevo código a tu correo."
+    },
+    "errors": {
+      "incompleteCode": "Por favor, ingresa el código completo de 6 caracteres",
+      "invalidCode": "Código incorrecto o expirado",
+      "connectionTitle": "Error de Conexión",
+      "connectionDescription": "No se pudo conectar con el servidor. Inténtalo más tarde.",
+      "mismatch": "Las contraseñas no coinciden",
+      "required": "Por favor completa todos los campos"
+    }
   }
 }

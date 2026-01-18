@@ -32,7 +32,7 @@ export const useCheckoutLogic = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { token, user } = useAuth();
-  const { selection, actions } = useCheckout();
+  const { selection, actions } = useCheckout(user?.user_id);
 
   const isMember = useMemo(() => hasActiveMembership(user), [user]);
   const [isCreatingInvoice, setIsCreatingInvoice] = useState(false);
@@ -80,10 +80,16 @@ export const useCheckoutLogic = () => {
       });
 
       if (invalidServices.length > 0) {
-        invalidServices.forEach((s) => actions.toggleService(s));
-        toast.info(
-          "Se han removido servicios gratuitos de tu carrito por ser miembro.",
+        const validServices = selection.services.filter(
+          (s) => !invalidServices.some((is) => is.service_id === s.service_id),
         );
+
+        Promise.resolve().then(() => {
+          actions.setServices(validServices);
+          toast.info(
+            "Se han removido servicios gratuitos de tu carrito por ser miembro.",
+          );
+        });
       }
     }
   }, [isMember, rawAvailableServices, selection.services, actions]);
@@ -129,8 +135,15 @@ export const useCheckoutLogic = () => {
     }
 
     lastFetchRef.current = fetchKey;
-    resetServices();
-    fetchServices(branchId, false, currency);
+
+    const initializeServices = async () => {
+      resetServices();
+      await fetchServices(branchId, false, currency);
+    };
+
+    Promise.resolve().then(() => {
+      initializeServices();
+    });
   }, [selection.branchId, selection.currency, fetchServices, resetServices]);
 
   const handleLoadMoreServices = useCallback(() => {

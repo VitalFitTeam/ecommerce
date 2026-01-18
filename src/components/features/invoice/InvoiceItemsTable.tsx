@@ -1,4 +1,5 @@
 "use client";
+import { useTranslations } from "next-intl";
 import { DataTable, Column } from "@/components/ui/table/DataTable";
 import { InvoiceItemDetail } from "@vitalfit/sdk";
 
@@ -17,38 +18,48 @@ export default function InvoiceItemsTable({
     }).format(amount);
   };
 
+  const it = useTranslations("invoiceDetails.itemsTable");
+
   const columns: Column<InvoiceItemDetail>[] = [
     {
-      header: "TIPO",
+      header: it("type"),
       accessor: "quantity",
       render: (_, row) => {
         if (row.membership_type_id) {
-          return <span className="font-medium text-gray-600">Membresía</span>;
+          return (
+            <span className="font-medium text-gray-600">
+              {it("membership")}
+            </span>
+          );
         }
         if (row.package_id) {
-          return <span className="font-medium text-gray-600">Paquete</span>;
+          return (
+            <span className="font-medium text-gray-600">{it("package")}</span>
+          );
         }
         if (row.service_id) {
-          return <span className="font-medium text-gray-600">Servicio</span>;
+          return (
+            <span className="font-medium text-gray-600">{it("service")}</span>
+          );
         }
-        return <span className="text-gray-400">Ítem</span>;
+        return <span className="text-gray-400">{it("item")}</span>;
       },
     },
     {
-      header: "NOMBRE DEL ÍTEM",
+      header: it("itemName"),
       accessor: "invoice_item_id",
       render: (_, row) => {
-        let name = "Ítem de facturación";
+        let name = it("defaultItemName");
         let subId = row.invoice_item_id;
 
         if (row.membership_type_id) {
-          name = "Suscripción Premium";
+          name = it("premiumSubscription");
           subId = row.membership_type_id;
         } else if (row.package_id) {
-          name = "Paquete de Clases";
+          name = it("classPackage");
           subId = row.package_id;
         } else if (row.service_id) {
-          name = "Servicio General";
+          name = it("generalService");
           subId = row.service_id;
         }
 
@@ -63,14 +74,14 @@ export default function InvoiceItemsTable({
       },
     },
     {
-      header: "CANT",
+      header: it("quantity"),
       accessor: "quantity",
       render: (val) => (
         <div className="text-center font-medium">{String(val)}</div>
       ),
     },
     {
-      header: "PRECIO UNITARIO",
+      header: it("unitPrice"),
       accessor: "unit_price",
       render: (val) => (
         <div className="text-right text-gray-600">
@@ -79,7 +90,7 @@ export default function InvoiceItemsTable({
       ),
     },
     {
-      header: "DESCUENTO",
+      header: it("discount"),
       accessor: "discount_applied",
       render: (val) => {
         const num = Number(val);
@@ -91,7 +102,7 @@ export default function InvoiceItemsTable({
       },
     },
     {
-      header: "SUB TOTAL",
+      header: it("subtotal"),
       accessor: "total_line",
       render: (val) => (
         <div className="text-right font-bold text-gray-900 text-base">

@@ -16,14 +16,19 @@ import { BranchInfo } from "@vitalfit/sdk";
 import { useBranchServices } from "@/hooks/useBranchServices";
 import { BranchServicesSection } from "@/components/features/branch/BranchServicesSection";
 
-const MapboxPicker = dynamic(() => import("@/components/ui/MapboxPicker"), {
-  ssr: false,
-  loading: () => (
+const MapLoading = () => {
+  const t = useTranslations("FindBranchPage");
+  return (
     <div className="w-full h-full bg-gray-100 animate-pulse flex flex-col items-center justify-center text-gray-400 gap-2">
       <MapPinIcon className="w-8 h-8 opacity-50" />
-      <span>Cargando mapa...</span>
+      <span>{t("loading_map")}</span>
     </div>
-  ),
+  );
+};
+
+const MapboxPicker = dynamic(() => import("@/components/ui/MapboxPicker"), {
+  ssr: false,
+  loading: MapLoading,
 });
 
 type FindBranchProps = {

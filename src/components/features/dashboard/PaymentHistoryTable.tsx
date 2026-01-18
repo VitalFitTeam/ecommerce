@@ -147,7 +147,7 @@ export default function PaymentHistoryTable({
 
       {loading && data.length === 0 ? (
         <div className="h-32 flex items-center justify-center text-gray-400 animate-pulse">
-          Cargando historial...
+          {t("loading")}
         </div>
       ) : (
         <DataTable<ClientInvoice>

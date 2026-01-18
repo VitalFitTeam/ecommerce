@@ -3,9 +3,11 @@
 import Banner from "@/components/features/home/Banner";
 import { Navbar } from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
+import { Button } from "@/components/ui/button";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
 import SectionAboutUs from "@/components/features/home/AboutUs";
+import { useRouter } from "@/i18n/routing";
 
 const aboutUsConfig = [
   {
@@ -39,6 +41,7 @@ const aboutUsConfig = [
 ];
 
 export default function Home() {
+  const router = useRouter();
   const t = useTranslations("HomePage");
   const tAbout = useTranslations("HomePage.aboutUs");
 
@@ -65,6 +68,29 @@ export default function Home() {
           })}
           subtitle={t("banner.subtitle")}
           height="h-screen"
+          actions={
+            <>
+              <Button
+                size="lg"
+                className="w-full sm:w-auto px-8 py-6 text-lg font-semibold rounded-full hover:scale-105 transition-transform"
+                onClick={() => {
+                  router.push("/memberships");
+                }}
+              >
+                {t("banner.startBtn")}
+              </Button>
+              <Button
+                variant="outline"
+                size="lg"
+                className="w-full sm:w-auto px-8 py-6 text-lg font-semibold rounded-full border-white text-white hover:bg-white hover:text-slate-900 hover:scale-105 transition-transform"
+                onClick={() => {
+                  router.push("/branches");
+                }}
+              >
+                {t("banner.branchesBtn")}
+              </Button>
+            </>
+          }
         />
 
         {/* CONTENEDOR CON OVERLAP Y SOMBRA PROYECTADA */}
@@ -89,9 +115,9 @@ export default function Home() {
           <Image
             src="/images/bannerfooter.jpeg"
             alt="Descarga la app"
-            width={1920} // Ajusta al ancho real de tu imagen
-            height={700} // Ajusta al alto real de tu imagen
-            className="w-full h-auto object-none"
+            width={1920}
+            height={700}
+            className="w-full h-[250px] md:h-auto object-cover md:object-contain"
             priority={false}
           />
         </div>

@@ -16,5 +16,6 @@ export const authService = {
     localStorage.removeItem("access_token");
     localStorage.removeItem("refresh_token");
     localStorage.removeItem("active_branch_id");
+    localStorage.removeItem("vitalfit_checkout_state");
   },
 };

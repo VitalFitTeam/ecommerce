@@ -99,7 +99,7 @@ const PackageCard = ({
 
         <div className="flex flex-col gap-1">
           <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
-            Inversión del servicio
+            {t("investmentLabel")}
           </span>
           <div className="flex items-baseline gap-2">
             <span

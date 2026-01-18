@@ -18,8 +18,10 @@ import { AlertTriangle, Activity, Save, X } from "lucide-react";
 import { toast } from "sonner";
 import useMedicalProfile from "@/hooks/useMedicalProfile";
 import type { MedicalProfile } from "@vitalfit/sdk";
+import { useTranslations } from "next-intl";
 
 export default function EditMedicalInfoPage() {
+  const t = useTranslations("MedicalInfo");
   const { token } = useAuth();
   const router = useRouter();
 
@@ -147,9 +149,10 @@ export default function EditMedicalInfoPage() {
       };
 
       await save(updateData);
+      toast.success(t("messages.success"));
       router.push("/infomedical");
     } catch (error) {
-      toast.error("Error al actualizar la información médica");
+      toast.error(t("messages.error"));
       console.error(error);
     } finally {
       setIsSubmitting(false);
@@ -166,9 +169,7 @@ export default function EditMedicalInfoPage() {
     <div className="container mx-auto p-6">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold">
-          {loadedProfile
-            ? "Editar Información Médica"
-            : "Agregar Información Médica"}
+          {loadedProfile ? t("editTitle") : t("addTitle")}
         </h1>
       </div>
 
@@ -181,7 +182,7 @@ export default function EditMedicalInfoPage() {
                 <div className="flex items-center gap-2 mb-6">
                   <AlertTriangle className="h-5 w-5 text-red-600" />
                   <h4 className="text-xl font-bold text-red-600 uppercase">
-                    Alertas Críticas
+                    {t("criticalAlerts")}
                   </h4>
                 </div>
 
@@ -190,20 +191,19 @@ export default function EditMedicalInfoPage() {
                     htmlFor="allergies"
                     className="text-sm font-semibold text-slate-500 uppercase tracking-wide block"
                   >
-                    Alergias
+                    {t("allergies.label")}
                   </label>
                   <Textarea
                     id="allergies"
                     name="allergies"
                     value={formData.allergies}
                     onChange={handleInputChange}
-                    placeholder="Describe las alergias conocidas..."
+                    placeholder={t("allergies.placeholder")}
                     className="min-h-[100px] border-red-200 focus:border-red-500"
                     required
                   />
                   <p className="text-xs text-slate-500">
-                    Incluye alergias a medicamentos, alimentos u otras
-                    sustancias
+                    {t("allergies.hint")}
                   </p>
                 </div>
 
@@ -212,20 +212,19 @@ export default function EditMedicalInfoPage() {
                     htmlFor="warnings"
                     className="text-sm font-semibold text-slate-500 uppercase tracking-wide block"
                   >
-                    Advertencias de Entrenamiento
+                    {t("trainingWarnings.label")}
                   </label>
                   <Textarea
                     id="warnings"
                     name="warnings"
                     value={formData.warnings}
                     onChange={handleInputChange}
-                    placeholder="Describe las precauciones durante el entrenamiento..."
+                    placeholder={t("trainingWarnings.placeholder")}
                     className="min-h-[100px] border-amber-200 focus:border-amber-500"
                     required
                   />
                   <p className="text-xs text-slate-500">
-                    Lesiones previas, limitaciones físicas o precauciones
-                    especiales
+                    {t("trainingWarnings.hint")}
                   </p>
                 </div>
 
@@ -234,18 +233,18 @@ export default function EditMedicalInfoPage() {
                     htmlFor="medical_risks"
                     className="text-sm font-semibold text-slate-500 uppercase tracking-wide block"
                   >
-                    Riesgos Médicos
+                    {t("medicalRisks.label")}
                   </label>
                   <Textarea
                     id="medical_risks"
                     name="medical_risks"
                     value={formData.medical_risks}
                     onChange={handleInputChange}
-                    placeholder="Describe riesgos médicos relevantes..."
+                    placeholder={t("medicalRisks.placeholder")}
                     className="min-h-[100px] border-orange-200 focus:border-orange-500"
                   />
                   <p className="text-xs text-slate-500">
-                    Factores de riesgo médico importantes para el entrenamiento
+                    {t("medicalRisks.hint")}
                   </p>
                 </div>
               </div>
@@ -255,7 +254,7 @@ export default function EditMedicalInfoPage() {
                 <div className="flex items-center gap-2 mb-6">
                   <Activity className="h-5 w-5 text-slate-600" />
                   <h4 className="text-xl font-bold text-slate-600 uppercase">
-                    Perfil Clínico del Atleta
+                    {t("athleteProfile")}
                   </h4>
                 </div>
 
@@ -265,18 +264,18 @@ export default function EditMedicalInfoPage() {
                       htmlFor="bloodType"
                       className="text-sm font-semibold text-slate-500 uppercase tracking-wide block"
                     >
-                      Grupo Sanguíneo
+                      {t("bloodType.label")}
                     </label>
                     <Select
                       value={formData.bloodType}
                       onValueChange={handleSelectChange}
                     >
                       <SelectTrigger className="border-orange-200 focus:border-orange-500">
-                        <SelectValue placeholder="Selecciona tipo de sangre" />
+                        <SelectValue placeholder={t("bloodType.placeholder")} />
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="NO_ESPECIFICADO">
-                          No especificado
+                          {t("bloodType.notSpecified")}
                         </SelectItem>
                         {bloodTypes.map((type) => (
                           <SelectItem key={type} value={type}>
@@ -290,7 +289,7 @@ export default function EditMedicalInfoPage() {
 
                 <div className="space-y-3">
                   <label className="text-sm font-semibold text-slate-500 uppercase tracking-wide block">
-                    Contacto de Emergencia
+                    {t("emergencyContact.label")}
                   </label>
                   <div className="space-y-3">
                     <Input
@@ -298,7 +297,7 @@ export default function EditMedicalInfoPage() {
                       name="emergencyContactName"
                       value={formData.emergencyContactName}
                       onChange={handleInputChange}
-                      placeholder="Nombre completo"
+                      placeholder={t("emergencyContact.name")}
                       className="border-orange-200 focus:border-orange-500"
                       required
                     />
@@ -307,7 +306,7 @@ export default function EditMedicalInfoPage() {
                       name="emergencyContactRelation"
                       value={formData.emergencyContactRelation}
                       onChange={handleInputChange}
-                      placeholder="Relación (ej: Madre, Padre, Esposo/a)"
+                      placeholder={t("emergencyContact.relation")}
                       className="border-orange-200 focus:border-orange-500"
                       required
                     />
@@ -317,7 +316,7 @@ export default function EditMedicalInfoPage() {
                       type="tel"
                       value={formData.emergencyContactPhone}
                       onChange={handleInputChange}
-                      placeholder="+58 412-555-6789"
+                      placeholder={t("emergencyContact.phone")}
                       className="border-orange-200 focus:border-orange-500"
                       required
                     />
@@ -329,18 +328,18 @@ export default function EditMedicalInfoPage() {
                     htmlFor="medicalConditions"
                     className="text-sm font-semibold text-slate-500 uppercase tracking-wide block"
                   >
-                    Condiciones Médicas
+                    {t("medicalConditions.label")}
                   </label>
                   <Textarea
                     id="medicalConditions"
                     name="medicalConditions"
                     value={formData.medicalConditions}
                     onChange={handleInputChange}
-                    placeholder="Describe condiciones médicas crónicas o relevantes..."
+                    placeholder={t("medicalConditions.placeholder")}
                     className="min-h-[100px] border-blue-200 focus:border-blue-500"
                   />
                   <p className="text-xs text-slate-500">
-                    Enfermedades crónicas, condiciones preexistentes, etc.
+                    {t("medicalConditions.hint")}
                   </p>
                 </div>
 
@@ -349,18 +348,18 @@ export default function EditMedicalInfoPage() {
                     htmlFor="currentMedication"
                     className="text-sm font-semibold text-slate-500 uppercase tracking-wide block"
                   >
-                    Medicamentación Actual
+                    {t("currentMedication.label")}
                   </label>
                   <Textarea
                     id="currentMedication"
                     name="currentMedication"
                     value={formData.currentMedication}
                     onChange={handleInputChange}
-                    placeholder="Lista de medicamentos actuales con dosis y frecuencia..."
+                    placeholder={t("currentMedication.placeholder")}
                     className="min-h-[100px] border-green-200 focus:border-green-500"
                   />
                   <p className="text-xs text-slate-500">
-                    Incluye nombre, dosis y frecuencia de cada medicamento
+                    {t("currentMedication.hint")}
                   </p>
                 </div>
               </div>
@@ -376,7 +375,7 @@ export default function EditMedicalInfoPage() {
                 className="px-6"
               >
                 <X className="h-4 w-4 mr-2" />
-                Cancelar
+                {t("cancelBtn")}
               </Button>
               <Button
                 type="submit"
@@ -384,7 +383,7 @@ export default function EditMedicalInfoPage() {
                 className="bg-orange-500 hover:bg-orange-600 text-white px-6"
               >
                 <Save className="h-4 w-4 mr-2" />
-                {isSubmitting ? "Guardando..." : "Guardar Cambios"}
+                {isSubmitting ? t("savingBtn") : t("saveBtn")}
               </Button>
             </div>
           </CardContent>

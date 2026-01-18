@@ -159,7 +159,10 @@ export default function Login() {
 
       <div className="relative w-full max-w-sm sm:max-w-md lg:max-w-lg transition-all duration-300 ease-in-out">
         <AuthCard>
-          <div className="flex flex-col items-center space-y-4 mb-8">
+          <div
+            onClick={() => router.replace("/")}
+            className="flex flex-col items-center space-y-4 mb-8"
+          >
             <Logo slogan={false} width={60} />
             <div className="space-y-1 text-center">
               <h3 className="text-3xl font-bebas leading-none tracking-wide text-gray-900 uppercase">
