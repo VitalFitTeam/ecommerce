@@ -205,7 +205,7 @@ export const StepSelectPlan = ({
                         {membership.name}
                       </h4>
                       <p className="text-[10px] font-black text-orange-500 uppercase tracking-widest opacity-80">
-                        Vital Fit Premium
+                        {t("planPriceBadge")}
                       </p>
                     </div>
                     <div className="text-right">
@@ -262,7 +262,7 @@ export const StepSelectPlan = ({
                   <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-orange-50 rounded-full">
                     <PackagePlus size={14} className="text-orange-500" />
                     <span className="text-[10px] font-black uppercase tracking-widest text-orange-600">
-                      Upgrade Available
+                      {t("upgradeAvailable")}
                     </span>
                   </div>
                   <h3 className="text-2xl font-black text-slate-900 italic uppercase tracking-tighter">
@@ -280,9 +280,9 @@ export const StepSelectPlan = ({
                       <SelectValue placeholder={t("explorePlaceholder")} />
                     </SelectTrigger>
                     <SelectContent className="rounded-2xl border-none shadow-2xl font-bold">
-                      <SelectItem value="no">Ocultar Paquetes</SelectItem>
+                      <SelectItem value="no">{t("hidePackages")}</SelectItem>
                       <SelectItem value="yes">
-                        Ver Paquetes ({packages.length})
+                        {t("showPackages", { count: packages.length })}
                       </SelectItem>
                     </SelectContent>
                   </Select>
@@ -314,7 +314,7 @@ export const StepSelectPlan = ({
                 size={18}
               />
               <Input
-                placeholder="Busca servicios específicos..."
+                placeholder={t("searchPlaceholder")}
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="h-14 pl-14 pr-6 rounded-3xl border-none bg-white shadow-xl shadow-slate-200/50 font-bold focus:ring-2 ring-orange-100 transition-all"
@@ -336,7 +336,7 @@ export const StepSelectPlan = ({
                   <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-blue-50 rounded-full">
                     <Plus size={14} className="text-blue-500" />
                     <span className="text-[10px] font-black uppercase tracking-widest text-blue-600">
-                      A La Carte
+                      {t("aLaCarte")}
                     </span>
                   </div>
                   <h3 className="text-2xl font-black text-slate-900 italic uppercase tracking-tighter">
@@ -353,9 +353,9 @@ export const StepSelectPlan = ({
                       <SelectValue placeholder={t("explorePlaceholder")} />
                     </SelectTrigger>
                     <SelectContent className="rounded-2xl border-none shadow-2xl font-bold">
-                      <SelectItem value="no">Ocultar Servicios</SelectItem>
+                      <SelectItem value="no">{t("hideServices")}</SelectItem>
                       <SelectItem value="yes">
-                        Mostrar Todos ({services.length})
+                        {t("showServices", { count: services.length })}
                       </SelectItem>
                     </SelectContent>
                   </Select>
@@ -408,7 +408,7 @@ export const StepSelectPlan = ({
                                 Number(service.lowest_price_no_member) && (
                                 <div className="flex items-center gap-1.5 px-3 py-1 bg-orange-100 text-orange-600 text-[9px] font-black uppercase tracking-tighter rounded-full border border-orange-200">
                                   <Sparkles size={10} />
-                                  Plan Price
+                                  {t("planPriceBadge")}
                                 </div>
                               )}
                           </div>
@@ -459,7 +459,7 @@ export const StepSelectPlan = ({
                           >
                             <div className="flex flex-col">
                               <span className="text-[9px] font-black text-slate-400 uppercase tracking-[0.1em] mb-1">
-                                Costo Neto
+                                {t("costNet")}
                               </span>
                               <div className="flex items-baseline gap-1">
                                 <span className="text-[12px] font-black text-slate-400">
@@ -474,7 +474,7 @@ export const StepSelectPlan = ({
                                   )}
                                 >
                                   {servicePrice === 0
-                                    ? "GRATIS"
+                                    ? t("free")
                                     : formatPrice(servicePrice)}
                                 </span>
                               </div>
@@ -483,7 +483,7 @@ export const StepSelectPlan = ({
                             {isSelected ? (
                               <div className="flex items-center gap-2 px-4 py-2 bg-orange-500 text-white rounded-2xl text-[10px] font-black uppercase tracking-tighter shadow-lg shadow-orange-500/20 animate-in slide-in-from-right-3">
                                 <div className="w-2 h-2 bg-white rounded-full animate-pulse shadow-sm" />
-                                Listo
+                                {t("ready")}
                               </div>
                             ) : (
                               <div className="text-slate-300 group-hover:text-orange-300 transition-colors">

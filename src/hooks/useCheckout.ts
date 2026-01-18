@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useMemo, useEffect } from "react";
+import { useState, useCallback, useMemo, useEffect, useRef } from "react";
 import {
   BranchPaymentMethodInfo,
   InvoiceDetail,
@@ -32,34 +32,54 @@ const INITIAL_STATE: CheckoutSelection = {
   invoice: null,
 };
 
-export const useCheckout = () => {
-  const [selection, setSelection] = useState<CheckoutSelection>(() => {
-    if (typeof window === "undefined") {
-      return INITIAL_STATE;
-    }
+export const useCheckout = (userId?: string) => {
+  const getStorageKey = useCallback(
+    (uid?: string) =>
+      uid ? `vitalfit_checkout_state_${uid}` : "vitalfit_checkout_state",
+    [],
+  );
 
-    const saved = localStorage.getItem("vitalfit_checkout_state");
-    if (saved) {
-      try {
-        return JSON.parse(saved);
-      } catch (e) {
-        console.error("Error al parsear el estado inicial", e);
-        return INITIAL_STATE;
-      }
-    }
-    return INITIAL_STATE;
-  });
+  const [selection, setSelection] = useState<CheckoutSelection>(INITIAL_STATE);
+  const isLoadedForUser = useRef<string | null>(null);
 
   useEffect(() => {
-    if (selection.step === 3) {
-      localStorage.removeItem("vitalfit_checkout_state");
-    } else {
-      localStorage.setItem(
-        "vitalfit_checkout_state",
-        JSON.stringify(selection),
-      );
+    if (typeof window === "undefined") {
+      return;
     }
-  }, [selection]);
+
+    const key = getStorageKey(userId);
+    const saved = localStorage.getItem(key);
+
+    Promise.resolve().then(() => {
+      if (saved) {
+        try {
+          setSelection(JSON.parse(saved));
+        } catch (e) {
+          console.error("Error al parsear el estado inicial", e);
+          setSelection(INITIAL_STATE);
+        }
+      } else {
+        setSelection(INITIAL_STATE);
+      }
+      isLoadedForUser.current = userId || "guest";
+    });
+  }, [userId, getStorageKey]);
+
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
+
+    if (isLoadedForUser.current !== (userId || "guest")) {
+      return;
+    }
+    const key = getStorageKey(userId);
+    if (selection.step === 3) {
+      localStorage.removeItem(key);
+    } else {
+      localStorage.setItem(key, JSON.stringify(selection));
+    }
+  }, [selection, userId, getStorageKey]);
 
   const setStep = useCallback(
     (step: number) => setSelection((s) => ({ ...s, step })),
@@ -137,6 +157,17 @@ export const useCheckout = () => {
     });
   }, []);
 
+  const setServices = useCallback(
+    (services: ServicePublicItem[]) =>
+      setSelection((s) => ({ ...s, services })),
+    [],
+  );
+
+  const setPackages = useCallback(
+    (packages: PackageOption[]) => setSelection((s) => ({ ...s, packages })),
+    [],
+  );
+
   const setInvoice = useCallback(
     (data: InvoiceDetail | null) =>
       setSelection((s) => ({ ...s, invoice: data })),
@@ -144,9 +175,10 @@ export const useCheckout = () => {
   );
 
   const reset = useCallback(() => {
-    localStorage.removeItem("vitalfit_checkout_state");
+    const key = getStorageKey(userId);
+    localStorage.removeItem(key);
     setSelection(INITIAL_STATE);
-  }, []);
+  }, [userId, getStorageKey]);
 
   const actions = useMemo(
     () => ({
@@ -161,6 +193,8 @@ export const useCheckout = () => {
       setMembershipId,
       togglePackage,
       toggleService,
+      setServices,
+      setPackages,
       reset,
     }),
     [
@@ -175,6 +209,8 @@ export const useCheckout = () => {
       setMembershipId,
       togglePackage,
       toggleService,
+      setServices,
+      setPackages,
       reset,
     ],
   );

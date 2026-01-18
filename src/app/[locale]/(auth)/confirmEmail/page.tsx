@@ -65,7 +65,9 @@ function ConfirmEmailContent() {
 
   const handleInputChange = (index: number, value: string) => {
     const char = value.slice(-1).toUpperCase();
-    if (!isValidChar(char) && char !== "") {return;}
+    if (!isValidChar(char) && char !== "") {
+      return;
+    }
 
     const newCode = [...code];
     newCode[index] = char;
@@ -239,12 +241,14 @@ function ConfirmEmailContent() {
   );
 }
 
+import { Loader2 } from "lucide-react";
+
 export default function ConfirmEmail() {
   return (
     <Suspense
       fallback={
         <div className="flex justify-center items-center min-h-screen">
-          Loading...
+          <Loader2 className="h-8 w-8 animate-spin text-primary" />
         </div>
       }
     >

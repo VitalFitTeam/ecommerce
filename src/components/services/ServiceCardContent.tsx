@@ -44,7 +44,7 @@ export const ServiceCardContent = ({
   <div className="p-5 flex flex-col flex-1 justify-between bg-white">
     <div>
       <div className="flex items-start justify-between mb-2 gap-2">
-        <h3 className="text-gray-900 font-bold text-lg leading-tight line-clamp-2 uppercase">
+        <h3 className="text-gray-900 font-bold text-lg leading-normal line-clamp-3 uppercase py-0.5 flex-1 pr-4 tracking-normal">
           {title}
         </h3>
 
@@ -91,7 +91,7 @@ export const ServiceCardContent = ({
           </span>
           {showReferencePrice && refPriceMember && (
             <span className="text-[9px] text-gray-400 mt-1 font-medium italic">
-              Ref: {refCurrency} {refPriceMember}
+              {t("refPrice")}: {refCurrency} {refPriceMember}
             </span>
           )}
         </div>
@@ -105,7 +105,7 @@ export const ServiceCardContent = ({
           </span>
           {showReferencePrice && refPriceNonMember && (
             <span className="text-[9px] text-gray-300 mt-1">
-              {refCurrency} {refPriceNonMember}
+              {t("refPrice")}: {refCurrency} {refPriceNonMember}
             </span>
           )}
         </div>

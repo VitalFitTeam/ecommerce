@@ -234,7 +234,10 @@ export default function RegisterPage() {
                   <span className="prevent-clip">{t("title")}</span>
                 </h3>
               </div>
-              <div className="flex justify-center sm:justify-end text-right">
+              <div
+                onClick={() => router.replace("/")}
+                className="flex justify-center sm:justify-end text-right"
+              >
                 <Logo theme="dark" slogan={true} />
               </div>
             </div>
@@ -260,11 +263,14 @@ export default function RegisterPage() {
                     className={`w-full ${inputBgClass}`}
                     disabled={isSignedIn && !!user?.firstName}
                   />
-                  {error.nombre?.[0] && (
-                    <p className="text-red-500 text-xs sm:text-sm mt-1">
-                      {error.nombre[0]}
+                  {error.nombre?.map((err, index) => (
+                    <p
+                      key={index}
+                      className="text-red-500 text-xs sm:text-sm mt-1"
+                    >
+                      {err}
                     </p>
-                  )}
+                  ))}
                 </div>
                 <div className="flex-1">
                   <label
@@ -285,11 +291,14 @@ export default function RegisterPage() {
                     className={`w-full ${inputBgClass}`}
                     disabled={isSignedIn && !!user?.lastName}
                   />
-                  {error.apellido?.[0] && (
-                    <p className="text-red-500 text-xs sm:text-sm mt-1">
-                      {error.apellido[0]}
+                  {error.apellido?.map((err, index) => (
+                    <p
+                      key={index}
+                      className="text-red-500 text-xs sm:text-sm mt-1"
+                    >
+                      {err}
                     </p>
-                  )}
+                  ))}
                 </div>
               </div>
 
@@ -313,11 +322,14 @@ export default function RegisterPage() {
                     isSignedIn && !!user?.primaryEmailAddress?.emailAddress
                   }
                 />
-                {error.email?.[0] && (
-                  <p className="text-red-500 text-xs sm:text-sm mt-1">
-                    {error.email[0]}
+                {error.email?.map((err, index) => (
+                  <p
+                    key={index}
+                    className="text-red-500 text-xs sm:text-sm mt-1"
+                  >
+                    {err}
                   </p>
-                )}
+                ))}
               </div>
 
               <div className="flex flex-col mb-4 space-y-4 sm:flex-row sm:space-y-0 sm:space-x-4">
@@ -334,11 +346,14 @@ export default function RegisterPage() {
                     onChange={(value) => handleInputChange("telefono", value)}
                     defaultCountry="VE"
                   />
-                  {error.telefono?.[0] && (
-                    <p className="text-red-500 text-xs sm:text-sm mt-1">
-                      {error.telefono[0]}
+                  {error.telefono?.map((err, index) => (
+                    <p
+                      key={index}
+                      className="text-red-500 text-xs sm:text-sm mt-1"
+                    >
+                      {err}
                     </p>
-                  )}
+                  ))}
                 </div>
                 <div className="flex-1">
                   <label
@@ -358,11 +373,14 @@ export default function RegisterPage() {
                     }
                     className="bg-white w-full"
                   />
-                  {error.documento?.[0] && (
-                    <p className="text-red-500 text-xs sm:text-sm mt-1">
-                      {error.documento[0]}
+                  {error.documento?.map((err, index) => (
+                    <p
+                      key={index}
+                      className="text-red-500 text-xs sm:text-sm mt-1"
+                    >
+                      {err}
                     </p>
-                  )}
+                  ))}
                 </div>
               </div>
 
@@ -384,11 +402,14 @@ export default function RegisterPage() {
                   }
                   className="bg-white w-full"
                 />
-                {error.nacimiento?.[0] && (
-                  <p className="text-red-500 text-xs sm:text-sm mt-1">
-                    {error.nacimiento[0]}
+                {error.nacimiento?.map((err, index) => (
+                  <p
+                    key={index}
+                    className="text-red-500 text-xs sm:text-sm mt-1"
+                  >
+                    {err}
                   </p>
-                )}
+                ))}
               </div>
 
               <div className="flex flex-col mb-4 space-y-4 sm:flex-row sm:space-y-0 sm:space-x-4">
@@ -435,11 +456,14 @@ export default function RegisterPage() {
                       </span>
                     </label>
                   </div>
-                  {error.genero?.[0] && (
-                    <p className="text-red-500 text-xs sm:text-sm mt-1">
-                      {error.genero[0]}
+                  {error.genero?.map((err, index) => (
+                    <p
+                      key={index}
+                      className="text-red-500 text-xs sm:text-sm mt-1"
+                    >
+                      {err}
                     </p>
-                  )}
+                  ))}
                 </div>
               </div>
 
@@ -463,11 +487,14 @@ export default function RegisterPage() {
                     className={`w-full ${inputBgClass}`}
                     disabled={isSignedIn}
                   />
-                  {error.password?.[0] && (
-                    <p className="text-red-500 text-xs sm:text-sm mt-1">
-                      {error.password[0]}
+                  {error.password?.map((err, index) => (
+                    <p
+                      key={index}
+                      className="text-red-500 text-xs sm:text-sm mt-1"
+                    >
+                      {err}
                     </p>
-                  )}
+                  ))}
                 </div>
                 <div className="flex-1">
                   <label
@@ -488,11 +515,14 @@ export default function RegisterPage() {
                     className={`w-full ${inputBgClass}`}
                     disabled={isSignedIn}
                   />
-                  {error.cpassword?.[0] && (
-                    <p className="text-red-500 text-xs sm:text-sm mt-1">
-                      {error.cpassword[0]}
+                  {error.cpassword?.map((err, index) => (
+                    <p
+                      key={index}
+                      className="text-red-500 text-xs sm:text-sm mt-1"
+                    >
+                      {err}
                     </p>
-                  )}
+                  ))}
                 </div>
               </div>
 

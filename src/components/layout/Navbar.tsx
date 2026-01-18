@@ -67,7 +67,7 @@ export function Navbar({
         )}
       </button>
 
-      <div className="flex items-center">
+      <div onClick={() => router.push("/")} className="flex items-center">
         <Logo slogan={true} theme="light" />
       </div>
 

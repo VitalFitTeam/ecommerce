@@ -24,7 +24,9 @@
   "HomePage": {
     "banner": {
       "title": "Transform your <highlight>body</highlight>, transform your <highlight>life</highlight>",
-      "subtitle": "Discover the power of smart, personalized fitness."
+      "subtitle": "Discover the power of smart, personalized fitness.",
+      "startBtn": "Get Started",
+      "branchesBtn": "View Branches"
     },
     "aboutUs": {
       "mainTitle": "ADN VITALFIT",
@@ -111,6 +113,7 @@
     "search_placeholder": "Search branch...",
     "find_nearest_button": "Find the nearest one",
     "loading_branches": "Loading branches...",
+    "loading_map": "Loading map...",
     "error_loading_branches": "We couldn’t load the map locations. Please try again later.",
     "no_valid_branches_found": "No branches with valid coordinates were found.",
     "branch_hours": {
@@ -535,12 +538,13 @@
       "downloadReceipt": "Download receipt"
     },
     "filters": {
-      "payname": "Payment Name",
+      "payname": "Search by invoice...",
       "status": "Status",
       "startDate": "Start Date",
       "endDate": "End Date",
       "clear": "Clear Filters"
-    }
+    },
+    "loading": "Loading history..."
   },
   "Profile": {
     "ptitle": "MY PROFILE",
@@ -631,6 +635,11 @@
         "title": "Confirmation"
       }
     },
+    "Stepper": {
+      "step1": "Options",
+      "step2": "Payment",
+      "step3": "Confirmation"
+    },
     "StepPlan": {
       "branchLabel": "Training Location",
       "branchPlaceholder": "Which branch will you attend?",
@@ -649,16 +658,22 @@
       "onlyServices": "Services only",
       "addMembershipBack": "Add membership to cart",
       "selectedPlanLabel": "Selected Monthly Plan",
-      "hidePackages": "Base Plan Only",
+      "hidePackages": "Hide Packages",
       "showPackages": "View Packages ({count})",
       "additionalServicesLabel": "Additional Services",
       "additionalServicesDesc": "Special pricing for active members.",
       "hideServices": "Hide services",
-      "showServices": "View available services",
+      "showServices": "Show All ({count})",
       "saveWithMembership": "Save with membership",
       "free": "FREE",
       "loading": "Loading...",
-      "loadMoreServices": "Show more services"
+      "loadMoreServices": "Show more services",
+      "searchPlaceholder": "Search specific services...",
+      "costNet": "Net Cost",
+      "ready": "Ready",
+      "upgradeAvailable": "Upgrade Available",
+      "aLaCarte": "A La Carte",
+      "planPriceBadge": "Plan Price"
     },
     "BranchSelector": {
       "label": "Select your Branch",
@@ -669,7 +684,8 @@
     "PackageCarousel": {
       "title": "Additional services",
       "subtitle": "Select one or more to complement your plan",
-      "accessDays": "{days} days of access"
+      "accessDays": "{days} days of access",
+      "investmentLabel": "Service investment"
     },
     "MembershipSummary": {
       "defaultDescription": "Selected membership plan.",
@@ -934,7 +950,8 @@
     "loginRequired": "You must log in to manage favorites",
     "wishlistRemove": "Remove from favorites",
     "wishlistRemoveSuccess": "Removed from favorites",
-    "refPrice": "Reference price",
+    "refPrice": "Ref",
+    "promoBadge": "PROMO",
     "noTitle": "Untitled Service",
     "noDescription": "No description available."
   },
@@ -947,10 +964,10 @@
       "receipt": "Receipt",
       "view": "View Document",
       "statusNotes": {
-        "completed": "Pago procesado exitosamente.",
-        "pending": "Tu pago está siendo verificado.",
-        "failed": "El pago fue rechazado. Intenta de nuevo.",
-        "refunded": "Este pago ha sido reembolsado a tu cuenta."
+        "completed": "Payment successfully processed.",
+        "pending": "Your payment is being verified.",
+        "failed": "The payment was rejected. Please try again.",
+        "refunded": "This payment has been refunded to your account."
       }
     },
     "backToHistory": "Back to history",
@@ -961,7 +978,8 @@
       "pending": "Pending",
       "overdue": "Overdue",
       "void": "Void",
-      "unknown": "Unknown"
+      "unknown": "Unknown",
+      "unpaid": "Unpaid"
     },
     "summary": {
       "title": "Summary",
@@ -989,6 +1007,22 @@
       "subtotal": "Subtotal",
       "tax": "Tax",
       "total": "Total Paid"
+    },
+    "itemsTable": {
+      "type": "TYPE",
+      "itemName": "ITEM NAME",
+      "quantity": "QTY",
+      "unitPrice": "UNIT PRICE",
+      "discount": "DISCOUNT",
+      "subtotal": "SUBTOTAL",
+      "membership": "Membership",
+      "package": "Package",
+      "service": "Service",
+      "item": "Item",
+      "defaultItemName": "Billing item",
+      "premiumSubscription": "Premium Subscription",
+      "classPackage": "Class Package",
+      "generalService": "General Service"
     },
     "errors": {
       "notFound": "Invoice not found",
@@ -1070,5 +1104,95 @@
     "viewDetail": "View Detail",
     "remove": "Remove",
     "reserve": "Book Now"
+  },
+  "MedicalInfo": {
+    "title": "Medical Information",
+    "editTitle": "Edit Medical Information",
+    "addTitle": "Add Medical Information",
+    "noInfo": "No medical information found.",
+    "addBtn": "Add Medical Information",
+    "editBtn": "Edit",
+    "saveBtn": "Save Changes",
+    "savingBtn": "Saving...",
+    "cancelBtn": "Cancel",
+    "criticalAlerts": "Critical Alerts",
+    "allergies": {
+      "label": "Allergies",
+      "placeholder": "Describe known allergies...",
+      "noRegistered": "No allergies registered",
+      "hint": "Include drug, food, or other allergies"
+    },
+    "trainingWarnings": {
+      "label": "Training Warnings",
+      "placeholder": "Describe training precautions...",
+      "noRegistered": "No warnings registered",
+      "hint": "Previous injuries, physical limitations or special precautions"
+    },
+    "medicalRisks": {
+      "label": "Medical Risks",
+      "placeholder": "Describe relevant medical risks...",
+      "noRegistered": "No risks registered",
+      "hint": "Important medical risk factors for training"
+    },
+    "athleteProfile": "Athlete Clinical Profile",
+    "bloodType": {
+      "label": "Blood Type",
+      "placeholder": "Select blood type",
+      "notSpecified": "Not specified"
+    },
+    "emergencyContact": {
+      "label": "Emergency Contact",
+      "name": "Full name",
+      "relation": "Relation (e.g., Mother, Father, Spouse)",
+      "phone": "+1 123-456-7890"
+    },
+    "medicalConditions": {
+      "label": "Medical Conditions",
+      "placeholder": "Describe chronic or relevant medical conditions...",
+      "noRegistered": "No medical conditions registered",
+      "hint": "Chronic diseases, pre-existing conditions, etc."
+    },
+    "currentMedication": {
+      "label": "Current Medication",
+      "placeholder": "List current medications with dosage and frequency...",
+      "noRegistered": "No medications registered",
+      "hint": "Include name, dose, and frequency of each medication"
+    },
+    "messages": {
+      "success": "Medical information updated successfully",
+      "error": "Error updating medical information"
+    }
+  },
+  "ForgotPasswordPage": {
+    "title": "Password Recovery",
+    "description": "We have sent a verification code to your email to reset your password. Enter it here.",
+    "emailSent": "We have sent a 6-digit code to {email} ...",
+    "resendCode": "Resend Code",
+    "verifyButton": "Continue",
+    "verifying": "Verifying...",
+    "resetTitle": "Update your password",
+    "resetSubtitle": "Update your password to protect your account security",
+    "newPasswordLabel": "New Password",
+    "newPasswordPlaceholder": "New password",
+    "confirmPasswordLabel": "Confirm password",
+    "confirmPasswordPlaceholder": "Confirm password",
+    "submitButton": "Reset Password",
+    "submitting": "Saving...",
+    "success": {
+      "codeValid": "Valid code",
+      "passwordUpdated": "Password updated",
+      "codeDescription": "Code verified. You can now create a new password.",
+      "passwordDescription": "Your password has been successfully updated.",
+      "resentTitle": "Code resent",
+      "resentDescription": "A new code has been sent to your email."
+    },
+    "errors": {
+      "incompleteCode": "Please enter the full 6-character code",
+      "invalidCode": "Invalid or expired code",
+      "connectionTitle": "Connection Error",
+      "connectionDescription": "Could not connect to the server. Please try again later.",
+      "mismatch": "Passwords do not match",
+      "required": "Please complete all fields"
+    }
   }
 }

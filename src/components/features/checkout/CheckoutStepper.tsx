@@ -1,7 +1,9 @@
 import { Check } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 export const CheckoutStepper = ({ currentStep }: { currentStep: number }) => {
-  const steps = ["Opciones", "Pago", "Confirmación"];
+  const t = useTranslations("Checkout.Stepper");
+  const steps = [t("step1"), t("step2"), t("step3")];
 
   return (
     <div className="flex justify-center mb-8">

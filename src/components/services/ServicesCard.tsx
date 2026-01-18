@@ -105,7 +105,7 @@ export default function ServiceCard({
         <Image src={imgSrc} alt={service.name} fill className="object-cover" />
         {activeBanner && (
           <div className="absolute top-3 left-3 bg-orange-600 text-white text-[10px] font-black px-2 py-1 rounded">
-            PROMO
+            {t("promoBadge")}
           </div>
         )}
       </div>
