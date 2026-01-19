@@ -19,21 +19,24 @@ export default function Sidebar() {
 
   return (
     <>
-      <aside className="flex h-full w-[280px] xl:w-[320px] flex-col bg-white shadow-lg border-r border-gray-100 p-4 space-y-2">
-        <div className="border-b border-orange-400 pb-2">
-          <UserHeader user={user} membership={membership} />
-        </div>
-
-        <ScrollArea className="flex-1 px-4 py-3">
-          <MenuList pathname={pathname} />
+      <aside className="flex h-full w-[280px] xl:w-[320px] flex-col bg-white shadow-lg border-r border-gray-100">
+        <ScrollArea className="flex-1">
+          <div className="border-b border-orange-400 pb-2">
+            <UserHeader user={user} membership={membership} />
+          </div>
+          <div className="px-4 py-3">
+            <MenuList pathname={pathname} />
+          </div>
         </ScrollArea>
 
-        <Button
-          onClick={logout}
-          className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
-        >
-          Cerrar sesión
-        </Button>
+        <div className="p-4 border-t border-gray-100">
+          <Button
+            onClick={logout}
+            className="w-full px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition-colors"
+          >
+            Cerrar sesión
+          </Button>
+        </div>
       </aside>
     </>
   );
