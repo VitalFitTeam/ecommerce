@@ -212,11 +212,11 @@ export default function Memberships() {
                 {t("cta.heading")}
               </span>
               <p className="text-white mt-2">{t("cta.subheading")}</p>
-              <div className="flex items-center justify-center gap-4 my-4">
-                <Button className="bg-black text-white px-4 py-2 text-sm rounded-md w-50">
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-4 my-4">
+                <Button className="bg-black text-white px-4 py-2 text-sm rounded-md w-full sm:w-auto">
                   {t("cta.advisorButton")}
                 </Button>
-                <Button className="bg-white text-black px-4 py-2 text-sm rounded-md w-70">
+                <Button className="bg-white text-black px-4 py-2 text-sm rounded-md w-full sm:w-auto">
                   {t("cta.faqButton")}
                 </Button>
               </div>

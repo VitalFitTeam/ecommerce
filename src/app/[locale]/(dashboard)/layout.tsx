@@ -25,7 +25,7 @@ export default function DashboardLayout({
 
           {sidebarOpen && (
             <div className="fixed inset-0 z-40 flex md:hidden">
-              <div className="w-auto bg-white shadow-lg">
+              <div className="w-auto bg-white shadow-lg h-full">
                 <Sidebar />
               </div>
               <div className="flex-1 bg-black/30" onClick={closeSidebar} />
