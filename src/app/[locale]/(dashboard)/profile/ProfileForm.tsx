@@ -281,11 +281,20 @@ export default function ProfileForm({ user, mode }: ProfileFormProps) {
       </div>
 
       {mode === "edit" && (
-        <div className="flex gap-4 pt-4">
-          <Button onClick={handleSave} disabled={saving} variant="default">
+        <div className="flex flex-col sm:flex-row gap-4 pt-4">
+          <Button
+            onClick={handleSave}
+            disabled={saving}
+            variant="default"
+            className="w-full sm:w-auto"
+          >
             {saving ? "Guardando..." : "Guardar cambios"}
           </Button>
-          <Button variant="outline" onClick={() => router.replace("/profile")}>
+          <Button
+            variant="outline"
+            onClick={() => router.replace("/profile")}
+            className="w-full sm:w-auto"
+          >
             Cancelar
           </Button>
         </div>

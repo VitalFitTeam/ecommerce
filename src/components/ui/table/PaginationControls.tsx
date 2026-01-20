@@ -19,7 +19,7 @@ export const PaginationControls: React.FC<PaginationControlsProps> = ({
   totalPages,
   onPageChange,
 }) => {
-  const delta = 2;
+  const delta = 1;
 
   const getPageNumbers = () => {
     const range: number[] = [];
@@ -32,22 +32,23 @@ export const PaginationControls: React.FC<PaginationControlsProps> = ({
     }
     return range;
   };
+
   return (
-    <Pagination>
-      <PaginationContent>
-        {page !== 1 && (
-          <PaginationItem>
-            <PaginationPrevious
-              href="#"
-              onClick={(e) => {
-                e.preventDefault();
-                if (page > 1) {
-                  onPageChange(page - 1);
-                }
-              }}
-            />
-          </PaginationItem>
-        )}
+    <Pagination className="mt-6">
+      <PaginationContent className="flex-wrap justify-center gap-1 sm:gap-2">
+        <PaginationItem>
+          <PaginationPrevious
+            href="#"
+            onClick={(e) => {
+              e.preventDefault();
+              if (page > 1) {
+                onPageChange(page - 1);
+              }
+            }}
+            className={page <= 1 ? "pointer-events-none opacity-40" : ""}
+          />
+        </PaginationItem>
+
         <PaginationItem>
           <PaginationLink
             href="#"
@@ -55,33 +56,38 @@ export const PaginationControls: React.FC<PaginationControlsProps> = ({
               e.preventDefault();
               onPageChange(1);
             }}
-            aria-current={page === 1 ? "page" : undefined}
+            isActive={page === 1}
           >
             1
           </PaginationLink>
         </PaginationItem>
+
         {page - delta > 2 && (
-          <PaginationItem>
+          <PaginationItem className="hidden sm:block">
             <PaginationEllipsis />
           </PaginationItem>
         )}
 
         {getPageNumbers().map((num) => (
-          <PaginationItem key={num}>
+          <PaginationItem
+            key={num}
+            className={Math.abs(page - num) > 0 ? "hidden xs:block" : ""}
+          >
             <PaginationLink
               href="#"
               onClick={(e) => {
                 e.preventDefault();
                 onPageChange(num);
               }}
-              aria-current={page === num ? "page" : undefined}
+              isActive={page === num}
             >
               {num}
             </PaginationLink>
           </PaginationItem>
         ))}
+
         {page + delta < totalPages - 1 && (
-          <PaginationItem>
+          <PaginationItem className="hidden sm:block">
             <PaginationEllipsis />
           </PaginationItem>
         )}
@@ -94,7 +100,7 @@ export const PaginationControls: React.FC<PaginationControlsProps> = ({
                 e.preventDefault();
                 onPageChange(totalPages);
               }}
-              aria-current={page === totalPages ? "page" : undefined}
+              isActive={page === totalPages}
             >
               {totalPages}
             </PaginationLink>
@@ -110,6 +116,9 @@ export const PaginationControls: React.FC<PaginationControlsProps> = ({
                 onPageChange(page + 1);
               }
             }}
+            className={
+              page >= totalPages ? "pointer-events-none opacity-40" : ""
+            }
           />
         </PaginationItem>
       </PaginationContent>

@@ -1,14 +1,8 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight, Check } from "lucide-react";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-} from "@/components/ui/Card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
 import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
 
@@ -43,29 +37,29 @@ const PackageCard = ({
   return (
     <Card
       className={cn(
-        "min-w-[300px] flex-1 cursor-pointer transition-all duration-500 relative overflow-hidden rounded-[2.5rem] border-2",
+        "min-w-0 w-full flex-1 cursor-pointer transition-all duration-500 relative overflow-hidden rounded-3xl sm:rounded-[2.5rem] border-2",
         isSelected
-          ? "border-orange-500 bg-orange-50/30 shadow-2xl shadow-orange-500/20 scale-[1.03]"
+          ? "border-orange-500 bg-orange-50/40 shadow-2xl shadow-orange-500/20 sm:scale-[1.03]"
           : "border-slate-100 hover:border-slate-200 hover:shadow-2xl hover:shadow-slate-200/50 bg-white",
       )}
       onClick={onClick}
     >
       <div
         className={cn(
-          "absolute top-5 right-5 h-8 w-8 rounded-full flex items-center justify-center transition-all duration-500 shadow-md",
+          "absolute top-4 right-4 sm:top-5 sm:right-5 h-7 w-7 sm:h-8 sm:w-8 rounded-full flex items-center justify-center transition-all duration-500 shadow-md",
           isSelected
             ? "bg-orange-500 text-white scale-110 rotate-0"
-            : "bg-slate-100 text-slate-300 scale-75 opacity-0 group-hover:opacity-100",
+            : "bg-slate-100 text-slate-300 scale-75 opacity-0 sm:group-hover:opacity-100",
         )}
       >
-        <Check size={18} strokeWidth={4} />
+        <Check size={16} className="sm:w-[18px]" strokeWidth={4} />
       </div>
 
-      <CardHeader className="p-8 pb-4">
-        <div className="space-y-2">
+      <CardHeader className="p-5 sm:p-8 pb-3 sm:pb-4">
+        <div className="space-y-1.5 sm:space-y-2">
           <CardTitle
             className={cn(
-              "text-xl font-black tracking-tighter transition-colors duration-300",
+              "text-lg sm:text-xl font-black tracking-tighter transition-colors duration-300 uppercase italic",
               isSelected ? "text-orange-600" : "text-slate-900",
             )}
           >
@@ -76,11 +70,11 @@ const PackageCard = ({
             <div className="flex items-center gap-2">
               <div
                 className={cn(
-                  "h-2 w-2 rounded-full animate-pulse",
+                  "h-1.5 w-1.5 sm:h-2 sm:w-2 rounded-full animate-pulse",
                   isSelected ? "bg-orange-500" : "bg-emerald-500",
                 )}
               />
-              <span className="text-[11px] uppercase tracking-[0.2em] font-black text-slate-400">
+              <span className="text-[9px] sm:text-[11px] uppercase tracking-[0.2em] font-black text-slate-400">
                 {t("accessDays", { days: pkg.duration_days })}
               </span>
             </div>
@@ -88,23 +82,23 @@ const PackageCard = ({
         </div>
       </CardHeader>
 
-      <CardContent className="p-8 pt-0">
-        <div className="min-h-[60px] mb-8">
+      <CardContent className="p-5 sm:p-8 pt-0">
+        <div className="min-h-[40px] sm:min-h-[60px] mb-4 sm:mb-8">
           {pkg.description && (
-            <p className="text-sm text-slate-500 leading-relaxed font-medium line-clamp-3">
+            <p className="text-[11px] sm:text-sm text-slate-500 leading-relaxed font-medium line-clamp-3 italic">
               {pkg.description}
             </p>
           )}
         </div>
 
-        <div className="flex flex-col gap-1">
-          <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
+        <div className="flex flex-col gap-0.5 sm:gap-1">
+          <span className="text-[8px] sm:text-[10px] font-black text-slate-400 uppercase tracking-widest">
             {t("investmentLabel")}
           </span>
-          <div className="flex items-baseline gap-2">
+          <div className="flex items-baseline gap-1.5 sm:gap-2">
             <span
               className={cn(
-                "text-4xl font-black tracking-tighter transition-colors",
+                "text-2xl sm:text-4xl font-black tracking-tighter transition-colors",
                 isSelected ? "text-orange-600" : "text-slate-900",
               )}
             >
@@ -113,7 +107,7 @@ const PackageCard = ({
                 minimumFractionDigits: 2,
               })}
             </span>
-            <span className="text-xs font-black text-slate-400 uppercase">
+            <span className="text-[10px] sm:text-xs font-black text-slate-400 uppercase">
               {pkg.base_currency || "USD"}
             </span>
           </div>
@@ -130,7 +124,31 @@ export const PackageCarousel = ({
   itemsVisible = 3,
 }: Props) => {
   const t = useTranslations("Checkout.PackageCarousel");
+  const [itemsToDisplay, setItemsToDisplay] = useState(3);
   const [startIndex, setStartIndex] = useState(0);
+
+  useEffect(() => {
+    const updateItems = () => {
+      let newItemsToDisplay;
+
+      if (window.innerWidth < 640) {
+        newItemsToDisplay = 1;
+      } else if (window.innerWidth < 1024) {
+        newItemsToDisplay = 2;
+      } else {
+        newItemsToDisplay = itemsVisible;
+      }
+
+      if (itemsToDisplay !== newItemsToDisplay) {
+        setItemsToDisplay(newItemsToDisplay);
+        setStartIndex(0);
+      }
+    };
+
+    updateItems();
+    window.addEventListener("resize", updateItems);
+    return () => window.removeEventListener("resize", updateItems);
+  }, [itemsVisible]);
 
   if (!packages || packages.length === 0) {
     return null;
@@ -139,14 +157,17 @@ export const PackageCarousel = ({
   const handlePrev = () => setStartIndex((prev) => Math.max(prev - 1, 0));
   const handleNext = () => {
     setStartIndex((prev) => {
-      const maxIndex = packages.length - itemsVisible;
+      const maxIndex = packages.length - itemsToDisplay;
       return prev < maxIndex ? prev + 1 : prev;
     });
   };
 
-  const visiblePackages = packages.slice(startIndex, startIndex + itemsVisible);
+  const visiblePackages = packages.slice(
+    startIndex,
+    startIndex + itemsToDisplay,
+  );
   const isPrevDisabled = startIndex === 0;
-  const isNextDisabled = startIndex + itemsVisible >= packages.length;
+  const isNextDisabled = startIndex + itemsToDisplay >= packages.length;
 
   return (
     <div className="space-y-6">
@@ -160,43 +181,52 @@ export const PackageCarousel = ({
           </p>
         </div>
 
-        {packages.length > itemsVisible && (
+        {packages.length > itemsToDisplay && (
           <div className="flex gap-2">
             <Button
               variant="outline"
               size="icon"
-              className="h-9 w-9 rounded-xl border-slate-200 bg-white hover:bg-slate-50 shadow-sm transition-all active:scale-90"
+              className="h-8 w-8 sm:h-9 sm:w-9 rounded-lg sm:rounded-xl border-slate-200 bg-white hover:bg-slate-50 shadow-sm transition-all active:scale-90"
               onClick={handlePrev}
               disabled={isPrevDisabled}
             >
-              <ChevronLeft size={18} className="text-slate-600" />
+              <ChevronLeft size={16} className="text-slate-600 sm:w-[18px]" />
             </Button>
             <Button
               variant="outline"
               size="icon"
-              className="h-9 w-9 rounded-xl border-slate-200 bg-white hover:bg-slate-50 shadow-sm transition-all active:scale-90"
+              className="h-8 w-8 sm:h-9 sm:w-9 rounded-lg sm:rounded-xl border-slate-200 bg-white hover:bg-slate-50 shadow-sm transition-all active:scale-90"
               onClick={handleNext}
               disabled={isNextDisabled}
             >
-              <ChevronRight size={18} className="text-slate-600" />
+              <ChevronRight size={16} className="text-slate-600 sm:w-[18px]" />
             </Button>
           </div>
         )}
       </div>
 
-      <div className="flex gap-4 overflow-hidden py-3 px-1">
+      <div className="flex gap-4 overflow-hidden py-3 px-1 transition-all duration-500">
         {visiblePackages.map((pkg) => (
-          <PackageCard
+          <div
             key={pkg.packageId}
-            pkg={pkg}
-            isSelected={selectedPackageIds.includes(pkg.packageId)}
-            onClick={() => onSelectPackage(pkg.packageId)}
-          />
+            className="w-full flex-none transition-all duration-500 animate-in fade-in zoom-in-95"
+            style={{
+              width: `calc(${100 / itemsToDisplay}% - ${
+                (16 * (itemsToDisplay - 1)) / itemsToDisplay
+              }px)`,
+            }}
+          >
+            <PackageCard
+              pkg={pkg}
+              isSelected={selectedPackageIds.includes(pkg.packageId)}
+              onClick={() => onSelectPackage(pkg.packageId)}
+            />
+          </div>
         ))}
-        {visiblePackages.length < itemsVisible &&
-          Array.from({ length: itemsVisible - visiblePackages.length }).map(
+        {visiblePackages.length < itemsToDisplay &&
+          Array.from({ length: itemsToDisplay - visiblePackages.length }).map(
             (_, i) => (
-              <div key={`placeholder-${i}`} className=" flex-1 invisible" />
+              <div key={`placeholder-${i}`} className="flex-1 invisible" />
             ),
           )}
       </div>

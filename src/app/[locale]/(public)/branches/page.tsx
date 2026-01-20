@@ -18,8 +18,28 @@ export default function Branches() {
   const [showSucursales, setShowSucursales] = useState(false);
   const [branches, setBranches] = useState<BranchInfo[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [itemsPerPage, setItemsPerPage] = useState(3);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const ITEMS_PER_PAGE = 3;
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 768) {
+        setItemsPerPage(1);
+      } else if (window.innerWidth < 1024) {
+        setItemsPerPage(2);
+      } else {
+        setItemsPerPage(3);
+      }
+    };
+
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  useEffect(() => {
+    setCurrentIndex(0);
+  }, [itemsPerPage]);
 
   const PLACEHOLDER_IMAGES = [
     "/images/gym-training-spain.png",
@@ -54,12 +74,12 @@ export default function Branches() {
 
   const handleNext = () => {
     setCurrentIndex((prev) =>
-      Math.min(prev + ITEMS_PER_PAGE, branches.length - ITEMS_PER_PAGE),
+      Math.min(prev + itemsPerPage, branches.length - itemsPerPage),
     );
   };
 
   const handlePrev = () => {
-    setCurrentIndex((prev) => Math.max(prev - ITEMS_PER_PAGE, 0));
+    setCurrentIndex((prev) => Math.max(prev - itemsPerPage, 0));
   };
 
   return (
@@ -99,42 +119,67 @@ export default function Branches() {
                     Cargando sucursales...
                   </div>
                 ) : (
-                  <div className="flex items-center justify-between mb-8">
+                  <div className="flex flex-col md:flex-row items-center gap-4 mb-8">
                     <button
                       onClick={handlePrev}
                       disabled={currentIndex === 0}
-                      className="p-2 hover:bg-gray-100 rounded-full transition-colors disabled:opacity-50"
+                      className="hidden md:flex p-2 hover:bg-gray-100 rounded-full transition-colors disabled:opacity-50"
+                      aria-label="Previous"
                     >
                       <ChevronLeftIcon className="w-6 h-6 text-gray-600" />
                     </button>
 
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 flex-1 mx-4">
-                      {branches.length > 0 ? (
-                        branches
-                          .slice(currentIndex, currentIndex + ITEMS_PER_PAGE)
-                          .map((branch, index) => (
-                            <BranchCard
-                              key={branch.branch_id}
-                              branch={branch}
-                              index={currentIndex + index}
-                            />
-                          ))
-                      ) : (
-                        <div className="text-center text-gray-500 col-span-3">
-                          No hay sucursales disponibles
-                        </div>
-                      )}
+                    <div className="flex-1 w-full overflow-hidden">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 w-full transition-all duration-500">
+                        {branches.length > 0 ? (
+                          branches
+                            .slice(currentIndex, currentIndex + itemsPerPage)
+                            .map((branch, index) => (
+                              <BranchCard
+                                key={branch.branch_id}
+                                branch={branch}
+                                index={currentIndex + index}
+                              />
+                            ))
+                        ) : (
+                          <div className="text-center text-gray-500 col-span-full py-20">
+                            No hay sucursales disponibles
+                          </div>
+                        )}
+                      </div>
                     </div>
 
                     <button
                       onClick={handleNext}
-                      disabled={
-                        currentIndex + ITEMS_PER_PAGE >= branches.length
-                      }
-                      className="p-2 hover:bg-gray-100 rounded-full transition-colors disabled:opacity-50"
+                      disabled={currentIndex + itemsPerPage >= branches.length}
+                      className="hidden md:flex p-2 hover:bg-gray-100 rounded-full transition-colors disabled:opacity-50"
+                      aria-label="Next"
                     >
                       <ChevronRightIcon className="w-6 h-6 text-gray-600" />
                     </button>
+
+                    {/* Mobile Navigation Buttons */}
+                    <div className="flex md:hidden items-center justify-between w-full mt-6">
+                      <button
+                        onClick={handlePrev}
+                        disabled={currentIndex === 0}
+                        className="p-3 bg-white shadow-md rounded-full transition-all disabled:opacity-40"
+                        aria-label="Previous"
+                      >
+                        <ChevronLeftIcon className="w-6 h-6 text-gray-600" />
+                      </button>
+
+                      <button
+                        onClick={handleNext}
+                        disabled={
+                          currentIndex + itemsPerPage >= branches.length
+                        }
+                        className="p-3 bg-white shadow-md rounded-full transition-all disabled:opacity-40"
+                        aria-label="Next"
+                      >
+                        <ChevronRightIcon className="w-6 h-6 text-gray-600" />
+                      </button>
+                    </div>
                   </div>
                 )}
 

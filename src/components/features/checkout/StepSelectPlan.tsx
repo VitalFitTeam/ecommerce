@@ -162,7 +162,7 @@ export const StepSelectPlan = ({
       >
         {!data ? (
           !skipMembership ? (
-            <section className="bg-slate-900 p-10 rounded-[3rem] shadow-2xl shadow-slate-900/20 relative overflow-hidden group animate-in zoom-in-95">
+            <section className="bg-slate-900 p-6 sm:p-10 rounded-2xl sm:rounded-[3rem] shadow-2xl shadow-slate-900/20 relative overflow-hidden group animate-in zoom-in-95">
               <div className="absolute top-0 right-0 p-12 opacity-5 group-hover:opacity-10 transition-opacity">
                 <Dumbbell size={200} className="text-white rotate-12" />
               </div>
@@ -252,11 +252,11 @@ export const StepSelectPlan = ({
         {packages.length > 0 && (
           <section
             className={cn(
-              "bg-white rounded-[3rem] border border-slate-100 shadow-2xl shadow-slate-200/40 overflow-hidden",
+              "bg-white rounded-2xl sm:rounded-[3rem] border border-slate-100 shadow-2xl shadow-slate-200/40 overflow-hidden",
               isLocked && "opacity-70",
             )}
           >
-            <div className="p-10">
+            <div className="p-6 sm:p-10">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-8 mb-8">
                 <div className="space-y-2">
                   <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-orange-50 rounded-full">
@@ -326,11 +326,11 @@ export const StepSelectPlan = ({
         {(services.length > 0 || isLoadingServices) && toggleService && (
           <section
             className={cn(
-              "bg-white rounded-[3rem] border border-slate-100 shadow-2xl shadow-slate-200/40 overflow-hidden",
+              "bg-white rounded-2xl sm:rounded-[3rem] border border-slate-100 shadow-2xl shadow-slate-200/40 overflow-hidden",
               isLocked && "opacity-70",
             )}
           >
-            <div className="p-10">
+            <div className="p-6 sm:p-10">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-8 mb-10">
                 <div className="space-y-2">
                   <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-blue-50 rounded-full">
@@ -364,7 +364,7 @@ export const StepSelectPlan = ({
 
               {showServices && (
                 <div className="space-y-8 animate-in fade-in duration-700">
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-2 gap-6">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
                     {filteredServices.map((service) => {
                       const isSelected = selectedServices.some(
                         (s) => s.service_id === service.service_id,
@@ -380,7 +380,7 @@ export const StepSelectPlan = ({
                           disabled={isLocked}
                           onClick={() => toggleService?.(service)}
                           className={cn(
-                            "group relative flex flex-col text-left rounded-[2.5rem] border-2 transition-all duration-500 h-full overflow-hidden",
+                            "group relative flex flex-col text-left rounded-3xl sm:rounded-[2.5rem] border-2 transition-all duration-500 h-full overflow-hidden",
                             isSelected
                               ? "bg-orange-50/40 border-orange-500 shadow-2xl shadow-orange-200/40 ring-4 ring-orange-500/5 -translate-y-2"
                               : "bg-white border-slate-100 hover:border-orange-200 hover:shadow-xl hover:-translate-y-1",
@@ -388,36 +388,47 @@ export const StepSelectPlan = ({
                               "opacity-80 grayscale-[0.3] cursor-not-allowed",
                           )}
                         >
-                          <div className="p-6 pb-0 flex justify-between items-start w-full">
+                          <div className="p-4 sm:p-6 pb-0 flex justify-between items-start w-full">
                             <div
                               className={cn(
-                                "p-3 rounded-2xl transition-all duration-500 shadow-sm",
+                                "p-2 sm:p-3 rounded-xl sm:rounded-2xl transition-all duration-500 shadow-sm",
                                 isSelected
                                   ? "bg-orange-500 text-white scale-110 rotate-3"
                                   : "bg-slate-50 text-slate-400 group-hover:bg-orange-100 group-hover:text-orange-500",
                               )}
                             >
                               {isSelected ? (
-                                <CheckCircle2 size={20} strokeWidth={3} />
+                                <CheckCircle2
+                                  size={18}
+                                  className="sm:w-5 sm:h-5"
+                                  strokeWidth={3}
+                                />
                               ) : (
-                                <Plus size={20} strokeWidth={3} />
+                                <Plus
+                                  size={18}
+                                  className="sm:w-5 sm:h-5"
+                                  strokeWidth={3}
+                                />
                               )}
                             </div>
                             {!userHasMembership &&
                               Number(service.lowest_price_member) <
                                 Number(service.lowest_price_no_member) && (
-                                <div className="flex items-center gap-1.5 px-3 py-1 bg-orange-100 text-orange-600 text-[9px] font-black uppercase tracking-tighter rounded-full border border-orange-200">
-                                  <Sparkles size={10} />
+                                <div className="flex items-center gap-1 sm:gap-1.5 px-2 py-0.5 sm:px-3 sm:py-1 bg-orange-100 text-orange-600 text-[8px] sm:text-[9px] font-black uppercase tracking-tighter rounded-full border border-orange-200">
+                                  <Sparkles
+                                    size={8}
+                                    className="sm:w-2.5 sm:h-2.5"
+                                  />
                                   {t("planPriceBadge")}
                                 </div>
                               )}
                           </div>
 
-                          <div className="p-6 flex-1 space-y-4">
-                            <div className="space-y-1.5">
+                          <div className="p-4 sm:p-6 flex-1 space-y-3 sm:space-y-4">
+                            <div className="space-y-1 sm:space-y-1.5">
                               <h4
                                 className={cn(
-                                  "text-[15px] font-black uppercase italic tracking-tight leading-tight transition-colors line-clamp-2",
+                                  "text-[13px] sm:text-[15px] font-black uppercase italic tracking-tight leading-tight transition-colors line-clamp-2",
                                   isSelected
                                     ? "text-orange-700"
                                     : "text-slate-900 group-hover:text-orange-600",
@@ -426,16 +437,20 @@ export const StepSelectPlan = ({
                                 {service.name}
                               </h4>
 
-                              <div className="flex flex-wrap gap-2">
+                              <div className="flex flex-wrap gap-1.5 sm:gap-2">
                                 {service.service_category?.name && (
-                                  <span className="flex items-center gap-1 text-[8px] font-black text-slate-500 bg-slate-100 px-2 py-1 rounded-lg uppercase tracking-widest">
-                                    <Tag size={8} />
+                                  <span className="flex items-center gap-1 text-[7px] sm:text-[8px] font-black text-slate-500 bg-slate-100 px-1.5 py-0.5 sm:px-2 sm:py-1 rounded-lg uppercase tracking-widest">
+                                    <Tag size={7} className="sm:w-2 sm:h-2" />
                                     {service.service_category.name}
                                   </span>
                                 )}
                                 {service.duration_minutes && (
-                                  <span className="flex items-center gap-1 text-[8px] font-black text-orange-600 bg-orange-50 px-2 py-1 rounded-lg uppercase tracking-widest">
-                                    <Clock size={8} strokeWidth={3} />
+                                  <span className="flex items-center gap-1 text-[7px] sm:text-[8px] font-black text-orange-600 bg-orange-50 px-1.5 py-0.5 sm:px-2 sm:py-1 rounded-lg uppercase tracking-widest">
+                                    <Clock
+                                      size={7}
+                                      className="sm:w-2 sm:h-2"
+                                      strokeWidth={3}
+                                    />
                                     {service.duration_minutes} MIN
                                   </span>
                                 )}
@@ -443,7 +458,7 @@ export const StepSelectPlan = ({
                             </div>
 
                             {service.description && (
-                              <p className="text-[11px] font-medium text-slate-400 line-clamp-2 leading-relaxed normal-case italic">
+                              <p className="text-[10px] sm:text-[11px] font-medium text-slate-400 line-clamp-2 leading-relaxed normal-case italic">
                                 {service.description}
                               </p>
                             )}
@@ -451,23 +466,23 @@ export const StepSelectPlan = ({
 
                           <div
                             className={cn(
-                              "p-6 pt-4 mt-auto border-t flex items-center justify-between w-full transition-colors",
+                              "p-4 sm:p-6 pt-3 sm:pt-4 mt-auto border-t flex items-center justify-between w-full transition-colors",
                               isSelected
                                 ? "border-orange-100 bg-orange-100/30"
                                 : "border-slate-50 bg-slate-50/30",
                             )}
                           >
                             <div className="flex flex-col">
-                              <span className="text-[9px] font-black text-slate-400 uppercase tracking-[0.1em] mb-1">
+                              <span className="text-[8px] sm:text-[9px] font-black text-slate-400 uppercase tracking-[0.1em] mb-0.5 sm:mb-1">
                                 {t("costNet")}
                               </span>
                               <div className="flex items-baseline gap-1">
-                                <span className="text-[12px] font-black text-slate-400">
+                                <span className="text-[10px] sm:text-[12px] font-black text-slate-400">
                                   {currencySymbol}
                                 </span>
                                 <span
                                   className={cn(
-                                    "text-2xl font-black tracking-tighter",
+                                    "text-xl sm:text-2xl font-black tracking-tighter",
                                     servicePrice === 0
                                       ? "text-green-600"
                                       : "text-slate-900",
@@ -481,13 +496,16 @@ export const StepSelectPlan = ({
                             </div>
 
                             {isSelected ? (
-                              <div className="flex items-center gap-2 px-4 py-2 bg-orange-500 text-white rounded-2xl text-[10px] font-black uppercase tracking-tighter shadow-lg shadow-orange-500/20 animate-in slide-in-from-right-3">
-                                <div className="w-2 h-2 bg-white rounded-full animate-pulse shadow-sm" />
+                              <div className="flex items-center gap-1.5 sm:gap-2 px-3 py-1.5 sm:px-4 sm:py-2 bg-orange-500 text-white rounded-xl sm:rounded-2xl text-[8px] sm:text-[10px] font-black uppercase tracking-tighter shadow-lg shadow-orange-500/20 animate-in slide-in-from-right-3">
+                                <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-white rounded-full animate-pulse shadow-sm" />
                                 {t("ready")}
                               </div>
                             ) : (
                               <div className="text-slate-300 group-hover:text-orange-300 transition-colors">
-                                <ChevronDown size={20} className="-rotate-90" />
+                                <ChevronDown
+                                  size={18}
+                                  className="sm:w-5 sm:h-5 -rotate-90"
+                                />
                               </div>
                             )}
                           </div>
@@ -497,7 +515,7 @@ export const StepSelectPlan = ({
                   </div>
 
                   {isLoadingServices && (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-6">
                       {[1, 2, 3, 4].map((i) => (
                         <div
                           key={i}

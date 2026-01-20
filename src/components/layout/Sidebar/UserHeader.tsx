@@ -65,10 +65,14 @@ export default function UserHeader({ user }: any) {
   }, [token, fetchQrToken]);
 
   return (
-    <div className="flex flex-col items-center text-center px-6 pt-10 pb-6 bg-white">
+    <div className="flex flex-col items-center text-center px-6 pt-24 md:pt-10 pb-6 bg-white">
       <div className="relative mb-4">
         <Avatar className="h-40 w-40 shadow-md border-2 border-gray-200 rounded-full">
-          <AvatarImage src={user.profile_picture_url} alt={fullName} />
+          <AvatarImage
+            src={user.profile_picture_url}
+            alt={fullName}
+            className="object-cover"
+          />
           <AvatarFallback className="bg-gray-300 text-white text-2xl rounded-full">
             {initials}
           </AvatarFallback>
