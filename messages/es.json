@@ -15,7 +15,15 @@
     "loginButton": "Iniciar Sesión",
     "registerButton": "Unirse",
     "logoutButton": "Cerrar Sesión",
-    "logoSlogan": "Potenciando tu bienestar"
+    "logoSlogan": "Potenciando tu bienestar",
+    "notifications": {
+      "title": "Notificaciones",
+      "new": "{count} nuevas",
+      "markAllAsRead": "Marcar todo como leído",
+      "empty": "No tienes notificaciones",
+      "loading": "Cargando...",
+      "viewAll": "Ver todas las notificaciones"
+    }
   },
   "LocaleSwitcher": {
     "label": "Cambiar idioma",

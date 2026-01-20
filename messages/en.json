@@ -15,7 +15,15 @@
     "loginButton": "Login",
     "registerButton": "Join",
     "logoutButton": "Logout",
-    "logoSlogan": "Empowering your wellness"
+    "logoSlogan": "Empowering your wellness",
+    "notifications": {
+      "title": "Notifications",
+      "new": "{count} new",
+      "markAllAsRead": "Mark all as read",
+      "empty": "No notifications",
+      "loading": "Loading...",
+      "viewAll": "View all notifications"
+    }
   },
   "LocaleSwitcher": {
     "label": "Change language",
