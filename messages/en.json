@@ -706,7 +706,16 @@
       "receiptLabel": "Receipt",
       "attachReceipt": "Attach Receipt",
       "uploading": "Uploading...",
-      "submitBtn": "Report Payment Now"
+      "submitBtn": "Report Payment Now",
+      "methodLabel": "Payment Method",
+      "currencyLabel": "Currency",
+      "amountLabel": "Amount to Report",
+      "equivalenceLabel": "Equivalence",
+      "receiptAttached": "Receipt Uploaded",
+      "payWithCard": "Pay with Card",
+      "confirmSelection": "Confirm Selection",
+      "confirmMethod": "Confirm Method",
+      "verifyingMethod": "Verifying method..."
     },
     "OrderSummary": {
       "title": "Summary",

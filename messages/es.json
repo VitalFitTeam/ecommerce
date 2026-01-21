@@ -738,7 +738,16 @@
       "receiptLabel": "Comprobante",
       "attachReceipt": "Adjuntar Comprobante",
       "uploading": "Subiendo...",
-      "submitBtn": "Informar Pago Ahora"
+      "methodLabel": "Método de Pago",
+      "currencyLabel": "Moneda",
+      "amountLabel": "Monto a Reportar",
+      "equivalenceLabel": "Equivalencia",
+      "receiptAttached": "Recibo Cargado",
+      "payWithCard": "Pagar con Tarjeta",
+      "confirmSelection": "Confirmar Selección",
+      "confirmMethod": "Confirmar Método",
+      "submitBtn": "Finalizar Reporte",
+      "verifyingMethod": "Verificando método..."
     },
     "OrderSummary": {
       "title": "Resumen",
