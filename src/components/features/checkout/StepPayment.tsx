@@ -103,9 +103,15 @@ export const StepPayment = ({
       if (currentCurrency && currentCurrency.code !== currencyMode) {
         setCurrencyMode(currentCurrency.code);
       }
+
       setIsChangingCurrency(false);
     }
-  }, [totalPrices.displaySymbol, currencyMode, setCurrencyMode]);
+  }, [
+    totalPrices.displaySymbol,
+    totalPrices.displayTotal,
+    currencyMode,
+    setCurrencyMode,
+  ]);
 
   useEffect(() => {
     const total = Number(totalPrices.displayTotal);
@@ -146,6 +152,7 @@ export const StepPayment = ({
 
   const handleMainAction = () => {
     if (formData.amount <= 0 && !isStripeMethod && isConfirmed) {
+      console.error("Monto inválido para envío");
       return;
     }
 
@@ -159,7 +166,7 @@ export const StepPayment = ({
   };
 
   const handleCurrencyChange = (val: string) => {
-    setIsChangingCurrency(true);
+    setIsChangingCurrency(true); // Activa estado de carga visual
     setCurrencyMode(val);
     if (onSelectCurrency) {
       onSelectCurrency(val);
@@ -194,7 +201,7 @@ export const StepPayment = ({
         <CardContent className="p-8 space-y-8">
           <div className="space-y-3">
             <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400">
-              {t("methodLabel")}
+              Método de Pago
             </Label>
             <Select
               value={selectedMethod}
@@ -204,7 +211,7 @@ export const StepPayment = ({
               }}
             >
               <SelectTrigger className="h-14 rounded-3xl bg-slate-50/50 border-slate-100 font-bold text-slate-700">
-                <SelectValue placeholder={t("methodPlaceholder")} />
+                <SelectValue placeholder="Selecciona un método" />
               </SelectTrigger>
               <SelectContent className="rounded-2xl font-bold">
                 {methods.map((m) => (
@@ -218,7 +225,6 @@ export const StepPayment = ({
 
           {(isConfirmed || isStripeMethod) && !loadingMethod && (
             <div className="space-y-8 animate-in fade-in slide-in-from-top-4 duration-500">
-              {/* BLOQUE DEL MONTO */}
               <div
                 className={cn(
                   "p-6 border border-slate-100 bg-slate-50/30 rounded-[2rem] transition-all duration-300",
@@ -228,7 +234,7 @@ export const StepPayment = ({
                 <div className="flex items-center justify-between gap-4">
                   <div className="space-y-2">
                     <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
-                      {t("currencyLabel")}
+                      Moneda
                     </p>
                     <Select
                       value={currencyMode}
@@ -249,7 +255,7 @@ export const StepPayment = ({
 
                   <div className="text-right relative">
                     <p className="text-[10px] text-slate-400 font-black uppercase tracking-widest mb-1">
-                      {t("amountLabel")}
+                      Monto a Reportar
                     </p>
                     {isChangingCurrency ? (
                       <div className="h-10 flex items-center justify-end">
@@ -274,7 +280,7 @@ export const StepPayment = ({
                     <ArrowRightLeft size={14} className="text-orange-500" />
                     <div>
                       <p className="text-[8px] font-black text-slate-400 uppercase">
-                        {t("equivalenceLabel")}
+                        Equivalencia
                       </p>
                       <p className="text-xs font-black text-slate-700">
                         $ {formatAmount(totalPrices.baseTotal)} USD
@@ -287,7 +293,7 @@ export const StepPayment = ({
                 <div className="space-y-6 pt-4 border-t border-slate-100 animate-in zoom-in-95">
                   <div className="space-y-3">
                     <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400">
-                      {t("referenceLabel")} *
+                      Referencia *
                     </Label>
                     <Input
                       value={formData.reference}
@@ -295,13 +301,13 @@ export const StepPayment = ({
                         setFormData({ ...formData, reference: e.target.value })
                       }
                       className="h-14 rounded-3xl font-black border-slate-100 bg-slate-50/50"
-                      placeholder={t("referencePlaceholder")}
+                      placeholder="Ingresa el número de confirmación"
                     />
                   </div>
 
                   <div className="space-y-3">
                     <Label className="text-[10px] font-black uppercase tracking-widest text-slate-400">
-                      {t("receiptLabel")}
+                      Comprobante
                     </Label>
                     {!formData.filePath ? (
                       <div className="relative h-32 border-2 border-dashed border-slate-200 bg-slate-50/30 hover:bg-slate-50 flex flex-col items-center justify-center rounded-[2rem] transition-all cursor-pointer">
@@ -316,7 +322,7 @@ export const StepPayment = ({
                         />
                         <UploadCloud className="text-orange-500 w-6 h-6 mb-2" />
                         <span className="text-[9px] font-black uppercase text-slate-500">
-                          {uploadingFile ? t("uploading") : t("attachReceipt")}
+                          {uploadingFile ? "Subiendo..." : "Subir comprobante"}
                         </span>
                       </div>
                     ) : (
@@ -324,7 +330,7 @@ export const StepPayment = ({
                         <div className="flex items-center gap-3">
                           <FileText className="text-orange-500" size={18} />
                           <span className="text-xs font-black text-orange-900 truncate max-w-[150px]">
-                            {t("receiptAttached")}
+                            Recibo Cargado
                           </span>
                         </div>
                         <Button
@@ -342,15 +348,6 @@ export const StepPayment = ({
                   </div>
                 </div>
               )}
-            </div>
-          )}
-
-          {loadingMethod && selectedMethod && (
-            <div className="flex items-center justify-center p-4">
-              <Loader2 className="animate-spin text-slate-400 mr-2" size={20} />
-              <span className="text-xs font-bold text-slate-400">
-                {t("verifyingMethod")}
-              </span>
             </div>
           )}
         </CardContent>
@@ -371,12 +368,12 @@ export const StepPayment = ({
               <Loader2 className="animate-spin" />
             ) : isStripeMethod ? (
               isConfirmed ? (
-                t("payWithCard")
+                "Pagar con Tarjeta"
               ) : (
-                t("confirmSelection")
+                "Confirmar Selección"
               )
             ) : !isConfirmed ? (
-              t("confirmMethod")
+              "Confirmar Método"
             ) : (
               t("submitBtn")
             )}
