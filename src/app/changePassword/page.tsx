@@ -1,5 +1,5 @@
 "use client";
-
+export const dynamic = "force-dynamic";
 import { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import AuthFooter from "@/components/features/AuthFooter";
@@ -59,9 +59,12 @@ function PasswordResetContent() {
     if (!result.success) {
       const fieldErrors: { password?: string; confirmPassword?: string } = {};
       result.error.issues.forEach((err) => {
-        if (err.path[0] === "password") {fieldErrors.password = err.message;}
-        if (err.path[0] === "confirmPassword")
-          {fieldErrors.confirmPassword = err.message;}
+        if (err.path[0] === "password") {
+          fieldErrors.password = err.message;
+        }
+        if (err.path[0] === "confirmPassword") {
+          fieldErrors.confirmPassword = err.message;
+        }
       });
       setIsLoading(false);
       setErrors(fieldErrors);
