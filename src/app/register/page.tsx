@@ -8,7 +8,6 @@ import Logo from "@/components/features/Logo";
 import PasswordInput from "@/components/ui/PasswordInput";
 import TextInput from "@/components/ui/TextInput";
 import { PhoneInput } from "@/components/ui/phone-input";
-import Checkbox from "@/components/ui/Checkbox";
 import { Notification } from "@/components/ui/Notification";
 import { registerSchema } from "@/lib/validation/registerSchema";
 import { RegisterFormData } from "@/lib/validation/registerSchema";
@@ -16,6 +15,7 @@ import GoogleLoginButton from "@/components/ui/GoogleLoginButton";
 import { colors } from "@/styles/styles";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/Checkbox";
 
 export default function RegisterPage() {
   const [formData, setFormData] = useState<RegisterFormData>({
@@ -443,8 +443,8 @@ export default function RegisterPage() {
               <div className="flex-shrink-0 mt-1">
                 <Checkbox
                   labelText=""
-                  isChecked={terms}
-                  onChange={handleCheckboxChange}
+                  checked={terms}
+                  onCheckedChange={(value) => setTerms(value as boolean)}
                 />
               </div>
               <div className="flex-1">
@@ -467,11 +467,7 @@ export default function RegisterPage() {
             </div>
 
             <div className="mt-6 w-full">
-              <Button
-                fullWidth
-                type="submit"
-                className="w-full py-3 text-base sm:py-2"
-              >
+              <Button type="submit" className="w-full py-3 text-base sm:py-2">
                 Crear Cuenta
               </Button>
             </div>
