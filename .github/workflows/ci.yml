@@ -1,37 +1,32 @@
-name: CI - Pruebas y Verificación
+name: CI - Tests Only
 
 on:
   push:
-    branches:
-      - main
-      - development
+    branches: [ main, development ]
   pull_request:
-    branches:
-      - main
-      - development
+    branches: [ main, development ]
 
 jobs:
-  build-and-test:
+  quality-check:
+    name: Lint & Test
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout del código
         uses: actions/checkout@v4
-
       - name: Configurar Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20' # Usar la versión LTS de Node.js
+          node-version: '20'
           cache: 'npm'
-
+      
       - name: Instalar dependencias
         run: npm ci
 
-      - name: Analizar el código (Lint)
+      - name: Analizar código (Lint)
         run: npm run lint
 
-      - name: Ejecutar pruebas (Tests)
-        run: npm test
+      - name: Ejecutar pruebas
+        run: npm test 
 
-      - name: Construir el proyecto (Build)
+      - name: Construir el proyecto (Verificación)
         run: npm run build
