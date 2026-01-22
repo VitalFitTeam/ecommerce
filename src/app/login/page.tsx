@@ -7,10 +7,11 @@ import Logo from "@/components/features/Logo";
 import GoogleLoginButton from "@/components/ui/GoogleLoginButton";
 import PasswordInput from "@/components/ui/PasswordInput";
 import TextInput from "@/components/ui/TextInput";
-import Checkbox from "@/components/ui/Checkbox";
 import { Notification } from "@/components/ui/Notification";
 import { loginSchema } from "@/lib/validation/loginSchema";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+import { Checkbox } from "@/components/ui/Checkbox";
 
 export default function Login() {
   const [rememberMe, setRememberMe] = useState(false);
@@ -193,8 +194,10 @@ export default function Login() {
               <div className="flex-1 text-sm">
                 <Checkbox
                   labelText="Mantener Sesión"
-                  isChecked={rememberMe}
-                  onChange={handleCheckboxChange}
+                  checked={rememberMe}
+                  onCheckedChange={(checked) =>
+                    setRememberMe(checked as boolean)
+                  }
                 />
               </div>
               <div className="flex-1 text-xs">
@@ -209,10 +212,12 @@ export default function Login() {
             <div className="mt-4 w-full">
               <Button
                 type="submit"
-                fullWidth
-                variant={"primary"}
+                variant="default"
                 disabled={isSubmitting}
-                className={isSubmitting ? "opacity-50 cursor-not-allowed" : ""}
+                className={cn(
+                  "w-full",
+                  isSubmitting && "opacity-50 cursor-not-allowed",
+                )}
               >
                 {isSubmitting ? "Cargando..." : "Iniciar sesión"}
               </Button>
